@@ -1,0 +1,172 @@
+:root {
+    --font-family: 'Nunito Sans', sans-serif;
+    --primary-color: #4A58EC;
+    --primary-text-color: #556476;
+    /* --primary-border-color: #E8E9EB; */
+    --primary-border-color: #d9d9d9;
+    --primary-border-radius: 10px;
+    --primary-btn-border-radius: 5px;
+    --primary-background-color: #FFFFFF;
+    --blue-shading: #E7E9FD;
+    --red-shading: #FFE9E5;
+    --green-shading: #E7F7F2;
+    --black-color: #172635;
+    --red-color: #ED2227;
+    --green-color: #00C500;
+    --default-gap: 20px
+}
+
+.main-header {
+    width: 100%;
+    height: 79px;
+    background-color: #fff;
+    border: 2px solid #e8e9eb;
+}
+
+.header-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 31px;
+}
+
+@media (max-width: 640px) {
+    .header-nav {
+        padding: 0 16px;
+    }
+}
+
+.search-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+@media (max-width: 640px) {
+    .search-section {
+        gap: 8px;
+    }
+}
+
+.search-form {
+    margin: 0;
+}
+
+.search-input-wrapper {
+    width: 387px;
+    height: 31px;
+    border-radius: 10px;
+    background-color: #f0f0ff;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 991px) {
+    .search-input-wrapper {
+        width: 300px;
+    }
+}
+
+@media (max-width: 640px) {
+    .search-input-wrapper {
+        width: 200px;
+    }
+}
+
+.search-icon {
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    left: 11px;
+}
+
+.search-input {
+    font-family: Nunito Sans, -apple-system, Roboto, Helvetica, sans-serif;
+    font-weight: 400;
+    font-size: 9px;
+    color: rgba(85, 100, 118, 1);
+    position: absolute;
+    left: 33px;
+    background: transparent;
+    border: none;
+    outline: none;
+    width: calc(100% - 44px);
+}
+
+.search-input::placeholder {
+    color: rgba(85, 100, 118, 1);
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.notification-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.user-profile {
+    width: 128px;
+    height: 31px;
+    border-radius: 10px;
+    background-color: #f0f0ff;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 640px) {
+    .user-profile {
+        width: 100px;
+    }
+}
+
+.user-avatar {
+    width: 31px;
+    height: 31px;
+    border-radius: 10px;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.user-name {
+    font-family: Nunito Sans, -apple-system, Roboto, Helvetica, sans-serif;
+    font-weight: 400;
+    font-size: 9px;
+    color: rgba(85, 100, 118, 1);
+    position: absolute;
+    left: 39px;
+}
+
+.dropdown-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    position: absolute;
+    right: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropdown-icon {
+    width: 10px;
+    height: 10px;
+}

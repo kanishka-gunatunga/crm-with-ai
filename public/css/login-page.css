@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700&display=swap');
+
+
+.login-container {
+    border-radius: 0;
+    max-width: 500px;
+    font-family: Nunito Sans, -apple-system, Roboto, Helvetica, sans-serif;
+    margin: 0 auto;
+   padding: 20px 0;
+}
+
+.login-card {
+    border-radius: 10px;
+    border: 1px solid var(--Gray-Light, #e8e9eb);
+    background-color: #fff;
+    display: flex;
+    width: 100%;
+    padding: 40px;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+@media (max-width: 991px) {
+    .login-card {
+        max-width: 100%;
+        padding: 45px 20px 12px;
+    }
+}
+
+.welcome-heading {
+    color: #172635;
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 35px;
+    margin: 0;
+}
+
+.brand-name {
+    font-weight: 800;
+}
+
+.login-form {
+    margin-top: 35px;
+    width: 100%;
+}
+
+@media (max-width: 991px) {
+    .login-form {
+        max-width: 100%;
+        margin-top: 30px;
+    }
+}
+
+.form-fields {
+    font-size: 12px;
+    color: #d9d9d9;
+    font-weight: 400;
+}
+
+.input-field {
+    align-self: stretch;
+    border-radius: 5px;
+    border: 1px solid #d9d9d9;
+    min-height: 38px;
+    width: 100%;
+    padding: 10px;
+    gap: 10px;
+    white-space: nowrap;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background: transparent;
+    box-sizing: border-box;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #4a58ec;
+}
+
+@media (max-width: 991px) {
+    .input-field {
+        max-width: 100%;
+        white-space: initial;
+    }
+}
+
+.password-field {
+    border-radius: 5px;
+    border: 1px solid #d9d9d9;
+    display: flex;
+    margin-top: 20px;
+    min-height: 38px;
+    width: 100%;
+    padding:10px;
+    align-items: center;
+    justify-content: start;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.password-field:focus-within {
+    border-color: #4a58ec;
+}
+
+@media (max-width: 991px) {
+    .password-field {
+        max-width: 100%;
+        white-space: initial;
+    }
+}
+
+.password-input {
+    align-self: stretch;
+    margin: auto 0;
+    /* border: none; */
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    flex: 1;
+}
+
+.password-toggle-icon {
+    aspect-ratio: 1;
+    object-fit: contain;
+    object-position: center;
+    width: 20px;
+    align-self: stretch;
+    margin: auto 0;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.forgot-link {
+    color: #172635;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 10px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.forgot-link:hover {
+    text-decoration: underline;
+}
+
+.login-btn {
+    align-self: stretch;
+    border-radius: 7px;
+    margin-top: 30px;
+    min-height: 53px;
+    padding: 10px;
+    gap: 10px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 1);
+    font-weight: 700;
+    white-space: nowrap;
+    background-color: #4a58ec;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background-color 0.2s ease;
+}
+
+.login-btn:hover {
+    background-color: #3a48dc;
+}
+
+.login-btn:active {
+    background-color: #2a38cc;
+}
+
+@media (max-width: 991px) {
+    .login-btn {
+        margin-top: 40px;
+        white-space: initial;
+    }
+}
+
+.register-text {
+    color: #000000;
+    font-family: Poppins, -apple-system, Roboto, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    align-self: center;
+    margin-top: 20px;
+    margin-bottom: 0;
+}
+
+@media (max-width: 991px) {
+    .register-text {
+        margin-top: 40px;
+    }
+}
+
+.register-prompt {
+    font-family: Nunito Sans, -apple-system, Roboto, Helvetica, sans-serif;
+    line-height: 22px;
+    color: rgba(0, 0, 0, 1);
+}
+
+.register-link {
+    font-family: Nunito Sans, -apple-system, Roboto, Helvetica, sans-serif;
+    line-height: 22px;
+    color: rgba(74, 88, 236, 1);
+    text-decoration: none;
+    margin-left: 4px;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+}
+
+.copyright-text {
+    color: #7c7c7c;
+    font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 186%;
+    align-self: center;
+    margin-top: 40px;
+    margin-bottom: 0;
+}
+
+.copyright-text span {
+    font-family: Nunito Sans, -apple-system, Roboto, Helvetica, sans-serif;
+    font-weight: 400;
+    line-height: 26px;
+    color: #d9d9d9;
+}
+
+@media (max-width: 991px) {
+    .copyright-text {
+        margin-top: 40px;
+    }
+}
