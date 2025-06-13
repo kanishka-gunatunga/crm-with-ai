@@ -41,7 +41,7 @@ $person = Person::where('id', $lead->person)->first();
                         
 
                         <?php if ($lead->category == 'low') { ?>
-                            <button class="btn  green" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn  low" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Low
                                 <span>
                                     <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -122,7 +122,7 @@ $person = Person::where('id', $lead->person)->first();
                                         <section class="primary-info">
                                             <div class="title-section">
                                                 <h3 class="field-label">Title</h3>
-                                                <p class="project-title">Design Dashboard Wireframe for Egoagri</p>
+                                                <p class="project-title">{{$lead->title}}</p>
                                             </div>
 
                                             <div class="status-section mb-3">
@@ -524,7 +524,7 @@ $person = Person::where('id', $lead->person)->first();
                                             </div>
                                             <div class="start-date-section">
                                                 <h3 class="field-label">Description</h3>
-                                                <p class="field-value">None</p>
+                                                <p class="field-value">{{$lead->description}}</p>
                                             </div>
                                         </section>
 
