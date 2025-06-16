@@ -10,7 +10,7 @@
                         <div class="page-title-container">
                             <div class="d-flex justify-content-between">
                                 <h3 class="page-title">
-                                    Products
+                                    {{ __('app.products.title') }}
                                 </h3>
                                 <div class="d-flex gap-3">
 
@@ -51,7 +51,7 @@
                                                 </svg>
                                             </div>
 
-                                            <span class="button-text">New Product</span>
+                                            <span class="button-text">{{ __('app.products.create-title') }}</span>
 
 
                                         </button>
@@ -89,7 +89,7 @@
                                     <div class="card-body">
                                         <div class="d-flex gap-3 mb-4 justify-content-between align-items-center">
                                             <div>
-                                                <h3 class="card-title">Products</h3>
+                                                <h3 class="card-title">{{ __('app.products.title') }}</h3>
                                             </div>
                                             <div>
                                                 <button class="btn white-btn">
@@ -117,75 +117,80 @@
 
                                         </div>
                                         <div class="row g-4">
+                                            <form id="bulk-delete-form" method="POST" action="{{ url('delete-selected-products') }}">
+                                            @csrf
                                             <div class="table-responsive">
                                                 <table class="table new-table" id="newTable">
 
                                                     <thead>
                                                         <tr>
-                                                            <th class="corner-left"><input type="checkbox"></th>
-                                                            <th>SKU</th>
-                                                            <th>Name</th>
-                                                            <th>Price</th>
-                                                            <th>Quantity</th>
-                                                            <th>Created Date</th>
-                                                            
-                                                            <th class="corner-right">Actions</th>
+                                                            <th class="corner-left"><input type="checkbox" id="select-all"></th>
+                                                            <th>{{ __('app.datagrid.sku') }}</th>
+                                                            <th>{{ __('app.datagrid.name') }}</th>
+                                                            <th>{{ __('app.datagrid.price') }}</th>
+                                                            <th>{{ __('app.datagrid.quantity') }}</th>
+                                                            <th>{{ __('app.leads.actions') }}</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <?php for ($i = 0; $i < 20; $i++): ?>
-                                                            <tr>
-                                                                <td><input type="checkbox"></td>
-                                                                <td>David Johnson</td>
-                                                                <td>David Johnson</td>
-                                                                <td>May 26, 2025</td>
-                                                                <td>David Johnson</td>
-                                                                <td>$234.00</td>
-                                                                
+                                                        <?php foreach($products as $product){
+                                                        ?>
+                                                            <tr class="odd gradeX">
+                                                            <td><input type="checkbox" name="selected_products[]" value="{{ $product->id }}"></td>
+                                                                <td class="">{{$product->sku}} </td>
+                                                                <td class="">{{$product->name}} </td>
+                                                                <td class="">{{number_format($product->cost)}}</td>
+                                                                <td class="">{{number_format($product->quantity)}}</td>
+
                                                                 <td class="action-icons d-flex gx-3">
-                                                                    <div class="text-muted" type="button">
-                                                                        <svg width="20" height="20" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                            <rect width="18" height="18" rx="2.90323" fill="#FFE9E5" />
-                                                                            <path d="M6.9431 12.7013C6.71689 12.7013 6.52331 12.6208 6.36236 12.4599C6.20141 12.2989 6.12079 12.1052 6.12052 11.8787V6.53197H5.70923V5.70939H7.76568V5.2981H10.2334V5.70939H12.2899V6.53197H11.8786V11.8787C11.8786 12.105 11.7981 12.2987 11.6372 12.4599C11.4762 12.6211 11.2825 12.7016 11.056 12.7013H6.9431ZM11.056 6.53197H6.9431V11.8787H11.056V6.53197ZM7.76568 11.0562H8.58826V7.35455H7.76568V11.0562ZM9.41084 11.0562H10.2334V7.35455H9.41084V11.0562Z" fill="#ED2227" />
-                                                                        </svg>
-                                                                    </div>
-                                                                    <div class="text-muted" type="button">
-                                                                        <svg width="20" height="20" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                            <rect width="18" height="18" rx="2.90323" fill="#E7E9FD" />
-                                                                            <path d="M6.1206 11.8786H6.70663L10.7266 7.85862L10.1406 7.27258L6.1206 11.2926V11.8786ZM5.70935 12.7011C5.59282 12.7011 5.49522 12.6616 5.41654 12.5826C5.33785 12.5037 5.29837 12.4061 5.2981 12.2898V11.2926C5.2981 11.1829 5.31866 11.0783 5.35978 10.9788C5.40091 10.8792 5.45917 10.7919 5.53456 10.7168L10.7266 5.53505C10.8088 5.45966 10.8997 5.4014 10.9993 5.36027C11.0988 5.31915 11.2032 5.29858 11.3126 5.29858C11.422 5.29858 11.5283 5.31915 11.6313 5.36027C11.7344 5.4014 11.8235 5.46308 11.8987 5.54533L12.4641 6.12108C12.5464 6.19648 12.6063 6.28558 12.6438 6.3884C12.6814 6.49121 12.7003 6.59402 12.7006 6.69683C12.7006 6.8065 12.6817 6.9111 12.6438 7.01062C12.606 7.11014 12.5461 7.20089 12.4641 7.28287L7.28238 12.4646C7.20698 12.54 7.11952 12.5983 7.02 12.6394C6.92048 12.6805 6.81602 12.7011 6.70663 12.7011H5.70935ZM10.4284 7.57074L10.1406 7.27258L10.7266 7.85862L10.4284 7.57074Z" fill="#4A58EC" />
-                                                                        </svg>
-                                                                    </div>
+                                                                    <a href="{{ url('delete-product/'.$product->id) }}" onclick="return confirm('Are you sure you want to delete this record?')">
+                                                                        <div class="text-muted" type="button">
+                                                                            <svg width="20" height="20" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <rect width="18" height="18" rx="2.90323" fill="#FFE9E5" />
+                                                                                <path d="M6.9431 12.7013C6.71689 12.7013 6.52331 12.6208 6.36236 12.4599C6.20141 12.2989 6.12079 12.1052 6.12052 11.8787V6.53197H5.70923V5.70939H7.76568V5.2981H10.2334V5.70939H12.2899V6.53197H11.8786V11.8787C11.8786 12.105 11.7981 12.2987 11.6372 12.4599C11.4762 12.6211 11.2825 12.7016 11.056 12.7013H6.9431ZM11.056 6.53197H6.9431V11.8787H11.056V6.53197ZM7.76568 11.0562H8.58826V7.35455H7.76568V11.0562ZM9.41084 11.0562H10.2334V7.35455H9.41084V11.0562Z" fill="#ED2227" />
+                                                                            </svg>
+                                                                        </div>
+                                                                    </a>
+                                                                    <a href="{{ url('edit-product/'.$product->id) }}">
+                                                                        <div class="text-muted" type="button">
+                                                                            <svg width="20" height="20" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <rect width="18" height="18" rx="2.90323" fill="#E7E9FD" />
+                                                                                <path d="M6.1206 11.8786H6.70663L10.7266 7.85862L10.1406 7.27258L6.1206 11.2926V11.8786ZM5.70935 12.7011C5.59282 12.7011 5.49522 12.6616 5.41654 12.5826C5.33785 12.5037 5.29837 12.4061 5.2981 12.2898V11.2926C5.2981 11.1829 5.31866 11.0783 5.35978 10.9788C5.40091 10.8792 5.45917 10.7919 5.53456 10.7168L10.7266 5.53505C10.8088 5.45966 10.8997 5.4014 10.9993 5.36027C11.0988 5.31915 11.2032 5.29858 11.3126 5.29858C11.422 5.29858 11.5283 5.31915 11.6313 5.36027C11.7344 5.4014 11.8235 5.46308 11.8987 5.54533L12.4641 6.12108C12.5464 6.19648 12.6063 6.28558 12.6438 6.3884C12.6814 6.49121 12.7003 6.59402 12.7006 6.69683C12.7006 6.8065 12.6817 6.9111 12.6438 7.01062C12.606 7.11014 12.5461 7.20089 12.4641 7.28287L7.28238 12.4646C7.20698 12.54 7.11952 12.5983 7.02 12.6394C6.92048 12.6805 6.81602 12.7011 6.70663 12.7011H5.70935ZM10.4284 7.57074L10.1406 7.27258L10.7266 7.85862L10.4284 7.57074Z" fill="#4A58EC" />
+                                                                            </svg>
+                                                                        </div>
+                                                                    </a>
                                                                 </td>
                                                             </tr>
-                                                        <?php endfor; ?>
-
+                                                        <?php } ?>
                                                         
-
                                                     </tbody>
                                                 </table>
                                             </div>
-
+                                            <button type="submit" class="btn btn-danger btn-sm mb-2" onclick="return confirm('Are you sure you want to delete selected records?')">Delete Selected</button>
+                                            </form>               
                                         </div>
 
-                                        <!--<nav aria-label="Page navigation example">
-                                            <ul class="pagination justify-content-center mt-5">
-                                                <li class="page-item disabled">
-                                                    <a class="page-link">Prev</a>
-                                                </li>
-                                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                <li class="page-item next">
-                                                    <a class="page-link" href="#">Next</a>
-                                                </li>
-                                            </ul>
-                                        </nav>-->
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+ <script>
+    $(document).ready(function() {
+        @if(Session::has('success'))
+            toastr.success("{{ Session::get('success') }}");
+        @endif
+
+        @if(Session::has('fail'))
+            toastr.error("{{ Session::get('fail') }}");
+        @endif
+    });
+    document.getElementById('select-all').addEventListener('click', function(event) {
+        let checkboxes = document.querySelectorAll('input[name="selected_products[]"]');
+        checkboxes.forEach(cb => cb.checked = event.target.checked);
+    });
+</script>
 
 @endsection
 
