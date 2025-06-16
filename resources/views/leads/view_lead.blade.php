@@ -600,18 +600,18 @@
 
 
                     <!-- <div class="col-12 bottom-actions-bar">
-                                                                                                                                                <div class="d-flex gap-2 mt-3 justify-content-between">
-                                                                                                                                                    <div>
-                                                                                                                                                        <button type="submit" class="btn clear-all-btn">Clear All</button>
-                                                                                                                                                    </div>
-                                                                                                                                                    <div>
-                                                                                                                                                        <button type="submit" class="btn save-btn">Save</button>
-                                                                                                                                                       <button type="button" class="btn cancel-btn">Cancel</button>
+                                                                                                                                                    <div class="d-flex gap-2 mt-3 justify-content-between">
+                                                                                                                                                        <div>
+                                                                                                                                                            <button type="submit" class="btn clear-all-btn">Clear All</button>
+                                                                                                                                                        </div>
+                                                                                                                                                        <div>
+                                                                                                                                                            <button type="submit" class="btn save-btn">Save</button>
+                                                                                                                                                           <button type="button" class="btn cancel-btn">Cancel</button>
+                                                                                                                                                        </div>
+
                                                                                                                                                     </div>
 
-                                                                                                                                                </div>
-
-                                                                                                                                            </div> -->
+                                                                                                                                                </div> -->
 
                 </div>
 
@@ -1224,6 +1224,132 @@
                 if (collapseElement.classList.contains("show")) {
                     bsCollapse.hide(); // Hide the collapse if it's open
                 }
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            var selectedStageId, selectedLeadId;
+
+            $('.stage-link').click(function() {
+                var stageId = $(this).data('stage-id');
+                var leadId = $(this).data('lead-id');
+
+                if ($(this).hasClass('won-lost')) {
+                    if ($(this).text() == 'Won') {
+                        selectedStageId = stageId;
+                        selectedLeadId = leadId;
+                        $('#wonModal').modal('show');
+                    } else if ($(this).text() == 'Lost') {
+                        selectedStageId = stageId;
+                        selectedLeadId = leadId;
+                        $('#lostModal').modal('show');
+                    }
+                } else {
+                    updateLeadStage(stageId, leadId, '');
+                }
+            });
+
+            $('#submitWonReason').click(function() {
+                var won_value = $('#won_value').val();
+                if (won_value === '') {
+                    alert('Please provide a won value.');
+                    return;
+                }
+                var closed_date = $('#closed_date').val();
+                if (closed_date === '') {
+                    alert('Please provide a closed date.');
+                    return;
+                }
+                $('#wonModal').modal('hide');
+                updateLeadStage(selectedStageId, selectedLeadId, won_value, closed_date, null);
+            });
+
+            $('#submitLostReason').click(function() {
+                var lost_closed_date = $('#lost_closed_date').val();
+                if (lost_closed_date === '') {
+                    alert('Please provide a closed date.');
+                    return;
+                }
+                var reason = $('#lostReasonText').val().trim();
+                if (reason === '') {
+                    alert('Please provide a reason.');
+                    return;
+                }
+                $('#lostModal').modal('hide');
+                updateLeadStage(selectedStageId, selectedLeadId, null, lost_closed_date, reason);
+            });
+
+            function updateLeadStage(stageId, leadId, won_value, closed_date, reason) {
+                $.ajax({
+                    url: '{{ url('update-lead-stage') }}',
+                    type: 'POST',
+                    data: {
+                        new_stage_id: stageId,
+                        lead_id: leadId,
+                        won_value: won_value,
+                        closed_date: closed_date,
+                        reason: reason,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            location.reload();
+                            toastr.success("Lead stage updated successfully");
+                        } else {
+                            toastr.error("Error updating lead stage");
+                        }
+                    },
+                    error: function() {
+                        alert('An error occurred.');
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            @if (Session::has('success'))
+                toastr.success("{{ Session::get('success') }}");
+            @endif
+
+            @if (Session::has('fail'))
+                toastr.error("{{ Session::get('fail') }}");
+            @endif
+        });
+    </script>
+
+
+    <script>
+        $('#body').summernote({
+            tabsize: 2,
+            height: 200
+        });
+        document.addEventListener("DOMContentLoaded", function() {
+
+
+            const ccButton = document.querySelector(".cc-toggle");
+            const bccButton = document.querySelector(".bcc-toggle");
+
+
+            const ccInputDiv = document.querySelector("input[name='cc[]']").closest('.col-md-12');
+            const bccInputDiv = document.querySelector("input[name='bcc[]']").closest('.col-md-12');
+
+            ccInputDiv.style.display = "none";
+            bccInputDiv.style.display = "none";
+
+
+            if (ccButton) {
+                ccButton.addEventListener("click", function() {
+                    ccInputDiv.style.display = ccInputDiv.style.display === "none" ? "block" : "none";
+                });
+            }
+
+
+            if (bccButton) {
+                bccButton.addEventListener("click", function() {
+                    bccInputDiv.style.display = bccInputDiv.style.display === "none" ? "block" : "none";
+                });
             }
         });
     </script>
