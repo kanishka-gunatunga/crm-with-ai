@@ -433,7 +433,28 @@ body {
 .import-leads-button:active {
   background-color: #3441c7;
 }
-.dt-button{
+
+.lead-status-dropdown {
+  padding: 0 !important;
+}
+
+.lead-status-dropdown .form-select {
+  background-color: inherit !important;
+  border: none !important;
+  padding: 5px 35px 5px 15px !important;
+  margin: 0 !important;
+  gap: 5px !important;
+}
+
+.lead-status-dropdown .form-select option {
+  font-family: var(--font-family) !important;
+  font-weight: 500 !important;
+  font-size: 12px !important;
+  color: var(--primary-text-color) !important;
+  padding: 10px !important;
+}
+
+.dt-button {
   height: 30px;
   padding: 13px 10px;
   justify-content: center;
@@ -444,6 +465,7 @@ body {
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
+
 .import-icon {
   width: 15px;
   height: 15px;
@@ -485,7 +507,7 @@ body {
   font-weight: 500;
 }
 
-.add-card-wrapper a{
+.add-card-wrapper a {
   text-decoration: none;
   color: inherit;
   font-family: inherit;
@@ -1079,7 +1101,7 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
 }
 
 
-.action-icons{
+.action-icons {
   gap: 5px !important;
 }
 

@@ -282,8 +282,8 @@
                                         <div class="col-md-5 mb-3">
                                             <label for="firstNameinput"
                                                 class="form-label">{{ __('app.leads.participants') }}</label>
-                                            <select class="form-control" data-choices data-choices-removeItem multiple
-                                                id="choices-multiple-remove-button" name="participants[]">
+                                            <select class="form-control multiselect" data-choices data-choices-removeItem
+                                                multiple id="choices-multiple-remove-button" name="participants[]">
                                                 <?php foreach($persons as $person){ ?>
                                                 <option value="person||{{ $person->id }}">
                                                     {{ $person->name }}</option>
@@ -321,33 +321,65 @@
                             </div>
                             <div class="tab-pane fade" id="email-tab" role="tabpanel" aria-labelledby="email-tab-tab"
                                 tabindex="0">
-                                <h3>Tab 3</h3>
-                                <section class="primary-info">
-                                    <div class="title-section">
-                                        <h3 class="field-label">Title</h3>
-                                        <p class="project-title">Design Dashboard Wireframe for Egoagri</p>
+                                <form>
+                                    <div class="card card-default">
+                                        <div class="card-body">
+
+
+                                            <div class="row g-4">
+                                                <div class="col-12 col-md-4 ">
+                                                    <label for="field1" class="form-label">To</label>
+                                                    <div class="position-relative">
+                                                        <input type="text" class="form-control " id="field1"
+                                                            placeholder="To" data-choices
+                                                            data-choices-limit="Required Limit" data-choices-removeItem
+                                                            class="form-control" name="to[]">
+                                                        <button type="button"
+                                                            class="position-absolute email-sending-option-btn CC cc-toggle">CC</button>
+                                                        <button type="button"
+                                                            class="position-absolute email-sending-option-btn BCC bcc-toggle">BCC</button>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="col-md-12 mb-3">
+                                                    <label for="firstNameinput"
+                                                        class="form-label">{{ __('app.leads.cc') }}</label>
+                                                    <input type="text" data-choices data-choices-limit="Required Limit"
+                                                        data-choices-removeItem class="form-control" name="cc[]">
+                                                </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <label for="firstNameinput"
+                                                        class="form-label">{{ __('app.leads.bcc') }}</label>
+                                                    <input type="text" data-choices data-choices-limit="Required Limit"
+                                                        data-choices-removeItem class="form-control" name="bcc[]">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label for="field1" class="form-label">Subject</label>
+                                                    <input type="text" class="form-control" id="field1"
+                                                        placeholder="Subject">
+                                                </div>
+
+
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+                                    <div class="card card-default mt-3">
+                                        <div class="card-body">
+                                            <div class="col-10">
+                                                <label for="field5" class="form-label">Description</label>
+                                                <div id="froala-editor"></div>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div class="status-section mb-3">
-                                        <h3 class="field-label mb-0">Status</h3>
-                                        <span class="priority-badge urgent">Urgent</span>
-                                    </div>
 
-                                    <div class="terms-section">
-                                        <h3 class="field-label">Terms</h3>
-                                        <p class="field-value">None</p>
-                                    </div>
 
-                                    <div class="start-date-section">
-                                        <h3 class="field-label">Start Date</h3>
-                                        <p class="field-value">May 26, 2025</p>
-                                    </div>
 
-                                    <div class="duration-section">
-                                        <h3 class="field-label">Duration</h3>
-                                        <p class="field-value">5 months</p>
-                                    </div>
-                                </section>
+                                </form>
                             </div>
                             <div class="tab-pane fade" id="file-tab" role="tabpanel" aria-labelledby="file-tab-tab"
                                 tabindex="0">
@@ -600,18 +632,18 @@
 
 
                     <!-- <div class="col-12 bottom-actions-bar">
-                                                                                                                                                    <div class="d-flex gap-2 mt-3 justify-content-between">
-                                                                                                                                                        <div>
-                                                                                                                                                            <button type="submit" class="btn clear-all-btn">Clear All</button>
-                                                                                                                                                        </div>
-                                                                                                                                                        <div>
-                                                                                                                                                            <button type="submit" class="btn save-btn">Save</button>
-                                                                                                                                                           <button type="button" class="btn cancel-btn">Cancel</button>
-                                                                                                                                                        </div>
+                                                                                                                                                                    <div class="d-flex gap-2 mt-3 justify-content-between">
+                                                                                                                                                                        <div>
+                                                                                                                                                                            <button type="submit" class="btn clear-all-btn">Clear All</button>
+                                                                                                                                                                        </div>
+                                                                                                                                                                        <div>
+                                                                                                                                                                            <button type="submit" class="btn save-btn">Save</button>
+                                                                                                                                                                           <button type="button" class="btn cancel-btn">Cancel</button>
+                                                                                                                                                                        </div>
 
-                                                                                                                                                    </div>
+                                                                                                                                                                    </div>
 
-                                                                                                                                                </div> -->
+                                                                                                                                                                </div> -->
 
                 </div>
 
@@ -1320,7 +1352,7 @@
     </script>
 
 
-    <script>
+    {{-- <script>
         $('#body').summernote({
             tabsize: 2,
             height: 200
@@ -1352,5 +1384,13 @@
                 });
             }
         });
+
+        $(document).ready(function() {
+            $('.multiselect').select2();
+        });
+    </script> --}}
+
+    <script>
+        
     </script>
 @endsection
