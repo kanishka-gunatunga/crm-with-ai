@@ -14,7 +14,7 @@
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <h3 class="page-title"> 
-                                       {{ __('app.products.create-title') }}
+                                       {{ __('app.products.edit-title') }}
                                     </h3>
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
@@ -37,19 +37,19 @@
                                             <div class="row g-4">
                                                 <div class="col-12 col-md-4">
                                                     <label for="field1" class="form-label">Name</label>
-                                                    <input type="text" class="form-control" id="field1" placeholder="Name" name="name" value="{{ old('name') }}" required>
+                                                    <input type="text" class="form-control" id="field1" placeholder="Name" name="name" value="{{ $product->name }}" required>
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label for="field1" class="form-label">SKU</label>
-                                                    <input type="text" class="form-control" id="field1" placeholder="SKU" name="sku" value="{{ old('sku') }}" required>
+                                                    <input type="text" class="form-control" id="field1" placeholder="SKU" name="sku" value="{{ $product->sku }}" required>
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label for="field1" class="form-label">Quantity</label>
-                                                    <input type="number" class="form-control" id="field1" placeholder="Quantity" step="any"  name="quantity" value="{{ old('quantity') }}" required>
+                                                    <input type="number" class="form-control" id="field1" placeholder="Quantity" step="any"  name="quantity" value="{{ $product->quantity }}" required>
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label for="field1" class="form-label">Unit Cost</label>
-                                                    <input type="number" step="any" class="form-control" name="cost" value="{{ old('cost') }}" required>
+                                                    <input type="number" step="any" class="form-control" name="cost" value="{{ $product->cost }}" required>
                                                 </div>
 
                                             </div>
@@ -62,7 +62,7 @@
                                         <div class="card-body">
                                             <div class="col-12">
                                                 <label for="field5" class="form-label">Description</label>
-                                                <textarea class="form-control" placeholder="Description" id="field5" rows="5" name="description">{{ old('description') }}</textarea>
+                                                <textarea class="form-control" placeholder="Description" id="field5" rows="5" name="description">{{ $product->description }}</textarea>
 
                                             </div>
                                         </div>
