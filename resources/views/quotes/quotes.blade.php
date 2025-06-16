@@ -103,7 +103,7 @@
                         </div>
                         <div class="row g-4">
                             <div class="table-responsive">
-                                <table class="table new-table">
+                                <table class="table new-table" id="quotes-table">
 
                                     <thead>
                                         <tr>
@@ -166,4 +166,9 @@
     </div>
 </div>
 
+<script>
+    $(document).ready(function() {
+        $('#quotes-table').DataTable();
+    });
+</script>
 @endsection

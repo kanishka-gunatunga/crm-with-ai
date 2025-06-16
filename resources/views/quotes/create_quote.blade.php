@@ -233,7 +233,7 @@
                                         </div>
                                         <div>
                                             <button type="submit" class="btn save-btn">Save</button>
-                                            <button type="submit" class="btn cancel-btn">Cancel</button>
+                                           <button type="button" class="btn cancel-btn">Cancel</button>
                                         </div>
 
                                     </div>
@@ -254,7 +254,7 @@
                         </div>
                         <div>
                             <button type="submit" class="btn save-btn">Save</button>
-                            <button type="submit" class="btn cancel-btn">Cancel</button>
+                           <button type="button" class="btn cancel-btn">Cancel</button>
                         </div>
 
                     </div>

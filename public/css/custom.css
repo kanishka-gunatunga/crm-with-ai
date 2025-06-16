@@ -434,6 +434,26 @@ body {
   background-color: #3441c7;
 }
 
+.lead-status-dropdown{
+  padding: 0 !important;
+}
+
+.lead-status-dropdown .form-select{
+  background-color: inherit !important;
+  border: none !important;
+  padding: 5px 35px 5px 15px !important;
+  margin: 0 !important;
+  gap: 5px !important ;
+}
+
+.lead-status-dropdown .form-select option {
+  font-family: var(--font-family) !important;
+  font-weight: 500 !important;
+  font-size: 12px !important;
+  color: var(--primary-text-color) !important;
+  padding: 10px !important;
+}
+
 .import-icon {
   width: 15px;
   height: 15px;
@@ -816,6 +836,7 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
   position: absolute;
   top: 50px;
   right: 20px;
+  z-index: 2;
 }
 
 .create-menu {
