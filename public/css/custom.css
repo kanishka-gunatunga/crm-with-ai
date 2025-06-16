@@ -434,15 +434,21 @@ body {
   background-color: #3441c7;
 }
 .dt-button{
-  height: 30px;
-  padding: 13px 10px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  background-color: var(--primary-color);
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+  height: 30px !important;
+  padding: 5px 10px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  border-radius: 5px !important;
+  background-color: var(--primary-color) !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease !important;
+  font-family: var(--font-family)!important;
+  font-weight: 400!important;
+  font-size: 12px!important;
+  color: #fff!important;
+  line-height: 1.5!important;
+  white-space: nowrap!important;
 }
 .import-icon {
   width: 15px;

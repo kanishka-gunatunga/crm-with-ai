@@ -12,7 +12,7 @@
             <div class="d-flex justify-content-between">
                 <div>
                     <h3 class="page-title">
-                       {{ __('app.services.create-title') }}
+                       {{ __('app.services.edit-title') }}
                     </h3>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
@@ -37,12 +37,12 @@
                             <div class="row g-4">
                                 <div class="col-12 col-md-4">
                                     <label for="field1" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="field1" placeholder="Name" name="name" value="{{ old('name') }}" required>
+                                    <input type="text" class="form-control" id="field1" placeholder="Name" name="name" value="{{ $service->name }}" required>
                                     @if($errors->has("name")) <div class="alert alert-danger mt-2">{{ $errors->first('name') }}</li></div>@endif
                                 </div>
                                 <div class="col-12 col-md-4">
                                     <label for="field1" class="form-label">Cost</label>
-                                    <input type="number"   step="any"  class="form-control" id="field1" placeholder="Price"  name="cost" value="{{ old('cost') }}" required>
+                                    <input type="number"   step="any"  class="form-control" id="field1" placeholder="Price"  name="cost"  value="{{  $service->cost  }}" required>
                                     @if($errors->has("cost")) <div class="alert alert-danger mt-2">{{ $errors->first('cost') }}</li></div>@endif
                                 </div>
                               
@@ -56,7 +56,7 @@
                         <div class="card-body">
                             <div class="col-12">
                                 <label for="field5" class="form-label">Description</label>
-                                <textarea class="form-control" placeholder="Description" id="field5" rows="5" name="description"></textarea>
+                                <textarea class="form-control" placeholder="Description" id="field5" rows="5" name="description">{{ $service->description }}</textarea>
                                 @if($errors->has("description")) <div class="alert alert-danger mt-2">{{ $errors->first('description') }}</li></div>@endif
 
                             </div>
