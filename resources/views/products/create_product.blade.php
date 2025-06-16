@@ -78,7 +78,7 @@
                         <div class="col-12 action-bar">
                     <div class="d-flex gap-2 justify-content-between">
                         <div>
-                            <button type="button" class="btn clear-all-btn">Clear All</button>
+                           <a href=""><button type="button" class="btn clear-all-btn">Clear All</button></a>
                         </div>
                         <div>
                             <button type="submit" class="btn save-btn">Save</button>
