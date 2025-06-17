@@ -3,7 +3,16 @@
 
 @section('content')
 
-
+<?php
+use App\Models\Person;
+use App\Models\UserDetails;
+use App\Models\Organization;
+use App\Models\Product;
+use App\Models\Service;
+$owner_name = UserDetails::where('id', $lead->sales_owner)->value('name');
+$person = Person::where('id', $lead->person)->first();
+$organization = Organization::where('id', $person->organization)->first();
+?>
   <!-- Scrollable Content -->
                 <div class="main-scrollable">
                     <div class="page-container">
@@ -13,7 +22,7 @@
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <h3 class="page-title">
-                                       {{ __('app.quotes.create-title') }}
+                                     {{ __('app.quotes.create-title') }}
                                     </h3>
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
@@ -40,21 +49,11 @@
                                             <div class="row g-4">
                                                 <div class="col-12 col-md-4">
                                                     <label for="assign_user" class="form-label">{{ __('app.quotes.lead') }}</label>
-                                                    <select class="myDropdown form-control " name="lead" required>
-                                                        <option  selected=""></option>
-                                                        <?php foreach($leads as $lead){ ?> 
-                                                        <option value="{{$lead->id}}">{{$lead->title}}</option>
-                                                        <?php } ?>
-                                                    </select>
+                                                   <input type="text" class="form-control" name="lead" value="{{ $lead->title }}" readonly required>
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label for="assign_user" class="form-label">Sales Owner</label>
-                                                    <select class="myDropdown form-control" name="owner" required>
-                                                        <option  selected=""></option>
-                                                        <?php foreach($owners as $owner){ ?> 
-                                                        <option value="{{$owner->user_id}}">{{$owner->name}}</option>
-                                                        <?php } ?>
-                                                    </select>
+                                                    <input type="text" class="form-control" name="owner" value="{{ $owner_name }}" readonly required>
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label for="assign_user" class="form-label">Subject</label>
@@ -70,17 +69,12 @@
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label for="terms" class="form-label">Person</label>
-                                                    <select class="myDropdown form-control" name="person" required>
-                                                        <option  selected=""></option>
-                                                        <?php foreach($persons as $person){ ?> 
-                                                        <option value="{{$person->id}}">{{$person->name}}</option>
-                                                        <?php } ?>
-                                                    </select>
+                                                    <input type="text" class="form-control" name="person" value="{{ $person->name }}" readonly required>
                                                 </div>
 
                                                 <div class="col-12 col-md-4">
                                                     <label for="date_start" class="form-label" name="description">Description</label>
-                                                    <input type="text" class="form-control" id="date_start" placeholder="Description">
+                                                    <input type="text" class="form-control" id="date_start" placeholder="Description" >
                                                 </div>
 
                                             </div>
@@ -96,23 +90,23 @@
                                         <div class="row g-4">
                                             <div class="col-12 col-md-4">
                                                 <label for="No" class="form-label">Address</label>
-                                                <input type="text" class="form-control" id="No" placeholder="No" name="address" required>
+                                                <input type="text" class="form-control" id="No" placeholder="No" name="address" required value="{{$organization->address}}">
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Province" class="form-label">Province</label>
-                                                <input type="text" class="form-control" id="Province" placeholder="Province" name="state" required>
+                                                <input type="text" class="form-control" id="Province" placeholder="Province" name="state" required value="{{$organization->state}}">
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Country" class="form-label">Country</label>
-                                                <input type="text" class="form-control" id="Country" placeholder="Country" name="country" required>
+                                                <input type="text" class="form-control" id="Country" placeholder="Country" name="country" required value="{{$organization->country}}">
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="City" class="form-label">City</label>
-                                                <input type="text" class="form-control" id="City" name="city" placeholder="City" value="" required>
+                                                <input type="text" class="form-control" id="City" name="city" placeholder="City" required value="{{$organization->city}}">
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Postal Code" class="form-label">Postal Code</label>
-                                                <input type="text" class="form-control" id="Postal Code"  name="post_code" placeholder="Post Code" value="" required>
+                                                <input type="text" class="form-control" id="Postal Code"  name="post_code" placeholder="Post Code"  required value="{{$organization->post_code}}">
                                             </div>
 
                                         </div>
@@ -127,23 +121,23 @@
                                         <div class="row g-4">
                                             <div class="col-12 col-md-4">
                                                 <label for="No" class="form-label">Address</label>
-                                                <input type="text" class="form-control" id="No" placeholder="No" name="shipping_address" required>
+                                                <input type="text" class="form-control" id="No" placeholder="No" name="shipping_address" required value="{{$organization->address}}">
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Province" class="form-label">Province</label>
-                                                <input type="text" class="form-control" id="Province" placeholder="Province" name="shipping_state" required>
+                                                <input type="text" class="form-control" id="Province" placeholder="Province" name="shipping_state" required value="{{$organization->state}}">
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Country" class="form-label">Country</label>
-                                                <input type="text" class="form-control" id="Country" placeholder="Country" name="shipping_country" required>
+                                                <input type="text" class="form-control" id="Country" placeholder="Country" name="shipping_country" required value="{{$organization->country}}">
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="City" class="form-label">City</label>
-                                                <input type="text" class="form-control" id="City" name="shipping_city" placeholder="City" value="" required>
+                                                <input type="text" class="form-control" id="City" name="shipping_city" placeholder="City" required value="{{$organization->city}}">
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Postal Code" class="form-label">Postal Code</label>
-                                                <input type="text" class="form-control" id="Postal Code" name="shipping_post_code" placeholder="Post Code" value="" required>
+                                                <input type="text" class="form-control" id="Postal Code" name="shipping_post_code" placeholder="Post Code"  required value="{{$organization->post_code}}">
                                             </div>
 
                                         </div>
@@ -181,13 +175,62 @@
                                                             <th class="corner-right">Actions</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody id="products-tbody">
-                                                         
-                                                    </tbody>
-                                                    <tfoot>
+                                                     <tbody id="products-tbody">
+                                                          <?php 
+                                                          $product_total = 0;
+                                                          foreach($lead_products as $lead_product){ 
+                                                            $product_total = $product_total+$lead_product->amount;
+                                                            if($lead_product->type == "product"){
+                                                            ?>
+                                                            <tr>
+                                                                <td>
+                                                                    <select class="form-control product-select" name="products[]" required>
+                                                                        <option hidden selected  value="product||{{$lead_product->product_id}}" data-price="{{$lead_product->price}}">{{Product::where('id',$lead_product->product_id)->value('name')}}</option>
+                                                                        <?php foreach($products as $product){ ?> 
+                                                                        <option value="product||{{$product->id}}" data-price="{{$product->cost}}">{{$product->name}}</option>
+                                                                        <?php } ?>
+                                                                        <?php foreach($services as $service){ ?> 
+                                                                            <option value="service||{{$service->id}}" data-price="{{$service->cost}}">{{$service->name}}</option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                    <textarea class="form-contro w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]" placeholder="Notes">{{$lead_product->note}}</textarea>
+                                                                </td>
+                                                                <td><input type="number" step="any" class="form-control" name="quantity[]" value="{{$lead_product->quantity}}" required></td>
+                                                                <td><input type="number" step="any" class="form-control" name="price[]" value="{{$lead_product->price}}" required></td>
+                                                                <td><input type="number" step="any" class="form-control" name="amount[]" value="{{$lead_product->amount}}" readonly required></td>
+                                                                <td><input type="number" step="any" class="form-control" name="discount[]"></td>
+                                                                <td><input type="number" step="any" class="form-control" name="tax[]"></td>
+                                                                <td><input type="number" step="any" class="form-control" name="total[]" value="{{$lead_product->amount}}"  readonly></td>
+                                                                <td><button type="button" class="btn btn-danger remove-product">-</button></td>
+                                                            </tr>
+                                                          <?php }else{ ?> 
+                                                            <tr>
+                                                                <td>
+                                                                    <select class="form-control product-select" name="products[]" required>
+                                                                        <option hidden selected  value="service||{{$lead_product->product_id}}" data-price="{{$lead_product->price}}">{{Service::where('id',$lead_product->product_id)->value('name')}}</option>
+                                                                        <?php foreach($products as $product){ ?> 
+                                                                        <option value="product||{{$product->id}}" data-price="{{$product->cost}}">{{$product->name}}</option>
+                                                                        <?php } ?>
+                                                                        <?php foreach($services as $service){ ?> 
+                                                                            <option value="service||{{$service->id}}" data-price="{{$service->cost}}">{{$service->name}}</option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                    <textarea class="form-contro w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]" placeholder="Notes">{{$lead_product->note}}</textarea>
+                                                                </td>
+                                                                <td><input type="number" step="any" class="form-control" name="quantity[]" value="{{$lead_product->quantity}}" required></td>
+                                                                <td><input type="number" step="any" class="form-control" name="price[]" value="{{$lead_product->price}}" required></td>
+                                                                <td><input type="number" step="any" class="form-control" name="amount[]" value="{{$lead_product->amount}}" readonly required></td>
+                                                                <td><input type="number" step="any" class="form-control" name="discount[]"></td>
+                                                                <td><input type="number" step="any" class="form-control" name="tax[]"></td>
+                                                                <td><input type="number" step="any" class="form-control" name="total[]" value="{{$lead_product->amount}}"  readonly></td>
+                                                                <td><button type="button" class="btn btn-danger remove-product">-</button></td>
+                                                            </tr>
+                                                            <?php }} ?>
+                                                        </tbody>
+                                                     <tfoot>
                                                             <tr>
                                                                 <th colspan="6" style="text-align:right">{{ __('app.quotes.sub-total') }}</th>
-                                                                <th id="sub-total"></th>
+                                                                <th id="sub-total">{{$product_total}}</th>
                                                             </tr>
                                                             <tr>
                                                                 <th colspan="6" style="text-align:right">{{ __('app.quotes.discount') }} -</th>
@@ -197,20 +240,20 @@
                                                                 <th colspan="6" style="text-align:right">{{ __('app.quotes.tax') }} +</th>
                                                                 <th  id="tax-total"></th>
                                                             </tr>
-                                                        
+                                                           
                                                             <tr>
                                                                 <th colspan="6" style="text-align:right">{{ __('app.quotes.total') }}</th>
-                                                                <th  id="order-total"></th>
+                                                                <th  id="order-total">{{$product_total}}</th>
                                                             </tr>
-                                                        </tfoot>          
+                                                        </tfoot> 
                                                 </table>
                                             </div>
 
                                         </div>
 
-                                         <input type="hidden" class="form-control" name="discount_total_amount" id="discount_total_amount" readonly value="0">
+                                        <input type="hidden" class="form-control" name="discount_total_amount" id="discount_total_amount" readonly value="0">
                                         <input type="hidden" class="form-control" name="tax_total_amount" id="tax_total_amount" readonly value="0">
-                                        <input type="hidden" class="form-control" name="order_total_input" id="order_total_input" readonly  value="0">
+                                        <input type="hidden" class="form-control" name="order_total_input" id="order_total_input" readonly  value="{{$product_total}}">
                                     </div>
                                 </div>
 
@@ -237,8 +280,7 @@
                 </div>
 
                 <!-- Bottom Action Buttons -->
-               
-<script>
+ <script>
     $(document).ready(function() {
         @if(Session::has('success'))
             toastr.success("{{ Session::get('success') }}");
@@ -322,7 +364,7 @@
                 <td>
                     <select class="form-control product-select" name="products[]" required>
                         <option hidden selected></option>
-                         <?php foreach($products as $product){ ?> 
+                        <?php foreach($products as $product){ ?> 
                         <option value="product||{{$product->id}}" data-price="{{$product->cost}}">{{$product->name}}</option>
                         <?php } ?>
                         <?php foreach($services as $service){ ?> 
