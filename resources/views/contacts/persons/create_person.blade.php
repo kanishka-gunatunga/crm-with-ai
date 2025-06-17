@@ -11,13 +11,13 @@
             <div class="d-flex justify-content-between">
                 <div>
                     <h3 class="page-title">
-                        Create Person
+                       {{ __('app.contacts.persons.create-title') }}
                     </h3>
 
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">Contacts</a></li>
-                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page"> Create Person</li>
+                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page"> {{ __('app.contacts.persons.create-title') }}</li>
                         </ol>
                     </nav>
 
