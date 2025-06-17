@@ -2,7 +2,9 @@
 
 @section('content')
 
-
+<?php
+use App\Models\Organization;
+?>
 <!-- Scrollable Content -->
 <!-- Scrollable Content -->
 <div class="main-scrollable">
@@ -103,7 +105,7 @@
                             <div class="row g-4">
                                 <div class="col-12 col-md-6">
                                     <label for="field1" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="field1" placeholder="Name" name="name" value="{{ old('name') }}" required>
+                                    <input type="text" class="form-control" id="field1" placeholder="Name" name="name" value="{{ $person->name }}" required>
                                     @if($errors->has("name")) <div class="alert alert-danger mt-2">{{ $errors->first('name') }}</div>@endif
                                 </div>
                                 <!-- <div class="col-12 col-md-4">
@@ -114,6 +116,7 @@
                                 <div class="col-12 col-md-6">
                                     <label for="field3" class="form-label">Organization</label>
                                     <select class="myDropdown form-control" name="organization">
+                                        <option value="{{$person->organization}}">{{Organization::where('id', $person->organization)->value('name') ?? ''}}</option> 
                                         <?php foreach($organizations as $organization){ ?> 
                                         <option value="{{$organization->id}}">{{$organization->name}}</option>
                                         <?php } ?>
@@ -136,19 +139,24 @@
                                         </div>
                                     </div>
                                     <div id="email-fields">
+                                         @foreach($person->emails as $key => $email)
                                         <div class="email-field">
-                                            <input type="email" class="form-control" id="field4" placeholder="Emails" name="emails[]" required>
+                                            <div class="d-flex align-items-center mt-2">
+                                            <input type="email" class="form-control" id="field4" placeholder="Emails" value="{{ $email['value'] }}" required>
+                                            <i class="fa-solid fa-trash delete-stage remove-append-item mx-2" onclick="removeEmailField(this)"></i>
+                                            </div>
                                             <div class="d-flex align-items-center mt-2">
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="email_types[0]" id="email-work-0" checked value="work">
-                                                    <label class="form-check-label" for="email-work-0">{{ __('app.common.work') }}</label>
+                                                    <input class="form-check-input" type="radio" name="email_types[{{ $key }}]" id="email-work-{{ $key }}" value="work" {{ $email['label'] == 'work' ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="email-work-{{ $key }}">{{ __('app.common.work') }}</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="email_types[0]" id="email-home-0" value="home">
-                                                    <label class="form-check-label" for="email-home-0">{{ __('app.common.home') }}</label>
+                                                    <input class="form-check-input" type="radio" name="email_types[{{ $key }}]" id="email-home-{{ $key }}" value="home" {{ $email['label'] == 'home' ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="email-home-{{ $key }}">{{ __('app.common.home') }}</label>
                                                 </div>
                                             </div>
                                         </div>
+                                        @endforeach
                                     </div>
 
                                 </div>
@@ -166,21 +174,26 @@
                                         </div>
                                     </div>
                                     <div id="number-fields">
+                                        @foreach($person->contact_numbers as $key => $contactNumber)
                                         <div class="number-field">        
-                                            <input type="text" class="form-control" id="field4" placeholder="Contact Numbers" name="contact_numbers[]">
+                                            <div class="d-flex align-items-center mt-2">
+                                            <input type="text" class="form-control" id="field4" placeholder="Contact Numbers" name="contact_numbers[]" value="{{ $contactNumber['value'] }}">
+                                            <i class="fa-solid fa-trash delete-stage remove-append-item mx-2" onclick="removeNumberField(this)"></i>
+                                            </div>
 
                                             <div class="d-flex align-items-center mt-2">
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="number_types[0]" id="number-work-0" checked value="work">
-                                                    <label class="form-check-label" for="inlineRadio1">{{ __('app.common.work') }}</label>
+                                                    <input class="form-check-input" type="radio" name="number_types[{{ $key }}]" id="number-work-{{ $key }}" value="work" {{ $contactNumber['label'] == 'work' ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="number-work-{{ $key }}">{{ __('app.common.work') }}</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="number_types[0]" id="number-home-0" value="home">
-                                                    <label class="form-check-label" for="inlineRadio2">{{ __('app.common.home') }}</label>
+                                                    <input class="form-check-input" type="radio" name="number_types[{{ $key }}]" id="number-home-{{ $key }}" value="home" {{ $contactNumber['label'] == 'home' ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="number-home-{{ $key }}">{{ __('app.common.home') }}</label>
                                                 </div>
 
                                             </div>
                                         </div>
+                                        @endforeach
                                     </div>
                                             
                                 </div>
