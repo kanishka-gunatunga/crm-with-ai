@@ -148,7 +148,7 @@ use App\Models\Person;
                                                           
                                                                         <td class="action-icons d-flex gx-3">
                                                                         
-                                                                        <a href="{{ url('delete-organization/'.$organization->id) }}" onclick="return confirm('Are you sure you want to delete this record?')">
+                                                                        <a href="{{ url('delete-organization/'.$organization->id) }}" class="delete-link-confirm">
                                                                         <div class="text-muted" type="button">
                                                                             <svg width="20" height="20" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                                 <rect width="18" height="18" rx="2.90323" fill="#FFE9E5" />
@@ -170,7 +170,7 @@ use App\Models\Person;
                                                         </tbody>
                                                 </table>
                                             </div>
-                                        <button type="submit" class="btn btn-danger mb-2" onclick="return confirm('Are you sure you want to delete selected records?')">Delete Selected</button>
+                                        <button type="submit" class="btn btn-danger mb-2 delete-form-confirm">Delete Selected</button>
                                         </form>                    
                                         </div>
 
@@ -199,11 +199,21 @@ use App\Models\Person;
   <script>
     $(document).ready(function() {
         @if(Session::has('success'))
-            toastr.success("{{ Session::get('success') }}");
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: "{{ Session::get('success') }}",
+                confirmButtonColor: '#3085d6'
+            });
         @endif
 
         @if(Session::has('fail'))
-            toastr.error("{{ Session::get('fail') }}");
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "{{ Session::get('fail') }}",
+                confirmButtonColor: '#d33'
+            });
         @endif
     });
     document.getElementById('select-all').addEventListener('click', function(event) {
