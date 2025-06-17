@@ -411,6 +411,7 @@ public function update_pipline_session(Request $request)
                 'type' => strtolower($actvity->type),
                 'created_at' => $actvity->created_at,
                 'activity' => $actvity
+                
             ];
         }
 

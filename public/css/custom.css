@@ -496,7 +496,9 @@ body {
     font-size: 13px;
   }
 }
-
+.task-content a, .assignee-info a{
+  text-decoration: none;
+}
 
 .add-card-wrapper {
   border-radius: 0;
@@ -557,7 +559,9 @@ body {
   align-self: stretch;
   margin: auto 0;
 }
-
+.tagselect span{
+  width: inherit !important;
+}
 .form-control {
   font-family: var(--font-family);
   font-weight: 500 !important;
