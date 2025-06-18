@@ -11,13 +11,13 @@
             <div class="d-flex justify-content-between">
                 <div>
                     <h3 class="page-title">
-                        {{ __('app.settings.sources.create-title') }}
+                        {{ __('app.settings.sources.edit-title') }}
                     </h3>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">Settings</a></li>
                             <li class="breadcrumb-item"><a href="#">{{ __('app.settings.sources.title') }}</a></li>
-                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">{{ __('app.settings.sources.create-title') }}</li>
+                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">{{ __('app.settings.sources.edit-title') }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -39,7 +39,7 @@
                             <div class="row g-4">
                                 <div class="col-12 col-md-4">
                                     <label for="field1" class="form-label">{{ __('app.datagrid.name') }}</label>
-                                    <input type="text" class="form-control" id="field1" placeholder="Name" name="name" value="" required>
+                                    <input type="text" class="form-control" id="field1" placeholder="Name" name="name" value="{{ $source->name }}" required>
                                      @if($errors->has("name")) <div class="alert alert-danger mt-2">{{ $errors->first('name') }}</li></div>@endif
                                 </div>
 
@@ -62,7 +62,7 @@
                                         </div>
                                         <div>
                                             <button type="submit" class="btn save-btn">Save</button>
-                                           <button type="button" class="btn cancel-btn">Cancel</button>
+                                            <button type="submit" class="btn cancel-btn">Cancel</button>
                                         </div>
 
                                     </div>

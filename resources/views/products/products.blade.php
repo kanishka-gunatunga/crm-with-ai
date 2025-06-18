@@ -143,7 +143,7 @@
                                                                 <td class="">{{number_format($product->quantity)}}</td>
 
                                                                 <td class="action-icons d-flex gx-3">
-                                                                    <a href="{{ url('delete-product/'.$product->id) }}" onclick="return confirm('Are you sure you want to delete this record?')">
+                                                                    <a href="{{ url('delete-product/'.$product->id) }}" class="delete-link-confirm">
                                                                         <div class="text-muted" type="button">
                                                                             <svg width="20" height="20" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                                 <rect width="18" height="18" rx="2.90323" fill="#FFE9E5" />
@@ -166,7 +166,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <button type="submit" class="btn btn-danger btn-xs mb-2" onclick="return confirm('Are you sure you want to delete selected records?')">Delete Selected</button>
+                                            <button type="submit" class="btn btn-danger btn-sm mb-2 delete-form-confirm" >Delete Selected</button>
                                             </form>               
                                         </div>
 

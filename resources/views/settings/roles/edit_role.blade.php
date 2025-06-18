@@ -12,12 +12,12 @@
             <div class="d-flex justify-content-between">
                 <div>
                     <h3 class="page-title">
-                        {{ __('app.settings.roles.create-title') }}
+                       {{ __('app.settings.roles.edit-title') }}
                     </h3>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#"> {{ __('app.settings.roles.title') }}</a></li>
-                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">{{ __('app.settings.roles.create-title') }}</li>
+                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">{{ __('app.settings.roles.edit-title') }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -39,7 +39,7 @@
                             <div class="row g-4">
                                 <div class="col-12 col-md-4">
                                     <label for="field1" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="field1" placeholder="Name" name="name" value="{{ old('name') }}" required>
+                                    <input type="text" class="form-control" id="field1" placeholder="Name" name="name" value="{{ $role->name }}" required>
                                 </div>
 
 
@@ -47,6 +47,7 @@
                                     <label for="field3" class="form-label">Permission Type</label>
 
                                     <select class="myDropdown form-control" id="pipeline-select" name="permission_type" required>
+                                        <option selected hidden  value="{{ $role->permission_type }}">{{ $role->permission_type }}</option>
                                         <option value="all">All</option>
                                         <option value="custom">Custom</option>
                                     </select>
@@ -65,7 +66,7 @@
 
                                 <div class="col-12 ">
                                     <label for="date_start" class="form-label">Description</label>
-                                    <textarea class="form-control" placeholder="Description" id="field5" rows="5" name="description" required></textarea>
+                                    <textarea class="form-control" placeholder="Description" id="field5" rows="5" name="description" required>{{ $role->description }}</textarea>
                                 </div>
                                  <div class="col-md-12" style="display:none;" id="permissions-col">
                                                     <div class="row">
@@ -559,9 +560,10 @@
                                                     
                                                 </div>
                             </div>
-                           
+ 
                     </div>
                 </div>
+
 
             </div>
         </div>

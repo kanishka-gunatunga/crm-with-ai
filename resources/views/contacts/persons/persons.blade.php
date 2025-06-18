@@ -154,7 +154,7 @@ use App\Models\Organization;
                             
                                                                     <td class="action-icons d-flex gx-3">
                                                                         
-                                                                        <a href="{{ url('delete-person/'.$person->id) }}" onclick="return confirm('Are you sure you want to delete this record?')">
+                                                                        <a href="{{ url('delete-person/'.$person->id) }}" class="delete-link-confirm">
                                                                         <div class="text-muted" type="button">
                                                                             <svg width="20" height="20" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                                 <rect width="18" height="18" rx="2.90323" fill="#FFE9E5" />
@@ -177,7 +177,8 @@ use App\Models\Organization;
                                                     </tbody>
                                                 </table>
                                             </div>
-
+                                        <button type="submit" class="btn btn-danger mb-2 btn-sm delete-form-confirm">Delete Selected</button>
+                                        </form>         
                                         </div>
 
                                         

@@ -12,13 +12,13 @@
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <h3 class="page-title">
-                                        {{ __('app.settings.attributes.create-title') }}
+                                        {{ __('app.settings.attributes.edit-title') }}
                                     </h3>
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="#">Settings</a></li>
                                             <li class="breadcrumb-item"><a href="#"> {{ __('app.settings.attributes.title') }}</a></li>
-                                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">{{ __('app.settings.attributes.create-title') }}</li>
+                                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">{{ __('app.settings.attributes.edit-title') }}</li>
                                         </ol>
                                     </nav>
                                 </div>
@@ -41,21 +41,20 @@
 
                                                 <div class="col-12 col-md-4">
                                                     <label for="field1" class="form-label">{{ __('app.settings.attributes.code') }}</label>
-                                                    <input type="text" class="form-control" id="field1" placeholder="Code" name="code" value="{{ old('code') }}" required>
+                                                    <input type="text" class="form-control" id="field1" placeholder="Code" name="code" value="{{ $attribute->code }}" readonly>
                                                     @if($errors->has("code")) <div class="alert alert-danger mt-2">{{ $errors->first('code') }}</li></div>@endif
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label for="field1" class="form-label">{{ __('app.settings.attributes.name') }}</label>
-                                                    <input type="text" class="form-control" id="field1" placeholder="Name" name="name" value="{{ old('name') }}" required>
+                                                    <input type="text" class="form-control" id="field1" placeholder="Name" name="name" value="{{ $attribute->name }}" required>
                                                     @if($errors->has("name")) <div class="alert alert-danger mt-2">{{ $errors->first('name') }}</li></div>@endif
                                                 </div>
 
 
                                                 <div class="col-12 col-md-4">
                                                     <label for="field3" class="form-label">{{ __('app.settings.attributes.entity-type') }}</label>
-
                                                     <select class="myDropdown form-control" name="entity_type" required>
-                                                        <option value="">Select</option>
+                                                        <option selected hidden value="{{ $attribute->entity_type }}">{{ $attribute->entity_type }}</option>
                                                         <option value="lead">Lead</option>
                                                         <option value="person" >Person</option>
                                                         <option value="organization" >Organization</option>
@@ -73,7 +72,7 @@
                                                     <label for="field3" class="form-label">{{ __('app.settings.attributes.type') }}</label>
 
                                                     <select class="myDropdown form-control" name="type" id="type" required>
-                                                        <option value="">Select</option>
+                                                        <option selected hidden value="{{ $attribute->type }}">{{ $attribute->type }}</option>
                                                         <option value="text">Text</option> 
                                                         <option value="textarea">Textarea</option> 
                                                         <option value="price">Price</option> 
@@ -97,6 +96,7 @@
                                                     <div class="mb-3" id="option-types">
                                                         <label for="option_type" class="form-label">{{ __('app.settings.attributes.options-type') }}</label>
                                                         <select class=" form-select" name="option_type" id="option_type">
+                                                            <option selected hidden value="{{ $attribute->option_type }}">{{ $attribute->option_type }}</option>
                                                             <option value="lookups">Lookups</option>
                                                             <option value="options">Options</option>
                                                         </select>
@@ -105,7 +105,7 @@
                                                     <div class="mb-3" id="lookups">
                                                         <label for="lookup_type" class="form-label">{{ __('app.settings.attributes.lookup-type') }}</label>
                                                         <select class=" form-select" name="lookup_type" id="lookup_type">
-                                                            <option value="">Select</option>
+                                                            <option selected hidden value="{{ $attribute->lookup_type }}">{{ $attribute->lookup_type }}</option>
                                                             <option value="leads">Leads</option>
                                                             <option value="lead_sources">Lead Sources</option>
                                                             <option value="lead_types">Lead Types</option>
@@ -126,7 +126,16 @@
                                                             </svg>
                                                             <span class="lg-button-text">{{ __('app.settings.attributes.add-option-btn-title') }}</span>
                                                         </button>
-                                                        <div id="dynamic-options" class="mt-2"></div>
+                                                        <div id="dynamic-options" class="mt-2">
+                                                             <?php 
+                                                        if($attribute->options){
+                                                        foreach($attribute->options as $attributeOption){ ?> 
+                                                            <div class="row mb-2">
+                                                                <div class="col-md-10"><input type="text" class="form-control" name="options[]" value="{{$attributeOption}}" required></div>
+                                                                <div class="col-md-2"><i class="fa-solid fa-trash delete-stage remove-append-item mx-2 remove-option"></i></div>
+                                                            </div>
+                                                        <?php }} ?>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -136,7 +145,7 @@
                                                 <div class="col-12 col-md-4">
                                                     <label for="field3" class="form-label">{{ __('app.settings.attributes.is_required') }}</label>
                                                     <select class="myDropdown form-control" name="is_required" >
-                                                        <option value="">Select</option>
+                                                        <option selected hidden value="{{ $attribute->is_required }}">{{ $attribute->is_required }}</option>
                                                         <option value="yes">Yes</option>
                                                         <option value="no" >No</option>
                                                     </select>
@@ -148,7 +157,7 @@
                                                     <label for="field3" class="form-label">{{ __('app.settings.attributes.is_unique') }}</label>
 
                                                     <select class="myDropdown form-select" name="is_unique" >
-                                                        <option value="">Select</option>
+                                                         <option selected hidden value="{{ $attribute->is_unique }}">{{ $attribute->is_unique }}</option>
                                                                 <option value="yes">Yes</option>
                                                                 <option value="no" >No</option>
                                                     </select>
@@ -159,7 +168,7 @@
                                                     <label for="field3" class="form-label">{{ __('app.settings.attributes.input_validation') }}</label>
 
                                                     <select class=" form-select" name="input_validation"  >
-                                                       <option value="">Select</option>
+                                                       <option selected hidden value="{{ $attribute->input_validation }}">{{ $attribute->input_validation }}</option>
                                                                 <option value="number">Number</option>
                                                                 <option value="email" >Email</option>
                                                                 <option value="decimal" >Decimal</option>
