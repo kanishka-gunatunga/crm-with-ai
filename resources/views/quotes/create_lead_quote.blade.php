@@ -90,23 +90,23 @@ $organization = Organization::where('id', $person->organization)->first();
                                         <div class="row g-4">
                                             <div class="col-12 col-md-4">
                                                 <label for="No" class="form-label">Address</label>
-                                                <input type="text" class="form-control" id="No" placeholder="No" name="address" required value="{{$organization->address}}">
+                                                <input type="text" class="form-control" id="No" placeholder="No" name="address" required value="{{$organization->address  ?? ''}}">
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Province" class="form-label">Province</label>
-                                                <input type="text" class="form-control" id="Province" placeholder="Province" name="state" required value="{{$organization->state}}">
+                                                <input type="text" class="form-control" id="Province" placeholder="Province" name="state" required value="{{$organization->state  ?? ''}}">
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Country" class="form-label">Country</label>
-                                                <input type="text" class="form-control" id="Country" placeholder="Country" name="country" required value="{{$organization->country}}">
+                                                <input type="text" class="form-control" id="Country" placeholder="Country" name="country" required value="{{$organization->country  ?? ''}}">
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="City" class="form-label">City</label>
-                                                <input type="text" class="form-control" id="City" name="city" placeholder="City" required value="{{$organization->city}}">
+                                                <input type="text" class="form-control" id="City" name="city" placeholder="City" required value="{{$organization->city  ?? ''}}">
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Postal Code" class="form-label">Postal Code</label>
-                                                <input type="text" class="form-control" id="Postal Code"  name="post_code" placeholder="Post Code"  required value="{{$organization->post_code}}">
+                                                <input type="text" class="form-control" id="Postal Code"  name="post_code" placeholder="Post Code"  required value="{{$organization->post_code  ?? ''}}">
                                             </div>
 
                                         </div>
@@ -121,23 +121,23 @@ $organization = Organization::where('id', $person->organization)->first();
                                         <div class="row g-4">
                                             <div class="col-12 col-md-4">
                                                 <label for="No" class="form-label">Address</label>
-                                                <input type="text" class="form-control" id="No" placeholder="No" name="shipping_address" required value="{{$organization->address}}">
+                                                <input type="text" class="form-control" id="No" placeholder="No" name="shipping_address" required value="{{$organization->address  ?? ''}}">
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Province" class="form-label">Province</label>
-                                                <input type="text" class="form-control" id="Province" placeholder="Province" name="shipping_state" required value="{{$organization->state}}">
+                                                <input type="text" class="form-control" id="Province" placeholder="Province" name="shipping_state" required value="{{$organization->state  ?? ''}}">
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Country" class="form-label">Country</label>
-                                                <input type="text" class="form-control" id="Country" placeholder="Country" name="shipping_country" required value="{{$organization->country}}">
+                                                <input type="text" class="form-control" id="Country" placeholder="Country" name="shipping_country" required value="{{$organization->country  ?? ''}}">
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="City" class="form-label">City</label>
-                                                <input type="text" class="form-control" id="City" name="shipping_city" placeholder="City" required value="{{$organization->city}}">
+                                                <input type="text" class="form-control" id="City" name="shipping_city" placeholder="City" required value="{{$organization->city  ?? ''}}">
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Postal Code" class="form-label">Postal Code</label>
-                                                <input type="text" class="form-control" id="Postal Code" name="shipping_post_code" placeholder="Post Code"  required value="{{$organization->post_code}}">
+                                                <input type="text" class="form-control" id="Postal Code" name="shipping_post_code" placeholder="Post Code"  required value="{{$organization->post_code ?? ''}}">
                                             </div>
 
                                         </div>
@@ -283,11 +283,21 @@ $organization = Organization::where('id', $person->organization)->first();
  <script>
     $(document).ready(function() {
         @if(Session::has('success'))
-            toastr.success("{{ Session::get('success') }}");
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: "{{ Session::get('success') }}",
+                confirmButtonColor: '#3085d6'
+            });
         @endif
 
         @if(Session::has('fail'))
-            toastr.error("{{ Session::get('fail') }}");
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "{{ Session::get('fail') }}",
+                confirmButtonColor: '#d33'
+            });
         @endif
     });
 </script>
