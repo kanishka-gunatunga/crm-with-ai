@@ -57,6 +57,62 @@
                             <div class="btn green lead-status-dropdown" id="statusWrapper">
                                 <select class="form-select dropdown styled-select" id="leadStatusSelect"
                                     aria-label="Lead Status">
+
+                                    <?php 
+                            $orderedStages = collect($stages)->sortBy(function ($stage) {
+                                if ($stage->name == 'New') {
+                                    return 1;
+                                } elseif ($stage->name == 'Won' || $stage->name == 'Lost') {
+                                    return 9999; 
+                                }
+                                return 500; 
+                            })->values();
+
+                            $currentStageIndex = -1;
+                            foreach ($orderedStages as $index => $stage) {
+                                if ($stage->id == $lead->stage) {
+                                    $currentStageIndex = $index;
+                                    break;
+                                }
+                            }
+
+                            $finalStages = [];
+                            $finalStages['main'] = [];
+                            $finalStages['won_lost'] = [];
+
+                            foreach ($orderedStages as $stage) {
+                                if ($stage->name == 'Won' || $stage->name == 'Lost') {
+                                    $finalStages['won_lost'][] = $stage;
+                                } else {
+                                    $finalStages['main'][] = $stage;
+                                }
+                            }
+
+                            foreach ($finalStages['main'] as $index => $stage) {
+                                $active_class = ($index <= $currentStageIndex) ? "active" : "";
+                                ?>
+                                    <a href="javascript:void(0);" class="progress-bar {{ $active_class }} stage-link"
+                                        data-stage-id="{{ $stage->id }}" data-lead-id="{{ $lead->id }}"
+                                        role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+                                        aria-valuemax="100">{{ $stage->name }} </a>
+                                    <?php 
+                            }
+
+                            if (!empty($finalStages['won_lost'])) {
+                               
+                                ?>
+                                    <div class="progress-bar stage-group" role="progressbar " style="width: 100%"
+                                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                        <?php foreach ($finalStages['won_lost'] as $stage) {
+                                         ?>
+                                        <a href="javascript:void(0);" class=" stage-link won-lost"
+                                            data-stage-id="{{ $stage->id }}"
+                                            data-lead-id="{{ $lead->id }}">{{ $stage->name }}</a>
+                                        <?php } ?>
+                                    </div>
+                                    <?php
+                            }
+                            ?>
                                     <option value="new" data-color="#4A58EC" data-class="blue">New</option>
                                     <option value="pending" data-color="#FF932F" data-class="orange">Pending</option>
                                     <option value="won" data-color="#00C500" data-class="green">Won</option>
@@ -387,7 +443,7 @@
                                         <div class="card-body">
                                             <div class="col-10">
                                                 <label for="field5" class="form-label">Description</label>
-                                                
+
                                                 <textarea class="summernoteNormal" id="summernote" name="body"></textarea>
                                                 {{-- <div id="froala-editor" rows="5"
                                                         name="body" required></div> --}}
@@ -434,8 +490,9 @@
                                                 </div>
                                                 <div class="col-12 mb-3">
                                                     <label for="field5" class="form-label">Description</label>
-                                                    <div id="froala-editor" rows="5" name="description" required>
-                                                    </div>
+                                                    <textarea class="summernoteNormal" id="summernote" name="description"></textarea>
+                                                    {{-- <div id="froala-editor" rows="5" name="description" required>
+                                                    </div> --}}
                                                 </div>
 
 
@@ -1139,7 +1196,8 @@
                                                             </td>
                                                             <td class="">${{ number_format($sub_total) }}</td>
                                                             <td class="">
-                                                                ${{ number_format($quote->discount_total_amount, 2) }}</td>
+                                                                ${{ number_format($quote->discount_total_amount, 2) }}
+                                                            </td>
                                                             <td class="">
                                                                 ${{ number_format($quote->tax_total_amount, 2) }}</td>
                                                             <td class="">
@@ -2082,9 +2140,5 @@
                 });
             });
         });
-
-
-        
-
     </script>
 @endsection
