@@ -388,9 +388,9 @@
                                             <div class="col-10">
                                                 <label for="field5" class="form-label">Description</label>
                                                 
-
-                                                <div id="froala-editor" rows="5"
-                                                        name="body" required></div>
+                                                <textarea class="summernoteNormal" id="summernote" name="body"></textarea>
+                                                {{-- <div id="froala-editor" rows="5"
+                                                        name="body" required></div> --}}
                                             </div>
 
 

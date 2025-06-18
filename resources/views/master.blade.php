@@ -240,7 +240,9 @@
         disableMobile: true
     });
 
-
+$(document).ready(function() {
+  $('.summernoteNormal').summernote();
+});
 
 
     document.addEventListener('DOMContentLoaded', function() {
