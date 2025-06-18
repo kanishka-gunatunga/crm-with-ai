@@ -136,7 +136,7 @@
 
                                 <div class="col-12 ">
                                     <label for="summernote" class="form-label">{{ __('app.settings.email-templates.content') }}</label>
-                                    <textarea class="form-contro w-100" id="summernote" rows="12" name="content" required></textarea>
+                                    <textarea class="form-control w-100" id="summernote" rows="12" name="content" required></textarea>
                                 </div>
 
                             </div>

@@ -91,7 +91,7 @@
                                                 <div class="col-md-12">
                                                     <div class="mb-3">
                                                         <label for="firstNameinput" class="form-label">Description</label>
-                                                        <textarea class="form-contro w-100" rows="5" name="description" >{{ $form->description }}</textarea>
+                                                        <textarea class="form-control w-100" rows="5" name="description" >{{ $form->description }}</textarea>
                                                         @if($errors->has("description")) <div class="alert alert-danger mt-2">{{ $errors->first('description') }}</li></div>@endif
                                                     </div>
                                                 </div>
