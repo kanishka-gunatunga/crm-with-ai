@@ -548,6 +548,17 @@ body {
   font-size: 15px !important;
   line-height: 100%;
   color: var(--black-color) !important;
+  height: 45px!important;
+  border: 1px solid #E8E9EB !important;
+}
+.form-select {
+  font-family: var(--font-family);
+  font-weight: 500 !important;
+  font-size: 15px !important;
+  line-height: 100%;
+  color: var(--black-color) !important;
+  height: 45px!important;
+  border: 1px solid #E8E9EB !important;
 }
 
 .form-control:focus {
@@ -608,17 +619,19 @@ body {
 }
 
 .select2-container .select2-selection--single {
-  box-sizing: border-box;
-  cursor: pointer;
-  display: block;
-  height: 36px !important;
-  user-select: none;
-  -webkit-user-select: none;
-  border-radius: 10px;
+  font-family: var(--font-family);
+  font-weight: 500 !important;
+  font-size: 15px !important;
+  line-height: 100%;
+  color: var(--black-color) !important;
+  height: 45px!important;
+  border: 1px solid #E8E9EB !important;
+  border-radius: 10px  !important;
+  padding: .375rem .75rem  !important;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow b {
-  margin-top: 2px !important;
+  margin-top: 5px !important;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -652,7 +665,9 @@ body {
   color: #556476;
   background-color: #E8E9EB;
 }
-
+table tr {
+  vertical-align: middle;
+}
 .new-table tbody tr td {
   font-family: var(--font-family);
   font-weight: 500 !important;
@@ -1055,6 +1070,8 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
   font-weight: 500 !important;
   font-size: 9px !important;
   color: var(--primary-color) !important;
+  display: flex;
+  align-items: center;
 }
 
 .form-check-inline {
@@ -1657,8 +1674,23 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
   position: absolute;
   top: 0;
   right: 10px;
-  width: 9%;
+
   border: none;
   border-radius: 5px;
 
+}
+.delete-form-confirm{
+  background-color: #ffe9e5 !important;
+  border: 1px solid #ffe9e5 !important;
+  color: #ed2227 !important;
+}
+.remove-append-item{
+    font-size: 10px;
+    background-color: #ffe9e5 !important;
+    border: 1px solid #ffe9e5 !important;
+    color: #ed2227 !important;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+  
 }

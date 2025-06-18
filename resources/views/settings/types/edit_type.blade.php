@@ -12,13 +12,13 @@
             <div class="d-flex justify-content-between">
                 <div>
                     <h3 class="page-title">
-                        {{ __('app.settings.types.create-title') }}
+                       {{ __('app.settings.types.edit-title') }}
                     </h3>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">Settings</a></li>
                             <li class="breadcrumb-item"><a href="#">{{ __('app.settings.types.title') }}</a></li>
-                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">{{ __('app.settings.types.create-title') }}</li>
+                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">{{ __('app.settings.types.edit-title') }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -40,7 +40,7 @@
                             <div class="row g-4">
                                 <div class="col-12 col-md-4">
                                     <label for="field1" class="form-label">{{ __('app.datagrid.name') }}</label>
-                                    <input type="text" class="form-control" id="field1" placeholder="Name" name="name" value="" required>
+                                    <input type="text" class="form-control" id="field1" placeholder="Name" name="name" value="{{ $type->name }}" required>
                                      @if($errors->has("name")) <div class="alert alert-danger mt-2">{{ $errors->first('name') }}</li></div>@endif
                                 </div>
 

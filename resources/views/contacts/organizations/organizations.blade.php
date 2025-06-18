@@ -170,7 +170,7 @@ use App\Models\Person;
                                                         </tbody>
                                                 </table>
                                             </div>
-                                        <button type="submit" class="btn btn-danger mb-2 delete-form-confirm">Delete Selected</button>
+                                        <button type="submit" class="btn btn-danger mb-2 btn-sm delete-form-confirm">Delete Selected</button>
                                         </form>                    
                                         </div>
 

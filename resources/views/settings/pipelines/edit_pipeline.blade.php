@@ -13,12 +13,12 @@
             <div class="d-flex justify-content-between">
                 <div>
                     <h3 class="page-title">
-                        {{ __('app.settings.pipelines.create-title') }}
+                       {{ __('app.settings.pipelines.edit-title') }}
                     </h3>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">{{ __('app.settings.pipelines.title') }}</a></li>
-                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">{{ __('app.settings.pipelines.create-title') }}</li>
+                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">{{ __('app.settings.pipelines.edit-title') }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -40,18 +40,18 @@
                             <div class="row g-4">
                                 <div class="col-12 col-md-4">
                                     <label for="field1" class="form-label">{{ __('app.settings.pipelines.name') }}</label>
-                                    <input type="text" class="form-control" id="field1" placeholder="Name" name="name" value="{{ old('name') }}" required>
+                                    <input type="text" class="form-control" id="field1" placeholder="Name" name="name" value="{{ $pipeline->name }}" required>
                                     @if($errors->has("name")) <div class="alert alert-danger mt-2">{{ $errors->first('name') }}</li></div>@endif
                                 </div>
 
                                 <div class="col-12 col-md-4">
                                     <label for="field1" class="form-label">{{ __('app.settings.pipelines.rotting-days') }}</label>
-                                    <input type="number" class="form-control" id="field1" placeholder="Rotten Days" name="rotting_days" value="{{ old('phone') ?? 30 }}" required>
+                                    <input type="number" class="form-control" id="field1" placeholder="Rotten Days" name="rotting_days" value="{{ $pipeline->rotting_days }}" required>
                                     @if($errors->has("rotting_days")) <div class="alert alert-danger mt-2">{{ $errors->first('rotting_days') }}</li></div>@endif
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck2" name="is_default">
+                                            <input class="form-check-input" type="checkbox" id="formCheck2" name="is_default" {{ $pipeline->is_default === 'on' ? 'checked' : '' }}>
                                             <label class="form-check-label" for="formCheck2">
                                             {{ __('app.settings.pipelines.is-default') }}
                                             </label>
@@ -81,14 +81,17 @@
                                                         <td><input type="number" step="any" class="form-control" name="probabilities[]" value="100" readonly required></td>
                                                         <td></td>
                                                     </tr>
+                                                   <?php foreach($pipeline->stages as $stage){ 
+                                                    if (!in_array($stage->name, ['New', 'Won', 'Lost'])) { 
+                                                    ?> 
                                                     <tr>
-                                                        <td ><input type="text" class="form-control" name="stages[]" required></td>
-                                                        <td><input type="number" step="any" class="form-control" name="probabilities[]" required></td>
-                                                        <td>
-                                                          <i class="fa-solid fa-trash delete-stage remove-append-item mx-2"></i>
-
+                                                        <td ><input type="text" class="form-control" name="stages[]" value="{{$stage->name}}" required>
+                                                        <input type="hidden" class="form-control" name="id[]" value="{{$stage->id}}">
                                                         </td>
+                                                        <td><input type="number" step="any" class="form-control" name="probabilities[]" value="{{$stage->probability}}" required></td>
+                                                        <td><a href="{{url('delete-stage/'.$stage->id.'')}}"  class="delete-link-confirm"><i class="fa-solid fa-trash  remove-append-item mx-2"></i></a></td>
                                                     </tr>
+                                                    <?php }  }?>
                                                     <tr>
                                                         <td ><input type="text" class="form-control" name="stages[]" value="Won" readonly required></td>
                                                         <td><input type="number" step="any" class="form-control" name="probabilities[]" value="100" readonly required></td>

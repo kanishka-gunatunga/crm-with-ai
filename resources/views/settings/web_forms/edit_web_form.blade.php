@@ -6,19 +6,18 @@
 <!-- Scrollable Content -->
 <div class="main-scrollable">
     <div class="page-container">
-        <form  action="" method="post" enctype="multipart/form-data" data-parsley-validate>
-        @csrf
+ 
         <div class="page-title-container mb-0">
             <div class="d-flex justify-content-between">
                 <div>
                     <h3 class="page-title">
-                        Create Web form
+                        Edit Web form
                     </h3>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">Settings</a></li>
                             <li class="breadcrumb-item"><a href="#">Web forms</a></li>
-                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">Create Web form</li>
+                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">Edit Web form</li>
                         </ol>
                     </nav>
                 </div>
@@ -32,151 +31,142 @@
 
         <div class="col-12">
             <div class="card-container">
+                               <form  action="" method="post" enctype="multipart/form-data" data-parsley-validate>
+                                @csrf
                 <!-- Basic Details Card -->
                 <div class="card card-default mb-4">
 
-                    <div class="card-body">
-   
-                            <div class="row g-4">
-                                <div class="col-12 col-md-4">
-                                    <label for="field1" class="form-label">Title</label>
-                                    <input type="text" class="form-control" id="field1" placeholder="Title" name="title" value="{{ old('title') }}" required>
-                                    @if($errors->has("title")) <div class="alert alert-danger mt-2">{{ $errors->first('title') }}</li></div>@endif
+     
+                                <div class="card-body">
+
+                                <div class="d-md-flex d-block gap-1">
+                                    <div class="nav nav-tabs gap-1 border-0" id="nav-tab" role="tablist">
+                                        <button class="btn white-btn tab-button active" id="tab1-tab" data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab" aria-controls="tab1" aria-selected="true">Edit</button>
+                                        <button class="btn white-btn tab-button" id="tab2-tab" data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab" aria-controls="tab2" aria-selected="false">Embed</button>
+                                        <a class="btn white-btn tab-button" target="_blank" href="http://127.0.0.1:8000/view-web-form/414f94db-b735-4bb7-bd6c-034eb307f83a">Preview</a>
+                                    </div>
                                 </div>
-
-                                <div class="col-12 col-md-4">
-                                    <label for="field1" class="form-label">Submit Button Lable</label>
-                                    <input type="text" class="form-control" id="field1" placeholder="Submit Button Lable" name="button_lable" value="{{ old('button_lable') }}" required>
-                                    @if($errors->has("button_lable")) <div class="alert alert-danger mt-2">{{ $errors->first('button_lable') }}</li></div>@endif
-                                </div>
-
-
-                                <div class="col-12 col-md-4">
-                                     <label for="firstNameinput" class="form-label">Submit Success Action</label>
-                                    <input type="text" class="form-control" name="success_action" value="{{ old('success_action') }}" placeholder="Enter message to display" required>
-                                    @if($errors->has("description")) <div class="alert alert-danger mt-2">{{ $errors->first('description') }}</li></div>@endif
-                                    <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="success_action_type" id="email-work-0" checked value="display_message">
-                                            <label class="form-check-label" for="email-work-0">Display a custom message</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="success_action_type" id="email-home-0" value="redirect">
-                                            <label class="form-check-label" for="email-home-0">Redirect to a URL</label>
-                                        </div>
-                                </div>
-                                <!-- <div class="col-12 col-md-4">
-                                                    <label for="date_start" class="form-label">Description</label>
-                                                    <input type="text" class="form-control" id="date_start" placeholder="Date Start">
-                                                </div> -->
-
-                            </div>
+                                <div class="tab-content mt-4" id="nav-tabContent">
+                               <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
                     
-                    </div>
-                </div>
-
-
-                <div class="card card-default mb-4">
-
-                    <div class="card-body">
-                       
-                            <div class="row g-4">
-
-                                <div class="col-12">
-                                    <label for="field5" class="form-label">Description</label>
-                                    <textarea class="form-control" placeholder="Description" id="field5" rows="5"  name="description" value="{{ old('description') }}"></textarea>
-
-                                </div>
-
-                            </div>
-                     
-                    </div>
-                </div>
-
-
-                <div class="card card-default mb-4">
-
-                    <div class="card-body">
-                       
-                            <div class="row g-4">
-                                <div class="col-12 col-md-4">
-                                    <label for="field1" class="form-label">Background Color</label>
-                                    <div class="form-control color-input color-input-parent position-relative">
-                                        <input type="text" class="hex-code form-control" style="width: 100px;" value="#F7F8F9">
-                                        <input type="color" class="color-picker color-input absolute-color" id="background-color" value="#F7F8F9" name="background_color"  required>
-                                    </div>
-                                    <!-- <input type="color" class="form-control color-input" placeholder="Form Submit Button Color"> -->
-                                </div>
-
-
-
-                                <div class="col-12 col-md-4">
-                                    <label for="field1" class="form-label">Form Background Color</label>
-                                    <div class="form-control color-input color-input-parent position-relative">
-                                        <input type="text" class="hex-code form-control" style="width: 100px;" value="#ffffff">
-                                        <input type="color" class="color-picker color-input absolute-color" id="form-background-color" value="#ffffff" name="form_background_color"  required>
-                                    </div>
-                                    <!-- <input type="color" class="form-control color-input" placeholder="Form Submit Button Color"> -->
-                                </div>
-
-                                <div class="col-12 col-md-4">
-                                    <label for="field1" class="form-label">Form Title Color</label>
-                                    <div class="form-control color-input color-input-parent position-relative">
-                                        <input type="text" class="hex-code form-control" style="width: 100px;" value="#263238">
-                                        <input type="color" class="color-picker color-input absolute-color" id="form-title-color" value="#263238" name="title_color"  required>
-                                    </div>
-                                    <!-- <input type="color" class="form-control color-input" placeholder="Form Submit Button Color"> -->
-                                </div>
-
-
-                            </div>
-
-
-                            <div class="row g-4">
-                                <div class="col-12 col-md-4">
-                                    <label for="field1" class="form-label">Form Submit Button Color</label>
-                                    <div class="form-control color-input color-input-parent position-relative">
-                                        <input type="text" class="hex-code form-control" style="width: 100px;" value="#0E90D9">
-                                        <input type="color" class="color-picker color-input absolute-color" id="form-submit-button-color" value="#0E90D9" name="submit_btn_color"  required>
-                                    </div>
-                                    <!-- <input type="color" class="form-control color-input" placeholder="Form Submit Button Color"> -->
-                                </div>
-
-                                <div class="col-12 col-md-4">
-                                    <label for="field1" class="form-label">Attribute Label Color</label>
-                                    <div class="form-control color-input color-input-parent position-relative">
-                                        <input type="text" class="hex-code form-control" style="width: 100px;" value="#546E7A">
-                                        <input type="color" class="color-picker color-input absolute-color" id="attribute-label-color" value="#546E7A" name="lable_color"  required>
-                                    </div>
-                                    <!-- <input type="color" class="form-control color-input" placeholder="Form Submit Button Color"> -->
-                                </div>
-
-
-
-
-
-                            </div>
-                     
-                    </div>
-                </div>
-
-
-
-                <div class="card card-default mb-4">
-
-                    <div class="card-body">
-                       
-
-                             <div class="form-check form-check-inline mt-2 mb-2">
-                                <input class="form-check-input" type="checkbox" name="create_lead_enabled" id="create_lead_enabled" >
-                                <label class="form-check-label" for="create_lead_enabled">Create new lead with contact</label>
-                            </div>
-
-
-                            <div class="row">
+                               
+                                    <div class="live-preview">
+                                            
+                                         
+                                            <div class="row">
  
                                                 <!--end col-->
                                                 <div class="col-md-6">
-                      <h5 class="mt-2">Person Attributes</h5>
+                                                    <div class="mb-3">
+                                                        <label for="firstNameinput" class="form-label">Title</label>
+                                                        <input type="text" class="form-control" name="title" value="{{ $form->title }}" required>
+                                                        @if($errors->has("title")) <div class="alert alert-danger mt-2">{{ $errors->first('title') }}</li></div>@endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="firstNameinput" class="form-label">Submit Button Lable</label>
+                                                        <input type="text" class="form-control" name="button_lable" value="{{ $form->button_lable }}" required>
+                                                        @if($errors->has("button_lable")) <div class="alert alert-danger mt-2">{{ $errors->first('button_lable') }}</li></div>@endif
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="firstNameinput" class="form-label">Submit Success Action</label>
+                                                        <input type="text" class="form-control" name="success_action" value="{{ $form->success_action }}" placeholder="Enter message to display" required>
+                                                        @if($errors->has("description")) <div class="alert alert-danger mt-2">{{ $errors->first('description') }}</li></div>@endif
+                                                        <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="success_action_type" id="email-work-0" {{ $form->success_action_type == 'display_message' ? 'checked' : '' }} value="display_message">
+                                                                <label class="form-check-label" for="email-work-0">Display a custom message</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="success_action_type" id="email-home-0" {{ $form->success_action_type == 'redirect' ? 'checked' : '' }} value="redirect">
+                                                                <label class="form-check-label" for="email-home-0">Redirect to a URL</label>
+                                                            </div>
+                                                    </div>
+                                                
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="mb-3">
+                                                        <label for="firstNameinput" class="form-label">Description</label>
+                                                        <textarea class="form-contro w-100" rows="5" name="description" >{{ $form->description }}</textarea>
+                                                        @if($errors->has("description")) <div class="alert alert-danger mt-2">{{ $errors->first('description') }}</li></div>@endif
+                                                    </div>
+                                                </div>
+
+                                                
+                                            </div>
+
+                                            <div class="row">
+ 
+                                                <!--end col-->
+                                                <div class="col-md-2">
+                                                    <div class="mb-3">
+                                                        <label for="firstNameinput" class="form-label">Background Color</label>
+                                                        <div class="form-control color-input color-input-parent position-relative">
+                                                            <input type="text" class="hex-code form-control" style="width: 100px;" value="{{ $form->background_color }}">
+                                                            <input type="color" class="color-picker  color-input absolute-color" id="form-submit-button-color" value="{{ $form->background_color }}" name="submit_btn_color"  required>
+                                                        </div>
+                                                        @if($errors->has("background_color")) <div class="alert alert-danger mt-2">{{ $errors->first('background_color') }}</li></div>@endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="mb-3">
+                                                        <label for="firstNameinput" class="form-label">Form Background Color</label>
+                                                        <div class="form-control color-input color-input-parent position-relative">
+                                                            <input type="text" class="hex-code form-control" style="width: 100px;" value="{{ $form->form_background_color }}">
+                                                            <input type="color" class="color-picker  color-input absolute-color" id="form-submit-button-color" name="form_background_color" value="{{ $form->form_background_color }}" required>
+                                                        </div>
+                                                        @if($errors->has("form_background_color")) <div class="alert alert-danger mt-2">{{ $errors->first('form_background_color') }}</li></div>@endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="mb-3">
+                                                        <label for="firstNameinput" class="form-label">Form Title Color</label>
+                                                        <div class="form-control color-input color-input-parent position-relative">
+                                                            <input type="text" class="hex-code form-control" style="width: 100px;" value="{{ $form->title_color }}">
+                                                            <input type="color" class="color-picker  color-input absolute-color" id="form-submit-button-color" name="title_color" value="{{ $form->title_color }}" required>
+                                                        </div>
+                                                        @if($errors->has("title_color")) <div class="alert alert-danger mt-2">{{ $errors->first('title_color') }}</li></div>@endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="mb-3">
+                                                        <label for="firstNameinput" class="form-label">Form Submit Button Color</label>
+                                                        <div class="form-control color-input color-input-parent position-relative">
+                                                            <input type="text" class="hex-code form-control" style="width: 100px;" value="{{ $form->submit_btn_color }}">
+                                                            <input type="color" class="color-picker  color-input absolute-color" id="form-submit-button-color" name="submit_btn_color" value="{{ $form->submit_btn_color }}" required>
+                                                        </div>
+                                                        @if($errors->has("submit_btn_color")) <div class="alert alert-danger mt-2">{{ $errors->first('submit_btn_color') }}</li></div>@endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="mb-3">
+                                                        <label for="firstNameinput" class="form-label">Attribute Label Color</label>
+                                                        <div class="form-control color-input color-input-parent position-relative">
+                                                            <input type="text" class="hex-code form-control" style="width: 100px;" value="{{ $form->lable_color }}">
+                                                            <input type="color" class="color-picker  color-input absolute-color" id="form-submit-button-color" name="lable_color" value="{{ $form->lable_color }}" required>
+                                                        </div>
+                                                        @if($errors->has("lable_color")) <div class="alert alert-danger mt-2">{{ $errors->first('lable_color') }}</li></div>@endif
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+
+                                       
+
+                                            <div class="form-check form-check-inline mt-2 mb-2">
+                                                        <input class="form-check-input" type="checkbox" name="create_lead_enabled" id="create_lead_enabled" {{ $form->create_lead_enabled == 'on' ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="create_lead_enabled">Create new lead with contact</label>
+                                                    </div>
+
+                                            <div class="row">
+ 
+                                                <!--end col-->
+                                                <div class="col-md-6">
+                                                    <h5 class="mt-2">Person Attributes</h5>
                                                     <div>
                                                     <div class="form-check form-check-inline mt-2">
                                                         <input class="form-check-input" type="checkbox"  id="email-work-0" checked  disabled>
@@ -463,17 +453,38 @@
                                                     </div>
                                                     
                                                 </div>
-                                               
-                                                
+                                </div>
+                                </div>      
+                                            </div>
+                                            <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+                                            <div class="col-lg-12">
+                                                <label for="firstNameinput" class="form-label">Public URL</label>
+                                                <div class="input-group">
+                                                    <input type="text" id="publicUrl" class="form-control" value="{{ url('view-web-form/'.$form->uid) }}" readonly>
+                                                    <button class="btn btn-primary" type="button" onclick="copyToClipboard('publicUrl')">Copy</button>
+                                                </div>
                                             </div>
 
-                       
-                    </div>
+                                            <div class="col-lg-12">
+                                                <label for="firstNameinput" class="form-label">Code Fragment</label>
+                                                <div class="input-group">
+                                                    <?php
+                                                    $js_code = '<script src="'.url('embed/web-form/'.$form->uid).'"></script>';
+                                                    ?>
+                                                    <input type="text" id="codeFragment" class="form-control" value="{{ $js_code }}" readonly>
+                                                    <button class="btn btn-primary" type="button" onclick="copyToClipboard('codeFragment')">Copy</button>
+                                                </div>
+                                            </div>
+
+                                            </div>
+
+                                            
+                                     
                 </div>
                
             </div>
         </div>
-<div class="col-12 action-bar">
+        <div class="col-12 action-bar">
                         <div class="d-flex gap-2 justify-content-between">
                         <div>
                            <a href=""><button type="button" class="btn clear-all-btn">Clear All</button></a>
@@ -486,7 +497,7 @@
                     </div>
 
                 </div>
-                </form>
+                   </form>
     </div>
 </div>
 
@@ -579,7 +590,17 @@
 
         });
     });
+</script>
+<script>
+function copyToClipboard(elementId) {
+    const input = document.getElementById(elementId);
+    input.select();
+    input.setSelectionRange(0, 99999); // For mobile devices
+    document.execCommand("copy");
 
+    // Optional: show a message
+    // alert("Copied: " + input.value);
+}
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -607,5 +628,4 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
-
 @endsection

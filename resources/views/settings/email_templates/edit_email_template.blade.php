@@ -12,13 +12,13 @@
             <div class="d-flex justify-content-between">
                 <div>
                     <h3 class="page-title">
-                        {{ __('app.settings.email-templates.create-title') }}
+                        {{ __('app.settings.email-templates.edit-title') }}
                     </h3>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">Settings</a></li>
                             <li class="breadcrumb-item"><a href="#">{{ __('app.settings.email-templates.title') }}</a></li>
-                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">{{ __('app.settings.email-templates.create-title') }}</li>
+                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page"> {{ __('app.settings.email-templates.edit-title') }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -40,7 +40,7 @@
                             <div class="row g-4">
                                 <div class="col-12 col-md-4 ">
                                     <label for="field1" class="form-label">{{ __('app.settings.email-templates.name') }}</label>
-                                    <input type="text" class="form-control" name="name" value="{{ old('name') }}" required>
+                                    <input type="text" class="form-control" name="name" value="{{ $template->name }}" required>
                                     @if($errors->has("name")) <div class="alert alert-danger mt-2">{{ $errors->first('name') }}</div>@endif
                                 </div>
                                 <div class="col-12 col-md-8">
@@ -118,7 +118,7 @@
                                                 </optgroup>
                                                 </select>
                                                
-                                                <input type="text" class="form-control" id="email-subject" name="subject" placeholder="Enter email subject" required>
+                                                <input type="text" class="form-control" id="email-subject" name="subject" placeholder="Enter email subject" value="{{ $template->subject }}" required>
                                             </div>
                                 </div>
 
@@ -136,7 +136,7 @@
 
                                 <div class="col-12 ">
                                     <label for="summernote" class="form-label">{{ __('app.settings.email-templates.content') }}</label>
-                                    <textarea class="form-contro w-100" id="summernote" rows="12" name="content" required></textarea>
+                                    <textarea class="form-contro w-100" id="summernote" rows="12" name="content" required><?php echo $template->content ?></textarea>
                                 </div>
 
                             </div>
