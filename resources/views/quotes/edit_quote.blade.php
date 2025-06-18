@@ -205,7 +205,7 @@ use App\Models\Service;
                                                                             <option value="service||{{$service->id}}" data-price="{{$service->cost}}">{{$service->name}}</option>
                                                                         <?php } ?>
                                                                     </select>
-                                                                    <textarea class="form-contro w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]" placeholder="Notes">{{$quote_product->note}}</textarea>
+                                                                    <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]" placeholder="Notes">{{$quote_product->note}}</textarea>
                                                                 </td>
                                                                 <td><input type="number" step="any" class="form-control" name="quantity[]" value="{{$quote_product->quantity}}" required></td>
                                                                 <td><input type="number" step="any" class="form-control" name="price[]" value="{{$quote_product->price}}" required></td>
@@ -213,7 +213,7 @@ use App\Models\Service;
                                                                 <td><input type="number" step="any" class="form-control" name="discount[]" value="{{$quote_product->discount}}"></td>
                                                                 <td><input type="number" step="any" class="form-control" name="tax[]" value="{{$quote_product->tax}}"></td>
                                                                 <td><input type="number" step="any" class="form-control" name="total[]" value="{{$quote_product->total}}" readonly></td>
-                                                                <td><button type="button" class="btn btn-danger remove-product">-</button></td>
+                                                                <td><i class="fa-solid fa-trash remove-product remove-append-item mx-2"></i></td>
                                                             </tr>
                                                          <?php }else{ ?> 
                                                             <tr>
@@ -227,7 +227,7 @@ use App\Models\Service;
                                                                             <option value="service||{{$service->id}}" data-price="{{$service->cost}}">{{$service->name}}</option>
                                                                         <?php } ?>
                                                                     </select>
-                                                                    <textarea class="form-contro w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]" placeholder="Notes">{{$quote_product->note}}</textarea>
+                                                                    <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]" placeholder="Notes">{{$quote_product->note}}</textarea>
                                                                 </td>
                                                                 <td><input type="number" step="any" class="form-control" name="quantity[]" value="{{$quote_product->quantity}}" required></td>
                                                                 <td><input type="number" step="any" class="form-control" name="price[]" value="{{$quote_product->price}}" required></td>
@@ -235,7 +235,7 @@ use App\Models\Service;
                                                                 <td><input type="number" step="any" class="form-control" name="discount[]" value="{{$quote_product->discount}}"></td>
                                                                 <td><input type="number" step="any" class="form-control" name="tax[]" value="{{$quote_product->tax}}"></td>
                                                                 <td><input type="number" step="any" class="form-control" name="total[]" value="{{$quote_product->total}}" readonly></td>
-                                                                <td><button type="button" class="btn btn-danger remove-product">-</button></td>
+                                                                <td><i class="fa-solid fa-trash remove-product remove-append-item mx-2"></i></td>
                                                             </tr>
                                                         <?php }} ?>
                                                     </tbody>
@@ -394,7 +394,7 @@ use App\Models\Service;
                         <option value="service||{{$service->id}}" data-price="{{$service->cost}}">{{$service->name}}</option>
                         <?php } ?>
                     </select>
-                    <textarea class="form-contro w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]" placeholder="Notes"></textarea>
+                    <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]" placeholder="Notes"></textarea>
                 </td>
                 <td><input type="number" step="any" class="form-control" name="quantity[]" required></td>
                 <td><input type="number" step="any" class="form-control" name="price[]" required></td>
@@ -402,7 +402,7 @@ use App\Models\Service;
                 <td><input type="number" step="any" class="form-control" name="discount[]"></td>
                 <td><input type="number" step="any" class="form-control" name="tax[]"></td>
                 <td><input type="number" step="any" class="form-control" name="total[]" readonly></td>
-                <td><button type="button" class="btn btn-danger remove-product">-</button></td>
+                <td><i class="fa-solid fa-trash remove-product remove-append-item mx-2"></i></td>
             </tr>
         `;
         $('#products-tbody').append(newRow);
