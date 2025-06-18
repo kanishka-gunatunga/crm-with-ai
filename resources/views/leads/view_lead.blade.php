@@ -226,7 +226,7 @@
                                         <div class="col-12 mt-3">
                                             <div class="d-flex gap-2 justify-content-between">
                                                 <div>
-                                                     <button type="button" class="btn clear-all-btn">Clear All</button>
+                                                    <button type="button" class="btn clear-all-btn">Clear All</button>
                                                 </div>
                                                 <div>
                                                     <button type="submit" class="btn save-btn">Save</button>
@@ -310,7 +310,7 @@
                                         <div class="col-10 mt-3">
                                             <div class="d-flex gap-2 justify-content-between">
                                                 <div>
-                                                     <button type="button" class="btn clear-all-btn">Clear All</button>
+                                                    <button type="button" class="btn clear-all-btn">Clear All</button>
                                                 </div>
                                                 <div>
                                                     <button type="submit"
@@ -387,8 +387,10 @@
                                         <div class="card-body">
                                             <div class="col-10">
                                                 <label for="field5" class="form-label">Description</label>
-                                                <div id="froala-editor" id="body" rows="5" name="body"
-                                                    required></div>
+                                                
+
+                                                <div id="froala-editor" rows="5"
+                                                        name="body" required></div>
                                             </div>
 
 
@@ -404,7 +406,7 @@
                                     <div class="col-10 mt-3">
                                         <div class="d-flex gap-2 justify-content-between">
                                             <div>
-                                                 <button type="button" class="btn clear-all-btn">Clear All</button>
+                                                <button type="button" class="btn clear-all-btn">Clear All</button>
                                             </div>
                                             <div>
                                                 <button type="submit"
@@ -432,8 +434,8 @@
                                                 </div>
                                                 <div class="col-12 mb-3">
                                                     <label for="field5" class="form-label">Description</label>
-                                                    <div id="froala-editor" id="body" rows="5"
-                                                        name="description" required></div>
+                                                    <div id="froala-editor" rows="5" name="description" required>
+                                                    </div>
                                                 </div>
 
 
@@ -936,52 +938,572 @@
                                     @endif
                                 </div>
 
+
+                                {{-- email --}}
+                                @if ($lead_emails->isEmpty())
+                                @else
+                                    <div>
+                                        <div>
+                                            <h5 class="mb-3 card-title">Emails</h5>
+                                        </div>
+                                        <form id="bulk-delete-form" method="POST"
+                                            action="{{ url('delete-selected-quotes') }}">
+                                            @csrf
+                                            <div class="table-responsive">
+                                                <table class="table new-table data-table-export"
+                                                    data-export-title="Quotes" data-export-filename="Quotes">
+
+                                                    <thead>
+
+                                                        <tr>
+                                                            <th class="corner-left"><input type="checkbox"
+                                                                    id="select-all">
+                                                            </th>
+                                                            <th>{{ __('app.datagrid.subject') }}</th>
+                                                            <th>{{ __('app.datagrid.content') }}</th>
+                                                            <th>{{ __('app.datagrid.date') }}</th>
+                                                            <th class="corner-right">{{ __('app.datagrid.actions') }}</th>
+                                                        </tr>
+
+
+                                                    </thead>
+                                                    <tbody>
+
+                                                        @foreach ($lead_emails as $lead_email)
+                                                            <tr class="odd gradeX">
+                                                                <td><input type="checkbox" name="selected_quotes[]"
+                                                                        value="{{ $lead_email->id }}"></td>
+                                                                <td class="">{{ $lead_email->subject }} </td>
+                                                                <td class="">{{ $lead_email->content }} </td>
+                                                                <td class="">{{ $lead_email->created_at }} </td>
+                                                                <td class="action-icons d-flex gx-3">
+                                                                    <a href="{{ url('delete-email/' . $lead_email->id) }}"
+                                                                        onclick="return confirm('Are you sure you want to delete this record?')">
+                                                                        <div class="text-muted">
+                                                                            <svg width="20" height="20"
+                                                                                viewBox="0 0 24 24" fill="none"
+                                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                                <path
+                                                                                    d="M3 6H5H21M19 6V19C19 20.1046 18.1046 21 17 21H7C5.89543 21 5 20.1046 5 19V6M19 6L17.5 4.5M19 6L16.5 4.5M17.5 4.5H16.5C15.6716 4.5 15.0122 4.94732 14.5858 5.58579L14.5858 5.58579C14.1594 6.22426 14.1594 7.17574 14.5858 7.81421L14.5858 7.81421C15.0122 8.45268 15.6716 8.9 16.5 8.9H17M7 6V19M7 6L8.5 4.5M7 6L9.5 4.5M8.5 4.5H9.5C10.3284 4.5 10.9878 4.94732 11.4142 5.58579L11.4142 5.58579C11.8406 6.22426 11.8406 7.17574 11.4142 7.81421L11.4142 7.81421C10.9878 8.45268 10.3284 8.9 9.5 8.9H9"
+                                                                                    stroke="#556476" stroke-width="1"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round" />
+                                                                            </svg>
+                                                                        </div>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <button type="submit" class="btn btn-danger btn-sm mb-2"
+                                                onclick="return confirm('Are you sure you want to delete selected records?')">Delete
+                                                Selected</button>
+                                        </form>
+
+
+                                    </div>
+                                @endif
+
+                                {{-- Files --}}
+                                @if ($files->isEmpty())
+                                @else
+                                    <div>
+                                        <div>
+                                            <h5 class="mb-3 card-title">Files</h5>
+                                        </div>
+                                        <form id="bulk-delete-form" method="POST"
+                                            action="{{ url('delete-selected-quotes') }}">
+                                            @csrf
+                                            <div class="table-responsive">
+                                                <table class="table new-table data-table-export"
+                                                    data-export-title="Quotes" data-export-filename="Quotes">
+
+                                                    <thead>
+
+                                                        <tr>
+                                                            <th class="corner-left"><input type="checkbox"
+                                                                    id="select-all">
+                                                            </th>
+                                                            <th>Name</th>
+                                                            <th>Description</th>
+                                                            <th>File</th>
+                                                            <th class="corner-right">Actions</th>
+                                                        </tr>
+
+
+                                                    </thead>
+                                                    <tbody>
+
+                                                        @foreach ($files as $file)
+                                                            <tr class="odd gradeX">
+                                                                <td><input type="checkbox" name="selected_quotes[]"
+                                                                        value="{{ $file->id }}"></td>
+                                                                <td class="">{{ $file->name }} </td>
+                                                                <td class="">{{ $file->description }} </td>
+                                                                <td class=""> <a
+                                                                        href="{{ asset('storage/' . $file->file) }}"
+                                                                        download="{{ $file->file }}">{{ $file->file }}
+                                                                    </a></td>
+                                                                <td class="action-icons d-flex gx-3">
+                                                                    <a href="{{ url('delete-file/' . $file->id) }}"
+                                                                        onclick="return confirm('Are you sure you want to delete this record?')">
+                                                                        <div class="text-muted">
+                                                                            <svg width="20" height="20"
+                                                                                viewBox="0 0 18 18" fill="none"
+                                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                                <rect width="18" height="18"
+                                                                                    rx="2.90323" fill="#FFE9E5" />
+                                                                                <path
+                                                                                    d="M6.9431 12.7013C6.71689 12.7013 6.52331 12.6208 6.36236 12.4599C6.20141 12.2989 6.12079 12.1052 6.12052 11.8787V6.53197H5.70923V5.70939H7.76568V5.2981H10.2334V5.70939H12.2899V6.53197H11.8786V11.8787C11.8786 12.105 11.7981 12.2987 11.6372 12.4599C11.4762 12.6211 11.2825 12.7016 11.056 12.7013H6.9431ZM11.056 6.53197H6.9431V11.8787H11.056V6.53197ZM7.76568 11.0562H8.58826V7.35455H7.76568V11.0562ZM9.41084 11.0562H10.2334V7.35455H9.41084V11.0562Z"
+                                                                                    fill="#ED2227" />
+                                                                            </svg>
+                                                                        </div>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <button type="submit" class="btn btn-danger btn-sm mb-2"
+                                                onclick="return confirm('Are you sure you want to delete selected records?')">Delete
+                                                Selected</button>
+                                        </form>
+
+
+                                    </div>
+                                @endif
+
+
+
+                                {{-- quotes --}}
+                                @if ($quotes->isEmpty())
+                                @else
+                                    <div>
+                                        <div>
+                                            <h5 class="mb-3 card-title">Quotes</h5>
+                                        </div>
+                                        <form id="bulk-delete-form" method="POST"
+                                            action="{{ url('delete-selected-quotes') }}">
+                                            @csrf
+                                            <div class="table-responsive">
+                                                <table class="table new-table data-table-export"
+                                                    data-export-title="Quotes" data-export-filename="Quotes">
+
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="corner-left"><input type="checkbox"
+                                                                    id="select-all"></th>
+                                                            <th>{{ __('app.datagrid.subject') }}</th>
+                                                            <th>{{ __('app.datagrid.sales-person') }}</th>
+                                                            <th>{{ __('app.datagrid.expired_quotes') }}</th>
+                                                            <th>{{ __('app.datagrid.person') }}</th>
+                                                            <th>{{ __('app.datagrid.sub-total') }}</th>
+                                                            <th>{{ __('app.datagrid.discount') }}</th>
+                                                            <th>{{ __('app.datagrid.tax') }}</th>
+                                                            <th>{{ __('app.datagrid.grand-total') }}</th>
+                                                            <th>{{ __('app.leads.expired-at') }}</th>
+                                                            <th>{{ __('app.datagrid.created_at') }}</th>
+                                                            <th>{{ __('app.leads.actions') }}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        <?php foreach($quotes as $quote){
+                                        $owner_name = UserDetails::where('id', $quote->owner)->value('name');
+                                        $person_name = Person::where('id', $quote->person)->value('name');
+                                        $sub_total = 0;
+                                        $products = QuoteProduct::where('quote_id', $quote->id)->get();
+                                        foreach($products as $product){
+                                    
+                                            $amount = $product->price * $product->quantity;
+                                            $discount_amount = ($amount * $product->discount) / 100;
+                                            $tax_amount = ($amount - $discount_amount) * ($product->tax / 100);
+                                            $total = $amount - $discount_amount + $tax_amount;
+                                    
+                                            $sub_total += $amount;
+                                        }
+                                    ?>
+                                                        <tr class="odd gradeX">
+                                                            <td><input type="checkbox" name="selected_quotes[]"
+                                                                    value="{{ $quote->id }}"></td>
+                                                            <td class="">{{ $quote->subject }} </td>
+                                                            <td class=""><a
+                                                                    href="{{ url('users?id=' . $quote->owner) }}">{{ $owner_name }}</a>
+                                                            </td>
+                                                            <td class="">{{ $quote->expired_at }} </td>
+                                                            <td class=""><a
+                                                                    href="{{ url('persons?id=' . $quote->person) }}">{{ $person_name }}</a>
+                                                            </td>
+                                                            <td class="">${{ number_format($sub_total) }}</td>
+                                                            <td class="">
+                                                                ${{ number_format($quote->discount_total_amount, 2) }}</td>
+                                                            <td class="">
+                                                                ${{ number_format($quote->tax_total_amount, 2) }}</td>
+                                                            <td class="">
+                                                                ${{ number_format($quote->order_total_input, 2) }}</td>
+                                                            <td class="">{{ $quote->expired_at }} </td>
+                                                            <td class="">{{ $quote->created_at }} </td>
+
+                                                            <td class="action-icons d-flex gx-3">
+                                                                <a href="{{ url('delete-quote/' . $quote->id) }}"
+                                                                    onclick="return confirm('Are you sure you want to delete this record?')">
+                                                                    <div class="text-muted" type="button">
+                                                                        <svg width="20" height="20"
+                                                                            viewBox="0 0 18 18" fill="none"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <rect width="18" height="18"
+                                                                                rx="2.90323" fill="#FFE9E5" />
+                                                                            <path
+                                                                                d="M6.9431 12.7013C6.71689 12.7013 6.52331 12.6208 6.36236 12.4599C6.20141 12.2989 6.12079 12.1052 6.12052 11.8787V6.53197H5.70923V5.70939H7.76568V5.2981H10.2334V5.70939H12.2899V6.53197H11.8786V11.8787C11.8786 12.105 11.7981 12.2987 11.6372 12.4599C11.4762 12.6211 11.2825 12.7016 11.056 12.7013H6.9431ZM11.056 6.53197H6.9431V11.8787H11.056V6.53197ZM7.76568 11.0562H8.58826V7.35455H7.76568V11.0562ZM9.41084 11.0562H10.2334V7.35455H9.41084V11.0562Z"
+                                                                                fill="#ED2227" />
+                                                                        </svg>
+                                                                    </div>
+                                                                </a>
+                                                                <a href="{{ url('edit-quote/' . $quote->id) }}">
+                                                                    <div class="text-muted" type="button">
+                                                                        <svg width="20" height="20"
+                                                                            viewBox="0 0 18 18" fill="none"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <rect width="18" height="18"
+                                                                                rx="2.90323" fill="#E7E9FD" />
+                                                                            <path
+                                                                                d="M6.1206 11.8786H6.70663L10.7266 7.85862L10.1406 7.27258L6.1206 11.2926V11.8786ZM5.70935 12.7011C5.59282 12.7011 5.49522 12.6616 5.41654 12.5826C5.33785 12.5037 5.29837 12.4061 5.2981 12.2898V11.2926C5.2981 11.1829 5.31866 11.0783 5.35978 10.9788C5.40091 10.8792 5.45917 10.7919 5.53456 10.7168L10.7266 5.53505C10.8088 5.45966 10.8997 5.4014 10.9993 5.36027C11.0988 5.31915 11.2032 5.29858 11.3126 5.29858C11.422 5.29858 11.5283 5.31915 11.6313 5.36027C11.7344 5.4014 11.8235 5.46308 11.8987 5.54533L12.4641 6.12108C12.5464 6.19648 12.6063 6.28558 12.6438 6.3884C12.6814 6.49121 12.7003 6.59402 12.7006 6.69683C12.7006 6.8065 12.6817 6.9111 12.6438 7.01062C12.606 7.11014 12.5461 7.20089 12.4641 7.28287L7.28238 12.4646C7.20698 12.54 7.11952 12.5983 7.02 12.6394C6.92048 12.6805 6.81602 12.7011 6.70663 12.7011H5.70935ZM10.4284 7.57074L10.1406 7.27258L10.7266 7.85862L10.4284 7.57074Z"
+                                                                                fill="#4A58EC" />
+                                                                        </svg>
+                                                                    </div>
+                                                                </a>
+                                                                <a href="{{ asset('uploads/quotes/' . $quote->pdf . '') }}"
+                                                                    target="_blank">
+                                                                    <div class="text-muted" type="button">
+                                                                        <i class="fa-regular fa-file-pdf"></i>
+                                                                    </div>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <button type="submit" class="btn btn-danger btn-sm mb-2"
+                                                onclick="return confirm('Are you sure you want to delete selected records?')">Delete
+                                                Selected</button>
+                                        </form>
+
+
+                                    </div>
+                                @endif
                             </div>
                             <div class="tab-pane fade" id="events-notes" role="tabpanel"
                                 aria-labelledby="events-note-tab" tabindex="0">
-                                <h1>Notes</h1>
+                                {{-- notes --}}
+                                <div>
+                                    <div>
+                                        <h5 class="mb-3 card-title">Notes</h5>
+                                    </div>
+
+                                    @foreach ($notes as $note)
+                                        <div class="d-flex">
+                                            <div class="col-5">
+                                                <div class="d-flex gap-3 align-items-center mb-3">
+                                                    <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
+                                                        class="rounded-circle object-fit-cover" alt="..."
+                                                        width="30" height="30">
+
+                                                    <p class="person-name">
+                                                        Robert Smith
+                                                    </p>
+
+
+                                                </div>
+                                            </div>
+                                            <div class="col-4 event-timestamp mb-3">
+                                                <span>{{ $note->created_at }}</span>
+                                                <span>></span>
+                                                <span>{{ $note->note }}</span>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="events-calls" role="tabpanel"
                                 aria-labelledby="events-calls-tab" tabindex="0">
-                                <h1>calls</h1>
+                                {{-- calls --}}
+
+
+                                <div class="calls-tab mt-3">
+
+                                    @if ($calls->isEmpty())
+                                    @else
+                                        <div>
+                                            <h5 class="mb-3 card-title">Calls</h5>
+                                        </div>
+                                        @foreach ($calls as $call)
+                                            @php
+                                                $activity = $call['activity'];
+                                            @endphp
+                                            <div class="card card-default mb-2">
+                                                <div class="card-body d-flex mb-3 position-relative mt-4 ">
+                                                    <div class="col-12 col-md-3 col-lg-6">
+                                                        <section class="primary-info ">
+
+                                                            <div class="title-section">
+                                                                <h3 class="field-label">Title</h3>
+                                                                <p class="project-title">{{ $activity->title }}</p>
+                                                            </div>
+
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">From</h3>
+                                                                <p class="field-value">{{ $activity->from }}</p>
+                                                            </div>
+
+                                                            <div class="start-date-section">
+                                                                <h3 class="field-label">Participants</h3>
+                                                                @if (is_array($activity->participants) && count($activity->participants))
+                                                                    @foreach ($activity->participants as $participant)
+                                                                        <p>Type: {{ $participant['type'] }}, ID:
+                                                                            {{ $participant['id'] }}</p>
+                                                                    @endforeach
+                                                                @else
+                                                                    <p>No participants found.</p>
+                                                                @endif
+                                                            </div>
+                                                        </section>
+                                                    </div>
+
+
+
+                                                    <div class="col-12 col-md-3 col-lg-4">
+                                                        <section class="secondary-info">
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">Location</h3>
+                                                                <p class="field-value">{{ $activity->location }}</p>
+                                                            </div>
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">To</h3>
+                                                                <p class="field-value">{{ $activity->to }}</p>
+                                                            </div>
+                                                            <div class="start-date-section">
+                                                                <h3 class="field-label">Description</h3>
+                                                                <p class="field-value">{{ $activity->description }}</p>
+                                                            </div>
+                                                        </section>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="events-meetings"
                                 role="tabpanel"aria-labelledby="events-meetings-tab" tabindex="0">
-                                meetings
+                                {{-- meetings --}}
+                                <div class="meetings-tab mt-3">
+
+                                    @if ($meetings->isEmpty())
+                                        <p>No meetings found.</p>
+                                    @else
+                                        <div>
+                                            <h5 class="mb-3 card-title">Meetings</h5>
+                                        </div>
+                                        @foreach ($meetings as $meeting)
+                                            @php
+                                                $activity = $meeting['activity'];
+                                            @endphp
+                                            <div class="card card-default mb-2">
+                                                <div class="card-body d-flex mb-3 position-relative mt-4 ">
+                                                    <div class="col-12 col-md-3 col-lg-6">
+                                                        <section class="primary-info ">
+
+                                                            <div class="title-section">
+                                                                <h3 class="field-label">Title</h3>
+                                                                <p class="project-title">{{ $activity->title }}</p>
+                                                            </div>
+
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">From</h3>
+                                                                <p class="field-value">{{ $activity->from }}</p>
+                                                            </div>
+
+                                                            <div class="start-date-section">
+                                                                <h3 class="field-label">Participants</h3>
+                                                                @if (is_array($activity->participants) && count($activity->participants))
+                                                                    @foreach ($activity->participants as $participant)
+                                                                        <p>Type: {{ $participant['type'] }}, ID:
+                                                                            {{ $participant['id'] }}</p>
+                                                                    @endforeach
+                                                                @else
+                                                                    <p>No participants found.</p>
+                                                                @endif
+                                                            </div>
+                                                        </section>
+                                                    </div>
+
+
+                                                    <div class="col-12 col-md-3 col-lg-4">
+                                                        <section class="secondary-info">
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">Location</h3>
+                                                                <p class="field-value">{{ $activity->location }}</p>
+                                                            </div>
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">To</h3>
+                                                                <p class="field-value">{{ $activity->to }}</p>
+                                                            </div>
+                                                            <div class="start-date-section">
+                                                                <h3 class="field-label">Description</h3>
+                                                                <p class="field-value">{{ $activity->description }}</p>
+                                                            </div>
+                                                        </section>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="events-lunches"
                                 role="tabpanel"aria-labelledby="events-lunches-tab" tabindex="0">
-                                lunches
+                                {{-- lunches --}}
+                                <div class="lunches-tab mt-3">
+
+                                    @if ($lunches->isEmpty())
+                                        <p>No lunches found.</p>
+                                    @else
+                                        <div>
+                                            <h5 class="mb-3 card-title">Lunches</h5>
+                                        </div>
+                                        @foreach ($lunches as $lunche)
+                                            @php
+                                                $activity = $lunche['activity'];
+                                            @endphp
+                                            <div class="card card-default mb-2">
+                                                <div class="card-body d-flex mb-3 position-relative mt-4 ">
+                                                    <div class="col-12 col-md-3 col-lg-6">
+                                                        <section class="primary-info ">
+
+                                                            <div class="title-section">
+                                                                <h3 class="field-label">Title</h3>
+                                                                <p class="project-title">{{ $activity->title }}</p>
+                                                            </div>
+
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">From</h3>
+                                                                <p class="field-value">{{ $activity->from }}</p>
+                                                            </div>
+
+                                                            <div class="start-date-section">
+                                                                <h3 class="field-label">Participants</h3>
+                                                                @if (is_array($activity->participants) && count($activity->participants))
+                                                                    @foreach ($activity->participants as $participant)
+                                                                        <p>Type: {{ $participant['type'] }}, ID:
+                                                                            {{ $participant['id'] }}</p>
+                                                                    @endforeach
+                                                                @else
+                                                                    <p>No participants found.</p>
+                                                                @endif
+                                                            </div>
+                                                        </section>
+                                                    </div>
+
+
+                                                    <div class="col-12 col-md-3 col-lg-4">
+                                                        <section class="secondary-info">
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">Location</h3>
+                                                                <p class="field-value">{{ $activity->location }}</p>
+                                                            </div>
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">To</h3>
+                                                                <p class="field-value">{{ $activity->to }}</p>
+                                                            </div>
+                                                            <div class="start-date-section">
+                                                                <h3 class="field-label">Description</h3>
+                                                                <p class="field-value">{{ $activity->description }}</p>
+                                                            </div>
+                                                        </section>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="events-email" role="tabpanel" aria-labelledby="email-tab-tab"
                                 tabindex="0">
-                                <h3>Tab 3</h3>
-                                <section class="primary-info">
-                                    <div class="title-section">
-                                        <h3 class="field-label">Title</h3>
-                                        <p class="project-title">Design Dashboard Wireframe for Egoagri</p>
-                                    </div>
+                                {{-- email --}}
+                                @if ($lead_emails->isEmpty())
+                                    <p>No emails found.</p>
+                                @else
+                                    <div>
+                                        <div>
+                                            <h5 class="mb-3 card-title">Emails</h5>
+                                        </div>
+                                        <form id="bulk-delete-form" method="POST"
+                                            action="{{ url('delete-selected-quotes') }}">
+                                            @csrf
+                                            <div class="table-responsive">
+                                                <table class="table new-table data-table-export"
+                                                    data-export-title="Quotes" data-export-filename="Quotes">
 
-                                    <div class="status-section mb-3">
-                                        <h3 class="field-label mb-0">Status</h3>
-                                        <span class="priority-badge urgent">Urgent</span>
-                                    </div>
+                                                    <thead>
 
-                                    <div class="terms-section">
-                                        <h3 class="field-label">Terms</h3>
-                                        <p class="field-value">None</p>
-                                    </div>
+                                                        <tr>
+                                                            <th class="corner-left"><input type="checkbox"
+                                                                    id="select-all">
+                                                            </th>
+                                                            <th>{{ __('app.datagrid.subject') }}</th>
+                                                            <th>{{ __('app.datagrid.content') }}</th>
+                                                            <th>{{ __('app.datagrid.date') }}</th>
+                                                            <th class="corner-right">{{ __('app.datagrid.actions') }}
+                                                            </th>
+                                                        </tr>
 
-                                    <div class="start-date-section">
-                                        <h3 class="field-label">Start Date</h3>
-                                        <p class="field-value">May 26, 2025</p>
-                                    </div>
 
-                                    <div class="duration-section">
-                                        <h3 class="field-label">Duration</h3>
-                                        <p class="field-value">5 months</p>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        @foreach ($lead_emails as $lead_email)
+                                                            <tr class="odd gradeX">
+                                                                <td><input type="checkbox" name="selected_quotes[]"
+                                                                        value="{{ $lead_email->id }}"></td>
+                                                                <td class="">{{ $lead_email->subject }} </td>
+                                                                <td class="">{{ $lead_email->content }} </td>
+                                                                <td class="">{{ $lead_email->created_at }} </td>
+                                                                <td class="action-icons d-flex gx-3">
+                                                                    <a href="{{ url('delete-email/' . $lead_email->id) }}"
+                                                                        onclick="return confirm('Are you sure you want to delete this record?')">
+                                                                        <div class="text-muted">
+                                                                            <svg width="20" height="20"
+                                                                                viewBox="0 0 24 24" fill="none"
+                                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                                <path
+                                                                                    d="M3 6H5H21M19 6V19C19 20.1046 18.1046 21 17 21H7C5.89543 21 5 20.1046 5 19V6M19 6L17.5 4.5M19 6L16.5 4.5M17.5 4.5H16.5C15.6716 4.5 15.0122 4.94732 14.5858 5.58579L14.5858 5.58579C14.1594 6.22426 14.1594 7.17574 14.5858 7.81421L14.5858 7.81421C15.0122 8.45268 15.6716 8.9 16.5 8.9H17M7 6V19M7 6L8.5 4.5M7 6L9.5 4.5M8.5 4.5H9.5C10.3284 4.5 10.9878 4.94732 11.4142 5.58579L11.4142 5.58579C11.8406 6.22426 11.8406 7.17574 11.4142 7.81421L11.4142 7.81421C10.9878 8.45268 10.3284 8.9 9.5 8.9H9"
+                                                                                    stroke="#556476" stroke-width="1"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round" />
+                                                                            </svg>
+                                                                        </div>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <button type="submit" class="btn btn-danger btn-sm mb-2"
+                                                onclick="return confirm('Are you sure you want to delete selected records?')">Delete
+                                                Selected</button>
+                                        </form>
+
+
                                     </div>
-                                </section>
+                                @endif
                             </div>
                             <div class="tab-pane fade" id="events-file" role="tabpanel" aria-labelledby="file-tab-tab"
                                 tabindex="0">
@@ -1263,7 +1785,8 @@
                     <div class="col-5">
                         <div class="d-flex gap-3 align-items-center mb-3">
                             <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
-                                class="rounded-circle object-fit-cover" alt="..." width="30" height="30">
+                                class="rounded-circle object-fit-cover" alt="..." width="30"
+                                height="30">
 
                             <p class="person-name">Robert Bacins</p>
                         </div>
@@ -1279,7 +1802,8 @@
                     <div class="col-5">
                         <div class="d-flex gap-3 align-items-center mb-3">
                             <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
-                                class="rounded-circle object-fit-cover" alt="..." width="30" height="30">
+                                class="rounded-circle object-fit-cover" alt="..." width="30"
+                                height="30">
 
                             <p class="person-name">Robert Bacins</p>
                         </div>
@@ -1319,7 +1843,8 @@
                     <div class="col-5">
                         <div class="d-flex gap-3 align-items-center mb-3">
                             <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
-                                class="rounded-circle object-fit-cover" alt="..." width="30" height="30">
+                                class="rounded-circle object-fit-cover" alt="..." width="30"
+                                height="30">
 
                             <p class="person-name">Robert Bacins</p>
                         </div>
@@ -1335,7 +1860,8 @@
                     <div class="col-5">
                         <div class="d-flex gap-3 align-items-center mb-3">
                             <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
-                                class="rounded-circle object-fit-cover" alt="..." width="30" height="30">
+                                class="rounded-circle object-fit-cover" alt="..." width="30"
+                                height="30">
 
                             <p class="person-name">Robert Bacins</p>
                         </div>
@@ -1359,16 +1885,25 @@
 
 
     <script>
-        // $(document).ready(function() {
-        //     @if (Session::has('success'))
-        //         toastr.success("{{ Session::get('success') }}");
-        //     @endif
+        $(document).ready(function() {
+            @if (Session::has('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: "{{ Session::get('success') }}",
+                    confirmButtonColor: '#3085d6'
+                });
+            @endif
 
-        //     @if (Session::has('fail'))
-        //         toastr.error("{{ Session::get('fail') }}");
-        //     @endif
-        // });
-
+            @if (Session::has('fail'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "{{ Session::get('fail') }}",
+                    confirmButtonColor: '#d33'
+                });
+            @endif
+        });
 
 
         const select = document.getElementById('leadStatusSelect');
@@ -1549,7 +2084,7 @@
         });
 
 
+        
 
-         
     </script>
 @endsection

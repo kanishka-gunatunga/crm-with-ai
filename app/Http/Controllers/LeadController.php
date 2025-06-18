@@ -659,6 +659,8 @@ public function complete_activity($id,Request $request)
     }
     public function add_lead_email($id,Request $request)
     {
+
+        // dd($request->all());
         if($request->isMethod('post')){
             $request->validate([
                 'to' => 'required',
