@@ -220,15 +220,15 @@
 <script>
     // 1. Only Date Picker
     flatpickr(".datePicker", {
-        dateFormat: "Y-m-d", 
-        disableMobile: true 
+        dateFormat: "Y-m-d",
+        disableMobile: true
     });
 
     // 2. Only Time Picker
     flatpickr(".timePicker", {
         enableTime: true,
         noCalendar: true,
-        dateFormat: "H:i", 
+        dateFormat: "H:i",
         time_24hr: true,
         disableMobile: true
     });
@@ -236,9 +236,48 @@
     // 3. Date and Time Picker
     flatpickr(".dateTimePicker", {
         enableTime: true,
-        dateFormat: "Y-m-d H:i", 
+        dateFormat: "Y-m-d H:i",
         time_24hr: true,
         disableMobile: true
+    });
+
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.clear-all-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const form = button.closest('form');
+                if (!form) return;
+
+                // Clear all input fields
+                form.querySelectorAll('input').forEach(function(input) {
+                    if (input.type === 'checkbox' || input.type === 'radio') {
+                        input.checked = false;
+                    } else if (input.type === 'file') {
+                        input.value = null;
+                    } else {
+                        input.value = '';
+                    }
+                });
+
+                // Clear textarea
+                form.querySelectorAll('textarea').forEach(function(textarea) {
+                    textarea.value = '';
+                });
+
+                // Clear select elements
+                form.querySelectorAll('select').forEach(function(select) {
+                    select.selectedIndex = 0;
+                });
+
+                // If using Froala or other editors, clear them too
+                const froalaEditor = form.querySelector('#froala-editor');
+                if (froalaEditor && $(froalaEditor).froalaEditor) {
+                    $(froalaEditor).froalaEditor('html.set', '');
+                }
+            });
+        });
     });
 </script>
 

@@ -16,6 +16,10 @@
     $type_name = Type::where('id', $lead->type)->value('name');
     $owner_name = UserDetails::where('id', $lead->sales_owner)->value('name');
     $person = Person::where('id', $lead->person)->first();
+    
+    $calls = collect($allItems)->where('type', 'call');
+    $lunches = collect($allItems)->where('type', 'lunch');
+    $meetings = collect($allItems)->where('type', 'meeting');
     ?>
     <!-- Scrollable Content -->
     <div class="main-scrollable">
@@ -222,7 +226,7 @@
                                         <div class="col-12 mt-3">
                                             <div class="d-flex gap-2 justify-content-between">
                                                 <div>
-                                                    <button type="submit" class="btn clear-all-btn">Clear All</button>
+                                                     <button type="button" class="btn clear-all-btn">Clear All</button>
                                                 </div>
                                                 <div>
                                                     <button type="submit" class="btn save-btn">Save</button>
@@ -306,7 +310,7 @@
                                         <div class="col-10 mt-3">
                                             <div class="d-flex gap-2 justify-content-between">
                                                 <div>
-                                                    <button type="submit" class="btn clear-all-btn">Clear All</button>
+                                                     <button type="button" class="btn clear-all-btn">Clear All</button>
                                                 </div>
                                                 <div>
                                                     <button type="submit"
@@ -372,14 +376,10 @@
 
                                                 <div class="col-12 col-md-4">
                                                     <label for="field1" class="form-label">Subject</label>
-                                                    <input type="text" class="form-control" id="field1" name="subject"
-                                                        placeholder="Subject">
+                                                    <input type="text" class="form-control" id="field1"
+                                                        name="subject" placeholder="Subject">
                                                 </div>
-
-
                                             </div>
-
-
                                         </div>
 
                                     </div>
@@ -404,7 +404,7 @@
                                     <div class="col-10 mt-3">
                                         <div class="d-flex gap-2 justify-content-between">
                                             <div>
-                                                <button type="submit" class="btn clear-all-btn">Clear All</button>
+                                                 <button type="button" class="btn clear-all-btn">Clear All</button>
                                             </div>
                                             <div>
                                                 <button type="submit"
@@ -414,51 +414,53 @@
                                         </div>
 
                                     </div>
-
-
                                 </form>
                             </div>
                             <div class="tab-pane fade" id="file-tab" role="tabpanel" aria-labelledby="file-tab-tab"
                                 tabindex="0">
-                                <div class="col-10">
-                                    <div class="card card-default mt-3">
-                                        <div class="card-body">
+                                <form action="{{ url('add-lead-file/' . $lead->id . '') }}" method="post"
+                                    enctype="multipart/form-data" data-parsley-validate>
+                                    @csrf
+                                    <div class="col-10">
+                                        <div class="card card-default mt-3">
+                                            <div class="card-body">
 
-                                            <div class="col-md-12 mb-3">
-                                                <label for="firstNameinput"
-                                                    class="form-label">{{ __('app.leads.name') }}</label>
-                                                <input type="text" class="form-control" name="name" required>
-                                            </div>
-                                            <div class="col-12 mb-3">
-                                                <label for="field5" class="form-label">Description</label>
-                                                <div id="froala-editor" id="body" rows="5" name="description"
-                                                    required></div>
-                                            </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <label for="firstNameinput"
+                                                        class="form-label">{{ __('app.leads.name') }}</label>
+                                                    <input type="text" class="form-control" name="name" required>
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <label for="field5" class="form-label">Description</label>
+                                                    <div id="froala-editor" id="body" rows="5"
+                                                        name="description" required></div>
+                                                </div>
 
 
-                                            <div class="col-md-12 mb-3">
-                                                <label for="firstNameinput"
-                                                    class="form-label">{{ __('app.leads.file') }}</label>
-                                                <input class="form-control" type="file" id="formFile" name="file"
-                                                    required>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 mt-3">
-                                        <div class="d-flex gap-2 justify-content-between">
-                                            <div>
-                                                <button type="submit" class="btn clear-all-btn">Clear All</button>
-                                            </div>
-                                            <div>
-                                                <button type="submit"
-                                                    class="btn save-btn">{{ __('app.leads.save') }}</button>
-                                                <button type="button" class="btn cancel-btn">Cancel</button>
+                                                <div class="col-md-12 mb-3">
+                                                    <label for="firstNameinput"
+                                                        class="form-label">{{ __('app.leads.file') }}</label>
+                                                    <input class="form-control" type="file" id="formFile"
+                                                        name="file" required>
+                                                </div>
                                             </div>
                                         </div>
 
+                                        <div class="col-12 mt-3">
+                                            <div class="d-flex gap-2 justify-content-between">
+                                                <div>
+                                                    <button type="button" class="btn clear-all-btn">Clear All</button>
+                                                </div>
+                                                <div>
+                                                    <button type="submit"
+                                                        class="btn save-btn">{{ __('app.leads.save') }}</button>
+                                                    <button type="button" class="btn cancel-btn">Cancel</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
-                                </div>
+                                </form>
 
                             </div>
                             <div class="tab-pane fade" id="quote-tab" role="tabpanel" aria-labelledby="quote-tab-tab"
@@ -630,8 +632,6 @@
                                                                     stroke="#556476" stroke-width="0.683775"
                                                                     stroke-linecap="round" stroke-linejoin="round" />
                                                             </svg>
-
-
                                                             <span class="item-label">File</span>
                                                         </div>
                                                     </div>
@@ -665,7 +665,6 @@
                                                     </div>
                                                 </button>
                                             </li>
-
                                         </ul>
                                     </section>
                                 </nav>
@@ -689,9 +688,8 @@
 
 
                 <!-- Events -->
-                <div class="card card-default mb-4">
+                <div class="card card-default mb-4 position-relative">
                     <div class="card-body col-12">
-
                         <!-- <article class="project-card"> -->
                         <!-- <div class="card-background"></div> -->
                         <div class="tab-content" id="pills-tabContent">
@@ -700,221 +698,353 @@
                                 <div>
                                     <h5 class="mb-3 card-title">All Events</h5>
                                 </div>
-                                <?php var_dump($allItems); ?>
-                                {{-- @foreach ($allItems as $item)
-                                 
-                                    @if ($item['type'] == 'note')
-                                        <div class="col-12">
-                                            <h5 class="section-title">Notes</h5>
-                                            <div class="d-flex">
-                                                <div class="col-5">
-                                                    <div class="d-flex gap-3 align-items-center mb-3">
-                                                        <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
-                                                            class="rounded-circle object-fit-cover" alt="..."
-                                                            width="30" height="30">
-                                                        <p class="person-name">{{ $item['note']->note }}</p>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4 event-timestamp mb-3">
-                                                    <span></span>
-                                                    <span>></span>
-                                                    <span>Warranty Claimed</span>
+                                {{-- notes --}}
+                                <div>
+                                    <div>
+                                        <h5 class="mb-3 card-title">Notes</h5>
+                                    </div>
+
+                                    @foreach ($notes as $note)
+                                        <div class="d-flex">
+                                            <div class="col-5">
+                                                <div class="d-flex gap-3 align-items-center mb-3">
+                                                    <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
+                                                        class="rounded-circle object-fit-cover" alt="..."
+                                                        width="30" height="30">
+
+                                                    <p class="person-name">
+                                                        Robert Smith
+                                                    </p>
+
+
                                                 </div>
                                             </div>
+                                            <div class="col-4 event-timestamp mb-3">
+                                                <span>{{ $note->created_at }}</span>
+                                                <span>></span>
+                                                <span>{{ $note->note }}</span>
+                                            </div>
                                         </div>
-                                    @elseif ($item['type'] == 'call')
-                                        <!-- Call item HTML -->
-                                    @elseif ($item['type'] == 'meeting')
-                                        <!-- Meeting item HTML -->
-                                    @elseif ($item['type'] == 'lunch')
-                                        <!-- Lunch item HTML -->
-                                    @elseif ($item['type'] == 'email')
-                                        <!-- Email item HTML -->
-                                    @elseif ($item['type'] == 'file')
-                                        <!-- File item HTML -->
+                                    @endforeach
+                                </div>
+
+
+
+
+
+
+                                {{-- calls --}}
+
+
+                                <div class="calls-tab mt-3">
+
+                                    @if ($calls->isEmpty())
                                     @else
-                                        <div class="col-12">
-                                            <div class="d-flex">
-                                                <div class="col-5">
-                                                    <div class="d-flex gap-3 align-items-center mb-3">
-                                                        <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
-                                                            class="rounded-circle object-fit-cover" alt="..."
-                                                            width="30" height="30">
-                                                        <p class="person-name">Robert Bacins</p>
+                                        <div>
+                                            <h5 class="mb-3 card-title">Calls</h5>
+                                        </div>
+                                        @foreach ($calls as $call)
+                                            @php
+                                                $activity = $call['activity'];
+                                            @endphp
+                                            <div class="card card-default mb-2">
+                                                <div class="card-body d-flex mb-3 position-relative mt-4 ">
+                                                    <div class="col-12 col-md-3 col-lg-6">
+                                                        <section class="primary-info ">
+
+                                                            <div class="title-section">
+                                                                <h3 class="field-label">Title</h3>
+                                                                <p class="project-title">{{ $activity->title }}</p>
+                                                            </div>
+
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">From</h3>
+                                                                <p class="field-value">{{ $activity->from }}</p>
+                                                            </div>
+
+                                                            <div class="start-date-section">
+                                                                <h3 class="field-label">Participants</h3>
+                                                                @if (is_array($activity->participants) && count($activity->participants))
+                                                                    @foreach ($activity->participants as $participant)
+                                                                        <p>Type: {{ $participant['type'] }}, ID:
+                                                                            {{ $participant['id'] }}</p>
+                                                                    @endforeach
+                                                                @else
+                                                                    <p>No participants found.</p>
+                                                                @endif
+                                                            </div>
+                                                        </section>
+                                                    </div>
+
+
+
+                                                    <div class="col-12 col-md-3 col-lg-4">
+                                                        <section class="secondary-info">
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">Location</h3>
+                                                                <p class="field-value">{{ $activity->location }}</p>
+                                                            </div>
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">To</h3>
+                                                                <p class="field-value">{{ $activity->to }}</p>
+                                                            </div>
+                                                            <div class="start-date-section">
+                                                                <h3 class="field-label">Description</h3>
+                                                                <p class="field-value">{{ $activity->description }}</p>
+                                                            </div>
+                                                        </section>
+
                                                     </div>
                                                 </div>
-                                                <div class="col-4 event-timestamp mb-3">
-                                                    <span>May 26, 2025 10:00</span>
-                                                    <span>></span>
-                                                    <span>Warranty Claimed</span>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
+
+
+
+                                {{-- meetings --}}
+                                <div class="meetings-tab mt-3">
+
+                                    @if ($meetings->isEmpty())
+                                        <p>No meetings found.</p>
+                                    @else
+                                        <div>
+                                            <h5 class="mb-3 card-title">Meetings</h5>
+                                        </div>
+                                        @foreach ($meetings as $meeting)
+                                            @php
+                                                $activity = $meeting['activity'];
+                                            @endphp
+                                            <div class="card card-default mb-2">
+                                                <div class="card-body d-flex mb-3 position-relative mt-4 ">
+                                                    <div class="col-12 col-md-3 col-lg-6">
+                                                        <section class="primary-info ">
+
+                                                            <div class="title-section">
+                                                                <h3 class="field-label">Title</h3>
+                                                                <p class="project-title">{{ $activity->title }}</p>
+                                                            </div>
+
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">From</h3>
+                                                                <p class="field-value">{{ $activity->from }}</p>
+                                                            </div>
+
+                                                            <div class="start-date-section">
+                                                                <h3 class="field-label">Participants</h3>
+                                                                @if (is_array($activity->participants) && count($activity->participants))
+                                                                    @foreach ($activity->participants as $participant)
+                                                                        <p>Type: {{ $participant['type'] }}, ID:
+                                                                            {{ $participant['id'] }}</p>
+                                                                    @endforeach
+                                                                @else
+                                                                    <p>No participants found.</p>
+                                                                @endif
+                                                            </div>
+                                                        </section>
+                                                    </div>
+
+
+                                                    <div class="col-12 col-md-3 col-lg-4">
+                                                        <section class="secondary-info">
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">Location</h3>
+                                                                <p class="field-value">{{ $activity->location }}</p>
+                                                            </div>
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">To</h3>
+                                                                <p class="field-value">{{ $activity->to }}</p>
+                                                            </div>
+                                                            <div class="start-date-section">
+                                                                <h3 class="field-label">Description</h3>
+                                                                <p class="field-value">{{ $activity->description }}</p>
+                                                            </div>
+                                                        </section>
+
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endforeach
                                     @endif
-                                @endforeach --}}
+                                </div>
 
 
+                                {{-- lunches --}}
+                                <div class="lunches-tab mt-3">
 
+                                    @if ($lunches->isEmpty())
+                                        <p>No lunches found.</p>
+                                    @else
+                                        <div>
+                                            <h5 class="mb-3 card-title">Lunches</h5>
+                                        </div>
+                                        @foreach ($lunches as $lunche)
+                                            @php
+                                                $activity = $lunche['activity'];
+                                            @endphp
+                                            <div class="card card-default mb-2">
+                                                <div class="card-body d-flex mb-3 position-relative mt-4 ">
+                                                    <div class="col-12 col-md-3 col-lg-6">
+                                                        <section class="primary-info ">
+
+                                                            <div class="title-section">
+                                                                <h3 class="field-label">Title</h3>
+                                                                <p class="project-title">{{ $activity->title }}</p>
+                                                            </div>
+
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">From</h3>
+                                                                <p class="field-value">{{ $activity->from }}</p>
+                                                            </div>
+
+                                                            <div class="start-date-section">
+                                                                <h3 class="field-label">Participants</h3>
+                                                                @if (is_array($activity->participants) && count($activity->participants))
+                                                                    @foreach ($activity->participants as $participant)
+                                                                        <p>Type: {{ $participant['type'] }}, ID:
+                                                                            {{ $participant['id'] }}</p>
+                                                                    @endforeach
+                                                                @else
+                                                                    <p>No participants found.</p>
+                                                                @endif
+                                                            </div>
+                                                        </section>
+                                                    </div>
+
+
+                                                    <div class="col-12 col-md-3 col-lg-4">
+                                                        <section class="secondary-info">
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">Location</h3>
+                                                                <p class="field-value">{{ $activity->location }}</p>
+                                                            </div>
+                                                            <div class="terms-section">
+                                                                <h3 class="field-label">To</h3>
+                                                                <p class="field-value">{{ $activity->to }}</p>
+                                                            </div>
+                                                            <div class="start-date-section">
+                                                                <h3 class="field-label">Description</h3>
+                                                                <p class="field-value">{{ $activity->description }}</p>
+                                                            </div>
+                                                        </section>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
 
                             </div>
-                            <div class="d-flex align-items-center mb-3 position-relative mt-4">
-
-                                <div class="col-12 col-md-3 col-lg-6">
-                                    <section class="primary-info">
-                                        <h5 class="section-title">
-                                            Calls
-                                        </h5>
-                                        <div class="title-section">
-                                            <h3 class="field-label">Title</h3>
-                                            <p class="project-title">Project 1</p>
-                                        </div>
-
-                                        <div class="terms-section">
-                                            <h3 class="field-label">From</h3>
-                                            <p class="field-value">User 1</p>
-                                        </div>
-
-                                        <div class="start-date-section">
-                                            <h3 class="field-label">Participants</h3>
-                                            <p class="field-value">User 1, User 2, User 3</p>
-                                        </div>
-
-
-
-
-                                    </section>
-
-                                </div>
-
-                                <div class="col-12 col-md-3 col-lg-4">
-                                    <section class="secondary-info">
-                                        <div class="terms-section">
-                                            <h3 class="field-label">Location</h3>
-                                            <p class="field-value">Havelock City Mall</p>
-                                        </div>
-                                        <div class="terms-section">
-                                            <h3 class="field-label">To</h3>
-                                            <p class="field-value">User 2</p>
-                                        </div>
-                                        <div class="start-date-section">
-                                            <h3 class="field-label">Description</h3>
-                                            <p class="field-value">{{ $lead->description }}</p>
-                                        </div>
-                                    </section>
-
-                                </div>
-
+                            <div class="tab-pane fade" id="events-notes" role="tabpanel"
+                                aria-labelledby="events-note-tab" tabindex="0">
+                                <h1>Notes</h1>
                             </div>
-                        </div>
-                        <div class="tab-pane fade" id="events-notes" role="tabpanel" aria-labelledby="events-note-tab"
-                            tabindex="0">
-                            <h1>Notes</h1>
-                        </div>
-                        <div class="tab-pane fade" id="events-calls" role="tabpanel" aria-labelledby="events-calls-tab"
-                            tabindex="0">
-                            <h1>calls</h1>
-                        </div>
-                        <div class="tab-pane fade" id="events-meetings"
-                            role="tabpanel"aria-labelledby="events-meetings-tab" tabindex="0">
-                            meetings
-                        </div>
-                        <div class="tab-pane fade" id="events-lunches"
-                            role="tabpanel"aria-labelledby="events-lunches-tab" tabindex="0">
-                            lunches
-                        </div>
-                        <div class="tab-pane fade" id="events-email" role="tabpanel" aria-labelledby="email-tab-tab"
-                            tabindex="0">
-                            <h3>Tab 3</h3>
-                            <section class="primary-info">
-                                <div class="title-section">
-                                    <h3 class="field-label">Title</h3>
-                                    <p class="project-title">Design Dashboard Wireframe for Egoagri</p>
-                                </div>
+                            <div class="tab-pane fade" id="events-calls" role="tabpanel"
+                                aria-labelledby="events-calls-tab" tabindex="0">
+                                <h1>calls</h1>
+                            </div>
+                            <div class="tab-pane fade" id="events-meetings"
+                                role="tabpanel"aria-labelledby="events-meetings-tab" tabindex="0">
+                                meetings
+                            </div>
+                            <div class="tab-pane fade" id="events-lunches"
+                                role="tabpanel"aria-labelledby="events-lunches-tab" tabindex="0">
+                                lunches
+                            </div>
+                            <div class="tab-pane fade" id="events-email" role="tabpanel" aria-labelledby="email-tab-tab"
+                                tabindex="0">
+                                <h3>Tab 3</h3>
+                                <section class="primary-info">
+                                    <div class="title-section">
+                                        <h3 class="field-label">Title</h3>
+                                        <p class="project-title">Design Dashboard Wireframe for Egoagri</p>
+                                    </div>
 
-                                <div class="status-section mb-3">
-                                    <h3 class="field-label mb-0">Status</h3>
-                                    <span class="priority-badge urgent">Urgent</span>
-                                </div>
+                                    <div class="status-section mb-3">
+                                        <h3 class="field-label mb-0">Status</h3>
+                                        <span class="priority-badge urgent">Urgent</span>
+                                    </div>
 
-                                <div class="terms-section">
-                                    <h3 class="field-label">Terms</h3>
-                                    <p class="field-value">None</p>
-                                </div>
+                                    <div class="terms-section">
+                                        <h3 class="field-label">Terms</h3>
+                                        <p class="field-value">None</p>
+                                    </div>
 
-                                <div class="start-date-section">
-                                    <h3 class="field-label">Start Date</h3>
-                                    <p class="field-value">May 26, 2025</p>
-                                </div>
+                                    <div class="start-date-section">
+                                        <h3 class="field-label">Start Date</h3>
+                                        <p class="field-value">May 26, 2025</p>
+                                    </div>
 
-                                <div class="duration-section">
-                                    <h3 class="field-label">Duration</h3>
-                                    <p class="field-value">5 months</p>
-                                </div>
-                            </section>
-                        </div>
-                        <div class="tab-pane fade" id="events-file" role="tabpanel" aria-labelledby="file-tab-tab"
-                            tabindex="0">
-                            <h3>Tab 4</h3>
-                            <section class="primary-info">
-                                <div class="title-section">
-                                    <h3 class="field-label">Title</h3>
-                                    <p class="project-title">Design Dashboard Wireframe for Egoagri</p>
-                                </div>
+                                    <div class="duration-section">
+                                        <h3 class="field-label">Duration</h3>
+                                        <p class="field-value">5 months</p>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="tab-pane fade" id="events-file" role="tabpanel" aria-labelledby="file-tab-tab"
+                                tabindex="0">
+                                <h3>Tab 4</h3>
+                                <section class="primary-info">
+                                    <div class="title-section">
+                                        <h3 class="field-label">Title</h3>
+                                        <p class="project-title">Design Dashboard Wireframe for Egoagri</p>
+                                    </div>
 
-                                <div class="status-section mb-3">
-                                    <h3 class="field-label mb-0">Status</h3>
-                                    <span class="priority-badge urgent">Urgent</span>
-                                </div>
+                                    <div class="status-section mb-3">
+                                        <h3 class="field-label mb-0">Status</h3>
+                                        <span class="priority-badge urgent">Urgent</span>
+                                    </div>
 
-                                <div class="terms-section">
-                                    <h3 class="field-label">Terms</h3>
-                                    <p class="field-value">None</p>
-                                </div>
+                                    <div class="terms-section">
+                                        <h3 class="field-label">Terms</h3>
+                                        <p class="field-value">None</p>
+                                    </div>
 
-                                <div class="start-date-section">
-                                    <h3 class="field-label">Start Date</h3>
-                                    <p class="field-value">May 26, 2025</p>
-                                </div>
+                                    <div class="start-date-section">
+                                        <h3 class="field-label">Start Date</h3>
+                                        <p class="field-value">May 26, 2025</p>
+                                    </div>
 
-                                <div class="duration-section">
-                                    <h3 class="field-label">Duration</h3>
-                                    <p class="field-value">5 months</p>
-                                </div>
-                            </section>
-                        </div>
-                        <div class="tab-pane fade" id="events-quote" role="tabpanel" aria-labelledby="quote-tab-tab"
-                            tabindex="0">
-                            <h3>Tab 5</h3>
-                            <section class="primary-info">
-                                <div class="title-section">
-                                    <h3 class="field-label">Title</h3>
-                                    <p class="project-title">Design Dashboard Wireframe for Egoagri</p>
-                                </div>
+                                    <div class="duration-section">
+                                        <h3 class="field-label">Duration</h3>
+                                        <p class="field-value">5 months</p>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="tab-pane fade" id="events-quote" role="tabpanel" aria-labelledby="quote-tab-tab"
+                                tabindex="0">
+                                <h3>Tab 5</h3>
+                                <section class="primary-info">
+                                    <div class="title-section">
+                                        <h3 class="field-label">Title</h3>
+                                        <p class="project-title">Design Dashboard Wireframe for Egoagri</p>
+                                    </div>
 
-                                <div class="status-section mb-3">
-                                    <h3 class="field-label mb-0">Status</h3>
-                                    <span class="priority-badge urgent">Urgent</span>
-                                </div>
+                                    <div class="status-section mb-3">
+                                        <h3 class="field-label mb-0">Status</h3>
+                                        <span class="priority-badge urgent">Urgent</span>
+                                    </div>
 
-                                <div class="terms-section">
-                                    <h3 class="field-label">Terms</h3>
-                                    <p class="field-value">None</p>
-                                </div>
+                                    <div class="terms-section">
+                                        <h3 class="field-label">Terms</h3>
+                                        <p class="field-value">None</p>
+                                    </div>
 
-                                <div class="start-date-section">
-                                    <h3 class="field-label">Start Date</h3>
-                                    <p class="field-value">May 26, 2025</p>
-                                </div>
+                                    <div class="start-date-section">
+                                        <h3 class="field-label">Start Date</h3>
+                                        <p class="field-value">May 26, 2025</p>
+                                    </div>
 
-                                <div class="duration-section">
-                                    <h3 class="field-label">Duration</h3>
-                                    <p class="field-value">5 months</p>
-                                </div>
-                            </section>
+                                    <div class="duration-section">
+                                        <h3 class="field-label">Duration</h3>
+                                        <p class="field-value">5 months</p>
+                                    </div>
+                                </section>
+                            </div>
                         </div>
                     </div>
-
-
 
 
 
@@ -1110,112 +1240,116 @@
                             </nav>
                         </div>
                     </div>
-                    <!-- </article> -->
-                    <!-- </div> -->
-                </div>
-
-            </div>
-
-            <div class="card card-default mb-4 ">
-                <div class="card-body col-12">
-                    <div>
-                        <h5 class="mb-3 card-title">Assigned User</h5>
-                    </div>
-                    <div class="d-flex">
-                        <div class="col-5">
-                            <div class="d-flex gap-3 align-items-center mb-3">
-                                <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
-                                    class="rounded-circle object-fit-cover" alt="..." width="30"
-                                    height="30">
-
-                                <p class="person-name">Robert Bacins</p>
-                            </div>
-                        </div>
-                        <div class="col-4 event-timestamp mb-3">
-                            <span>May 26, 2025 10:00</span>
-                            <span>></span>
-                            <span>Warranty Claimed</span>
-                        </div>
-                    </div>
-
-                    <div class="d-flex">
-                        <div class="col-5">
-                            <div class="d-flex gap-3 align-items-center mb-3">
-                                <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
-                                    class="rounded-circle object-fit-cover" alt="..." width="30"
-                                    height="30">
-
-                                <p class="person-name">Robert Bacins</p>
-                            </div>
-                        </div>
-                        <div class="col-4 event-timestamp mb-3">
-                            <span>May 26, 2025 10:00</span>
-                            <span>></span>
-                            <span>Warranty Claimed</span>
-                        </div>
-                    </div>
                 </div>
 
 
-                <div class="action-buttons position-absolute">
-                    <button class="action-btn">
-                        <svg width="40" height="40" viewBox="0 0 26 26" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <rect width="26" height="26" rx="5" fill="#E8E9EB" />
-                            <path
-                                d="M9.20841 16.7918H9.80316L15.5979 10.997L15.0032 10.4023L9.20841 16.197V16.7918ZM8.66675 17.3334V15.9684L15.8059 8.82276C15.8619 8.77328 15.9233 8.73501 15.9901 8.70792C16.0569 8.68084 16.1268 8.66712 16.1997 8.66676C16.2726 8.6664 16.3431 8.67795 16.411 8.70142C16.4796 8.72417 16.5428 8.76534 16.6005 8.82492L17.1785 9.40667C17.2381 9.46409 17.2789 9.52728 17.3009 9.59626C17.3226 9.66487 17.3334 9.73348 17.3334 9.80209C17.3334 9.87576 17.3211 9.94617 17.2966 10.0133C17.2717 10.0801 17.2323 10.1414 17.1785 10.197L10.0312 17.3334H8.66675ZM15.2957 10.7045L15.0032 10.4023L15.5979 10.997L15.2957 10.7045Z"
-                                fill="#172635" />
-                        </svg>
-                    </button>
-
-
-                </div>
-            </div>
 
 
 
-            <div class="card card-default mb-4">
-                <div class="card-body col-12">
-                    <div>
-                        <h5 class="mb-3 card-title">Activities</h5>
-                    </div>
-                    <div class="d-flex">
-                        <div class="col-5">
-                            <div class="d-flex gap-3 align-items-center mb-3">
-                                <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
-                                    class="rounded-circle object-fit-cover" alt="..." width="30"
-                                    height="30">
 
-                                <p class="person-name">Robert Bacins</p>
-                            </div>
-                        </div>
-                        <div class="col-4 event-timestamp mb-3">
-                            <span>May 26, 2025 10:00</span>
-                            <span>></span>
-                            <span>Warranty Claimed</span>
-                        </div>
-                    </div>
 
-                    <div class="d-flex">
-                        <div class="col-5">
-                            <div class="d-flex gap-3 align-items-center mb-3">
-                                <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
-                                    class="rounded-circle object-fit-cover" alt="..." width="30"
-                                    height="30">
-
-                                <p class="person-name">Robert Bacins</p>
-                            </div>
-                        </div>
-                        <div class="col-4 event-timestamp mb-3">
-                            <span>May 26, 2025 10:00</span>
-                            <span>></span>
-                            <span>Warranty Claimed</span>
-                        </div>
-                    </div>
-                </div>
+                <!-- </article> -->
+                <!-- </div> -->
             </div>
 
         </div>
+
+        <div class="card card-default mb-4 ">
+            <div class="card-body col-12">
+                <div>
+                    <h5 class="mb-3 card-title">Assigned User</h5>
+                </div>
+                <div class="d-flex">
+                    <div class="col-5">
+                        <div class="d-flex gap-3 align-items-center mb-3">
+                            <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
+                                class="rounded-circle object-fit-cover" alt="..." width="30" height="30">
+
+                            <p class="person-name">Robert Bacins</p>
+                        </div>
+                    </div>
+                    <div class="col-4 event-timestamp mb-3">
+                        <span>May 26, 2025 10:00</span>
+                        <span>></span>
+                        <span>Warranty Claimed</span>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <div class="col-5">
+                        <div class="d-flex gap-3 align-items-center mb-3">
+                            <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
+                                class="rounded-circle object-fit-cover" alt="..." width="30" height="30">
+
+                            <p class="person-name">Robert Bacins</p>
+                        </div>
+                    </div>
+                    <div class="col-4 event-timestamp mb-3">
+                        <span>May 26, 2025 10:00</span>
+                        <span>></span>
+                        <span>Warranty Claimed</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="action-buttons position-absolute">
+                <button class="action-btn">
+                    <svg width="40" height="40" viewBox="0 0 26 26" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <rect width="26" height="26" rx="5" fill="#E8E9EB" />
+                        <path
+                            d="M9.20841 16.7918H9.80316L15.5979 10.997L15.0032 10.4023L9.20841 16.197V16.7918ZM8.66675 17.3334V15.9684L15.8059 8.82276C15.8619 8.77328 15.9233 8.73501 15.9901 8.70792C16.0569 8.68084 16.1268 8.66712 16.1997 8.66676C16.2726 8.6664 16.3431 8.67795 16.411 8.70142C16.4796 8.72417 16.5428 8.76534 16.6005 8.82492L17.1785 9.40667C17.2381 9.46409 17.2789 9.52728 17.3009 9.59626C17.3226 9.66487 17.3334 9.73348 17.3334 9.80209C17.3334 9.87576 17.3211 9.94617 17.2966 10.0133C17.2717 10.0801 17.2323 10.1414 17.1785 10.197L10.0312 17.3334H8.66675ZM15.2957 10.7045L15.0032 10.4023L15.5979 10.997L15.2957 10.7045Z"
+                            fill="#172635" />
+                    </svg>
+                </button>
+
+
+            </div>
+        </div>
+
+
+
+        <div class="card card-default mb-4">
+            <div class="card-body col-12">
+                <div>
+                    <h5 class="mb-3 card-title">Activities</h5>
+                </div>
+                <div class="d-flex">
+                    <div class="col-5">
+                        <div class="d-flex gap-3 align-items-center mb-3">
+                            <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
+                                class="rounded-circle object-fit-cover" alt="..." width="30" height="30">
+
+                            <p class="person-name">Robert Bacins</p>
+                        </div>
+                    </div>
+                    <div class="col-4 event-timestamp mb-3">
+                        <span>May 26, 2025 10:00</span>
+                        <span>></span>
+                        <span>Warranty Claimed</span>
+                    </div>
+                </div>
+
+                <div class="d-flex">
+                    <div class="col-5">
+                        <div class="d-flex gap-3 align-items-center mb-3">
+                            <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
+                                class="rounded-circle object-fit-cover" alt="..." width="30" height="30">
+
+                            <p class="person-name">Robert Bacins</p>
+                        </div>
+                    </div>
+                    <div class="col-4 event-timestamp mb-3">
+                        <span>May 26, 2025 10:00</span>
+                        <span>></span>
+                        <span>Warranty Claimed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
 
     </div>
@@ -1413,5 +1547,9 @@
                 });
             });
         });
+
+
+
+         
     </script>
 @endsection
