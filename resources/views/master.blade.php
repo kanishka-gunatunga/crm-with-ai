@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('css/header.css') }}">
     <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style_override.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 
@@ -72,7 +73,7 @@
             </div>
 
             <!-- Main Content Area -->
-            <div class="main-content container">
+            <div class="main-content ">
                 @yield('content')
             </div>
 
