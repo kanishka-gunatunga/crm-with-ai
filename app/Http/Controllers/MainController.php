@@ -20,6 +20,7 @@ use App\Models\LeadActivity;
 use App\Models\Person;
 use App\Models\Product;
 use App\Models\Service;
+use App\Models\Source;
 use File;
 use Illuminate\Support\Facades\Crypt;
 use PDF;
@@ -69,15 +70,41 @@ class MainController extends Controller
         if($request->isMethod('get')){
            
             $pipelines = Pipeline::orderBy('id', 'DESC')->get();
+            $sources = Source::orderBy('id', 'DESC')->get();
 
             $leadCounts = DB::table('leads')
                 ->select('pipeline', DB::raw('count(*) as total'))
                 ->groupBy('pipeline')
                 ->pluck('total', 'pipeline'); 
 
+            $weeklyLeadsBySource = DB::table('leads')
+                ->select('source', DB::raw('COUNT(*) as total'))
+                ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+                ->groupBy('source')
+                ->pluck('total', 'source'); 
+
+            $monthlyLeadsBySource = DB::table('leads')
+                ->select('source', DB::raw('COUNT(*) as total'))
+                ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+                ->groupBy('source')
+                ->pluck('total', 'source');
+
+            $yearlyLeadsBySource = DB::table('leads')
+                ->select('source', DB::raw('COUNT(*) as total'))
+                ->whereYear('created_at', Carbon::now()->year)
+                ->groupBy('source')
+                ->pluck('total', 'source');
+
+            $sourceLabels = $sources->pluck('name');
+            $weeklyData = $sources->map(fn($s) => $weeklyLeadsBySource->get($s->id, 0));
+            $monthlyData = $sources->map(fn($s) => $monthlyLeadsBySource->get($s->id, 0));
+            $yearlyData = $sources->map(fn($s) => $yearlyLeadsBySource->get($s->id, 0));
+
             foreach ($pipelines as $pipeline) {
                 $pipeline->leads_count = $leadCounts->get($pipeline->id, 0);
             }
+
+      
 
             $pieChartData = [
                 'labels' => $pipelines->pluck('name'),
@@ -121,6 +148,12 @@ class MainController extends Controller
             $all_won_leads = $all_leads->filter(function ($lead) {
                 return PipelineStage::where('id', $lead->stage)->value('name') === "Won";
             });
+            $all_new_leads = $all_leads->filter(function ($lead) {
+                return PipelineStage::where('id', $lead->stage)->value('name') === "New";
+            });
+            $all_lost_leads = $all_leads->filter(function ($lead) {
+                return PipelineStage::where('id', $lead->stage)->value('name') === "Lost";
+            });
 
             $allLeadsCount = $all_leads->count();
             $wonLeadsCount = $all_won_leads->count();
@@ -132,6 +165,9 @@ class MainController extends Controller
             $monthlyLabels = [];
             $monthlyAllLeadsData = array_fill(0, 12, 0);
             $monthlyWonLeadsData = array_fill(0, 12, 0);
+            $monthlyNewLeadsData = array_fill(0, 12, 0);
+            $monthlyLostLeadsData = array_fill(0, 12, 0);
+
 
             for ($i = 0; $i < 12; $i++) {
             $month = $now->copy()->subMonthsNoOverflow(11 - $i);
@@ -150,11 +186,22 @@ class MainController extends Controller
                 $createdAt = Carbon::parse($lead->created_at);
                 return $createdAt->between($startOfMonth, $endOfMonth);
             })->count();
+            $monthlyNewLeadsData[$i] = $all_new_leads->filter(function ($lead) use ($startOfMonth, $endOfMonth) {
+                $createdAt = Carbon::parse($lead->created_at);
+                return $createdAt->between($startOfMonth, $endOfMonth);
+            })->count();
+
+            $monthlyLostLeadsData[$i] = $all_lost_leads->filter(function ($lead) use ($startOfMonth, $endOfMonth) {
+                $createdAt = Carbon::parse($lead->created_at);
+                return $createdAt->between($startOfMonth, $endOfMonth);
+            })->count();
             }
 
             $weeklyLabels = [];
             $weeklyAllLeadsData = array_fill(0, 7, 0);
             $weeklyWonLeadsData = array_fill(0, 7, 0);
+            $weeklyNewLeadsData = array_fill(0, 7, 0);
+            $weeklyLostLeadsData = array_fill(0, 7, 0);
 
             for ($i = 0; $i < 7; $i++) {
 
@@ -175,11 +222,22 @@ class MainController extends Controller
                     $createdAt = Carbon::parse($lead->created_at);
                     return $createdAt->between($startOfWeek, $endOfWeek);
                 })->count();
+                $weeklyNewLeadsData[$i] = $all_new_leads->filter(function ($lead) use ($startOfWeek, $endOfWeek) {
+                    $createdAt = Carbon::parse($lead->created_at);
+                    return $createdAt->between($startOfWeek, $endOfWeek);
+                })->count();
+
+                $weeklyLostLeadsData[$i] = $all_lost_leads->filter(function ($lead) use ($startOfWeek, $endOfWeek) {
+                    $createdAt = Carbon::parse($lead->created_at);
+                    return $createdAt->between($startOfWeek, $endOfWeek);
+                })->count();
             }
 
             $yearlyLabels = [];
             $yearlyAllLeadsData = array_fill(0, 5, 0);
             $yearlyWonLeadsData = array_fill(0, 5, 0);
+            $yearlyNewLeadsData = array_fill(0, 5, 0);
+            $yearlyLostLeadsData = array_fill(0, 5, 0);
 
             for ($i = 0; $i < 5; $i++) {
                 $year = $now->copy()->subYearsNoOverflow(4 - $i);
@@ -198,13 +256,24 @@ class MainController extends Controller
                     $createdAt = Carbon::parse($lead->created_at);
                     return $createdAt->between($startOfYear, $endOfYear);
                 })->count();
+                $yearlyNewLeadsData[$i] = $all_new_leads->filter(function ($lead) use ($startOfYear, $endOfYear) {
+                    $createdAt = Carbon::parse($lead->created_at);
+                    return $createdAt->between($startOfYear, $endOfYear);
+                })->count();
+
+                $yearlyLostLeadsData[$i] = $all_lost_leads->filter(function ($lead) use ($startOfYear, $endOfYear) {
+                    $createdAt = Carbon::parse($lead->created_at);
+                    return $createdAt->between($startOfYear, $endOfYear);
+                })->count();
             }
             return view('dashboard', ['all_customers' => $all_customers,'this_month_customers' => $this_month_customers,'all_products' => $all_products,'this_month_products' => $this_month_products
             ,'all_services' => $all_services,'this_month_services' => $this_month_services,'all_leads' => $all_leads,'this_month_leads' => $this_month_leads
             ,'all_new_leads' => $all_new_leads,'this_month_new_leads' => $this_month_new_leads,'all_won_leads' => $all_won_leads,'overallSuccessRate' => $overallSuccessRate,
             'wonLeadsCount' => $wonLeadsCount,'monthlyLabels' => $monthlyLabels,'monthlyAllLeadsData' => $monthlyAllLeadsData,'monthlyWonLeadsData' => $monthlyWonLeadsData
             ,'weeklyLabels' => $weeklyLabels,'weeklyAllLeadsData' => $weeklyAllLeadsData,'weeklyWonLeadsData' => $weeklyWonLeadsData,'yearlyLabels' => $yearlyLabels,'yearlyAllLeadsData' => $yearlyAllLeadsData
-            ,'yearlyWonLeadsData' => $yearlyWonLeadsData,'pipelines' => $pipelines,'pieChartData' => $pieChartData]);
+            ,'yearlyWonLeadsData' => $yearlyWonLeadsData,'pipelines' => $pipelines,'pieChartData' => $pieChartData,'monthlyNewLeadsData' => $monthlyNewLeadsData,'monthlyLostLeadsData' => $monthlyLostLeadsData,
+            'weeklyNewLeadsData' => $weeklyNewLeadsData,'weeklyLostLeadsData' => $weeklyLostLeadsData,'yearlyNewLeadsData' => $yearlyNewLeadsData,'yearlyLostLeadsData' => $yearlyLostLeadsData,
+            'sourceLabels' => $sourceLabels,'weeklyData' => $weeklyData,'monthlyData' => $monthlyData,'yearlyData' => $yearlyData]);
          }
         
     }
