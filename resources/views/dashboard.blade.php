@@ -5,9 +5,10 @@
 @section('content')
 
 <?php
-
+use Carbon\Carbon;
 use App\Models\Lead;
 use App\Models\Person;
+use App\Models\Organization;
 ?>
 <link rel="stylesheet" href="{{ asset('css/custom2.css') }}">
  
@@ -651,27 +652,27 @@ use App\Models\Person;
                                         style="width:100%">
                                        
                                         <tbody>
-                                        <?php
-                                            // $persons = $all_leads->pluck('person')->unique();
-                                            // foreach($persons as $person){
-
-                                            // }
-                                        ?>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                          <img src="{{ asset('images/cake.png') }}" >
-                                                          <div class="mx-2">
-                                                                <B>David Johnson</B><br>
-                                                                KodeTech(Pvt)Ltd
-                                                          </div>
+                                        @foreach($persons as $person)
+                                        @php
+                                            $organization = Organization::find($person->organization);
+                                            $dob = Carbon::parse($person->dob);
+                                            $age = $dob->age;
+                                            $todayFormatted = $dob->format('F d, Y');
+                                        @endphp
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="{{ asset('images/cake.png') }}" alt="Cake Icon">
+                                                    <div class="mx-2">
+                                                        <strong>{{ $person->name }}</strong><br>
+                                                        {{ $organization->name ?? '-' }}
                                                     </div>
-                                                </td>
-                                                <td>May 26, 2025</td>
-                                                <td>25 Year old</td>
-                                               
-                                            </tr>
-                                            
+                                                </div>
+                                            </td>
+                                            <td>{{ $todayFormatted }}</td>
+                                            <td>{{ $age }} Year{{ $age > 1 ? 's' : '' }} old</td>
+                                        </tr>
+                                    @endforeach
                                         </tbody>
                                     </table>
                                 </div>

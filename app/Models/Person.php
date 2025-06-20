@@ -17,6 +17,7 @@ class Person extends Model
         'organization',
         'emails',
         'contact_numbers',
+        'dob',
     ];
 
     protected $casts = [

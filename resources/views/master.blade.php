@@ -203,16 +203,6 @@
 <script>
     $('.tagselect').select2({
         tags: true,
-        createTag: function(params) {
-            // Only allow tags with an "@" symbol
-            if (params.term.indexOf('@') === -1) {
-                return null;
-            }
-            return {
-                id: params.term,
-                text: params.term
-            };
-        }
     });
 </script>
 

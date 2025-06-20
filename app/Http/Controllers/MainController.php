@@ -71,6 +71,10 @@ class MainController extends Controller
            
             $pipelines = Pipeline::orderBy('id', 'DESC')->get();
             $sources = Source::orderBy('id', 'DESC')->get();
+            $persons = Person::whereMonth('dob', Carbon::today()->month)
+                 ->whereDay('dob', Carbon::today()->day)
+                 ->orderBy('id', 'DESC')
+                 ->get();
 
             $leadCounts = DB::table('leads')
                 ->select('pipeline', DB::raw('count(*) as total'))
@@ -273,7 +277,7 @@ class MainController extends Controller
             ,'weeklyLabels' => $weeklyLabels,'weeklyAllLeadsData' => $weeklyAllLeadsData,'weeklyWonLeadsData' => $weeklyWonLeadsData,'yearlyLabels' => $yearlyLabels,'yearlyAllLeadsData' => $yearlyAllLeadsData
             ,'yearlyWonLeadsData' => $yearlyWonLeadsData,'pipelines' => $pipelines,'pieChartData' => $pieChartData,'monthlyNewLeadsData' => $monthlyNewLeadsData,'monthlyLostLeadsData' => $monthlyLostLeadsData,
             'weeklyNewLeadsData' => $weeklyNewLeadsData,'weeklyLostLeadsData' => $weeklyLostLeadsData,'yearlyNewLeadsData' => $yearlyNewLeadsData,'yearlyLostLeadsData' => $yearlyLostLeadsData,
-            'sourceLabels' => $sourceLabels,'weeklyData' => $weeklyData,'monthlyData' => $monthlyData,'yearlyData' => $yearlyData]);
+            'sourceLabels' => $sourceLabels,'weeklyData' => $weeklyData,'monthlyData' => $monthlyData,'yearlyData' => $yearlyData,'persons' => $persons]);
          }
         
     }

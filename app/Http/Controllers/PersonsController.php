@@ -80,6 +80,7 @@ class PersonsController extends Controller
 
             $person = new Person();
             $person->name = $request->name;
+            $person->dob = $request->dob;
             $person->organization = $request->organization;
             if ($request->has('emails')) {
                 $emails = [];
@@ -140,7 +141,7 @@ class PersonsController extends Controller
 
         $person->name = $request->name;
         $person->organization = $request->organization;
-
+        $person->dob = $request->dob;
         if ($request->has('emails')) {
             $emails = [];
             foreach ($request->input('emails') as $key => $email) {
