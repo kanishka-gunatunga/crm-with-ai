@@ -31,7 +31,7 @@ Route::match(['get', 'post'],'forgot-password', [MainController::class, 'forgot_
 Route::match(['get', 'post'],'/reset-password/{id}/{email}', [MainController::class, 'reset_password']);
 Route::get( '/logout', [MainController::class, 'logout']);
 Route::get('/dashboard', [MainController::class, 'dashboard'])->middleware(['auth', 'permission:dashboard']);
-
+Route::get('/get-events/{date}', [MainController::class, 'get_events'])->middleware(['auth', 'permission:dashboard']);
 
 
 //Leads
