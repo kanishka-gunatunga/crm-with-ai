@@ -35,7 +35,7 @@ class EmailsController extends Controller
 
             $sent_emails = SentEmails::get();
 
-            return view('emails.emails', [
+            return view('mail.mail', [
                 'sent_emails' => $sent_emails
             ]);
          }
@@ -76,6 +76,8 @@ class EmailsController extends Controller
             ->send(new LeadSendEmail($sent_email));
 
             return back()->with('success', 'Email sent successfully.');
+        }else{
+            return view('mail.compose-mail');
         }
         
     }
