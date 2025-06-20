@@ -1219,33 +1219,37 @@
                                     aria-labelledby="events-note-tab" tabindex="0">
                                     {{-- notes --}}
                                     <div>
-                                        <div>
-                                            <h5 class="mb-3 card-title">Notes</h5>
-                                        </div>
+                                        @if ($calls->isEmpty())
+                                        @else
+                                            <div>
+                                                <h5 class="mb-3 card-title">Notes</h5>
+                                            </div>
 
-                                        @foreach ($notes as $note)
-                                            <div class="d-flex">
-                                                <div class="col-5">
-                                                    <div class="d-flex gap-3 align-items-center mb-3">
-                                                        <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
-                                                            class="rounded-circle object-fit-cover" alt="..."
-                                                            width="30" height="30">
+                                            @foreach ($notes as $note)
+                                                <div class="d-flex">
+                                                    <div class="col-5">
+                                                        <div class="d-flex gap-3 align-items-center mb-3">
+                                                            <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
+                                                                class="rounded-circle object-fit-cover" alt="..."
+                                                                width="30" height="30">
 
-                                                        <p class="person-name">
-                                                            Robert Smith
-                                                        </p>
+                                                            <p class="person-name">
+                                                                Robert Smith
+                                                            </p>
 
 
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4 event-timestamp mb-3">
+                                                        <span>{{ $note->created_at }}</span>
+                                                        <span>></span>
+                                                        <span>{{ $note->note }}</span>
                                                     </div>
                                                 </div>
-                                                <div class="col-4 event-timestamp mb-3">
-                                                    <span>{{ $note->created_at }}</span>
-                                                    <span>></span>
-                                                    <span>{{ $note->note }}</span>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
+                                            @endforeach
+                                    
+                                    @endif
+                                        </div>
                                 </div>
                                 <div class="tab-pane fade" id="events-calls" role="tabpanel"
                                     aria-labelledby="events-calls-tab" tabindex="0">

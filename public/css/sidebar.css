@@ -50,9 +50,9 @@
 
 
 .sidenav {
-    width: 200px;
+    /* width: 200px; */
     transition: left 0.3s;
-    padding-left: 25px;
+    /* padding-left: 25px; */
     font: var(--font-family);
     margin-top: 20px;
 
@@ -64,7 +64,8 @@
     font-weight: 600;
     font-size: 17px;
     line-height: 100%;
-    margin-bottom: 12px;
+    /* margin-bottom: 12px; */
+    padding: 20px;
 }
 
 .sidenav .nav-link svg {
@@ -81,6 +82,8 @@
 
 .navbar-nav .nav-link.active {
     color: var(--primary-color) !important;
+    background-color: #F4F7FF;
+    border-right: 5px solid var(--primary-color);
 }
 
 /* .nav-item .active{

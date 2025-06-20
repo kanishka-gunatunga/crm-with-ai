@@ -603,7 +603,10 @@ body {
   border: 1px solid #E8E9EB !important;
   border-radius: 10px !important;
 }
-
+.icon-container{
+  display: flex;
+  align-items: center;
+}
 .form-select {
   font-family: var(--font-family);
   font-weight: 500 !important;
@@ -644,6 +647,12 @@ body {
   padding: 5px 20px !important;
   border: 1px solid #FFE9E5 !important;
   border-radius: var(--primary-btn-border-radius) !important;
+}
+
+.clear-all-btn:hover {
+  background-color: #FFE9E5 !important;
+  color: var(--red-color) !important;
+  border: 1px solid #FFE9E5 !important;
 }
 
 .save-btn {
@@ -779,7 +788,27 @@ table tr {
   border-top-right-radius: 10px;
 }
 
+.filter-search {
+  z-index: 10;
+  position: absolute;
+  top: 60px;
+  right: 15px;
+}
 
+.filter-search .form-control, .filter-search .form-control:placeholder-shown{
+  font-size: 12px !important;
+  max-height: 31px;
+}
+
+.filter-search .form-label{
+  font-size: 12px !important;
+}
+
+.filter-search .clear-all-btn{
+  background-color: #F3F3FF !important;
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+}
 /* 
 .pagination {
   display: flex;
@@ -905,6 +934,13 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
   gap: 10px;
   display: flex;
   align-items: center;
+}
+
+.dataTables_filter input[type="search"] {
+  border-radius: 10px !important;
+  max-height: 31px !important;
+  padding: 5px;
+
 }
 
 .page-link {
@@ -1847,3 +1883,4 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
   cursor: pointer;
 
 }
+
