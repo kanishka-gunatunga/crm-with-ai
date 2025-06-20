@@ -1,6 +1,24 @@
 @extends('master')
 
 @section('content')
+
+<?php
+use App\Models\Lead;
+use App\Models\Person;
+use App\Models\Source;
+use App\Models\Type;
+use App\Models\UserDetails;
+use App\Models\Organization;
+use App\Models\Product;
+use App\Models\QuoteProduct;
+use App\Models\Service;
+
+$source_name = Source::where('id', $lead->source)->value('name');
+$type_name = Type::where('id', $lead->type)->value('name');
+$owner_name = UserDetails::where('id', $lead->sales_owner)->value('name');
+$person = Person::where('id', $lead->person)->first();
+$organization = Organization::where('id', $person->organization)->first();
+?>
     <!-- Scrollable Content -->
     <!-- Scrollable Content -->
     <form action="" method="post" enctype="multipart/form-data" data-parsley-validate class="lead-form">
@@ -11,13 +29,13 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <h3 class="page-title">
-                                {{ __('app.leads.create-title') }}
+                                {{ __('app.leads.edit-title') }}
                             </h3>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="#">Leads</a></li>
                                     <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
-                                        {{ __('app.leads.create-title') }}</li>
+                                        {{ __('app.leads.edit-title') }}</li>
                                 </ol>
                             </nav>
                         </div>
@@ -61,7 +79,8 @@
                                     <div class="col-12 col-md-4">
                                         <label for="field2" class="form-label">Source</label>
                                         <select class="form-control tagselect" name="source" required>
-                                            <?php foreach($sources as $source){ ?>
+                                            <option selected hidden value="{{ $lead->source }}">
+                                                <?php foreach($sources as $source){ ?>
                                             <option value="{{ $source->id }}">{{ $source->name }}</option>
                                             <?php } ?>
                                         </select>
@@ -94,6 +113,10 @@
                                         <select class="form-control" data-choices id="choices-single-default"
                                             name="sales_owner" required>
 
+                                            <option selected hidden value="{{ $lead->sales_owner }}">
+                                                {{ $owner_name }}
+                                            </option> 
+
                                             <?php foreach($owners as $owner){ ?>
                                                 <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
                                             <?php } ?>
@@ -110,7 +133,7 @@
                                         <label for="field2" class="form-label">Expected Closing
                                             Date</label>
                                         <input type="date" class="form-control" name="closing_date"
-                                            value="{{ old('closing_date') }}" required>
+                                            value="{{ $lead->closing_date }}" required>
                                         @if ($errors->has('closing_date'))
                                             <div class="alert alert-danger mt-2">
                                                 {{ $errors->first('closing_date') }}
@@ -155,9 +178,9 @@
                                         <input type="text" class="form-control" id="field5" placeholder="Date Due">
                                     </div> --}}
                                     <!-- <div class="col-12 col-md-4">
-                                                                                                                        <label for="field5" class="form-label">Reminders</label>
-                                                                                                                        <input type="text" class="form-control" id="field5" placeholder="Reminders">
-                                                                                                                    </div> -->
+                                                                                                                                <label for="field5" class="form-label">Reminders</label>
+                                                                                                                                <input type="text" class="form-control" id="field5" placeholder="Reminders">
+                                                                                                                            </div> -->
 
                                 </div>
 
@@ -173,7 +196,8 @@
                                     <div class="col-12 col-md-4">
                                         <label for="field1" class="form-label">{{ __('app.leads.name') }}</label>
                                         <select class="form-control stagselect" id="person-select" name="person" required>
-                                            <option hidden selected></option>
+                                            <option selected hidden value="{{ $lead->person }}">
+                                                                {{ $person->name }}</option>
                                             <?php foreach($persons as $person){ ?>
                                             <option value="{{ $person->id }}">{{ $person->name }}</option>
                                             <?php } ?>
@@ -190,7 +214,9 @@
                                         <label for="field1" class="form-label">{{ __('app.leads.organization') }}</label>
                                         <select class="form-control stagselect" id="organization-select"
                                             name="organization">
-                                            <option hidden selected></option>
+                                             <option selected hidden
+                                                                value="{{ $person->organization ?? '' }}">
+                                                                {{ $organization->name ?? '' }}</option>
                                             <?php foreach($organizations as $organization){ ?>
                                             <option value="{{ $organization->id }}">{{ $organization->name }}
                                             </option>
@@ -292,8 +318,8 @@
                             <div class="card-body">
                                 <div class="col-12">
                                     <label for="field5" class="form-label">Description</label>
-                                    <textarea class="form-control w-100" id="exampleFormControlTextarea5" rows="5" name="description"></textarea>
-                                    @if ($errors->has('description'))
+                                    <textarea class="form-control w-100" id="exampleFormControlTextarea5" rows="5" name="description">{{ $lead->description }}</textarea>
+                                                        @if ($errors->has('description'))
                                         <div class="alert alert-danger mt-2">
                                             {{ $errors->first('description') }}</li>
                                         </div>

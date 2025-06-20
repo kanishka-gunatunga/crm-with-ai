@@ -438,6 +438,27 @@ body {
   padding: 0 !important;
 }
 
+#leadStatusSelect {
+  color: black !important;
+  /* default */
+}
+
+#leadStatusSelect.blue {
+  color: #4A58EC !important;
+}
+
+#leadStatusSelect.orange {
+  color: #FF932F !important;
+}
+
+#leadStatusSelect.green {
+  color: #00C500 !important;
+}
+
+#leadStatusSelect.red {
+  color: #ED2227 !important;
+}
+
 .lead-status-dropdown .form-select {
   background-color: inherit !important;
   border: none !important;
@@ -502,7 +523,9 @@ body {
     font-size: 13px;
   }
 }
-.task-content a, .assignee-info a{
+
+.task-content a,
+.assignee-info a {
   text-decoration: none;
 }
 
@@ -565,17 +588,24 @@ body {
   align-self: stretch;
   margin: auto 0;
 }
-.tagselect span{
+
+.tagselect span {
   width: inherit !important;
 }
+
 .form-control {
   font-family: var(--font-family);
   font-weight: 500 !important;
   font-size: 15px !important;
   line-height: 100%;
   color: var(--black-color) !important;
-  height: 45px!important;
+  height: 45px !important;
   border: 1px solid #E8E9EB !important;
+  border-radius: 10px !important;
+}
+.icon-container{
+  display: flex;
+  align-items: center;
 }
 .form-select {
   font-family: var(--font-family);
@@ -583,7 +613,7 @@ body {
   font-size: 15px !important;
   line-height: 100%;
   color: var(--black-color) !important;
-  height: 45px!important;
+  height: 45px !important;
   border: 1px solid #E8E9EB !important;
 }
 
@@ -619,6 +649,12 @@ body {
   border-radius: var(--primary-btn-border-radius) !important;
 }
 
+.clear-all-btn:hover {
+  background-color: #FFE9E5 !important;
+  color: var(--red-color) !important;
+  border: 1px solid #FFE9E5 !important;
+}
+
 .save-btn {
   font-family: var(--font-family) !important;
   font-weight: 400 !important;
@@ -638,6 +674,10 @@ body {
   color: var(--primary-text-color) !important;
 }
 
+.select2-container{
+          display: inherit !important;
+}
+
 .select2-container--default .select2-selection--single {
   background-color: #fff;
   border: 1px solid #aaa;
@@ -650,10 +690,10 @@ body {
   font-size: 15px !important;
   line-height: 100%;
   color: var(--black-color) !important;
-  height: 45px!important;
+  height: 45px !important;
   border: 1px solid #E8E9EB !important;
-  border-radius: 10px  !important;
-  padding: .375rem .75rem  !important;
+  border-radius: 10px !important;
+  padding: .375rem .75rem !important;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow b {
@@ -726,9 +766,11 @@ body {
   color: #556476;
   background-color: #E8E9EB;
 }
+
 table tr {
   vertical-align: middle;
 }
+
 .new-table tbody tr td {
   font-family: var(--font-family);
   font-weight: 500 !important;
@@ -746,7 +788,27 @@ table tr {
   border-top-right-radius: 10px;
 }
 
+.filter-search {
+  z-index: 10;
+  position: absolute;
+  top: 60px;
+  right: 15px;
+}
 
+.filter-search .form-control, .filter-search .form-control:placeholder-shown{
+  font-size: 12px !important;
+  max-height: 31px;
+}
+
+.filter-search .form-label{
+  font-size: 12px !important;
+}
+
+.filter-search .clear-all-btn{
+  background-color: #F3F3FF !important;
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+}
 /* 
 .pagination {
   display: flex;
@@ -855,7 +917,7 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
 .dataTables_wrapper .dataTables_paginate {
   padding: 6px 12px;
   font-weight: 500;
-  font-size: 10px;
+  font-size: 12px;
   color: #333;
   background-color: white;
   transition: 0.2s;
@@ -863,20 +925,33 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
   align-items: center;
   justify-content: center;
 }
+
+.dataTables_wrapper .dataTables_filter {
+  justify-content: end;
+}
+
 .dataTables_length {
   gap: 10px;
   display: flex;
   align-items: center;
 }
-.page-link{
- font-size: 7px !important;
- border: 1px solid #F1F1F1;
+
+.dataTables_filter input[type="search"] {
+  border-radius: 10px !important;
+  max-height: 31px !important;
+  padding: 5px;
+
+}
+
+.page-link {
+  font-size: 7px !important;
+  border: 1px solid #F1F1F1;
   border-radius: 5px;
   margin: 0 2px;
   padding: 4px 7px;
 }
 
-.active>.page-link{
+.active>.page-link {
   background-color: var(--primary-color) !important;
   color: #FFFFFF !important;
   font-weight: 600 !important;
@@ -884,6 +959,7 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
   font-family: var(--font-family) !important;
   font-size: 7px !important;
 }
+
 /* .dataTables_wrapper .dataTables_paginate .paginate_button {
   
 } */
@@ -1173,6 +1249,7 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
 
 .trash-icon-btn {
   background-color: var(--red-shading) !important;
+  padding: 13px;
 }
 
 .add-more-button {
@@ -1789,18 +1866,21 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
   border-radius: 5px;
 
 }
-.delete-form-confirm{
+
+.delete-form-confirm {
   background-color: #ffe9e5 !important;
   border: 1px solid #ffe9e5 !important;
   color: #ed2227 !important;
 }
-.remove-append-item{
-    font-size: 10px;
-    background-color: #ffe9e5 !important;
-    border: 1px solid #ffe9e5 !important;
-    color: #ed2227 !important;
-    padding: 5px;
-    border-radius: 5px;
-    cursor: pointer;
-  
+
+.remove-append-item {
+  font-size: 10px;
+  background-color: #ffe9e5 !important;
+  border: 1px solid #ffe9e5 !important;
+  color: #ed2227 !important;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+
 }
+
