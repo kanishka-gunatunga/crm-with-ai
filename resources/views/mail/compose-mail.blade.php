@@ -1,94 +1,249 @@
 @extends('master')
 
 @section('content')
+    <form action="{{ url('compose-email') }}" method="post" enctype="multipart/form-data" data-parsley-validate>
+        @csrf
+        <!-- Scrollable Content -->
+        <div class="main-scrollable">
+            <div class="page-container">
+                <div class="page-title-container">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h3 class="page-title">
+                                Compose Mail
+                            </h3>
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="#">Mail</a></li>
+                                    <li class="breadcrumb-item active current-breadcrumb" aria-current="page">Compose mail
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
 
-
-<!-- Scrollable Content -->
-<div class="main-scrollable">
-    <div class="page-container">
-        <div class="page-title-container">
-            <div class="d-flex justify-content-between">
-                <div>
-                    <h3 class="page-title">
-                        Compose Mail
-                    </h3>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">Mail</a></li>
-                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">Compose mail</li>
-                        </ol>
-                    </nav>
                 </div>
 
+                <div class="col-12">
+                    <div class="card-container">
+
+                        <div class="card card-default">
+                            <div class="card-body">
+
+
+                                <div class="row g-4">
+                                    <div class="col-12 col-md-4 ">
+                                        <label for="field1" class="form-label">To</label>
+                                        <div class="position-relative">
+                                            <input type="text" class="form-control " id="field1" placeholder="To"
+                                                data-choices data-choices-limit="Required Limit" data-choices-removeItem
+                                                class="form-control" name="to[]">
+                                            <button type="button"
+                                                class="position-absolute email-sending-option-btn CC cc-toggle">CC</button>
+                                            <button type="button"
+                                                class="position-absolute email-sending-option-btn BCC bcc-toggle">BCC</button>
+                                        </div>
+
+                                    </div>
+                                    {{-- <div class="col-md-4 mb-3">
+                                                    <label for="firstNameinput" class="form-label">ggg</label>
+                                                    <select class="form-control tagselect" name="cc[]"
+                                                        multiple="multiple"></select>
+                                                </div> --}}
 
 
 
-            </div>
+                                    <div class="col-md-4 mb-3 cc-input d-none">
 
-        </div>
+                                        <label for="firstNameinput" class="form-label">{{ __('app.leads.cc') }}</label>
 
-        <div class="col-12">
-            <div class="card-container">
-                <form>
-                    <div class="card card-default">
-                        <div class="card-body">
-
-
-                            <div class="row g-4">
-                                <div class="col-12 col-md-4 ">
-                                    <label for="field1" class="form-label">To</label>
-                                    <div class="position-relative">
-                                        <input type="text" class="form-control " id="field1" placeholder="To">
-                                        <button type="button" class="position-absolute email-sending-option-btn CC">CC</button>
-                                        <button type="button" class="position-absolute email-sending-option-btn BCC">BCC</button>
+                                        <input type="text" data-choices data-choices-limit="Required Limit"
+                                            data-choices-removeItem class="form-control tagselect" name="cc[]">
+                                    </div>
+                                    <div class="col-md-4 mb-3 bcc-input d-none">
+                                        <label for="firstNameinput" class="form-label">{{ __('app.leads.bcc') }}</label>
+                                        <input type="text" data-choices data-choices-limit="Required Limit"
+                                            data-choices-removeItem class="form-control tagselect" name="bcc[]">
                                     </div>
 
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <label for="field1" class="form-label">Subject</label>
-                                    <input type="text" class="form-control" id="field1" placeholder="Subject">
-                                </div>
 
-
+                                    <div class="col-12 col-md-4">
+                                        <label for="field1" class="form-label">Subject</label>
+                                        <input type="text" class="form-control" id="field1" name="subject"
+                                            placeholder="Subject">
+                                    </div>
+                                </div>
                             </div>
 
+                        </div>
+                        <div class="card card-default mt-3">
+                            <div class="card-body">
+                                <div class="col-10">
+                                    <label for="field5" class="form-label">Description</label>
 
+                                    <textarea class="summernoteNormal" id="summernote" name="body"></textarea>
+                                    {{-- <div id="froala-editor" rows="5"
+                                                        name="body" required></div> --}}
+                                </div>
+
+
+                                <div class="col-10 mt-3">
+                                    <label for="firstNameinput"
+                                        class="form-label">{{ __('app.datagrid.attachments') }}</label>
+                                    <input class="form-control" type="file" id="formFile" name="attchments[]" multiple>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
-                    <div class="card card-default mt-3">
-                        <div class="card-body">
-                            <div class="col-12">
-                                <label for="field5" class="form-label">Description</label>
-                                <div id="summernote"></div>
-                            </div>
-                        </div>
-                    </div>
+                </div>
 
-
-
-
-                </form>
             </div>
         </div>
 
-    </div>
-</div>
+        <!-- Bottom Action Buttons -->
+        <div class="col-12 action-bar">
+            <div class="d-flex gap-2 justify-content-between">
+                <div>
+                    <button type="submit" class="btn clear-all-btn">Clear All</button>
+                </div>
+                <div>
+                    <button type="submit" class="btn save-btn">Save</button>
+                    <button type="button" class="btn cancel-btn">Cancel</button>
+                </div>
 
-<!-- Bottom Action Buttons -->
-<div class="col-12 action-bar">
-    <div class="d-flex gap-2 justify-content-between">
-        <div>
-            <button type="submit" class="btn clear-all-btn">Clear All</button>
+            </div>
+
         </div>
-        <div>
-            <button type="submit" class="btn save-btn">Save</button>
-           <button type="button" class="btn cancel-btn">Cancel</button>
-        </div>
 
-    </div>
+    </form>
 
-</div>
+    <script>
+        document.querySelectorAll('.email-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const data = JSON.parse(item.dataset.email);
+
+                const parseList = str => {
+                    try {
+                        return JSON.parse(str);
+                    } catch (e) {
+                        return [str]; // fallback if it's just a string
+                    }
+                };
+
+                document.getElementById('email-to').textContent = parseList(data.to).join(', ');
+                document.getElementById('email-cc').textContent = parseList(data.cc).join(', ');
+                document.getElementById('email-bcc').textContent = parseList(data.bcc).join(', ');
+                document.getElementById('email-subject').textContent = data.subject;
+                document.getElementById('email-date').textContent = new Date(data.created_at)
+                    .toLocaleString();
+                document.getElementById('email-body').innerHTML = data.body;
+
+                // Attachments
+
+                const attachments = parseList(data.attachments);
+                const baseUrl = "{{ asset('uploads/leads/email_attachments') }}";
+
+                const attachmentList = document.getElementById('email-attachments');
+                attachmentList.innerHTML = '';
+
+                attachments.forEach(file => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="${baseUrl}/${file}" target="_blank">${file}</a>`;
+                    attachmentList.appendChild(li);
+                });
+            });
+        });
+    </script>
+    <script>
+        $('#body').summernote({
+            tabsize: 2,
+            height: 200
+        });
+        document.addEventListener("DOMContentLoaded", function() {
 
 
+            const ccButton = document.querySelector(".cc-toggle");
+            const bccButton = document.querySelector(".bcc-toggle");
+
+
+            const ccInputDiv = document.querySelector("input[name='cc[]']").closest('.col-md-12');
+            const bccInputDiv = document.querySelector("input[name='bcc[]']").closest('.col-md-12');
+
+            ccInputDiv.style.display = "none";
+            bccInputDiv.style.display = "none";
+
+
+            if (ccButton) {
+                ccButton.addEventListener("click", function() {
+                    ccInputDiv.style.display = ccInputDiv.style.display === "none" ? "block" : "none";
+                });
+            }
+
+
+            if (bccButton) {
+                bccButton.addEventListener("click", function() {
+                    bccInputDiv.style.display = bccInputDiv.style.display === "none" ? "block" : "none";
+                });
+            }
+        });
+    </script>
+    <script>
+        const ccButton = document.querySelector(".cc-toggle");
+        const bccButton = document.querySelector(".bcc-toggle");
+
+        if (ccButton) {
+            ccButton.addEventListener("click", function() {
+                const ccInputDiv = document.querySelector(".cc-input");
+                ccInputDiv.classList.toggle("d-none");
+            });
+        }
+
+        if (bccButton) {
+            bccButton.addEventListener("click", function() {
+                const bccInputDiv = document.querySelector(".bcc-input");
+                bccInputDiv.classList.toggle("d-none");
+            });
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.cancel-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const defaultTabTrigger = document.querySelector('#default-tab-tab');
+                    if (defaultTabTrigger) {
+                        const tab = new bootstrap.Tab(defaultTabTrigger);
+                        tab.show();
+                    }
+                });
+            });
+        });
+        let toChoices, ccChoices, bccChoices;
+
+        const initChoices = () => {
+            if (toChoices) toChoices.destroy();
+            if (ccChoices) ccChoices.destroy();
+            if (bccChoices) bccChoices.destroy();
+
+            document.querySelectorAll('[data-choices]').forEach((el) => {
+                const name = el.getAttribute("name");
+
+                const instance = new Choices(el, {
+                    removeItemButton: true,
+                    duplicateItemsAllowed: false,
+                });
+
+                if (name === "to[]") toChoices = instance;
+                if (name === "cc[]") ccChoices = instance;
+                if (name === "bcc[]") bccChoices = instance;
+            });
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('composemodal');
+            modal.addEventListener('shown.bs.modal', function() {
+                initChoices();
+            });
+        });
+    </script>
 @endsection

@@ -5,119 +5,122 @@
     <!-- Scrollable Content -->
     <form action="" method="post" enctype="multipart/form-data" data-parsley-validate class="lead-form">
         @csrf
-        <div class="main-scrollable">
-            <div class="page-container">
-                <div class="page-title-container mb-0">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h3 class="page-title">
-                                {{ __('app.leads.create-title') }}
-                            </h3>
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">Leads</a></li>
-                                    <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
-                                        {{ __('app.leads.create-title') }}</li>
-                                </ol>
-                            </nav>
+
+        <div class="d-flex flex-column min-vh-100">
+            <div class="flex-grow-1">
+                <div class="main-scrollable">
+                    <div class="page-container">
+                        <div class="page-title-container mb-0">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h3 class="page-title">
+                                        {{ __('app.leads.create-title') }}
+                                    </h3>
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="#">Leads</a></li>
+                                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
+                                                {{ __('app.leads.create-title') }}</li>
+                                        </ol>
+                                    </nav>
+                                </div>
+
+
+
+
+                            </div>
+
                         </div>
 
+                        <div class="col-12">
+                            <div class="card-container">
+                                <div class="card card-default">
+                                    <div class="card-body">
 
 
-
-                    </div>
-
-                </div>
-
-                <div class="col-12">
-                    <div class="card-container">
-                        <div class="card card-default">
-                            <div class="card-body">
-
-
-                                <div class="row g-4">
-                                    <div class="col-12 col-md-4">
-                                        <label for="field1" class="form-label">Title</label>
-                                        <input type="text" class="form-control" name="title"
-                                            value="{{ old('title') }}" required>
-                                        @if ($errors->has('title'))
-                                            <div class="alert alert-danger mt-2">
-                                                {{ $errors->first('title') }}
+                                        <div class="row g-4">
+                                            <div class="col-12 col-md-4">
+                                                <label for="field1" class="form-label">Title</label>
+                                                <input type="text" class="form-control" name="title"
+                                                    value="{{ old('title') }}" required>
+                                                @if ($errors->has('title'))
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $errors->first('title') }}
+                                                    </div>
+                                                @endif
                                             </div>
-                                        @endif
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="field2" class="form-label">Lead Value ($)</label>
-                                        <input type="number" step="any" class="form-control" name="lead_value"
-                                            value="{{ old('lead_value') }}" required>
-                                        @if ($errors->has('lead_value'))
-                                            <div class="alert alert-danger mt-2">
-                                                {{ $errors->first('lead_value') }}
+                                            <div class="col-12 col-md-4">
+                                                <label for="field2" class="form-label">Lead Value ($)</label>
+                                                <input type="number" step="any" class="form-control" name="lead_value"
+                                                    value="{{ old('lead_value') }}" required>
+                                                @if ($errors->has('lead_value'))
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $errors->first('lead_value') }}
+                                                    </div>
+                                                @endif
                                             </div>
-                                        @endif
-                                    </div>
 
 
-                                    <div class="col-12 col-md-4">
-                                        <label for="field2" class="form-label">Source</label>
-                                        <select class="form-control tagselect" name="source" required>
-                                            <?php foreach($sources as $source){ ?>
-                                            <option value="{{ $source->id }}">{{ $source->name }}</option>
-                                            <?php } ?>
-                                        </select>
-                                        @if ($errors->has('source'))
-                                            <div class="alert alert-danger mt-2">
-                                                {{ $errors->first('source') }}
+                                            <div class="col-12 col-md-4">
+                                                <label for="field2" class="form-label">Source</label>
+                                                <select class="form-control tagselect" name="source" required>
+                                                    <?php foreach($sources as $source){ ?>
+                                                    <option value="{{ $source->id }}">{{ $source->name }}</option>
+                                                    <?php } ?>
+                                                </select>
+                                                @if ($errors->has('source'))
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $errors->first('source') }}
+                                                    </div>
+                                                @endif
                                             </div>
-                                        @endif
-                                    </div>
 
 
-                                    <div class="col-12 col-md-4">
-                                        <label for="field2" class="form-label">Type</label>
-                                        <select class="form-control" data-choices id="choices-single-default" name="type"
-                                            required>
-                                            <?php foreach($types as $type){ ?>
-                                            <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                            <?php } ?>
-                                        </select>
-                                        @if ($errors->has('type'))
-                                            <div class="alert alert-danger mt-2">
-                                                {{ $errors->first('type') }}
+                                            <div class="col-12 col-md-4">
+                                                <label for="field2" class="form-label">Type</label>
+                                                <select class="form-control" data-choices id="choices-single-default"
+                                                    name="type" required>
+                                                    <?php foreach($types as $type){ ?>
+                                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                                    <?php } ?>
+                                                </select>
+                                                @if ($errors->has('type'))
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $errors->first('type') }}
+                                                    </div>
+                                                @endif
                                             </div>
-                                        @endif
-                                    </div>
 
 
-                                    <div class="col-12 col-md-4">
-                                        <label for="field2" class="form-label">Sales Owner</label>
-                                        <select class="form-control" data-choices id="choices-single-default"
-                                            name="sales_owner" required>
+                                            <div class="col-12 col-md-4">
+                                                <label for="field2" class="form-label">Sales Owner</label>
+                                                <select class="form-control" data-choices id="choices-single-default"
+                                                    name="sales_owner" required>
 
-                                            <?php foreach($owners as $owner){ ?>
-                                                <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
-                                            <?php } ?>
-                                        </select>
-                                        @if ($errors->has('sales_owner'))
-                                            <div class="alert alert-danger mt-2">
-                                                {{ $errors->first('sales_owner') }}
+                                                    <?php foreach($owners as $owner){ ?>
+                                                    <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
+                                                    <?php } ?>
+                                                </select>
+                                                @if ($errors->has('sales_owner'))
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $errors->first('sales_owner') }}
+                                                    </div>
+                                                @endif
                                             </div>
-                                        @endif
-                                    </div>
 
 
-                                    <div class="col-12 col-md-4">
-                                        <label for="field2" class="form-label">Expected Closing
-                                            Date</label>
-                                        <input type="date" class="form-control" name="closing_date"
-                                            value="{{ old('closing_date') }}" required>
-                                        @if ($errors->has('closing_date'))
-                                            <div class="alert alert-danger mt-2">
-                                                {{ $errors->first('closing_date') }}
+                                            <div class="col-12 col-md-4">
+                                                <label for="field2" class="form-label">Expected Closing
+                                                    Date</label>
+                                                <input type="date" class="form-control" name="closing_date"
+                                                    value="{{ old('closing_date') }}" required>
+                                                @if ($errors->has('closing_date'))
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $errors->first('closing_date') }}
+                                                    </div>
+                                                @endif
                                             </div>
-                                        @endif
-                                    </div>
-                                    {{-- <div class="col-12 col-md-4">
+                                            {{-- <div class="col-12 col-md-4">
                                         <label for="field3" class="form-label">Assign User</label>
 
                                         <select class="myDropdown form-control  ">
@@ -126,10 +129,10 @@
                                             <option value="3">Option 3</option>
                                         </select>
                                     </div> --}}
-                                    <!-- Select2 CSS -->
+                                            <!-- Select2 CSS -->
 
 
-                                    {{-- <div class="col-12 col-md-4">
+                                            {{-- <div class="col-12 col-md-4">
                                         <label for="field4" class="form-label">Status</label>
                                         <input type="text" class="form-control" id="field4" placeholder="Status">
                                     </div>
@@ -154,212 +157,218 @@
                                         <label for="field5" class="form-label">Date Due</label>
                                         <input type="text" class="form-control" id="field5" placeholder="Date Due">
                                     </div> --}}
-                                    <!-- <div class="col-12 col-md-4">
-                                                                                                                        <label for="field5" class="form-label">Reminders</label>
-                                                                                                                        <input type="text" class="form-control" id="field5" placeholder="Reminders">
-                                                                                                                    </div> -->
+                                            <!-- <div class="col-12 col-md-4">
+                                                                                                                                <label for="field5" class="form-label">Reminders</label>
+                                                                                                                                <input type="text" class="form-control" id="field5" placeholder="Reminders">
+                                                                                                                            </div> -->
+
+                                        </div>
+
+
+                                    </div>
 
                                 </div>
 
 
-                            </div>
-
-                        </div>
-
-
-                        <div class="card card-default mt-3">
-                            <div class="card-body">
-                                <div class="row g-4 input-fields-container" id="input-fields-container">
-                                    <div class="col-12 col-md-4">
-                                        <label for="field1" class="form-label">{{ __('app.leads.name') }}</label>
-                                        <select class="form-control stagselect" id="person-select" name="person" required>
-                                            <option hidden selected></option>
-                                            <?php foreach($persons as $person){ ?>
-                                            <option value="{{ $person->id }}">{{ $person->name }}</option>
-                                            <?php } ?>
-                                        </select>
-                                        @if ($errors->has('person'))
-                                            <div class="alert alert-danger mt-2">
-                                                {{ $errors->first('person') }}
+                                <div class="card card-default mt-3">
+                                    <div class="card-body">
+                                        <div class="row g-4 input-fields-container" id="input-fields-container">
+                                            <div class="col-12 col-md-4">
+                                                <label for="field1" class="form-label">{{ __('app.leads.name') }}</label>
+                                                <select class="form-control stagselect" id="person-select" name="person"
+                                                    required>
+                                                    <option hidden selected></option>
+                                                    <?php foreach($persons as $person){ ?>
+                                                    <option value="{{ $person->id }}">{{ $person->name }}</option>
+                                                    <?php } ?>
+                                                </select>
+                                                @if ($errors->has('person'))
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $errors->first('person') }}
+                                                    </div>
+                                                @endif
                                             </div>
-                                        @endif
+
+
+                                            <div class="col-12 col-md-4">
+                                                <label for="field1"
+                                                    class="form-label">{{ __('app.leads.organization') }}</label>
+                                                <select class="form-control stagselect" id="organization-select"
+                                                    name="organization">
+                                                    <option hidden selected></option>
+                                                    <?php foreach($organizations as $organization){ ?>
+                                                    <option value="{{ $organization->id }}">{{ $organization->name }}
+                                                    </option>
+                                                    <?php } ?>
+                                                </select>
+                                                @if ($errors->has('organization'))
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $errors->first('organization') }}
+                                                    </div>
+                                                @endif
+                                            </div>
+
+
+                                            <div class="col-12 col-md-4" id="email-fields">
+                                                <label for="field1"
+                                                    class="form-label">{{ __('app.leads.emails') }}</label>
+                                                <input type="email" class="form-control" name="emails[]" required>
+
+                                                <div class="mt-4 mt-lg-0">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="email_types[0]" id="email-work-0" checked
+                                                            value="work">
+                                                        <label class="form-check-label"
+                                                            for="email-work-0">{{ __('app.common.work') }}</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="email_types[0]" id="email-home-0" value="home">
+                                                        <label class="form-check-label"
+                                                            for="email-home-0">{{ __('app.common.home') }}</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <button class="btn add-more-button p-0" id="add-emails"
+                                                            onclick="addEmailField()">
+                                                            <svg width="14" height="14" viewBox="0 0 14 14"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z"
+                                                                    fill="#4A58EC" />
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z"
+                                                                    fill="#4A58EC" />
+                                                            </svg>
+
+                                                            <span class="">{{ __('app.common.add_more') }}</span>
+                                                        </button>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 col-md-4 mt-1" id="number-fields">
+                                                <label for="field1"
+                                                    class="form-label">{{ __('app.leads.contact-numbers') }}</label>
+                                                <input type="text" class="form-control" name="contact_numbers[]">
+
+                                                <div class="mt-4 mt-lg-0">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="number_types[0]" id="number-work-0" checked
+                                                            value="work">
+                                                        <label class="form-check-label"
+                                                            for="number-work-0">{{ __('app.common.work') }}</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="number_types[0]" id="number-home-0" value="home">
+                                                        <label class="form-check-label"
+                                                            for="number-home-0">{{ __('app.common.home') }}</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <button class="btn add-more-button p-0" id="add-emails"
+                                                            onclick="addNumberField()">
+                                                            <svg width="14" height="14" viewBox="0 0 14 14"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z"
+                                                                    fill="#4A58EC" />
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z"
+                                                                    fill="#4A58EC" />
+                                                            </svg>
+
+                                                            <span class="">{{ __('app.common.add_more') }}</span>
+                                                        </button>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+
+
                                     </div>
-
-
-                                    <div class="col-12 col-md-4">
-                                        <label for="field1" class="form-label">{{ __('app.leads.organization') }}</label>
-                                        <select class="form-control stagselect" id="organization-select"
-                                            name="organization">
-                                            <option hidden selected></option>
-                                            <?php foreach($organizations as $organization){ ?>
-                                            <option value="{{ $organization->id }}">{{ $organization->name }}
-                                            </option>
-                                            <?php } ?>
-                                        </select>
-                                        @if ($errors->has('organization'))
-                                            <div class="alert alert-danger mt-2">
-                                                {{ $errors->first('organization') }}
-                                            </div>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="col-12 col-md-4" id="email-fields">
-                                        <label for="field1" class="form-label">{{ __('app.leads.emails') }}</label>
-                                        <input type="email" class="form-control" name="emails[]" required>
-
-                                        <div class="mt-4 mt-lg-0">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="email_types[0]"
-                                                    id="email-work-0" checked value="work">
-                                                <label class="form-check-label"
-                                                    for="email-work-0">{{ __('app.common.work') }}</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="email_types[0]"
-                                                    id="email-home-0" value="home">
-                                                <label class="form-check-label"
-                                                    for="email-home-0">{{ __('app.common.home') }}</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <button class="btn add-more-button p-0" id="add-emails"
-                                                    onclick="addEmailField()">
-                                                    <svg width="14" height="14" viewBox="0 0 14 14"
-                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                            d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z"
-                                                            fill="#4A58EC" />
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                            d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z"
-                                                            fill="#4A58EC" />
-                                                    </svg>
-
-                                                    <span class="">{{ __('app.common.add_more') }}</span>
-                                                </button>
-                                            </div>
-
+                                </div>
+                                <div class="card card-default mt-3">
+                                    <div class="card-body">
+                                        <div class="col-12">
+                                            <label for="field5" class="form-label">Description</label>
+                                            <textarea class="form-control w-100" id="exampleFormControlTextarea5" rows="5" name="description"></textarea>
+                                            @if ($errors->has('description'))
+                                                <div class="alert alert-danger mt-2">
+                                                    {{ $errors->first('description') }}</li>
+                                                </div>
+                                            @endif
 
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div class="col-12 col-md-4 mt-1" id="number-fields">
-                                        <label for="field1"
-                                            class="form-label">{{ __('app.leads.contact-numbers') }}</label>
-                                        <input type="text" class="form-control" name="contact_numbers[]">
 
-                                        <div class="mt-4 mt-lg-0">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="number_types[0]"
-                                                    id="number-work-0" checked value="work">
-                                                <label class="form-check-label"
-                                                    for="number-work-0">{{ __('app.common.work') }}</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="number_types[0]"
-                                                    id="number-home-0" value="home">
-                                                <label class="form-check-label"
-                                                    for="number-home-0">{{ __('app.common.home') }}</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <button class="btn add-more-button p-0" id="add-emails"
-                                                    onclick="addNumberField()">
-                                                    <svg width="14" height="14" viewBox="0 0 14 14"
-                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                            d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z"
-                                                            fill="#4A58EC" />
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                            d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z"
-                                                            fill="#4A58EC" />
-                                                    </svg>
 
-                                                    <span class="">{{ __('app.common.add_more') }}</span>
-                                                </button>
-                                            </div>
+                                <div class="col-md-12 p-4">
+                                    <div class="d-flex gap-3 mb-3 align-items-center">
+                                        <div>
+                                            <p class="m-0">Attachments </p>
+                                        </div>
 
+                                        <div type="button" class="btn muted p-0">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M11.6667 0C12.7718 0 13.8316 0.438987 14.613 1.22039C15.3944 2.00179 15.8334 3.0616 15.8334 4.16667V14.1667C15.8334 14.9327 15.6825 15.6913 15.3894 16.399C15.0962 17.1067 14.6665 17.7498 14.1249 18.2915C13.5832 18.8331 12.9401 19.2628 12.2324 19.556C11.5247 19.8491 10.7661 20 10.0001 20C9.23404 20 8.47549 19.8491 7.76776 19.556C7.06003 19.2628 6.41697 18.8331 5.87529 18.2915C5.33362 17.7498 4.90394 17.1067 4.61078 16.399C4.31763 15.6913 4.16675 14.9327 4.16675 14.1667V7.5H5.83341V14.1667C5.83341 15.2717 6.2724 16.3315 7.0538 17.1129C7.8352 17.8943 8.89501 18.3333 10.0001 18.3333C11.1052 18.3333 12.165 17.8943 12.9464 17.1129C13.7278 16.3315 14.1667 15.2717 14.1667 14.1667V4.16667C14.1667 3.83836 14.1021 3.51327 13.9764 3.20996C13.8508 2.90664 13.6667 2.63105 13.4345 2.3989C13.2024 2.16675 12.9268 1.9826 12.6235 1.85697C12.3201 1.73133 11.9951 1.66667 11.6667 1.66667C11.3384 1.66667 11.0134 1.73133 10.71 1.85697C10.4067 1.9826 10.1311 2.16675 9.89898 2.3989C9.66683 2.63105 9.48269 2.90664 9.35705 3.20996C9.23141 3.51327 9.16675 3.83836 9.16675 4.16667V14.1667C9.16675 14.3877 9.25455 14.5996 9.41083 14.7559C9.56711 14.9122 9.77907 15 10.0001 15C10.2211 15 10.4331 14.9122 10.5893 14.7559C10.7456 14.5996 10.8334 14.3877 10.8334 14.1667V5H12.5001V14.1667C12.5001 14.8297 12.2367 15.4656 11.7678 15.9344C11.299 16.4033 10.6631 16.6667 10.0001 16.6667C9.33704 16.6667 8.70116 16.4033 8.23231 15.9344C7.76347 15.4656 7.50008 14.8297 7.50008 14.1667V4.16667C7.50008 3.0616 7.93907 2.00179 8.72047 1.22039C9.50187 0.438987 10.5617 0 11.6667 0Z"
+                                                    fill="#172635" />
+                                            </svg>
 
                                         </div>
+
+                                        <div type="button" class="btn muted p-0">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M10.8333 4.99998L12.4999 3.33331C13.3333 2.49998 14.9999 2.49998 15.8333 3.33331L16.6666 4.16665C17.4999 4.99998 17.4999 6.66665 16.6666 7.49998L12.4999 11.6666C11.6666 12.5 9.99992 12.5 9.16659 11.6666M9.16659 15L7.49992 16.6666C6.66659 17.5 4.99992 17.5 4.16659 16.6666L3.33325 15.8333C2.49992 15 2.49992 13.3333 3.33325 12.5L7.49992 8.33331C8.33325 7.49998 9.99992 7.49998 10.8333 8.33331"
+                                                    stroke="#172635" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                            </svg>
+
+                                        </div>
+
                                     </div>
-
                                 </div>
-
-
 
 
                             </div>
                         </div>
-                        <div class="card card-default mt-3">
-                            <div class="card-body">
-                                <div class="col-12">
-                                    <label for="field5" class="form-label">Description</label>
-                                    <textarea class="form-control w-100" id="exampleFormControlTextarea5" rows="5" name="description"></textarea>
-                                    @if ($errors->has('description'))
-                                        <div class="alert alert-danger mt-2">
-                                            {{ $errors->first('description') }}</li>
-                                        </div>
-                                    @endif
-
-                                </div>
-                            </div>
-                        </div>
-
-
-
-                        <div class="col-md-12 p-4">
-                            <div class="d-flex gap-3 mb-3 align-items-center">
-                                <div>
-                                    <p class="m-0">Attachments </p>
-                                </div>
-
-                                <div type="button" class="btn muted p-0">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M11.6667 0C12.7718 0 13.8316 0.438987 14.613 1.22039C15.3944 2.00179 15.8334 3.0616 15.8334 4.16667V14.1667C15.8334 14.9327 15.6825 15.6913 15.3894 16.399C15.0962 17.1067 14.6665 17.7498 14.1249 18.2915C13.5832 18.8331 12.9401 19.2628 12.2324 19.556C11.5247 19.8491 10.7661 20 10.0001 20C9.23404 20 8.47549 19.8491 7.76776 19.556C7.06003 19.2628 6.41697 18.8331 5.87529 18.2915C5.33362 17.7498 4.90394 17.1067 4.61078 16.399C4.31763 15.6913 4.16675 14.9327 4.16675 14.1667V7.5H5.83341V14.1667C5.83341 15.2717 6.2724 16.3315 7.0538 17.1129C7.8352 17.8943 8.89501 18.3333 10.0001 18.3333C11.1052 18.3333 12.165 17.8943 12.9464 17.1129C13.7278 16.3315 14.1667 15.2717 14.1667 14.1667V4.16667C14.1667 3.83836 14.1021 3.51327 13.9764 3.20996C13.8508 2.90664 13.6667 2.63105 13.4345 2.3989C13.2024 2.16675 12.9268 1.9826 12.6235 1.85697C12.3201 1.73133 11.9951 1.66667 11.6667 1.66667C11.3384 1.66667 11.0134 1.73133 10.71 1.85697C10.4067 1.9826 10.1311 2.16675 9.89898 2.3989C9.66683 2.63105 9.48269 2.90664 9.35705 3.20996C9.23141 3.51327 9.16675 3.83836 9.16675 4.16667V14.1667C9.16675 14.3877 9.25455 14.5996 9.41083 14.7559C9.56711 14.9122 9.77907 15 10.0001 15C10.2211 15 10.4331 14.9122 10.5893 14.7559C10.7456 14.5996 10.8334 14.3877 10.8334 14.1667V5H12.5001V14.1667C12.5001 14.8297 12.2367 15.4656 11.7678 15.9344C11.299 16.4033 10.6631 16.6667 10.0001 16.6667C9.33704 16.6667 8.70116 16.4033 8.23231 15.9344C7.76347 15.4656 7.50008 14.8297 7.50008 14.1667V4.16667C7.50008 3.0616 7.93907 2.00179 8.72047 1.22039C9.50187 0.438987 10.5617 0 11.6667 0Z"
-                                            fill="#172635" />
-                                    </svg>
-
-                                </div>
-
-                                <div type="button" class="btn muted p-0">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M10.8333 4.99998L12.4999 3.33331C13.3333 2.49998 14.9999 2.49998 15.8333 3.33331L16.6666 4.16665C17.4999 4.99998 17.4999 6.66665 16.6666 7.49998L12.4999 11.6666C11.6666 12.5 9.99992 12.5 9.16659 11.6666M9.16659 15L7.49992 16.6666C6.66659 17.5 4.99992 17.5 4.16659 16.6666L3.33325 15.8333C2.49992 15 2.49992 13.3333 3.33325 12.5L7.49992 8.33331C8.33325 7.49998 9.99992 7.49998 10.8333 8.33331"
-                                            stroke="#172635" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-
-                                </div>
-
-                            </div>
-                        </div>
-
 
                     </div>
                 </div>
 
-            </div>
-        </div>
+                <!-- Bottom Action Buttons -->
+                <div class="col-12 action-bar">
+                    <div class="d-flex gap-2 justify-content-between">
+                        <div>
+                            <button type="submit" class="btn clear-all-btn">Clear All</button>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn save-btn">Save</button>
+                            <button type="button" class="btn cancel-btn">Cancel</button>
+                        </div>
 
-        <!-- Bottom Action Buttons -->
-        <div class="col-12 action-bar">
-            <div class="d-flex gap-2 justify-content-between">
-                <div>
-                    <button type="submit" class="btn clear-all-btn">Clear All</button>
+                    </div>
+
                 </div>
-                <div>
-                    <button type="submit" class="btn save-btn">Save</button>
-                    <button type="button" class="btn cancel-btn">Cancel</button>
-                </div>
+
+
 
             </div>
-
-        </div>
-
     </form>
-
-    </div>
 
 
 
