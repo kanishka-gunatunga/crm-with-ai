@@ -11,364 +11,396 @@
     <!-- Scrollable Content -->
     <form action="" method="post" enctype="multipart/form-data" data-parsley-validate>
         @csrf
-        <div class="main-scrollable">
-            <div class="page-container">
+        <div class="d-flex flex-column min-vh-100">
+            <div class="flex-grow-1">
+                <div class="main-scrollable">
+                    <div class="page-container">
 
-                <div class="page-title-container mb-0">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h3 class="page-title">
-                                {{ __('app.quotes.edit-title') }}
-                            </h3>
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#"> {{ __('app.quotes.title') }}</a></li>
-                                    <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
-                                        {{ __('app.quotes.edit-title') }}</li>
-                                </ol>
-                            </nav>
+                        <div class="page-title-container mb-0">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h3 class="page-title">
+                                        {{ __('app.quotes.edit-title') }}
+                                    </h3>
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="#"> {{ __('app.quotes.title') }}</a>
+                                            </li>
+                                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
+                                                {{ __('app.quotes.edit-title') }}</li>
+                                        </ol>
+                                    </nav>
+                                </div>
+
+
+
+
+                            </div>
+
                         </div>
 
+                        <div class="col-12">
+                            <div class="card-container">
+                                <!-- Basic Details Card -->
+                                <div class="card card-default mb-4">
 
-
-
-                    </div>
-
-                </div>
-
-                <div class="col-12">
-                    <div class="card-container">
-                        <!-- Basic Details Card -->
-                        <div class="card card-default mb-4">
-
-                            <div class="card-body">
-                                <form>
-                                    <div class="row g-4">
-                                        <div class="col-12 col-md-4">
-                                            <label for="assign_user" class="form-label">{{ __('app.quotes.lead') }}</label>
-                                            <select class="myDropdown form-control " name="lead" required>
-                                                <option hidden selected value="{{ $quote->lead }}">
-                                                    {{ Lead::where('id', $quote->lead)->value('title') }}</option>
-                                                <?php foreach($leads as $lead){ ?>
-                                                <option value="{{ $lead->id }}">{{ $lead->title }}</option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                        <div class="col-12 col-md-4">
-                                            <label for="assign_user" class="form-label">Sales Owner</label>
-                                            <select class="myDropdown form-control" name="owner" required>
-                                                <option hidden selected value="{{ $quote->owner }}">
-                                                    {{ UserDetails::where('id', $quote->owner)->value('name') }}</option>
-                                                <?php foreach($owners as $owner){ ?>
-                                                <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                        <div class="col-12 col-md-4">
-                                            <label for="assign_user" class="form-label">Subject</label>
-                                            <input type="text" class="form-control" name="subject"
-                                                value="{{ $quote->subject }}" required>
-                                            @if ($errors->has('subject'))
-                                                <div class="alert alert-danger mt-2">{{ $errors->first('subject') }}</li>
+                                    <div class="card-body">
+                                        <form>
+                                            <div class="row g-4">
+                                                <div class="col-12 col-md-4">
+                                                    <label for="assign_user"
+                                                        class="form-label">{{ __('app.quotes.lead') }}</label>
+                                                    <select class="myDropdown form-control " name="lead" required>
+                                                        <option hidden selected value="{{ $quote->lead }}">
+                                                            {{ Lead::where('id', $quote->lead)->value('title') }}</option>
+                                                        <?php foreach($leads as $lead){ ?>
+                                                        <option value="{{ $lead->id }}">{{ $lead->title }}</option>
+                                                        <?php } ?>
+                                                    </select>
                                                 </div>
-                                            @endif
-                                        </div>
-                                        <div class="col-12 col-md-4">
-                                            <label for="expired_at" class="form-label">Expired At</label>
-                                            <div class="input-group">
-                                                <input type="date" class="form-control" id="expired_at"
-                                                    placeholder="Expired At" name="expired_at"
-                                                    value="{{ $quote->expired_at }}" required>
+                                                <div class="col-12 col-md-4">
+                                                    <label for="assign_user" class="form-label">Sales Owner</label>
+                                                    <select class="myDropdown form-control" name="owner" required>
+                                                        <option hidden selected value="{{ $quote->owner }}">
+                                                            {{ UserDetails::where('id', $quote->owner)->value('name') }}
+                                                        </option>
+                                                        <?php foreach($owners as $owner){ ?>
+                                                        <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label for="assign_user" class="form-label">Subject</label>
+                                                    <input type="text" class="form-control" name="subject"
+                                                        value="{{ $quote->subject }}" required>
+                                                    @if ($errors->has('subject'))
+                                                        <div class="alert alert-danger mt-2">
+                                                            {{ $errors->first('subject') }}</li>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label for="expired_at" class="form-label">Expired At</label>
+                                                    <div class="input-group">
+                                                        <input type="date" class="form-control" id="expired_at"
+                                                            placeholder="Expired At" name="expired_at"
+                                                            value="{{ $quote->expired_at }}" required>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label for="terms" class="form-label">Person</label>
+                                                    <select class="myDropdown form-control" name="person" required>
+                                                        <option hidden selected value="{{ $quote->person }}">
+                                                            {{ Person::where('id', $quote->person)->value('name') }}
+                                                        </option>
+                                                        <?php foreach($persons as $person){ ?>
+                                                        <option value="{{ $person->id }}">{{ $person->name }}</option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-12 col-md-4">
+                                                    <label for="date_start" class="form-label"
+                                                        name="description">Description</label>
+                                                    <input type="text" class="form-control" id="date_start"
+                                                        placeholder="Description" value="{{ $quote->description }}">
+                                                </div>
 
                                             </div>
-                                        </div>
-                                        <div class="col-12 col-md-4">
-                                            <label for="terms" class="form-label">Person</label>
-                                            <select class="myDropdown form-control" name="person" required>
-                                                <option hidden selected value="{{ $quote->person }}">
-                                                    {{ Person::where('id', $quote->person)->value('name') }}</option>
-                                                <?php foreach($persons as $person){ ?>
-                                                <option value="{{ $person->id }}">{{ $person->name }}</option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-
-                                        <div class="col-12 col-md-4">
-                                            <label for="date_start" class="form-label"
-                                                name="description">Description</label>
-                                            <input type="text" class="form-control" id="date_start"
-                                                placeholder="Description" value="{{ $quote->description }}">
-                                        </div>
-
+                                        </form>
                                     </div>
-                                </form>
-                            </div>
-                        </div>
-
-                        <!-- Billing Address Card -->
-                        <div class="card card-default mb-4">
-
-                            <div class="card-body">
-                                <h5 class="mb-3 card-title">Billing Address</h5>
-                                <div class="row g-4">
-                                    <div class="col-12 col-md-4">
-                                        <label for="No" class="form-label">Address</label>
-                                        <input type="text" class="form-control" id="No" placeholder="No"
-                                            name="address" required value="{{ $quote->address }}">
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="Province" class="form-label">Province</label>
-                                        <input type="text" class="form-control" id="Province" placeholder="Province"
-                                            name="state" required value="{{ $quote->state }}">
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="Country" class="form-label">Country</label>
-                                        <input type="text" class="form-control" id="Country" placeholder="Country"
-                                            name="country" required value="{{ $quote->country }}">
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="City" class="form-label">City</label>
-                                        <input type="text" class="form-control" id="City" name="city"
-                                            placeholder="City" required value="{{ $quote->city }}">
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="Postal Code" class="form-label">Postal Code</label>
-                                        <input type="text" class="form-control" id="Postal Code" name="post_code"
-                                            placeholder="Post Code" required value="{{ $quote->post_code }}">
-                                    </div>
-
                                 </div>
-                            </div>
-                        </div>
 
-                        <!-- Shipping Address Card -->
-                        <div class="card card-default mb-4">
+                                <!-- Billing Address Card -->
+                                <div class="card card-default mb-4">
 
-                            <div class="card-body">
-                                <h5 class="mb-3 card-title">Shipping Address</h5>
-                                <div class="row g-4">
-                                    <div class="col-12 col-md-4">
-                                        <label for="No" class="form-label">Address</label>
-                                        <input type="text" class="form-control" id="No" placeholder="No"
-                                            name="shipping_address" required value="{{ $quote->shipping_address }}">
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="Province" class="form-label">Province</label>
-                                        <input type="text" class="form-control" id="Province" placeholder="Province"
-                                            name="shipping_state" required value="{{ $quote->shipping_state }}">
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="Country" class="form-label">Country</label>
-                                        <input type="text" class="form-control" id="Country" placeholder="Country"
-                                            name="shipping_country" required value="{{ $quote->shipping_country }}">
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="City" class="form-label">City</label>
-                                        <input type="text" class="form-control" id="City" name="shipping_city"
-                                            placeholder="City" required value="{{ $quote->shipping_city }}">
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="Postal Code" class="form-label">Postal Code</label>
-                                        <input type="text" class="form-control" id="Postal Code"
-                                            name="shipping_post_code" placeholder="Post Code" required
-                                            value="{{ $quote->shipping_post_code }}">
-                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="mb-3 card-title">Billing Address</h5>
+                                        <div class="row g-4">
+                                            <div class="col-12 col-md-4">
+                                                <label for="No" class="form-label">Address</label>
+                                                <input type="text" class="form-control" id="No" placeholder="No"
+                                                    name="address" required value="{{ $quote->address }}">
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label for="Province" class="form-label">Province</label>
+                                                <input type="text" class="form-control" id="Province"
+                                                    placeholder="Province" name="state" required
+                                                    value="{{ $quote->state }}">
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label for="Country" class="form-label">Country</label>
+                                                <input type="text" class="form-control" id="Country"
+                                                    placeholder="Country" name="country" required
+                                                    value="{{ $quote->country }}">
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label for="City" class="form-label">City</label>
+                                                <input type="text" class="form-control" id="City" name="city"
+                                                    placeholder="City" required value="{{ $quote->city }}">
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label for="Postal Code" class="form-label">Postal Code</label>
+                                                <input type="text" class="form-control" id="Postal Code"
+                                                    name="post_code" placeholder="Post Code" required
+                                                    value="{{ $quote->post_code }}">
+                                            </div>
 
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="card card-default">
-                            <div class="card-body">
-                                <div class="row g-4">
-                                    <div class="table-responsive">
-                                        <div class="d-flex justify-content-between align-items-center mb-5">
-                                            <h5 class="card-title">{{ __('app.quotes.quote-items') }}</h5>
-                                            <button class="import-leads-button" type="button" id="add-product">
-                                                <div class="icon-container">
-                                                    <svg width="20" height="20" viewBox="0 0 20 20"
-                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M8.625 9.375H4.5V8.625H8.625V4.5H9.375V8.625H13.5V9.375H9.375V13.5H8.625V9.375Z"
-                                                            fill="white" />
-                                                    </svg>
+
+                                <!-- Shipping Address Card -->
+                                <div class="card card-default mb-4">
+
+                                    <div class="card-body">
+                                        <h5 class="mb-3 card-title">Shipping Address</h5>
+                                        <div class="row g-4">
+                                            <div class="col-12 col-md-4">
+                                                <label for="No" class="form-label">Address</label>
+                                                <input type="text" class="form-control" id="No"
+                                                    placeholder="No" name="shipping_address" required
+                                                    value="{{ $quote->shipping_address }}">
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label for="Province" class="form-label">Province</label>
+                                                <input type="text" class="form-control" id="Province"
+                                                    placeholder="Province" name="shipping_state" required
+                                                    value="{{ $quote->shipping_state }}">
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label for="Country" class="form-label">Country</label>
+                                                <input type="text" class="form-control" id="Country"
+                                                    placeholder="Country" name="shipping_country" required
+                                                    value="{{ $quote->shipping_country }}">
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label for="City" class="form-label">City</label>
+                                                <input type="text" class="form-control" id="City"
+                                                    name="shipping_city" placeholder="City" required
+                                                    value="{{ $quote->shipping_city }}">
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label for="Postal Code" class="form-label">Postal Code</label>
+                                                <input type="text" class="form-control" id="Postal Code"
+                                                    name="shipping_post_code" placeholder="Post Code" required
+                                                    value="{{ $quote->shipping_post_code }}">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card card-default">
+                                    <div class="card-body">
+                                        <div class="row g-4">
+                                            <div class="table-responsive">
+                                                <div class="d-flex justify-content-between align-items-center mb-5">
+                                                    <h5 class="card-title">{{ __('app.quotes.quote-items') }}</h5>
+                                                    <button class="import-leads-button" type="button" id="add-product">
+                                                        <div class="icon-container">
+                                                            <svg width="20" height="20" viewBox="0 0 20 20"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M8.625 9.375H4.5V8.625H8.625V4.5H9.375V8.625H13.5V9.375H9.375V13.5H8.625V9.375Z"
+                                                                    fill="white" />
+                                                            </svg>
+
+                                                        </div>
+                                                        <span class="button-text">{{ __('app.common.add_more') }}</span>
+                                                    </button>
 
                                                 </div>
-                                                <span class="button-text">{{ __('app.common.add_more') }}</span>
-                                            </button>
+                                                <table class="table new-table">
+                                                    <thead>
+                                                        <tr>
 
-                                        </div>
-                                        <table class="table new-table">
-                                            <thead>
-                                                <tr>
+                                                            <th class="corner-left" style="width:400px;">Name</th>
+                                                            <th>Quantity</th>
+                                                            <th>Price</th>
+                                                            <th>Amount</th>
+                                                            <th>Discount (%)</th>
+                                                            <th>Tax (%)</th>
+                                                            <th>Total</th>
 
-                                                    <th class="corner-left" style="width:400px;">Name</th>
-                                                    <th>Quantity</th>
-                                                    <th>Price</th>
-                                                    <th>Amount</th>
-                                                    <th>Discount (%)</th>
-                                                    <th>Tax (%)</th>
-                                                    <th>Total</th>
-
-                                                    <th class="corner-right">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="products-tbody">
-                                                <?php 
+                                                            <th class="corner-right">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="products-tbody">
+                                                        <?php 
                                                         $sub_total = 0;
                                                         foreach($quote_products as $quote_product){ 
                                                             $sub_total += $quote_product->amount;
                                                             if($quote_product->type == "product"){
                                                         ?>
-                                                <tr>
-                                                    <td>
-                                                        <select class="form-control product-select" name="products[]"
-                                                            required>
-                                                            <option hidden selected
-                                                                value="product||{{ $quote_product->product_id }}"
-                                                                data-price="{{ $quote_product->price }}">
-                                                                {{ Product::where('id', $quote_product->product_id)->value('name') }}
-                                                            </option>
-                                                            <?php foreach($products as $product){ ?>
-                                                            <option value="product||{{ $product->id }}"
-                                                                data-price="{{ $product->cost }}">{{ $product->name }}
-                                                            </option>
-                                                            <?php } ?>
-                                                            <?php foreach($services as $service){ ?>
-                                                            <option value="service||{{ $service->id }}"
-                                                                data-price="{{ $service->cost }}">{{ $service->name }}
-                                                            </option>
-                                                            <?php } ?>
-                                                        </select>
-                                                        <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]"
-                                                            placeholder="Notes">{{ $quote_product->note }}</textarea>
-                                                    </td>
-                                                    <td><input type="number" step="any" class="form-control"
-                                                            name="quantity[]" value="{{ $quote_product->quantity }}"
-                                                            required></td>
-                                                    <td><input type="number" step="any" class="form-control"
-                                                            name="price[]" value="{{ $quote_product->price }}" required>
-                                                    </td>
-                                                    <td><input type="number" step="any" class="form-control"
-                                                            name="amount[]" value="{{ $quote_product->amount }}" readonly
-                                                            required></td>
-                                                    <td><input type="number" step="any" class="form-control"
-                                                            name="discount[]" value="{{ $quote_product->discount }}">
-                                                    </td>
-                                                    <td><input type="number" step="any" class="form-control"
-                                                            name="tax[]" value="{{ $quote_product->tax }}"></td>
-                                                    <td><input type="number" step="any" class="form-control"
-                                                            name="total[]" value="{{ $quote_product->total }}" readonly>
-                                                    </td>
-                                                    <td><i
-                                                            class="fa-solid fa-trash remove-product remove-append-item mx-2"></i>
-                                                    </td>
-                                                </tr>
-                                                <?php }else{ ?>
-                                                <tr>
-                                                    <td>
-                                                        <select class="form-control product-select" name="products[]"
-                                                            required>
-                                                            <option hidden selected
-                                                                value="service||{{ $quote_product->product_id }}"
-                                                                data-price="{{ $quote_product->price }}">
-                                                                {{ Service::where('id', $quote_product->product_id)->value('name') }}
-                                                            </option>
-                                                            <?php foreach($products as $product){ ?>
-                                                            <option value="product||{{ $product->id }}"
-                                                                data-price="{{ $product->cost }}">{{ $product->name }}
-                                                            </option>
-                                                            <?php } ?>
-                                                            <?php foreach($services as $service){ ?>
-                                                            <option value="service||{{ $service->id }}"
-                                                                data-price="{{ $service->cost }}">{{ $service->name }}
-                                                            </option>
-                                                            <?php } ?>
-                                                        </select>
-                                                        <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]"
-                                                            placeholder="Notes">{{ $quote_product->note }}</textarea>
-                                                    </td>
-                                                    <td><input type="number" step="any" class="form-control"
-                                                            name="quantity[]" value="{{ $quote_product->quantity }}"
-                                                            required></td>
-                                                    <td><input type="number" step="any" class="form-control"
-                                                            name="price[]" value="{{ $quote_product->price }}" required>
-                                                    </td>
-                                                    <td><input type="number" step="any" class="form-control"
-                                                            name="amount[]" value="{{ $quote_product->amount }}" readonly
-                                                            required></td>
-                                                    <td><input type="number" step="any" class="form-control"
-                                                            name="discount[]" value="{{ $quote_product->discount }}">
-                                                    </td>
-                                                    <td><input type="number" step="any" class="form-control"
-                                                            name="tax[]" value="{{ $quote_product->tax }}"></td>
-                                                    <td><input type="number" step="any" class="form-control"
-                                                            name="total[]" value="{{ $quote_product->total }}" readonly>
-                                                    </td>
-                                                    <td><i
-                                                            class="fa-solid fa-trash remove-product remove-append-item mx-2"></i>
-                                                    </td>
-                                                </tr>
-                                                <?php }} ?>
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <th colspan="6" style="text-align:right">
-                                                        {{ __('app.quotes.sub-total') }}</th>
-                                                    <th id="sub-total">{{ $sub_total }}</th>
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="6" style="text-align:right">
-                                                        {{ __('app.quotes.discount') }} -</th>
-                                                    <th id="discount-total">{{ $quote->discount_total_amount }}</th>
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="6" style="text-align:right">
-                                                        {{ __('app.quotes.tax') }} +</th>
-                                                    <th id="tax-total">{{ $quote->tax_total_amount }}</th>
-                                                </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <select class="form-control product-select"
+                                                                    name="products[]" required>
+                                                                    <option hidden selected
+                                                                        value="product||{{ $quote_product->product_id }}"
+                                                                        data-price="{{ $quote_product->price }}">
+                                                                        {{ Product::where('id', $quote_product->product_id)->value('name') }}
+                                                                    </option>
+                                                                    <?php foreach($products as $product){ ?>
+                                                                    <option value="product||{{ $product->id }}"
+                                                                        data-price="{{ $product->cost }}">
+                                                                        {{ $product->name }}
+                                                                    </option>
+                                                                    <?php } ?>
+                                                                    <?php foreach($services as $service){ ?>
+                                                                    <option value="service||{{ $service->id }}"
+                                                                        data-price="{{ $service->cost }}">
+                                                                        {{ $service->name }}
+                                                                    </option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                                <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]"
+                                                                    placeholder="Notes">{{ $quote_product->note }}</textarea>
+                                                            </td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="quantity[]"
+                                                                    value="{{ $quote_product->quantity }}" required></td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="price[]" value="{{ $quote_product->price }}"
+                                                                    required>
+                                                            </td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="amount[]" value="{{ $quote_product->amount }}"
+                                                                    readonly required></td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="discount[]"
+                                                                    value="{{ $quote_product->discount }}">
+                                                            </td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="tax[]" value="{{ $quote_product->tax }}">
+                                                            </td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="total[]" value="{{ $quote_product->total }}"
+                                                                    readonly>
+                                                            </td>
+                                                            <td><i
+                                                                    class="fa-solid fa-trash remove-product remove-append-item mx-2"></i>
+                                                            </td>
+                                                        </tr>
+                                                        <?php }else{ ?>
+                                                        <tr>
+                                                            <td>
+                                                                <select class="form-control product-select"
+                                                                    name="products[]" required>
+                                                                    <option hidden selected
+                                                                        value="service||{{ $quote_product->product_id }}"
+                                                                        data-price="{{ $quote_product->price }}">
+                                                                        {{ Service::where('id', $quote_product->product_id)->value('name') }}
+                                                                    </option>
+                                                                    <?php foreach($products as $product){ ?>
+                                                                    <option value="product||{{ $product->id }}"
+                                                                        data-price="{{ $product->cost }}">
+                                                                        {{ $product->name }}
+                                                                    </option>
+                                                                    <?php } ?>
+                                                                    <?php foreach($services as $service){ ?>
+                                                                    <option value="service||{{ $service->id }}"
+                                                                        data-price="{{ $service->cost }}">
+                                                                        {{ $service->name }}
+                                                                    </option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                                <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]"
+                                                                    placeholder="Notes">{{ $quote_product->note }}</textarea>
+                                                            </td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="quantity[]"
+                                                                    value="{{ $quote_product->quantity }}" required></td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="price[]" value="{{ $quote_product->price }}"
+                                                                    required>
+                                                            </td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="amount[]" value="{{ $quote_product->amount }}"
+                                                                    readonly required></td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="discount[]"
+                                                                    value="{{ $quote_product->discount }}">
+                                                            </td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="tax[]" value="{{ $quote_product->tax }}">
+                                                            </td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="total[]" value="{{ $quote_product->total }}"
+                                                                    readonly>
+                                                            </td>
+                                                            <td><i
+                                                                    class="fa-solid fa-trash remove-product remove-append-item mx-2"></i>
+                                                            </td>
+                                                        </tr>
+                                                        <?php }} ?>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th colspan="6" style="text-align:right">
+                                                                {{ __('app.quotes.sub-total') }}</th>
+                                                            <th id="sub-total">{{ $sub_total }}</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th colspan="6" style="text-align:right">
+                                                                {{ __('app.quotes.discount') }} -</th>
+                                                            <th id="discount-total">{{ $quote->discount_total_amount }}
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th colspan="6" style="text-align:right">
+                                                                {{ __('app.quotes.tax') }} +</th>
+                                                            <th id="tax-total">{{ $quote->tax_total_amount }}</th>
+                                                        </tr>
 
-                                                <tr>
-                                                    <th colspan="6" style="text-align:right">
-                                                        {{ __('app.quotes.total') }}</th>
-                                                    <th id="order-total">{{ $quote->order_total_input }}</th>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
+                                                        <tr>
+                                                            <th colspan="6" style="text-align:right">
+                                                                {{ __('app.quotes.total') }}</th>
+                                                            <th id="order-total">{{ $quote->order_total_input }}</th>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+
+                                        </div>
+
+                                        <input type="hidden" class="form-control" name="discount_total_amount"
+                                            id="discount_total_amount" readonly
+                                            value="{{ $quote->discount_total_amount }}">
+                                        <input type="hidden" class="form-control" name="tax_total_amount"
+                                            id="tax_total_amount" readonly value="{{ $quote->tax_total_amount }}">
+                                        <input type="hidden" class="form-control" name="order_total_input"
+                                            id="order_total_input" readonly value="{{ $quote->order_total_input }}">
                                     </div>
-
                                 </div>
 
-                                <input type="hidden" class="form-control" name="discount_total_amount"
-                                    id="discount_total_amount" readonly value="{{ $quote->discount_total_amount }}">
-                                <input type="hidden" class="form-control" name="tax_total_amount" id="tax_total_amount"
-                                    readonly value="{{ $quote->tax_total_amount }}">
-                                <input type="hidden" class="form-control" name="order_total_input"
-                                    id="order_total_input" readonly value="{{ $quote->order_total_input }}">
+
                             </div>
+
                         </div>
 
 
+
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col-12 action-bar">
+                <div class="d-flex gap-2 justify-content-between">
+                    <div>
+                        <a href=""><button type="button" class="btn clear-all-btn">Clear All</button></a>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn save-btn">Save</button>
+                        <a href="{{ url('quotes') }}"><button type="button" class="btn cancel-btn">Cancel</button></a>
                     </div>
 
                 </div>
 
-
-
             </div>
-        </div>
-
-        <div class="col-12 action-bar">
-            <div class="d-flex gap-2 justify-content-between">
-                <div>
-                    <a href=""><button type="button" class="btn clear-all-btn">Clear All</button></a>
-                </div>
-                <div>
-                    <button type="submit" class="btn save-btn">Save</button>
-                    <a href="{{ url('quotes') }}"><button type="button" class="btn cancel-btn">Cancel</button></a>
-                </div>
-
-            </div>
-
         </div>
     </form>
 
