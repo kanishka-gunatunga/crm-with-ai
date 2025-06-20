@@ -595,6 +595,7 @@ body {
   color: var(--black-color) !important;
   height: 45px !important;
   border: 1px solid #E8E9EB !important;
+  border-radius: 10px !important;
 }
 
 .form-select {

@@ -120,49 +120,8 @@
                         </div>
                     </div>
 
-
-                    {{-- <button id="myButton">Click Me</button> --}}
-
-
-
-
-
-
-
                 </div>
-                {{-- <div class="shading-button">
-                            
-                            <select class="form-select shading-select" aria-label="Default select example">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
 
-                            
-
-
-                            <div class="dropdown">
-
-                                <ul class="dropdown-menu p-0">
-                                    <li><a class="dropdown-item blue" href="#">New</a></li>
-                                    <li><a class="dropdown-item orange" href="#">in Review</a></li>
-                                    <li><a class="dropdown-item green" href="#">Won</a></li>
-                                    <li><a class="dropdown-item red" href="#">Lost</a></li>
-                                </ul>
-                            </div>
-                        </div> --}}
-                {{-- <div>
-                        <button class="btn trash-icon-btn">
-                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M4.44137 13.0221C4.1026 13.0221 3.81269 12.9016 3.57164 12.6606C3.3306 12.4195 3.20987 12.1294 3.20946 11.7902V3.78281H2.59351V2.55089H5.67329V1.93494H9.36902V2.55089H12.4488V3.78281H11.8328V11.7902C11.8328 12.129 11.7123 12.4191 11.4713 12.6606C11.2302 12.902 10.9401 13.0226 10.6009 13.0221H4.44137ZM10.6009 3.78281H4.44137V11.7902H10.6009V3.78281ZM5.67329 10.5583H6.9052V5.01472H5.67329V10.5583ZM8.13711 10.5583H9.36902V5.01472H8.13711V10.5583Z"
-                                    fill="#ED2227" />
-                            </svg>
-
-                        </button>
-                    </div> --}}
             </div>
 
 
@@ -544,7 +503,8 @@
 
 
                             <div class="action-buttons position-absolute d-flex gap-2">
-                                <button class="action-btn edit-btn" aria-label="Edit project" type="button"
+
+                                <button class="action-btn add-btn" aria-label="Edit project" type="button"
                                     data-bs-toggle="collapse" data-bs-target="#collapseWidthExample"
                                     aria-expanded="false" aria-controls="collapseWidthExample">
                                     <svg width="40" height="40" viewBox="0 0 26 26" fill="none"
@@ -557,16 +517,19 @@
 
                                 </button>
 
-                                <button class="action-btn add-btn" aria-label="Add to project">
-                                    <svg width="40" height="40" viewBox="0 0 26 26" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <rect width="26" height="26" rx="5" fill="#E8E9EB" />
-                                        <path
-                                            d="M9.20841 16.7916H9.80316L15.5979 10.9969L15.0032 10.4021L9.20841 16.1969V16.7916ZM8.66675 17.3333V15.9683L15.8059 8.82263C15.8619 8.77316 15.9233 8.73488 15.9901 8.7078C16.0569 8.68072 16.1268 8.667 16.1997 8.66663C16.2726 8.66627 16.3431 8.67783 16.411 8.7013C16.4796 8.72405 16.5428 8.76522 16.6005 8.8248L17.1785 9.40655C17.2381 9.46397 17.2789 9.52716 17.3009 9.59613C17.3226 9.66475 17.3334 9.73336 17.3334 9.80197C17.3334 9.87563 17.3211 9.94605 17.2966 10.0132C17.2717 10.08 17.2323 10.1412 17.1785 10.1968L10.0312 17.3333H8.66675ZM15.2957 10.7044L15.0032 10.4021L15.5979 10.9969L15.2957 10.7044Z"
-                                            fill="#172635" />
-                                    </svg>
+                                <a href="{{ url('edit-lead/' . $lead->id) }}">
 
-                                </button>
+                                    <button class="action-btn edit-btn" aria-label="Add to project">
+                                        <svg width="40" height="40" viewBox="0 0 26 26" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <rect width="26" height="26" rx="5" fill="#E8E9EB" />
+                                            <path
+                                                d="M9.20841 16.7916H9.80316L15.5979 10.9969L15.0032 10.4021L9.20841 16.1969V16.7916ZM8.66675 17.3333V15.9683L15.8059 8.82263C15.8619 8.77316 15.9233 8.73488 15.9901 8.7078C16.0569 8.68072 16.1268 8.667 16.1997 8.66663C16.2726 8.66627 16.3431 8.67783 16.411 8.7013C16.4796 8.72405 16.5428 8.76522 16.6005 8.8248L17.1785 9.40655C17.2381 9.46397 17.2789 9.52716 17.3009 9.59613C17.3226 9.66475 17.3334 9.73336 17.3334 9.80197C17.3334 9.87563 17.3211 9.94605 17.2966 10.0132C17.2717 10.08 17.2323 10.1412 17.1785 10.1968L10.0312 17.3333H8.66675ZM15.2957 10.7044L15.0032 10.4021L15.5979 10.9969L15.2957 10.7044Z"
+                                                fill="#172635" />
+                                        </svg>
+
+                                    </button>
+                                </a>
 
 
                                 <div class="create-menu-container collapse " id="collapseWidthExample">
@@ -859,7 +822,7 @@
                                     <div class="meetings-tab mt-3">
 
                                         @if ($meetings->isEmpty())
-                                            <p>No meetings found.</p>
+                                            {{-- <p>No meetings found.</p> --}}
                                         @else
                                             <div>
                                                 <h5 class="mb-3 card-title">Meetings</h5>
@@ -927,7 +890,7 @@
                                     <div class="lunches-tab mt-3">
 
                                         @if ($lunches->isEmpty())
-                                            <p>No lunches found.</p>
+                                            {{-- <p>No lunches found.</p> --}}
                                         @else
                                             <div>
                                                 <h5 class="mb-3 card-title">Lunches</h5>
@@ -1945,7 +1908,7 @@
 
     </div>
 
-    
+
     <div id="wonModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-md" role="document">
