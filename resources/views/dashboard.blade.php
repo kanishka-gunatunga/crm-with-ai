@@ -5,9 +5,10 @@
 @section('content')
 
 <?php
-
+use Carbon\Carbon;
 use App\Models\Lead;
 use App\Models\Person;
+use App\Models\Organization;
 ?>
 <link rel="stylesheet" href="{{ asset('css/custom2.css') }}">
  
@@ -651,27 +652,27 @@ use App\Models\Person;
                                         style="width:100%">
                                        
                                         <tbody>
-                                        <?php
-                                            // $persons = $all_leads->pluck('person')->unique();
-                                            // foreach($persons as $person){
-
-                                            // }
-                                        ?>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                          <img src="{{ asset('images/cake.png') }}" >
-                                                          <div class="mx-2">
-                                                                <B>David Johnson</B><br>
-                                                                KodeTech(Pvt)Ltd
-                                                          </div>
+                                        @foreach($persons as $person)
+                                        @php
+                                            $organization = Organization::find($person->organization);
+                                            $dob = Carbon::parse($person->dob);
+                                            $age = $dob->age;
+                                            $todayFormatted = $dob->format('F d, Y');
+                                        @endphp
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="{{ asset('images/cake.png') }}" alt="Cake Icon">
+                                                    <div class="mx-2">
+                                                        <strong>{{ $person->name }}</strong><br>
+                                                        {{ $organization->name ?? '-' }}
                                                     </div>
-                                                </td>
-                                                <td>May 26, 2025</td>
-                                                <td>25 Year old</td>
-                                               
-                                            </tr>
-                                            
+                                                </div>
+                                            </td>
+                                            <td>{{ $todayFormatted }}</td>
+                                            <td>{{ $age }} Year{{ $age > 1 ? 's' : '' }} old</td>
+                                        </tr>
+                                    @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -908,31 +909,31 @@ use App\Models\Person;
     const statusWeeklyChart = new Chart(ctx4, {
         type: 'bar',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', ],
+            labels: @json($weeklyLabels),
             datasets: [{
                     label: 'Leads',
-                    data: [80, 55, 60, 72, 65, 74, 70, 68, 90, 78, 50, 60],
+                     data: @json($weeklyAllLeadsData),
                     backgroundColor: '#4A58EC',
                     borderRadius: 6,
                     barThickness: 20,
                 },
                 {
-                    label: 'Success',
-                    data: [60, 30, 35, 50, 45, 60, 42, 40, 60, 55, 32, 39],
+                    label: 'New',
+                    data: @json($weeklyNewLeadsData),
                     backgroundColor: '#48D3FF',
                     borderRadius: 6,
                     barThickness: 20,
                 },
                 {
-                    label: 'Leads',
-                    data: [42, 87, 15, 63, 29, 91, 54, 77, 36, 58, 80, 24],
+                    label: 'Won',
+                    data: @json($weeklyWonLeadsData),
                     backgroundColor: '#7265F9',
                     borderRadius: 6,
                     barThickness: 20,
                 },
                 {
-                    label: 'Success',
-                    data: [42, 30, 35, 50, 29, 91, 54, 77, 63, 29, 91, 24],
+                    label: 'Lost',
+                    data: @json($weeklyLostLeadsData),
                     backgroundColor: '#B965F9',
                     borderRadius: 6,
                     barThickness: 20,
@@ -955,7 +956,7 @@ use App\Models\Person;
             scales: {
                 y: {
                     beginAtZero: true,
-                    max: 100,
+                    // max: 100,
                     ticks: {
                         stepSize: 20
                     },
@@ -975,36 +976,28 @@ use App\Models\Person;
     const statusMonthlyChart = new Chart(ctx5, {
         type: 'bar',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', ],
-            datasets: [{
+            labels: @json($monthlyLabels),
+            datasets: [
+                {
                     label: 'Leads',
-                    data: [80, 55, 60, 72, 65, 74, 70, 68, 90, 78, 50, 60],
+                    data: @json($monthlyAllLeadsData),
                     backgroundColor: '#4A58EC',
-                    borderRadius: 6,
-                    barThickness: 20,
                 },
                 {
-                    label: 'Success',
-                    data: [60, 30, 35, 50, 45, 60, 42, 40, 60, 55, 32, 39],
+                    label: 'New',
+                    data: @json($monthlyNewLeadsData),
                     backgroundColor: '#48D3FF',
-                    borderRadius: 6,
-                    barThickness: 20,
                 },
                 {
-                    label: 'Leads',
-                    data: [42, 87, 15, 63, 29, 91, 54, 77, 36, 58, 80, 24],
+                    label: 'Won',
+                    data: @json($monthlyWonLeadsData),
                     backgroundColor: '#7265F9',
-                    borderRadius: 6,
-                    barThickness: 20,
                 },
                 {
-                    label: 'Success',
-                    data: [42, 30, 35, 50, 29, 91, 54, 77, 63, 29, 91, 24],
+                    label: 'Lost',
+                    data: @json($monthlyLostLeadsData),
                     backgroundColor: '#B965F9',
-                    borderRadius: 6,
-                    barThickness: 20,
-                },
-
+                }
             ]
         },
         options: {
@@ -1022,7 +1015,7 @@ use App\Models\Person;
             scales: {
                 y: {
                     beginAtZero: true,
-                    max: 100,
+                    // max: 100,
                     ticks: {
                         stepSize: 20
                     },
@@ -1043,36 +1036,28 @@ use App\Models\Person;
     const statusYearlyChart = new Chart(ctx6, {
         type: 'bar',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', ],
-            datasets: [{
+            labels: @json($yearlyLabels),
+            datasets: [
+                {
                     label: 'Leads',
-                    data: [80, 55, 60, 72, 65, 74, 70, 68, 90, 78, 50, 60],
+                    data: @json($yearlyAllLeadsData),
                     backgroundColor: '#4A58EC',
-                    borderRadius: 6,
-                    barThickness: 20,
                 },
                 {
-                    label: 'Success',
-                    data: [60, 30, 35, 50, 45, 60, 42, 40, 60, 55, 32, 39],
+                    label: 'New',
+                    data: @json($yearlyNewLeadsData),
                     backgroundColor: '#48D3FF',
-                    borderRadius: 6,
-                    barThickness: 20,
                 },
                 {
-                    label: 'Leads',
-                    data: [42, 87, 15, 63, 29, 91, 54, 77, 36, 58, 80, 24],
+                    label: 'Won',
+                    data: @json($yearlyWonLeadsData),
                     backgroundColor: '#7265F9',
-                    borderRadius: 6,
-                    barThickness: 20,
                 },
                 {
-                    label: 'Success',
-                    data: [42, 30, 35, 50, 29, 91, 54, 77, 63, 29, 91, 24],
+                    label: 'Lost',
+                    data: @json($yearlyLostLeadsData),
                     backgroundColor: '#B965F9',
-                    borderRadius: 6,
-                    barThickness: 20,
-                },
-
+                }
             ]
         },
         options: {
@@ -1090,7 +1075,7 @@ use App\Models\Person;
             scales: {
                 y: {
                     beginAtZero: true,
-                    max: 100,
+                    // max: 100,
                     ticks: {
                         stepSize: 20
                     },
@@ -1107,152 +1092,92 @@ use App\Models\Person;
         }
     });
 </script>
-
+@php
+    $sourceColors = ['#4A58EC', '#34C759', '#FF9500', '#FF3B30', '#AF52DE', '#5AC8FA', '#FFCC00'];
+    while (count($sourceColors) < $sourceLabels->count()) {
+        $sourceColors[] = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
+    }
+@endphp
 {{-- chart for sources --}}
 <script>
+    const sourceLabels = @json($sourceLabels);
+    const weeklySourceData = @json($weeklyData);
+    const monthlySourceData = @json($monthlyData);
+    const yearlySourceData = @json($yearlyData);
+    const sourceColors = @json($sourceColors);
+
     const ctx7 = document.getElementById('sourcesWeeklyChart').getContext('2d');
     const ctx8 = document.getElementById('sourcesMonthlyChart').getContext('2d');
     const ctx9 = document.getElementById('sourcesYearlyChart').getContext('2d');
 
+     const commonOptions = {
+        responsive: true,
+        indexAxis: 'y',
+        plugins: {
+            tooltip: {
+                mode: 'index',
+                intersect: false,
+            },
+            legend: {
+                display: false,
+                position: 'bottom',
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: { stepSize: 10 },
+                grid: { color: '#e0e0e0' }
+            },
+            x: {
+                grid: { display: false }
+            }
+        }
+    };
+
     const sourcesWeeklyChart = new Chart(ctx7, {
         type: 'bar',
         data: {
-            labels: ['Web', 'Web', 'Web', ],
+            labels: sourceLabels,
             datasets: [{
-                    label: 'Leads',
-                    data: [80, 55, 60, ],
-                    backgroundColor: '#4A58EC',
-                    borderRadius: 20,
-                    barThickness: 40,
-                },
-
-            ]
+                label: 'Weekly Leads',
+                data: weeklySourceData,
+                backgroundColor: sourceColors,
+                borderRadius: 20,
+                barThickness: 40,
+            }]
         },
-        options: {
-            responsive: true,
-            indexAxis: 'y',
-            plugins: {
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                legend: {
-                    display: true,
-                    position: 'bottom',
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 100,
-                    ticks: {
-                        stepSize: 20
-                    },
-                    grid: {
-                        color: '#e0e0e0'
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            }
-        }
+        options: commonOptions
     });
 
     const sourcesMonthlyChart = new Chart(ctx8, {
-        type: 'bar',
+         type: 'bar',
         data: {
-            labels: ['Web', 'Web', 'Web', ],
+            labels: sourceLabels,
             datasets: [{
-                    label: 'Leads',
-                    data: [80, 55, 60, ],
-                    backgroundColor: '#4A58EC',
-                    borderRadius: 20,
-                    barThickness: 40,
-                },
-
-            ]
+                label: 'Monthly Leads',
+                data: monthlySourceData,
+                backgroundColor: sourceColors,
+                borderRadius: 20,
+                barThickness: 40,
+            }]
         },
-        options: {
-            responsive: true,
-            indexAxis: 'y',
-            plugins: {
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                legend: {
-                    display: true,
-                    position: 'bottom',
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 100,
-                    ticks: {
-                        stepSize: 20
-                    },
-                    grid: {
-                        color: '#e0e0e0'
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            }
-        }
+        options: commonOptions
     });
 
     const sourcesYearlyChart = new Chart(ctx9, {
         type: 'bar',
         data: {
-            labels: ['Web', 'Web', 'Web', ],
+            labels: sourceLabels,
             datasets: [{
-                    label: 'Leads',
-                    data: [80, 55, 60, ],
-                    backgroundColor: '#4A58EC',
-                    borderRadius: 20,
-                    barThickness: 40,
-                },
-
-            ]
+                label: 'Yearly Leads',
+                data: yearlySourceData,
+                backgroundColor: sourceColors,
+                borderRadius: 20,
+                barThickness: 40,
+            }]
         },
-        options: {
-            responsive: true,
-            indexAxis: 'y',
-            plugins: {
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                legend: {
-                    display: true,
-                    position: 'bottom',
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 100,
-                    ticks: {
-                        stepSize: 20
-                    },
-                    grid: {
-                        color: '#e0e0e0'
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            }
-        }
+        options: commonOptions
     });
 </script>
 <script>

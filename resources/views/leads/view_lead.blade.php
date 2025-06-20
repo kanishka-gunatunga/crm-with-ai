@@ -339,10 +339,8 @@
                                                     <div class="col-12 col-md-4 ">
                                                         <label for="field1" class="form-label">To</label>
                                                         <div class="position-relative">
-                                                            <input type="text" class="form-control " id="field1"
-                                                                placeholder="To" data-choices
-                                                                data-choices-limit="Required Limit" data-choices-removeItem
-                                                                class="form-control" name="to[]">
+                                                             <select class="form-control tagselect" name="to[]"
+                                                                 multiple="multiple"></select>
                                                             <button type="button"
                                                                 class="position-absolute email-sending-option-btn CC cc-toggle">CC</button>
                                                             <button type="button"
@@ -362,17 +360,16 @@
 
                                                         <label for="firstNameinput"
                                                             class="form-label">{{ __('app.leads.cc') }}</label>
-
-                                                        <input type="text" data-choices
-                                                            data-choices-limit="Required Limit" data-choices-removeItem
-                                                            class="form-control tagselect" name="cc[]">
+                                                        <select class="form-control tagselect" name="cc[]"
+                                                                 multiple="multiple"></select>
+                                          
                                                     </div>
                                                     <div class="col-md-4 mb-3 bcc-input d-none">
                                                         <label for="firstNameinput"
                                                             class="form-label">{{ __('app.leads.bcc') }}</label>
-                                                        <input type="text" data-choices
-                                                            data-choices-limit="Required Limit" data-choices-removeItem
-                                                            class="form-control tagselect" name="bcc[]">
+                                                            <select class="form-control tagselect" name="bcc[]"
+                                                                 multiple="multiple"></select>
+                                 
                                                     </div>
 
 

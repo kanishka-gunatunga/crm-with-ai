@@ -106,7 +106,7 @@
                                 <div class="card card-default">
                                     <div class="card-body">
                                         <div class="row g-4">
-                                            <div class="col-12 col-md-6">
+                                            <div class="col-12 col-md-4">
                                                 <label for="field1" class="form-label">Name</label>
                                                 <input type="text" class="form-control" id="field1" placeholder="Name"
                                                     name="name" value="{{ $person->name }}" required>
@@ -119,7 +119,7 @@
                                                         <input type="text" class="form-control" id="field2" placeholder="Organization">
                                                     </div> -->
 
-                                            <div class="col-12 col-md-6">
+                                            <div class="col-12 col-md-4">
                                                 <label for="field3" class="form-label">Organization</label>
                                                 <select class="myDropdown form-control" name="organization">
                                                     <option value="{{ $person->organization }}">
@@ -135,7 +135,14 @@
                                                         {{ $errors->first('organization') }}</div>
                                                 @endif
                                             </div>
-
+                                            <div class="col-12 col-md-4">
+                                                <label for="field1" class="form-label">Date of Birth</label>
+                                                <input type="date" class="form-control" id="field1" placeholder="Name"
+                                                    name="dob" value="{{ $person->dob }}" required>
+                                                @if ($errors->has('dob'))
+                                                    <div class="alert alert-danger mt-2">{{ $errors->first('dob') }}</div>
+                                                @endif
+                                            </div>                    
                                             <div class="col-12 col-md-6">
                                                 <div class="d-flex align-items-center">
                                                     <label for="field4" class="form-label">Emails</label>

@@ -141,6 +141,7 @@ color: var(--black-color);
 }
 .main-content{
     width: 100%;
+
 }
 .dashbaord-piechart-container{
     max-width: 400px;
@@ -176,6 +177,14 @@ color: var(--black-color);
 }
 .dashboard-top-col{
     width: 20%;
+}
+body{
+  /* overflow: hidden; */
+}
+.page-content{
+    /* height: 100vh;
+    overflow: auto;
+    margin-bottom: 50px; */
 }
 @media (max-width: 600px) {
   .dashbaord-piechart-container{
