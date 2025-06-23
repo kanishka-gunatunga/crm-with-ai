@@ -1297,7 +1297,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function fetchEvents(date) {
         console.log(date);
-        fetch(`/get-events/${date}`, {
+        fetch(`{{ url("get-events") }}/${date}`, {
             method: 'GET',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'

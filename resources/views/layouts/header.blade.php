@@ -1,7 +1,21 @@
 
-
+ <?php
+use App\Models\Configuration;
+$config = Configuration::first();
+?>
 <header class="main-header">
+        <nav class="mobile-nav">
+            <button class="hamburger" id="hamburgerBtn" aria-label="Open sidebar">
+                &#9776;
+            </button>
+            <img src="{{ asset('uploads/'.$config->logo) }}" alt="Infinity CRM Logo" style="height: 40px; margin-right: 10px;">
+        </nav>
         <nav class="header-nav">
+            <div class="logo-and-search">
+            <div class="logo-section" >
+                <img src="{{ asset('uploads/'.$config->logo) }}" alt="Infinity CRM Logo" style="height: 40px; margin-right: 10px;">
+
+             </div>
             <div class="search-section">
                 <form class="search-form" role="search">
                     <div class="search-input-wrapper">
@@ -24,40 +38,27 @@
                     </div>
                 </form>
             </div>
+            </div>
             <div class="user-actions">
-                <button class="notification-button" aria-label="Notifications">
-                    <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="notification-icon"
-                        aria-hidden="true">
-                        <path
-                            d="M6 19V10C6 8.4087 6.63214 6.88258 7.75736 5.75736C8.88258 4.63214 10.4087 4 12 4C13.5913 4 15.1174 4.63214 16.2426 5.75736C17.3679 6.88258 18 8.4087 18 10V19M6 19H18M6 19H4M18 19H20M11 22H13"
-                            stroke="#556476"
-                            stroke-linecap="round"
-                            stroke-linejoin="round" />
-                        <path
-                            d="M12 4C12.5523 4 13 3.55228 13 3C13 2.44772 12.5523 2 12 2C11.4477 2 11 2.44772 11 3C11 3.55228 11.4477 4 12 4Z"
-                            stroke="#556476" />
-                        <circle
-                            cx="17.5"
-                            cy="5.5"
-                            r="3.25"
-                            fill="#ED2227"
-                            stroke="white"
-                            stroke-width="0.5" />
+                <div class="notification-wrapper" style="position: relative;">
+                <button class="notification-button" aria-label="Notifications" onclick="toggleDropdown('notification-dropdown')" style="background: none; border: none;">
+                    <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 19V10C6 8.4087 6.63214 6.88258 7.75736 5.75736C8.88258 4.63214 10.4087 4 12 4C13.5913 4 15.1174 4.63214 16.2426 5.75736C17.3679 6.88258 18 8.4087 18 10V19M6 19H18M6 19H4M18 19H20M11 22H13" stroke="#556476" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="17.5" cy="5.5" r="3.25" fill="#ED2227" stroke="white" stroke-width="0.5"/>
                     </svg>
                 </button>
-                <div class="user-profile">
+                <div id="notification-dropdown" class="dropdown-menu" style="display: none; position: absolute; right: 0; top: 35px; background: white; border: 1px solid #ccc; padding: 10px; border-radius: 8px; min-width: 200px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 999;">
+                    <p>No new notifications</p>
+                </div>
+                </div>
+                
+                <div class="user-profile"  onclick="toggleDropdown('user-dropdown')" style="cursor:pointer;">
                     <img
                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/ff47f92652fd0ea04e7b5613333c3cc085fa3036?placeholderIfAbsent=true"
                         alt=""
                         class="user-avatar" />
                     <span class="user-name">David Johnson</span>
-                    <button class="dropdown-button" aria-label="User menu">
+                    <button class="dropdown-button" aria-label="User menu" >
                         <svg
                             width="10"
                             height="10"
@@ -73,6 +74,11 @@
                                 fill="#556476" />
                         </svg>
                     </button>
+                </div>
+                <div id="user-dropdown" class="dropdown-menu">
+                    <a href="{{ url('edit-user/'.Auth::user()->id) }}" style="display: block; padding: 5px;"><i class="fa-solid fa-user mx-2"></i> Profile</a>
+                    
+                    <a href="{{ url('logout') }}" style="display: block; padding: 5px;"><i class="fa-solid fa-arrow-right-from-bracket mx-2"></i> Logout</a>
                 </div>
             </div>
         </nav>

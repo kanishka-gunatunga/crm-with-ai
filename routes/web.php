@@ -118,31 +118,35 @@ Route::match(['get', 'post'],'create-pipeline', [PipelineController::class, 'cre
 Route::get( '/delete-pipeline/{id}', [PipelineController::class, 'delete_pipeline'])->middleware(['auth', 'permission:pipeline-delete']);
 Route::match(['get', 'post'],'edit-pipeline/{id}', [PipelineController::class, 'edit_pipeline'])->middleware(['auth', 'permission:pipeline-edit']);
 Route::get( '/delete-stage/{id}', [PipelineController::class, 'delete_stage'])->middleware(['auth']);
+Route::get( '/delete-selected-pipelines', [PipelineController::class, 'delete_selected_pipelines'])->middleware(['auth', 'permission:pipeline-delete']);
 
 //Sources
 Route::get( '/sources', [SourceController::class, 'sources'])->middleware(['auth', 'permission:sources']);
 Route::match(['get', 'post'],'create-source', [SourceController::class, 'create_source'])->middleware(['auth', 'permission:source-create']);
 Route::get( '/delete-source/{id}', [SourceController::class, 'delete_source'])->middleware(['auth', 'permission:source-delete']);
 Route::match(['get', 'post'],'edit-source/{id}', [SourceController::class, 'edit_source'])->middleware(['auth', 'permission:source-edit']);
+Route::get( '/delete-selected-sources', [SourceController::class, 'delete_selected_sources'])->middleware(['auth', 'permission:source-delete']);
 
 //Types
 Route::get( '/types', [TypeController::class, 'types'])->middleware(['auth', 'permission:types']);
 Route::match(['get', 'post'],'create-type', [TypeController::class, 'create_type'])->middleware(['auth', 'permission:type-create']);
 Route::get( '/delete-type/{id}', [TypeController::class, 'delete_type'])->middleware(['auth', 'permission:type-delete']);
 Route::match(['get', 'post'],'edit-type/{id}', [TypeController::class, 'edit_type'])->middleware(['auth', 'permission:type-edit']);
+Route::get( '/delete-selected-types', [TypeController::class, 'delete_selected_types'])->middleware(['auth', 'permission:type-delete']);
 
 //Groups
 Route::get( '/groups', [GroupsController::class, 'groups'])->middleware(['auth', 'permission:groups']);
 Route::match(['get', 'post'],'create-group', [GroupsController::class, 'create_group'])->middleware(['auth', 'permission:group-create']);
 Route::get( '/delete-group/{id}', [GroupsController::class, 'delete_group'])->middleware(['auth', 'permission:group-delete']);
 Route::match(['get', 'post'],'edit-group/{id}', [GroupsController::class, 'edit_group'])->middleware(['auth', 'permission:group-edit']);
+Route::get( '/delete-selected-groups', [GroupsController::class, 'delete_selected_groups'])->middleware(['auth', 'permission:group-delete']);
 
 //Roles
 Route::get( '/roles', [RolesController::class, 'roles'])->middleware(['auth', 'permission:roles']);
 Route::match(['get', 'post'],'create-role', [RolesController::class, 'create_role'])->middleware(['auth', 'permission:role-create']);
 Route::get( '/delete-role/{id}', [RolesController::class, 'delete_role'])->middleware(['auth', 'permission:role-delete']);
 Route::match(['get', 'post'],'edit-role/{id}', [RolesController::class, 'edit_role'])->middleware(['auth', 'permission:role-edit']);
-
+Route::get( '/delete-selected-roles', [RolesController::class, 'delete_selected_roles'])->middleware(['auth', 'permission:role-delete']);
 
 //Users
 Route::get( '/users', [UsersController::class, 'users'])->middleware(['auth', 'permission:users']);
@@ -159,10 +163,11 @@ Route::get( '/delete-selected-attributes', [AttributeController::class, 'delete_
 Route::match(['get', 'post'],'edit-attribute/{id}', [AttributeController::class, 'edit_attribute'])->middleware(['auth', 'permission:attribute-edit']);
 
 //Email Templates
-Route::get( '/email-templates', [EmailTemplateController::class, 'email_templates'])->middleware(['auth', 'permission:groups']);
-Route::match(['get', 'post'],'create-email-template', [EmailTemplateController::class, 'create_email_template'])->middleware(['auth', 'permission:group-create']);
-Route::get( '/delete-email-template/{id}', [EmailTemplateController::class, 'delete_email_template'])->middleware(['auth', 'permission:group-delete']);
-Route::match(['get', 'post'],'edit-email-template/{id}', [EmailTemplateController::class, 'edit_email_template'])->middleware(['auth', 'permission:group-edit']);
+Route::get( '/email-templates', [EmailTemplateController::class, 'email_templates'])->middleware(['auth']);
+Route::match(['get', 'post'],'create-email-template', [EmailTemplateController::class, 'create_email_template'])->middleware(['auth']);
+Route::get( '/delete-email-template/{id}', [EmailTemplateController::class, 'delete_email_template'])->middleware(['auth']);
+Route::match(['get', 'post'],'edit-email-template/{id}', [EmailTemplateController::class, 'edit_email_template'])->middleware(['auth']);
+Route::get( '/delete-selected-templates', [EmailTemplateController::class, 'delete_selected_templates'])->middleware(['auth']);
 
 //Web Flows
 Route::get( '/web-forms', [WebFormController::class, 'web_forms'])->middleware(['auth', 'permission:web-forms']);
@@ -172,11 +177,13 @@ Route::get( '/view-web-form/{uuid}', [WebFormController::class, 'view_web_form']
 Route::get('/embed/web-form/{uuid}', [WebFormController::class, 'serveEmbedScript']);
 Route::post('web-form-submit/{uuid}', [WebFormController::class, 'web_form_submit']);
 Route::match(['get', 'post'],'edit-web-form/{id}', [WebFormController::class, 'edit_web_form'])->middleware(['auth', 'permission:webForms-edit']);
-
+Route::get( '/delete-selected-webforms', [WebFormController::class, 'delete_selected_webforms'])->middleware(['auth', 'permission:webForms-delete']);
 
 //Emails
 Route::get( '/emails', [EmailsController::class, 'emails'])->middleware(['auth']);
 Route::match(['get', 'post'],'compose-email', [EmailsController::class, 'compose_email'])->middleware(['auth']);
+Route::match(['get', 'post'],'view-email', [EmailsController::class, 'view_email'])->middleware(['auth']);
+Route::get( '/delete-selected-emails', [EmailsController::class, 'delete_selected_emails'])->middleware(['auth']);
 });
 
 Route::get('/lang/{locale}', function ($locale) {

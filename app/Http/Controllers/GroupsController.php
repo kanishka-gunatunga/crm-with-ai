@@ -95,7 +95,17 @@ class GroupsController extends Controller
 
     }
 }
+public function delete_selected_groups(Request $request)
+{
+    $gropIds = $request->input('selected_groups', []);
+    
+    if (!empty($gropIds)) {
+        Group::whereIn('id', $gropIds)->delete();
+        return back()->with('success', 'Selected groups deleted successfully.');
+    }
 
+    return back()->with('error', 'No attributes selected.');
+}
 }
 
 

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Infinity CRM</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -295,6 +295,69 @@
         time_24hr: true,
         disableMobile: true
     });
+</script>
+<script>
+    $(document).ready(function () {
+
+        // Case 1: For delete links (e.g., <a href="...">)
+        $(document).on('click', '.delete-link-confirm', function (e) {
+            e.preventDefault();
+            const url = $(this).attr('href');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This action cannot be undone!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                }
+            });
+        });
+
+        // Case 2: For form submits (e.g., <button type="submit"> inside a <form>)
+        $(document).on('click', '.delete-form-confirm', function (e) {
+            e.preventDefault();
+            const form = $(this).closest('form');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This will delete selected records!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+
+    });
+</script>
+
+<script>
+  function toggleDropdown(id) {
+    const el = document.getElementById(id);
+    const allDropdowns = document.querySelectorAll('.dropdown-menu');
+    allDropdowns.forEach(d => {
+      if (d.id !== id) d.style.display = 'none';
+    });
+    el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+  }
+
+  // Optional: Close on outside click
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.user-profile') && !e.target.closest('.notification-wrapper')) {
+      document.querySelectorAll('.dropdown-menu').forEach(el => el.style.display = 'none');
+    }
+  });
 </script>
 
 </html>

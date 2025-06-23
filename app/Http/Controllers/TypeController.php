@@ -87,6 +87,17 @@ public function delete_stage($id,Request $request)
      }
     
 }
+public function delete_selected_types(Request $request)
+{
+    $typeIds = $request->input('selected_types', []);
+    
+    if (!empty($typeIds)) {
+        Type::whereIn('id', $typeIds)->delete();
+        return back()->with('success', 'Selected types deleted successfully.');
+    }
+
+    return back()->with('error', 'No attributes selected.');
+}
 }
 
 

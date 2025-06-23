@@ -263,6 +263,17 @@ public function web_form_submit($uid)
 
     return response($form->success_action);
 }
+public function delete_selected_webforms(Request $request)
+{
+    $formsIds = $request->input('selected_webforms', []);
+    
+    if (!empty($formsIds)) {
+        WebForm::whereIn('id', $formsIds)->delete();
+        return back()->with('success', 'Selected web forms deleted successfully.');
+    }
+
+    return back()->with('error', 'No attributes selected.');
+}
 }
 
 
