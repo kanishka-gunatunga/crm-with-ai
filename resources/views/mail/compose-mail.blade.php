@@ -33,17 +33,16 @@
 
                                 <div class="row g-4">
                                     <div class="col-12 col-md-4 ">
-                                        <label for="field1" class="form-label">To</label>
+                                        <label for="field1" class="form-label">{{ __('app.leads.to') }}</label>
                                         <div class="position-relative">
-                                            <input type="text" class="form-control " id="field1" placeholder="To"
-                                                data-choices data-choices-limit="Required Limit" data-choices-removeItem
-                                                class="form-control" name="to[]">
+                                            <select class="form-control tagselect" name="to[]"
+                                                                 multiple="multiple"></select>
                                             <button type="button"
-                                                class="position-absolute email-sending-option-btn CC cc-toggle">CC</button>
+                                                class="position-absolute email-sending-option-btn CC cc-toggle">{{ __('app.leads.cc') }}</button>
                                             <button type="button"
-                                                class="position-absolute email-sending-option-btn BCC bcc-toggle">BCC</button>
+                                                class="position-absolute email-sending-option-btn BCC bcc-toggle">{{ __('app.leads.bcc') }}</button>
                                         </div>
-
+                                    @if ($errors->has('to')) <div class="alert alert-danger mt-2"> {{ $errors->first('to') }} </div>  @endif
                                     </div>
                                     {{-- <div class="col-md-4 mb-3">
                                                     <label for="firstNameinput" class="form-label">ggg</label>
@@ -57,20 +56,21 @@
 
                                         <label for="firstNameinput" class="form-label">{{ __('app.leads.cc') }}</label>
 
-                                        <input type="text" data-choices data-choices-limit="Required Limit"
-                                            data-choices-removeItem class="form-control tagselect" name="cc[]">
+                                      <select class="form-control tagselect" name="cc[]"
+                                                                 multiple="multiple"></select>
                                     </div>
                                     <div class="col-md-4 mb-3 bcc-input d-none">
                                         <label for="firstNameinput" class="form-label">{{ __('app.leads.bcc') }}</label>
-                                        <input type="text" data-choices data-choices-limit="Required Limit"
-                                            data-choices-removeItem class="form-control tagselect" name="bcc[]">
+                                        <select class="form-control tagselect" name="bcc[]"
+                                                                 multiple="multiple"></select>
                                     </div>
 
 
                                     <div class="col-12 col-md-4">
-                                        <label for="field1" class="form-label">Subject</label>
+                                        <label for="field1" class="form-label">{{ __('app.leads.subject') }}</label>
                                         <input type="text" class="form-control" id="field1" name="subject"
                                             placeholder="Subject">
+                                            @if ($errors->has('subject')) <div class="alert alert-danger mt-2"> {{ $errors->first('subject') }} </div>  @endif
                                     </div>
                                 </div>
                             </div>
@@ -79,11 +79,12 @@
                         <div class="card card-default mt-3">
                             <div class="card-body">
                                 <div class="col-10">
-                                    <label for="field5" class="form-label">Description</label>
+                                    <label for="field5" class="form-label">{{ __('app.leads.description') }}</label>
 
                                     <textarea class="summernoteNormal" id="summernote" name="body"></textarea>
                                     {{-- <div id="froala-editor" rows="5"
                                                         name="body" required></div> --}}
+                                                        @if ($errors->has('body')) <div class="alert alert-danger mt-2"> {{ $errors->first('body') }} </div>  @endif
                                 </div>
 
 
@@ -105,11 +106,11 @@
         <div class="col-12 action-bar">
             <div class="d-flex gap-2 justify-content-between">
                 <div>
-                    <button type="submit" class="btn clear-all-btn">Clear All</button>
+                    <a href=""><button type="button" class="btn clear-all-btn">Clear All</button></a>
                 </div>
                 <div>
                     <button type="submit" class="btn save-btn">Save</button>
-                    <button type="button" class="btn cancel-btn">Cancel</button>
+                     <a href="{{ url('emails') }}"><button type="button" class="btn cancel-btn">Cancel</button></a>
                 </div>
 
             </div>
@@ -117,7 +118,28 @@
         </div>
 
     </form>
+    <script>
+        $(document).ready(function() {
+            @if (Session::has('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: "{{ Session::get('success') }}",
+                    confirmButtonColor: '#3085d6'
+                });
+            @endif
 
+            @if (Session::has('fail'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "{{ Session::get('fail') }}",
+                    confirmButtonColor: '#d33'
+                });
+            @endif
+        });
+
+    </script>
     <script>
         document.querySelectorAll('.email-item').forEach(item => {
             item.addEventListener('click', () => {

@@ -104,7 +104,17 @@ class EmailTemplateController extends Controller
 
     }
 }
+public function delete_selected_templates(Request $request)
+{
+    $tempalteIds = $request->input('selected_templates', []);
+    
+    if (!empty($tempalteIds)) {
+        EmailTemplate::whereIn('id', $tempalteIds)->delete();
+        return back()->with('success', 'Selected templates deleted successfully.');
+    }
 
+    return back()->with('error', 'No attributes selected.');
+}
 }
 
 

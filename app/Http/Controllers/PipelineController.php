@@ -209,6 +209,18 @@ public function delete_stage($id,Request $request)
      }
     
 }
+public function delete_selected_pipelines(Request $request)
+{
+    $pipeIds = $request->input('selected_pipelines', []);
+    
+    if (!empty($pipeIds)) {
+        Pipeline::whereIn('id', $pipeIds)->delete();
+        PipelineStage::whereIn('pipeline_id',$pipeIds)->delete();
+        return back()->with('success', 'Selected pipelines deleted successfully.');
+    }
+
+    return back()->with('error', 'No attributes selected.');
+}
 }
 
 

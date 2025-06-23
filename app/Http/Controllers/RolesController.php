@@ -111,17 +111,16 @@ class RolesController extends Controller
     }
 }
 
-public function delete_selected_products(Request $request)
+public function delete_selected_roles(Request $request)
 {
-    $productIds = $request->input('selected_products', []);
+    $roleIds = $request->input('selected_roles', []);
     
-    if (!empty($productIds)) {
-        Product::whereIn('id', $productIds)->delete();
-        return back()->with('success', 'Selected products deleted successfully.');
+    if (!empty($roleIds)) {
+        Role::whereIn('id', $roleIds)->delete();
+        return back()->with('success', 'Selected roles deleted successfully.');
     }
 
-    return back()->with('error', 'No products selected.');
-    
+    return back()->with('error', 'No attributes selected.');
 }
 }
 
