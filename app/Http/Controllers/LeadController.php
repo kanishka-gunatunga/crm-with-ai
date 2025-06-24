@@ -221,6 +221,7 @@ public function update_pipline_session(Request $request)
             $lead->sales_owner = $request->sales_owner;
             $lead->closing_date = $request->closing_date;
             $lead->description = $request->description;
+            $lead->priority = $request->priority;
             $lead->status = 'active';
             $lead->category = 'qualified';
             $lead->pipeline = $id;
@@ -345,6 +346,7 @@ public function update_pipline_session(Request $request)
             $lead->sales_owner = $request->sales_owner;
             $lead->closing_date = $request->closing_date;
             $lead->description = $request->description;
+            $lead->priority = $request->priority;
             $lead->person = $person->id;
             $lead->update();
 
@@ -1069,7 +1071,19 @@ function addEventToGoogleCalendar($lead_activity)
     return $event->htmlLink; 
 }
 
+public function update_lead_priority(Request $request)
+{
+    $request->validate([
+        'lead_id' => 'required|exists:leads,id',
+        'priority' => 'required|in:High,Medium,Low',
+    ]);
 
+    $lead = Lead::find($request->lead_id);
+    $lead->priority = $request->priority;
+    $lead->save();
+
+    return response()->json(['status' => 'success']);
+}
 }
 
 

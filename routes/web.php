@@ -57,12 +57,13 @@ Route::match(['get', 'post'],'delete-email/{id}', [LeadController::class, 'delet
 Route::match(['get', 'post'],'add-lead-file/{id}', [LeadController::class, 'add_lead_file'])->middleware(['auth']);
 Route::match(['get', 'post'],'edit-file/{id}', [LeadController::class, 'edit_file'])->middleware(['auth']);
 Route::match(['get', 'post'],'delete-file/{id}', [LeadController::class, 'delete_file'])->middleware(['auth']);
-Route::match(['get', 'post'],'create-lead-quote/{id}', [QuoteController::class, 'create_lead_quote'])->middleware(['auth', 'permission:quote-create']);
 Route::match(['get', 'post'],'export-leads/{format}', [LeadController::class, 'export_leads'])->middleware(['auth']);
 Route::match(['post'],'import-leads', [LeadController::class, 'import_leads'])->middleware(['auth']);
+Route::match(['post'],'update-lead-priority', [LeadController::class, 'update_lead_priority'])->middleware(['auth']);
 
 //Quotes
 Route::match(['get', 'post'],'quotes', [QuoteController::class, 'quotes'])->middleware(['auth', 'permission:quotes']);
+Route::match(['get', 'post'],'create-lead-quote/{id}', [QuoteController::class, 'create_lead_quote'])->middleware(['auth', 'permission:quote-create']);
 Route::get( '/delete-quote/{id}', [QuoteController::class, 'delete_quote'])->middleware(['auth', 'permission:quote-delete']);
 Route::match(['get', 'post'],'create-quote', [QuoteController::class, 'create_quote'])->middleware(['auth', 'permission:quote-create']);
 Route::match(['get', 'post'],'edit-quote/{id}', [QuoteController::class, 'edit_quote'])->middleware(['auth', 'permission:quote-edit']);

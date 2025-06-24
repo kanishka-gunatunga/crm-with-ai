@@ -142,7 +142,14 @@
                                                 @if ($errors->has('dob'))
                                                     <div class="alert alert-danger mt-2">{{ $errors->first('dob') }}</div>
                                                 @endif
-                                            </div>                    
+                                            </div>       
+                                            <div class="col-12 col-md-4">
+                                                <label for="field1" class="form-label">Picture</label>
+                                                <input type="file" class="form-control" id="Picture" name="picture" value="{{ old('picture') }}" required>
+                                                @if ($errors->has('picture'))
+                                                    <div class="alert alert-danger mt-2">{{ $errors->first('picture') }}</div>
+                                                @endif
+                                            </div>             
                                             <div class="col-12 col-md-6">
                                                 <div class="d-flex align-items-center">
                                                     <label for="field4" class="form-label">Emails</label>

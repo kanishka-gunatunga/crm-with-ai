@@ -17,7 +17,7 @@ class CheckPermission
         if (!$user) {
             abort(403, 'Unauthorized.');
         }
-
+ 
         $role = Role::find($user->role);
 
         if (!$role) {

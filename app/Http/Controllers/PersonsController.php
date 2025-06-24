@@ -77,11 +77,17 @@ class PersonsController extends Controller
                 'email_types.*' => 'required|in:work,home',
                 'number_types.*' => 'required|in:work,home',
             ]);
+            $file_name = null;
+            if($request->picture){
+            $file_name = time().'-.'.$request->picture->extension();
+            $request->picture->move(public_path('uploads/persons/pictures'), $file_name);
+            }
 
             $person = new Person();
             $person->name = $request->name;
             $person->dob = $request->dob;
             $person->organization = $request->organization;
+            $person->picture = $file_name;
             if ($request->has('emails')) {
                 $emails = [];
                 foreach ($request->input('emails') as $key => $email) {
@@ -138,10 +144,15 @@ class PersonsController extends Controller
             'email_types.*' => 'required|in:work,home',
             'number_types.*' => 'required|in:work,home',
         ]);
-
+        $file_name =$person->picture;
+        if($request->picture){
+        $file_name = time().'-.'.$request->picture->extension();
+        $request->picture->move(public_path('uploads/persons/pictures'), $file_name);
+        }
         $person->name = $request->name;
         $person->organization = $request->organization;
         $person->dob = $request->dob;
+        $person->picture = $file_name;
         if ($request->has('emails')) {
             $emails = [];
             foreach ($request->input('emails') as $key => $email) {

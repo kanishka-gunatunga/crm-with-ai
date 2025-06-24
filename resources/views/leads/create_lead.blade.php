@@ -74,7 +74,7 @@
                                                     </div>
                                                 @endif
                                             </div>
-
+                                  
 
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Type</label>
