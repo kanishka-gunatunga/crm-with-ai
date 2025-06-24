@@ -220,6 +220,7 @@ public function update_pipline_session(Request $request)
             $lead->source = $request->source;
             $lead->type = $request->type;
             $lead->sales_owner = $request->sales_owner;
+            $lead->start_date = $request->start_date;
             $lead->closing_date = $request->closing_date;
             $lead->description = $request->description;
             $lead->priority = $request->priority;
@@ -352,6 +353,7 @@ public function update_pipline_session(Request $request)
             $lead->source = $request->source;
             $lead->type = $request->type;
             $lead->sales_owner = $request->sales_owner;
+            $lead->start_date = $request->start_date;
             $lead->closing_date = $request->closing_date;
             $lead->description = $request->description;
             $lead->priority = $request->priority;
