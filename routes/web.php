@@ -60,6 +60,7 @@ Route::match(['get', 'post'],'delete-file/{id}', [LeadController::class, 'delete
 Route::match(['get', 'post'],'export-leads/{format}', [LeadController::class, 'export_leads'])->middleware(['auth']);
 Route::match(['post'],'import-leads', [LeadController::class, 'import_leads'])->middleware(['auth']);
 Route::match(['post'],'update-lead-priority', [LeadController::class, 'update_lead_priority'])->middleware(['auth']);
+Route::match(['get'],'get-stages-by-pipeline/{pipeline}', [LeadController::class, 'get_stages_by_pipeline'])->middleware(['auth']);
 
 //Quotes
 Route::match(['get', 'post'],'quotes', [QuoteController::class, 'quotes'])->middleware(['auth', 'permission:quotes']);

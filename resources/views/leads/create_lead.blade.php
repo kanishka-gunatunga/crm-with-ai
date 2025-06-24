@@ -59,7 +59,39 @@
                                                     </div>
                                                 @endif
                                             </div>
-
+                                            <div class="col-12 col-md-4">
+                                            <label for="field2" class="form-label">Pipeline</label>
+                                            <select class="form-control tagselect" name="pipeline" required>
+                                                <option value="">Select a pipeline</option>
+                                                <?php foreach($pipelines as $pipeline){ ?>
+                                                <option value="{{ $pipeline->id }}" {{ session('pipeline_id') == $pipeline->id ? 'selected' : '' }}>{{ $pipeline->name }}</option>
+                                                <?php } ?>
+                                            </select>
+                                            @if ($errors->has('pipeline'))
+                                                <div class="alert alert-danger mt-2">
+                                                    {{ $errors->first('pipeline') }}
+                                                </div>
+                                            @endif
+                                            </div>
+                                            @php
+                                                $selectedStage = request('stage') ?? old('stage');
+                                            @endphp
+                                            <div class="col-12 col-md-4">
+                                            <label for="field2" class="form-label">Stage</label>
+                                            <select class="form-control tagselect" name="stage" required>
+                                                <option value="">Select a stage</option>
+                                                <?php foreach($stages as $stage){ ?>
+                                                <option value="{{ $stage->id }}" {{ $selectedStage == $stage->id ? 'selected' : '' }}>
+                                                    {{ $stage->name }}
+                                                </option>
+                                                <?php } ?>
+                                            </select>
+                                            @if ($errors->has('stage'))
+                                                <div class="alert alert-danger mt-2">
+                                                    {{ $errors->first('stage') }}
+                                                </div>
+                                            @endif
+                                            </div>
 
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Source</label>
@@ -651,4 +683,39 @@
             @endif
         });
     </script>
+
+
+<script>
+$(document).ready(function () {
+
+
+    $('select[name="pipeline"]').on('change', function () {
+        let pipelineId = $(this).val();
+
+        if (pipelineId) {
+            $.ajax({
+                url: '{{ url('get-stages-by-pipeline') }}/' + pipelineId,
+                type: 'GET',
+                success: function (data) {
+                    let $stageSelect = $('select[name="stage"]');
+
+                    $stageSelect.empty().append('<option value="">Select a stage</option>');
+
+                    $.each(data, function (key, stage) {
+                        $stageSelect.append('<option value="' + stage.id + '">' + stage.name + '</option>');
+                    });
+
+                    $stageSelect.val(null).trigger('change');
+                },
+                error: function () {
+                    alert('Failed to load stages. Please try again.');
+                }
+            });
+        } else {
+            let $stageSelect = $('select[name="stage"]');
+            $stageSelect.empty().append('<option value="">Select a stage</option>').val(null).trigger('change');
+        }
+    });
+});
+</script>
 @endsection

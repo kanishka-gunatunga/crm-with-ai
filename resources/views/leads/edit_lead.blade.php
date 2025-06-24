@@ -78,7 +78,39 @@
                                                 @endif
                                             </div>
 
-
+                                            <div class="col-12 col-md-4">
+                                            <label for="field2" class="form-label">Pipeline</label>
+                                            <select class="form-control tagselect" name="pipeline" required>
+                                                <option value="">Select a pipeline</option>
+                                                <?php foreach($pipelines as $pipeline){ ?>
+                                                <option value="{{ $pipeline->id }}" {{ $lead->pipeline == $pipeline->id ? 'selected' : '' }}>{{ $pipeline->name }}</option>
+                                                <?php } ?>
+                                            </select>
+                                            @if ($errors->has('pipeline'))
+                                                <div class="alert alert-danger mt-2">
+                                                    {{ $errors->first('pipeline') }}
+                                                </div>
+                                            @endif
+                                            </div>
+                                            @php
+                                                $selectedStage = $lead->stage;
+                                            @endphp
+                                            <div class="col-12 col-md-4">
+                                            <label for="field2" class="form-label">Stage</label>
+                                            <select class="form-control tagselect" name="stage" required>
+                                                <option value="">Select a stage</option>
+                                                <?php foreach($stages as $stage){ ?>
+                                                <option value="{{ $stage->id }}" {{ $selectedStage == $stage->id ? 'selected' : '' }}>
+                                                    {{ $stage->name }}
+                                                </option>
+                                                <?php } ?>
+                                            </select>
+                                            @if ($errors->has('stage'))
+                                                <div class="alert alert-danger mt-2">
+                                                    {{ $errors->first('stage') }}
+                                                </div>
+                                            @endif
+                                            </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Source</label>
                                                 <select class="form-control tagselect" name="source" required>

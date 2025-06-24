@@ -141,14 +141,19 @@ public function update_pipline_session(Request $request)
             $organizations = Organization::get();
             $products = Product::get();
             $services = Service::get();
+            $pipelines = Pipeline::get();
+            $stages = PipelineStage::where('pipeline_id',$id)->get();
             return view('leads.create_lead', ['sources' => $sources,'types' => $types,'owners' => $owners,
-            'persons' => $persons,'organizations' => $organizations,'products' => $products,'services' => $services]);
+            'persons' => $persons,'organizations' => $organizations,'products' => $products,'services' => $services,'pipelines' => $pipelines
+            ,'stages' => $stages]);
         }
         if($request->isMethod('post')){
             $request->validate([
                 'title' => 'required|string',
                 'lead_value' => 'required',
                 'source' => 'required',
+                'pipeline' => 'required',
+                'stage' => 'required',
             ]);
             
             if(Person::where("id", $request->person)->exists()){
@@ -226,8 +231,8 @@ public function update_pipline_session(Request $request)
             $lead->priority = $request->priority;
             $lead->status = 'active';
             $lead->category = 'qualified';
-            $lead->pipeline = $id;
-            $lead->stage = PipelineStage::where('id',$id)->where('name', 'New')->value('id');
+            $lead->pipeline = $request->pipeline;
+            $lead->stage = $request->stage;
             $lead->person = $person->id;
             $lead->save();
 
@@ -273,16 +278,20 @@ public function update_pipline_session(Request $request)
             $services = Service::get();
 
             $lead_products = LeadProduct::where('lead_id',$id)->get();
+            $pipelines = Pipeline::get();
+            $stages = PipelineStage::where('pipeline_id',$lead->pipeline)->get();
 
             return view('leads.edit_lead', ['sources' => $sources,'types' => $types,'owners' => $owners,
             'persons' => $persons,'organizations' => $organizations,'products' => $products,'lead' => $lead,'lead_products' => $lead_products
-            ,'services' => $services]);
+            ,'services' => $services,'pipelines' => $pipelines,'stages' => $stages]);
         }
         if($request->isMethod('post')){
             $request->validate([
                 'title' => 'required|string',
                 'lead_value' => 'required',
                 'source' => 'required',
+                'pipeline' => 'required',
+                'stage' => 'required',
             ]);
             
             if(Person::where("id", $request->person)->exists()){
@@ -358,6 +367,8 @@ public function update_pipline_session(Request $request)
             $lead->description = $request->description;
             $lead->priority = $request->priority;
             $lead->person = $person->id;
+            $lead->pipeline = $request->pipeline;
+            $lead->stage = $request->stage;
             $lead->update();
 
             LeadProduct::where('lead_id',$id)->delete();
@@ -1272,6 +1283,12 @@ public function update_lead_priority(Request $request)
     }
 
     return response()->json(['status' => 'success']);
+}
+public function get_stages_by_pipeline($pipelineId)
+{
+    $stages = PipelineStage::where('pipeline_id', $pipelineId)->get();
+
+    return response()->json($stages);
 }
 }
 

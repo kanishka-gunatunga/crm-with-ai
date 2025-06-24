@@ -206,7 +206,7 @@
                                         <?php } ?>
                                     </div>
                                     <div class="add-card-wrapper">
-                                        <a href="{{ url('create-lead') }}">
+                                        <a href="{{ url('create-lead') . '?pipeline=' . session('pipeline_id') . '&stage=' . $stage->id }}">
                                             <div class="add-card-container">
                                                 <div class="add-card-button">
                                                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/7594641fe0b0bf04f82d99ec52410440ee0f61f1?placeholderIfAbsent=true&apiKey=58cf9ebae01449cda017611d277ef437"
