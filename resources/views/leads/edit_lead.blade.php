@@ -59,7 +59,7 @@
                                             <div class="col-12 col-md-4">
                                                 <label for="field1" class="form-label">Title</label>
                                                 <input type="text" class="form-control" name="title"
-                                                    value="{{ old('title') }}" required>
+                                                    value="{{ old('title', isset($lead) ? $lead->title : '') }}" required>
                                                 @if ($errors->has('title'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('title') }}
@@ -69,7 +69,8 @@
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Lead Value ($)</label>
                                                 <input type="number" step="any" class="form-control" name="lead_value"
-                                                    value="{{ old('lead_value') }}" required>
+                                                    value="{{ old('lead_value', isset($lead) ? $lead->lead_value : '') }}"
+                                                    required>
                                                 @if ($errors->has('lead_value'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('lead_value') }}
@@ -82,7 +83,9 @@
                                                 <label for="field2" class="form-label">Source</label>
                                                 <select class="form-control tagselect" name="source" required>
                                                     <option selected hidden value="{{ $lead->source }}">
-                                                        <?php foreach($sources as $source){ ?>
+                                                        {{ $source_name }}
+                                                    </option>
+                                                    <?php foreach($sources as $source){ ?>
                                                     <option value="{{ $source->id }}">{{ $source->name }}</option>
                                                     <?php } ?>
                                                 </select>
@@ -129,9 +132,49 @@
                                                     </div>
                                                 @endif
                                             </div>
+                                            <div class="col-12 col-md-4">
+                                                <label for="field2" class="form-label">Priority</label>
+                                                <select class="form-control" name="priority" required>
 
+                                                    <option selected hidden value="{{ $lead->priority }}">
+                                                        {{ $lead->priority }}
+                                                    </option>
+                                                    <option value="Urgent">Urgent</option>
+                                                    <option value="High">High</option>
+                                                    <option value="Medium">Medium</option>
+                                                    <option value="Low">Low</option>
+                                                </select>
+                                            </div>
 
                                             <div class="col-12 col-md-4">
+                                                <label for="field2" class="form-label">Start Date</label>
+                                                <input type="date" class="form-control" name="start_date"
+                                                    value="{{ old('start_date', $lead->start_date ? \Carbon\Carbon::parse($lead->start_date)->format('Y-m-d') : '') }}"
+                                                    required>
+                                                @if ($errors->has('start_date'))
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $errors->first('start_date') }}
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            <div class="col-12 col-md-4">
+                                                <label for="field2" class="form-label">Expected Closing
+                                                    Date</label>
+                                                <input type="date" class="form-control" name="closing_date"
+                                                    value="{{ old('closing_date', $lead->closing_date ? \Carbon\Carbon::parse($lead->closing_date)->format('Y-m-d') : '') }}"
+                                                    required>
+                                                @if ($errors->has('closing_date'))
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $errors->first('closing_date') }}
+                                                    </div>
+                                                @endif
+                                            </div>
+
+
+
+
+                                            {{-- <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Expected Closing
                                                     Date</label>
                                                 <input type="date" class="form-control" name="closing_date"
@@ -141,7 +184,7 @@
                                                         {{ $errors->first('closing_date') }}
                                                     </div>
                                                 @endif
-                                            </div>
+                                            </div> --}}
                                             {{-- <div class="col-12 col-md-4">
                                         <label for="field3" class="form-label">Assign User</label>
 
@@ -180,9 +223,9 @@
                                         <input type="text" class="form-control" id="field5" placeholder="Date Due">
                                     </div> --}}
                                             <!-- <div class="col-12 col-md-4">
-                                                                                                                                        <label for="field5" class="form-label">Reminders</label>
-                                                                                                                                        <input type="text" class="form-control" id="field5" placeholder="Reminders">
-                                                                                                                                    </div> -->
+                                                                                                                                                    <label for="field5" class="form-label">Reminders</label>
+                                                                                                                                                    <input type="text" class="form-control" id="field5" placeholder="Reminders">
+                                                                                                                                                </div> -->
 
                                         </div>
 
@@ -196,7 +239,8 @@
                                     <div class="card-body">
                                         <div class="row g-4 input-fields-container" id="input-fields-container">
                                             <div class="col-12 col-md-4">
-                                                <label for="field1" class="form-label">{{ __('app.leads.name') }}</label>
+                                                <label for="field1"
+                                                    class="form-label">{{ __('app.leads.name') }}</label>
                                                 <select class="form-control stagselect" id="person-select" name="person"
                                                     required>
                                                     <option selected hidden value="{{ $lead->person }}">
@@ -236,7 +280,7 @@
                                             <div class="col-12 col-md-4" id="email-fields">
                                                 <label for="field1"
                                                     class="form-label">{{ __('app.leads.emails') }}</label>
-                                                <input type="email" class="form-control" name="emails[]" required>
+                                                <input type="email" class="form-control" name="emails[]">
 
                                                 <div class="mt-4 mt-lg-0">
                                                     <div class="form-check form-check-inline">
@@ -337,7 +381,7 @@
 
 
 
-                                <div class="col-md-12 p-4">
+                                {{-- <div class="col-md-12 p-4">
                                     <div class="d-flex gap-3 mb-3 align-items-center">
                                         <div>
                                             <p class="m-0">Attachments </p>
@@ -365,7 +409,7 @@
                                         </div>
 
                                     </div>
-                                </div>
+                                </div> --}}
 
 
                             </div>

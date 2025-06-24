@@ -16,7 +16,16 @@
     $type_name = Type::where('id', $lead->type)->value('name');
     $owner_name = UserDetails::where('id', $lead->sales_owner)->value('name');
     $person = Person::where('id', $lead->person)->first();
-    
+    $organization = Organization::where('id', $lead->organization)->first();
+
+    $start_date = Lead::where('id', $lead->id)->value('start_date');
+    $closed_date = Lead::where('id', $lead->id)->value('closed_date');
+    $pipeline =  Lead::where('id', $lead->id)->value('pipeline');
+    $priority = Lead::where('id', $lead->id)->value('priority');
+
+
+   
+
     $calls = collect($allItems)->where('type', 'call');
     $lunches = collect($allItems)->where('type', 'lunch');
     $meetings = collect($allItems)->where('type', 'meeting');
@@ -165,6 +174,12 @@
                                                     <p class="field-value">{{ $type_name }}</p>
                                                 </div>
 
+                                                <div class="terms-section">
+                                                    <h3 class="field-label">Pipeline</h3>
+                                                    <p class="field-value">{{ $pipeline }}</p>
+                                                </div>
+
+                                                
 
 
                                                 {{-- <div class="duration-section">
@@ -181,10 +196,28 @@
                                                     <h3 class="field-label">Sales Owner</h3>
                                                     <p class="field-value">{{ $owner_name }}</p>
                                                 </div>
-                                                <div class="start-date-section">
-                                                    <h3 class="field-label">Expected Close Date</h3>
+
+                                                 <div class="date-due-section">
+                                                    <h3 class="field-label">Start Date</h3>
+                                                    <p class="field-value">{{ $lead->start_date }}</p>
+                                                </div>
+
+                                                <div class="date-due-section">
+                                                    <h3 class="field-label">Expected Closing Date</h3>
                                                     <p class="field-value">{{ $lead->closing_date }}</p>
                                                 </div>
+
+                                                <div class="terms-section">
+                                                    <h3 class="field-label">Priority</h3>
+                                                    <p class="field-value">{{ $priority }}</p>
+                                                </div>
+
+
+                                                 </section>
+                                                {{-- <div class="start-date-section">
+                                                    <h3 class="field-label">Expected Close Date</h3>
+                                                    <p class="field-value">{{ $lead->closing_date }}</p>
+                                                </div> --}}
                                                 {{-- <div class="pipeline-section">
                                                 <h3 class="field-label">Pipeline</h3>
                                                 <p class="field-value">Stop &amp; Shop</p>
@@ -195,16 +228,13 @@
                                                 <p class="field-value">High</p>
                                             </div> --}}
 
-                                                <div class="reminders-section">
+                                                {{-- <div class="reminders-section">
                                                     <h3 class="field-label">Reminders</h3>
                                                     <p class="field-value">None</p>
-                                                </div>
+                                                </div> --}}
 
-                                                <div class="date-due-section">
-                                                    <h3 class="field-label">Date Due</h3>
-                                                    <p class="field-value">May 26, 2025</p>
-                                                </div>
-                                            </section>
+                                               
+                                           
 
                                         </div>
 
@@ -339,8 +369,8 @@
                                                     <div class="col-12 col-md-4 ">
                                                         <label for="field1" class="form-label">To</label>
                                                         <div class="position-relative">
-                                                             <select class="form-control tagselect" name="to[]"
-                                                                 multiple="multiple"></select>
+                                                            <select class="form-control tagselect" name="to[]"
+                                                                multiple="multiple"></select>
                                                             <button type="button"
                                                                 class="position-absolute email-sending-option-btn CC cc-toggle">CC</button>
                                                             <button type="button"
@@ -361,15 +391,15 @@
                                                         <label for="firstNameinput"
                                                             class="form-label">{{ __('app.leads.cc') }}</label>
                                                         <select class="form-control tagselect" name="cc[]"
-                                                                 multiple="multiple"></select>
-                                          
+                                                            multiple="multiple"></select>
+
                                                     </div>
                                                     <div class="col-md-4 mb-3 bcc-input d-none">
                                                         <label for="firstNameinput"
                                                             class="form-label">{{ __('app.leads.bcc') }}</label>
-                                                            <select class="form-control tagselect" name="bcc[]"
-                                                                 multiple="multiple"></select>
-                                 
+                                                        <select class="form-control tagselect" name="bcc[]"
+                                                            multiple="multiple"></select>
+
                                                     </div>
 
 
@@ -1244,9 +1274,8 @@
                                                     </div>
                                                 </div>
                                             @endforeach
-                                    
-                                    @endif
-                                        </div>
+                                        @endif
+                                    </div>
                                 </div>
                                 <div class="tab-pane fade" id="events-calls" role="tabpanel"
                                     aria-labelledby="events-calls-tab" tabindex="0">
