@@ -129,12 +129,20 @@
                                                         {{ $errors->first('organization') }}</div>
                                                 @endif
                                             </div>
+                                            
                                              <div class="col-12 col-md-4">
                                                 <label for="field1" class="form-label">Date of Birth</label>
                                                 <input type="date" class="form-control" id="field1" placeholder="Name"
                                                     name="dob" value="{{ old('dob') }}" required>
                                                 @if ($errors->has('dob'))
                                                     <div class="alert alert-danger mt-2">{{ $errors->first('dob') }}</div>
+                                                @endif
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <label for="field1" class="form-label">Picture</label>
+                                                <input type="file" class="form-control" id="Picture" name="picture" value="{{ old('picture') }}" required>
+                                                @if ($errors->has('picture'))
+                                                    <div class="alert alert-danger mt-2">{{ $errors->first('picture') }}</div>
                                                 @endif
                                             </div>
                                             <div class="col-12 col-md-6">

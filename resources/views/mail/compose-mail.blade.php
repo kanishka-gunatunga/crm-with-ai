@@ -35,7 +35,7 @@
                                     <div class="col-12 col-md-4 ">
                                         <label for="field1" class="form-label">{{ __('app.leads.to') }}</label>
                                         <div class="position-relative">
-                                            <select class="form-control tagselect" name="to[]"
+                                            <select class="form-control tagselectemail" name="to[]"
                                                                  multiple="multiple"></select>
                                             <button type="button"
                                                 class="position-absolute email-sending-option-btn CC cc-toggle">{{ __('app.leads.cc') }}</button>
@@ -56,12 +56,12 @@
 
                                         <label for="firstNameinput" class="form-label">{{ __('app.leads.cc') }}</label>
 
-                                      <select class="form-control tagselect" name="cc[]"
+                                      <select class="form-control tagselectemail" name="cc[]"
                                                                  multiple="multiple"></select>
                                     </div>
                                     <div class="col-md-4 mb-3 bcc-input d-none">
                                         <label for="firstNameinput" class="form-label">{{ __('app.leads.bcc') }}</label>
-                                        <select class="form-control tagselect" name="bcc[]"
+                                        <select class="form-control tagselectemail" name="bcc[]"
                                                                  multiple="multiple"></select>
                                     </div>
 
@@ -267,5 +267,37 @@
                 initChoices();
             });
         });
+    </script>
+
+    <script>
+        $('.tagselectemail').select2({
+    tags: true,
+    tokenSeparators: [',', ' '],
+    createTag: function (params) {
+        var term = $.trim(params.term);
+
+        // Simple email validation regex
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (emailRegex.test(term)) {
+            return {
+                id: term,
+                text: term,
+                newTag: true
+            };
+        }
+
+        // Don't create the tag if not a valid email
+        return null;
+    },
+    insertTag: function (data, tag) {
+        // Only insert the tag if it's not null
+        if (tag) {
+            data.push(tag);
+        }
+    }
+});
+
+
     </script>
 @endsection

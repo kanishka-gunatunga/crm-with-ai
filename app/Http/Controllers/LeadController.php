@@ -29,6 +29,7 @@ use App\Models\SentEmails;
 use App\Models\LeadFile;
 use App\Models\Quote;
 use App\Models\Service;
+use App\Models\ActivityHistory;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 
@@ -221,6 +222,7 @@ public function update_pipline_session(Request $request)
             $lead->sales_owner = $request->sales_owner;
             $lead->closing_date = $request->closing_date;
             $lead->description = $request->description;
+            $lead->priority = $request->priority;
             $lead->status = 'active';
             $lead->category = 'qualified';
             $lead->pipeline = $id;
@@ -244,7 +246,14 @@ public function update_pipline_session(Request $request)
                 ]);
             }
         }
-            return redirect()->back()->with('success', 'Lead created successfully!');
+
+        $activity_history =  new ActivityHistory();
+        $activity_history->lead_id = $lead->id;
+        $activity_history->user_id = Auth::user()->id;
+        $activity_history->action = "Lead created";
+        $activity_history->save();
+
+        return redirect()->back()->with('success', 'Lead created successfully!');
         }
     }
 
@@ -345,6 +354,7 @@ public function update_pipline_session(Request $request)
             $lead->sales_owner = $request->sales_owner;
             $lead->closing_date = $request->closing_date;
             $lead->description = $request->description;
+            $lead->priority = $request->priority;
             $lead->person = $person->id;
             $lead->update();
 
@@ -366,6 +376,11 @@ public function update_pipline_session(Request $request)
                 ]);
             }
             }
+            $activity_history =  new ActivityHistory();
+            $activity_history->lead_id = $id;
+            $activity_history->user_id = Auth::user()->id;
+            $activity_history->action = "Lead updated";
+            $activity_history->save();
 
             return redirect()->back()->with('success', 'Lead updated successfully!');
         }
@@ -481,11 +496,23 @@ public function update_lead_stage(Request $request)
 {
     $lead = Lead::find($request->lead_id);
     if ($lead) {
+        $old_stage = $lead->stage;
+        $old_stage_name = PipelineStage::where('id',$old_stage)->value('name');
+        $new_stage_name = PipelineStage::where('id',$request->new_stage_id)->value('name');
+
+
         $lead->stage = $request->new_stage_id;
         $lead->won_value = $request->won_value;
         $lead->closed_date = $request->closed_date;
         $lead->reason = $request->reason;
         $lead->save();
+
+        $activity_history = new ActivityHistory();
+        $activity_history->lead_id = $request->lead_id;
+        $activity_history->user_id = Auth::id();
+        $activity_history->action = "Lead stage changed from {$old_stage_name} to {$request->new_stage_name}";
+        $activity_history->save();
+    
 
         return response()->json(['success' => true, 'message' => 'Stage updated successfully']);
     }
@@ -505,8 +532,16 @@ public function add_lead_note($id,Request $request)
             $lead_note->lead_id = $id;
             $lead_note->note = $request->note;
             $lead_note->save();
+
+            $activity_history = new ActivityHistory();
+            $activity_history->lead_id = $id;
+            $activity_history->source = 'note';
+            $activity_history->source_id = $lead_note->id;
+            $activity_history->user_id = Auth::id();
+            $activity_history->action = "A note (#{$lead_note->id}) has been added.";
+            $activity_history->save();
     
-            return redirect()->back()->with('success', 'Note created successfully!');
+            return redirect()->back()->with('success', 'Note {$old_stage_name} created successfully!');
         }
     }
     public function edit_note($id,Request $request)
@@ -524,20 +559,44 @@ public function add_lead_note($id,Request $request)
     
             $note->note = $request->note;
             $note->update();
-    
+            
+            $activity_history = new ActivityHistory();
+            $activity_history->lead_id = $note->lead_id;
+            $activity_history->source = 'note';
+            $activity_history->source_id = $id;
+            $activity_history->user_id = Auth::id();
+            $activity_history->action = "Note (#{$id}) has been updated.";
+            $activity_history->save();
+
             return redirect()->back()->with('success', 'Note updated successfully!');
         }
     }
-    public function delete_note($id,Request $request)
+   public function delete_note($id, Request $request)
 {
-    if($request->isMethod('get')){
+    if ($request->isMethod('get')) {
 
-        LeadNote::where('id',$id)->delete();
-        return redirect()->back()->with('success', 'Note deleted successfully!');
+        $note = LeadNote::find($id);
 
-     }
-    
+        if ($note) {
+            $lead_id = $note->lead_id;
+
+            $note->delete();
+
+            $activity_history = new ActivityHistory();
+            $activity_history->lead_id = $lead_id;
+            $activity_history->source = 'note';
+            $activity_history->source_id = $id;
+            $activity_history->user_id = Auth::id();
+            $activity_history->action = "Note (#{$id}) has been deleted.";
+            $activity_history->save();
+
+            return redirect()->back()->with('success', 'Note deleted successfully!');
+        }
+
+        return redirect()->back()->with('error', 'Note not found.');
+    }
 }
+
     public function add_lead_activity($id,Request $request)
     {
         if($request->isMethod('post')){
@@ -574,6 +633,14 @@ public function add_lead_note($id,Request $request)
             $lead_activity->save();
     
             $this->addEventToGoogleCalendar($lead_activity);
+
+            $activity_history = new ActivityHistory();
+            $activity_history->lead_id = $id;
+            $activity_history->source = $request->type;
+            $activity_history->source_id = $lead_activity->id;
+            $activity_history->user_id = Auth::id();
+            $activity_history->action = "{$request->type} (#{$lead_activity->id}) has been added.";
+            $activity_history->save();
 
             return redirect()->back()->with('success', 'Activity created successfully!');
         }
@@ -619,32 +686,70 @@ public function add_lead_note($id,Request $request)
             }
             $lead_activity->participants = $participants;
             $lead_activity->update();
-    
+            
+            $activity_history = new ActivityHistory();
+            $activity_history->lead_id = $lead_activity->lead_id;
+            $activity_history->source = $request->type;
+            $activity_history->source_id = $id;
+            $activity_history->user_id = Auth::id();
+            $activity_history->action = "{$request->type} (#{$id}) has been updated.";
+            $activity_history->save();
+
             return redirect()->back()->with('success', 'Activity updated successfully!');
         }
     }
-public function delete_activity($id,Request $request)
+
+public function delete_activity($id, Request $request)
 {
-    if($request->isMethod('get')){
+    if ($request->isMethod('get')) {
 
-        LeadActivity::where('id',$id)->delete();
-        return redirect()->back()->with('success', 'Activity deleted successfully!');
+        $activity = LeadActivity::find($id);
 
-     }
-    
+        if ($activity) {
+            $lead_id = $activity->lead_id;
+            $type = $activity->type;
+
+            $activity->delete();
+
+            $activity_history = new ActivityHistory();
+            $activity_history->lead_id = $lead_id;
+            $activity_history->source = $type;
+            $activity_history->source_id = $id;
+            $activity_history->user_id = Auth::id();
+            $activity_history->action = "{$type} (#{$id}) has been deleted.";
+            $activity_history->save();
+
+           return redirect()->back()->with('success', 'Activity deleted successfully!');
+        }
+
+        return redirect()->back()->with('error', 'Note not found.');
+    }
 }
 public function delete_selected_activities(Request $request)
 {
     $activityIds = $request->input('selected_activities', []);
-    
+
     if (!empty($activityIds)) {
+        $activities = LeadActivity::whereIn('id', $activityIds)->get();
+
+        foreach ($activities as $activity) {
+            $activity_history = new ActivityHistory();
+            $activity_history->lead_id = $activity->lead_id;
+            $activity_history->source = $activity->type;
+            $activity_history->source_id = $activity->id;
+            $activity_history->user_id = Auth::id();
+            $activity_history->action = "{$activity->type} (#{$activity->id}) has been deleted.";
+            $activity_history->save();
+        }
+
         LeadActivity::whereIn('id', $activityIds)->delete();
+
         return back()->with('success', 'Selected activities deleted successfully.');
     }
 
     return back()->with('error', 'No activities selected.');
-    
 }
+
 public function complete_activity($id,Request $request)
     {
         $lead_activity = LeadActivity::where('id',$id)->first();
@@ -652,6 +757,14 @@ public function complete_activity($id,Request $request)
 
             $lead_activity->is_completed =1;
             $lead_activity->update();
+
+            $activity_history = new ActivityHistory();
+            $activity_history->lead_id = $lead_activity->lead_id;
+            $activity_history->source = $lead_activity->type;
+            $activity_history->source_id = $lead_activity->id;
+            $activity_history->user_id = Auth::id();
+            $activity_history->action = "{$lead_activity->type} (#{$lead_activity->id}) has been marked as complete.";
+            $activity_history->save();
 
             return redirect()->back()->with('success', 'Activity marked as completed!');
         }
@@ -693,19 +806,43 @@ public function complete_activity($id,Request $request)
             ->bcc($request->bcc ?? [])
             ->send(new LeadSendEmail($lead_email));
 
+            $activity_history = new ActivityHistory();
+            $activity_history->lead_id = $id;
+            $activity_history->source = 'email';
+            $activity_history->source_id = $lead_email->id;
+            $activity_history->user_id = Auth::id();
+            $activity_history->action = "Email (#{$lead_email->id}) has been sent.";
+            $activity_history->save();
+
             return back()->with('success', 'Lead activity saved and email sent successfully.');
         }
         
     }
-public function delete_email($id,Request $request)
+
+public function delete_email($id, Request $request)
 {
-    if($request->isMethod('get')){
+    if ($request->isMethod('get')) {
 
-        SentEmails::where('id',$id)->delete();
-        return redirect()->back()->with('success', 'Email deleted successfully!');
+        $email = SentEmails::find($id);
 
-     }
-    
+        if ($email) {
+            $lead_id = $email->lead_id;
+
+            $email->delete();
+
+            $activity_history = new ActivityHistory();
+            $activity_history->lead_id = $lead_id;
+            $activity_history->source = 'email';
+            $activity_history->source_id = $id;
+            $activity_history->user_id = Auth::id();
+            $activity_history->action = "Email (#{$id}) has been deleted.";
+            $activity_history->save();
+
+            return redirect()->back()->with('success', 'Email deleted successfully!');
+        }
+
+        return redirect()->back()->with('error', 'Note not found.');
+    }
 }
     public function add_lead_file($id,Request $request)
     {
@@ -724,6 +861,14 @@ public function delete_email($id,Request $request)
             $lead_file->description = $request->description;
             $lead_file->file = $file_name;
             $lead_file->save();
+
+            $activity_history = new ActivityHistory();
+            $activity_history->lead_id = $id;
+            $activity_history->source = 'file';
+            $activity_history->source_id = $lead_file->id;
+            $activity_history->user_id = Auth::id();
+            $activity_history->action = "File (#{$lead_file->id}) has been added.";
+            $activity_history->save();
 
             return back()->with('success', 'Lead file successfully added.');
         }
@@ -756,7 +901,15 @@ public function delete_email($id,Request $request)
             $lead_file->description = $request->description;
             $lead_file->file = $file_name;
             $lead_file->update();
-    
+            
+            $activity_history = new ActivityHistory();
+            $activity_history->lead_id = $lead_file->lead_id;
+            $activity_history->source = 'file';
+            $activity_history->source_id = $id;
+            $activity_history->user_id = Auth::id();
+            $activity_history->action = "File (#{$id}) has been updated.";
+            $activity_history->save();
+
             return redirect()->back()->with('success', 'File updated successfully!');
         }
     }
@@ -782,6 +935,12 @@ public function delete_lead($id,Request $request)
         LeadNote::where('lead_id',$id)->delete();
         LeadProduct::where('lead_id',$id)->delete();
         Quote::where('lead',$id)->delete();
+
+        $activity_history = new ActivityHistory();
+        $activity_history->lead_id = $id;
+        $activity_history->user_id = Auth::id();
+        $activity_history->action = "Lead has been deleted.";
+        $activity_history->save();
         return redirect('leads')->with('success', 'Lead deleted successfully!');
 
      }
@@ -901,11 +1060,22 @@ public function update_activity_status(Request $request)
         $activity->is_completed = $request->status;
         $activity->update();
 
+        $statusText = $request->status == 1 ? 'complete' : 'incomplete';
+
+        $activity_history = new ActivityHistory();
+        $activity_history->lead_id = $activity->lead_id;
+        $activity_history->source = $activity->type;
+        $activity_history->source_id = $activity->id;
+        $activity_history->user_id = Auth::id();
+        $activity_history->action = "{$activity->type} (#{$activity->id}) has been marked as {$statusText}.";
+        $activity_history->save();
+
         return response()->json(['success' => true]);
     }
 
     return response()->json(['success' => false]);
 }
+
 
 
 public function import_leads(Request $request)
@@ -972,6 +1142,12 @@ public function import_leads(Request $request)
             $lead->stage = PipelineStage::where('id',$id)->where('name', 'New')->value('id');
             $lead->person = $person->id;
             $lead->save();
+
+            $activity_history =  new ActivityHistory();
+            $activity_history->lead_id = $lead->id;
+            $activity_history->user_id = Auth::user()->id;
+            $activity_history->action = "Lead created";
+            $activity_history->save();
         }
 
         return back()->with('success', 'Leads Successfully Imported');
@@ -1069,7 +1245,31 @@ function addEventToGoogleCalendar($lead_activity)
     return $event->htmlLink; 
 }
 
+public function update_lead_priority(Request $request)
+{
+    $request->validate([
+        'lead_id' => 'required|exists:leads,id',
+        'priority' => 'required|in:High,Medium,Low',
+    ]);
 
+    $lead = Lead::find($request->lead_id);
+
+    if ($lead) {
+        $old_priority = $lead->priority;
+
+        $lead->priority = $request->priority;
+        $lead->save();
+
+        $activity_history = new ActivityHistory();
+        $activity_history->lead_id = $request->lead_id;
+        $activity_history->user_id = Auth::id();
+        $activity_history->action = "Lead priority changed from {$old_priority} to {$request->priority}";
+        $activity_history->save();
+
+    }
+
+    return response()->json(['status' => 'success']);
+}
 }
 
 

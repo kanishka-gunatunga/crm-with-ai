@@ -324,6 +324,7 @@
                                                                 Delete
                                                             </label>
                                                         </div>
+
                                                     </div>
                                                     <div class="col-md-3">
 
@@ -715,6 +716,39 @@
                                                                 name="permissions[]">
                                                             <label class="form-check-label" for="Configuration">
                                                                 Configuration
+                                                            </label>
+                                                        </div>
+
+                                                         <div class="form-check mb-3">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="Mails" data-group="mails" value="mails"
+                                                                name="permissions[]">
+                                                            <label class="form-check-label" for="mails">
+                                                                Mails
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check mb-3 mx-3">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="MailsCreate" value="mail-create"
+                                                                name="permissions[]" data-parent="mails">
+                                                            <label class="form-check-label" for="MailsCreate">
+                                                                Create
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check mb-3 mx-3">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="MailsEdit" value="mail-edit"
+                                                                name="permissions[]" data-parent="mails">
+                                                            <label class="form-check-label" for="MailsEdit">
+                                                                Edit
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check mb-3 mx-3">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="MailsDelete" value="mail-delete"
+                                                                name="permissions[]" data-parent="mails">
+                                                            <label class="form-check-label" for="MailsDelete">
+                                                                Delete
                                                             </label>
                                                         </div>
                                                     </div>

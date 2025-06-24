@@ -395,41 +395,37 @@ use App\Models\Organization;
                                         <tbody>
                                             <?php
                                             $my_leads = $all_leads->take(10);
-                                            foreach($my_leads as $my_lead){
-                                                 $person_name = Person::where('id', $my_lead->person)->value('name');
+                                            foreach ($my_leads as $my_lead) {
+                                                $person_name = Person::where('id', $my_lead->person)->value('name');
+
+                                                $closing_date = $my_lead->closing_date ? Carbon::parse($my_lead->closing_date) : null;
+                                                $is_within_week = $closing_date && $closing_date->isBetween(Carbon::now(), Carbon::now()->addWeek());
                                             ?>
                                             <tr>
-                                                <td>{{$my_lead->id}}</td>
-                                                <td><a href="{{url('view-lead/'.$my_lead->id)}}"> {{$my_lead->title}}</a></td>
-                                                <td><a href="{{url('persons?id='.$my_lead->person)}}">{{$person_name}}</a></td>
+                                                <td>{{ $my_lead->id }}</td>
+                                                <td><a href="{{ url('view-lead/' . $my_lead->id) }}">{{ $my_lead->title }}</a></td>
+                                                <td><a href="{{ url('persons?id=' . $my_lead->person) }}">{{ $person_name }}</a></td>
                                                 <td class="successBakcgorund">
-                                                    <span class="badge rounded-pill stat-badge-success px-4">{{ \Carbon\Carbon::parse($my_lead->created_at)->format('F j, Y') }}</span>
+                                                    @if ($is_within_week)
+                                                        <span class="badge rounded-pill stat-badge-danger px-4">
+                                                            {{ $closing_date->format('F j, Y') }}
+                                                        </span>
+                                                    @else
+                                                        <span class="badge rounded-pill stat-badge-success px-4">
+                                                            {{ Carbon::parse($my_lead->created_at)->format('F j, Y') }}
+                                                        </span>
+                                                    @endif
                                                 </td>
                                                 <td>
-                                                    <select name="" id="priority-select">
-                                                        <option value="">High</option>
-                                                        <option value="">Medium</option>
-                                                        <option value="">Low</option>
+                                                    <select class="priority-select" data-lead-id="{{ $my_lead->id }}">
+                                                        <option value="High" {{ $my_lead->priority == 'High' ? 'selected' : '' }}>High</option>
+                                                        <option value="Medium" {{ $my_lead->priority == 'Medium' ? 'selected' : '' }}>Medium</option>
+                                                        <option value="Low" {{ $my_lead->priority == 'Low' ? 'selected' : '' }}>Low</option>
                                                     </select>
+                                                    
                                                 </td>
                                             </tr>
                                             <?php } ?>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Create wireframe and high level wireframe </td>
-                                                <td>David Johnson</td>
-                                                <td class="successBakcgorund">
-                                                    <span class="badge rounded-pill stat-badge-danger px-4">May 9,
-                                                        2025</span>
-                                                </td>
-                                                <td>
-                                                    <select name="" id="priority-select">
-                                                        <option value="">High</option>
-                                                        <option value="">Medium</option>
-                                                        <option value="">Low</option>
-                                                    </select>
-                                                </td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                     </div>
@@ -1111,29 +1107,38 @@ use App\Models\Organization;
     const ctx9 = document.getElementById('sourcesYearlyChart').getContext('2d');
 
      const commonOptions = {
-        responsive: true,
-        indexAxis: 'y',
-        plugins: {
-            tooltip: {
-                mode: 'index',
-                intersect: false,
-            },
-            legend: {
-                display: false,
-                position: 'bottom',
-            }
+    responsive: true,
+    indexAxis: 'y',
+    plugins: {
+        tooltip: {
+            mode: 'index',
+            intersect: false,
         },
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: { stepSize: 10 },
-                grid: { color: '#e0e0e0' }
-            },
-            x: {
-                grid: { display: false }
-            }
+        legend: {
+            display: false,
+            position: 'bottom',
         }
-    };
+    },
+    scales: {
+        y: {
+            beginAtZero: true,
+            ticks: {
+                stepSize: 1, // you can adjust this if needed
+            },
+            grid: { color: '#e0e0e0' }
+        },
+        x: {
+            ticks: {
+                callback: function(value) {
+                    return Number.isInteger(value) ? value : '';
+                },
+                precision: 0, // Ensure Chart.js doesn't add decimals
+            },
+            grid: { display: false }
+        }
+    }
+};
+
 
     const sourcesWeeklyChart = new Chart(ctx7, {
         type: 'bar',
@@ -1336,5 +1341,42 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchEvents(formatDate(currentDate));
 });
 </script>
+<script>
+    $(document).ready(function () {
+        $('.priority-select').on('change', function () {
+            var leadId = $(this).data('lead-id');
+            var newPriority = $(this).val();
 
+            $.ajax({
+                url: '{{ url("/update-lead-priority") }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    lead_id: leadId,
+                    priority: newPriority
+                },
+                success: function (response) {
+                    Swal.fire({
+                        toast: true,
+                        icon: 'success',
+                        title: 'Priority updated successfully',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true
+                    }); 
+                },
+                error: function (xhr) {
+                    Swal.fire({
+                        toast: true,
+                        icon: 'error',
+                        title: 'Failed to update priority',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true
+                    });
+                }
+            });
+        });
+    });
+</script>
 @endsection
