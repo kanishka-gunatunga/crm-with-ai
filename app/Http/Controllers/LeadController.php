@@ -412,6 +412,7 @@ public function update_pipline_session(Request $request)
         $lead_emails = SentEmails::where('lead_id',$id)->get();
         $files = LeadFile::where('lead_id',$id)->get();
         $quotes = Quote::where('lead',$id)->get();
+        $activity_logs = ActivityHistory::orderBy('id', 'DESC')->where('lead_id',$id)->get();
 
         $allItems = [];
 
@@ -447,7 +448,7 @@ public function update_pipline_session(Request $request)
         return view('leads.view_lead', ['sources' => $sources,'types' => $types,'owners' => $owners,
         'persons' => $persons,'organizations' => $organizations,'products' => $products,'lead' => $lead,'lead_products' => $lead_products
         ,'stages' => $stages,'notes' => $notes,'actvities' => $actvities,'lead_emails' => $lead_emails,'files' => $files,'quotes' => $quotes
-        ,'allItems' => $allItems]);
+        ,'allItems' => $allItems,'activity_logs' => $activity_logs]);
     }
 
     if ($request->isMethod('post')) {
@@ -512,7 +513,7 @@ public function update_lead_stage(Request $request)
         $activity_history = new ActivityHistory();
         $activity_history->lead_id = $request->lead_id;
         $activity_history->user_id = Auth::id();
-        $activity_history->action = "Lead stage changed from {$old_stage_name} to {$request->new_stage_name}";
+        $activity_history->action = "Lead stage changed from {$old_stage_name} to {$new_stage_name}";
         $activity_history->save();
     
 

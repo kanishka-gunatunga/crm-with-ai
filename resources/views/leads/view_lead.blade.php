@@ -1868,39 +1868,28 @@
                     <div>
                         <h5 class="mb-3 card-title">Activities</h5>
                     </div>
-                    <div class="d-flex">
-                        <div class="col-5">
-                            <div class="d-flex gap-3 align-items-center mb-3">
-                                <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
-                                    class="rounded-circle object-fit-cover" alt="..." width="30"
-                                    height="30">
-
-                                <p class="person-name">Robert Bacins</p>
-                            </div>
-                        </div>
-                        <div class="col-4 event-timestamp mb-3">
-                            <span>May 26, 2025 10:00</span>
-                            <span>></span>
-                            <span>Warranty Claimed</span>
-                        </div>
-                    </div>
+                    <?php foreach($activity_logs as $activity_log){ 
+                        $user_name = UserDetails::where('id', $activity_log->user_id)->value('name');
+                    ?>
 
                     <div class="d-flex">
                         <div class="col-5">
                             <div class="d-flex gap-3 align-items-center mb-3">
-                                <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
+                                <img src="{{ asset('images/user.png') }}"
                                     class="rounded-circle object-fit-cover" alt="..." width="30"
                                     height="30">
 
-                                <p class="person-name">Robert Bacins</p>
+                                <p class="person-name">{{$user_name}}</p>
                             </div>
                         </div>
                         <div class="col-4 event-timestamp mb-3">
-                            <span>May 26, 2025 10:00</span>
+                            <span>{{ \Carbon\Carbon::parse($activity_log->created_at)->format('F d, Y H:i') }}</span>
                             <span>></span>
-                            <span>Warranty Claimed</span>
+                            <span>{{$activity_log->action}}</span>
                         </div>
                     </div>
+                    <?php } ?>
+                    
                 </div>
             </div>
 
