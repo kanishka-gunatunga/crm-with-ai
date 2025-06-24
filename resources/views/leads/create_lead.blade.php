@@ -74,7 +74,7 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                  
+
 
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Type</label>
@@ -107,7 +107,27 @@
                                                     </div>
                                                 @endif
                                             </div>
+                                            <div class="col-12 col-md-4">
+                                                <label for="field2" class="form-label">Priority</label>
+                                                <select class="form-control" name="priority" required>
+                                                    <option value="Urgent">Urgent</option>
+                                                    <option value="High">High</option>
+                                                    <option value="Medium">Medium</option>
+                                                    <option value="Low">Low</option>
+                                                </select>
+                                            </div>
 
+
+                                            <div class="col-12 col-md-4">
+                                                <label for="field2" class="form-label">Start Date</label>
+                                                <input type="date" class="form-control" name="start_date"
+                                                    value="{{ old('start_date') }}" required>
+                                                @if ($errors->has('start_date'))
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $errors->first('start_date') }}
+                                                    </div>
+                                                @endif
+                                            </div>
 
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Expected Closing
@@ -120,14 +140,9 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                            <div class="col-12 col-md-4">
-                                                <select class="form-control" name="priority" required>
-                                                     <option value="Urgent">Urgent</option>
-                                                    <option value="High">High</option>
-                                                    <option value="Medium">Medium</option>
-                                                    <option value="Low">Low</option>
-                                                </select>
-                                            </div>
+
+
+                                            
 
                                             {{-- <div class="col-12 col-md-4">
                                                 <label for="field5" class="form-label">Priority</label>
@@ -172,9 +187,9 @@
                                         <input type="text" class="form-control" id="field5" placeholder="Date Due">
                                     </div> --}}
                                             <!-- <div class="col-12 col-md-4">
-                                                                                                                                            <label for="field5" class="form-label">Reminders</label>
-                                                                                                                                            <input type="text" class="form-control" id="field5" placeholder="Reminders">
-                                                                                                                                        </div> -->
+                                                                                                                                                    <label for="field5" class="form-label">Reminders</label>
+                                                                                                                                                    <input type="text" class="form-control" id="field5" placeholder="Reminders">
+                                                                                                                                                </div> -->
 
                                         </div>
 
@@ -188,7 +203,8 @@
                                     <div class="card-body">
                                         <div class="row g-4 input-fields-container" id="input-fields-container">
                                             <div class="col-12 col-md-4">
-                                                <label for="field1" class="form-label">{{ __('app.leads.name') }}</label>
+                                                <label for="field1"
+                                                    class="form-label">{{ __('app.leads.name') }}</label>
                                                 <select class="form-control stagselect" id="person-select" name="person"
                                                     required>
                                                     <option hidden selected></option>
