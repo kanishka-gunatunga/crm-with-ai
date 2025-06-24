@@ -128,7 +128,8 @@
                                                     <span class="notification-label">{{ $stage->name }} </span>
 
 
-                                                    <span class="notification-badge">{{ $leads->where('stage', $stage->id)->count() }}</span>
+                                                    <span
+                                                        class="notification-badge" id="stage-count-{{ $stage->id }}">{{ $leads->where('stage', $stage->id)->count() }}</span>
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <span class="notification-badge" id="stage-value-{{ $stage->id }}">
@@ -368,6 +369,16 @@
 
                 oldStageValueElement.innerText = "$" + (oldStageValue - leadValue).toLocaleString();
                 newStageValueElement.innerText = "$" + (newStageValue + leadValue).toLocaleString();
+
+
+                let oldStageList = document.querySelector(`[data-status="${oldStage}"]`);
+                let newStageList = document.querySelector(`[data-status="${newStage}"]`);
+
+                let oldStageCount = oldStageList.querySelectorAll('.task-card').length;
+                let newStageCount = newStageList.querySelectorAll('.task-card').length;
+
+                document.getElementById('stage-count-' + oldStage).innerText = oldStageCount;
+                document.getElementById('stage-count-' + newStage).innerText = newStageCount;
             },
             error: function(xhr, status, error) {
                 // console.error("Error updating lead stage", error);

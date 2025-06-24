@@ -120,6 +120,20 @@
                                                     </div>
                                                 @endif
                                             </div>
+                                            <div class="col-12 col-md-4">
+                                                <select class="form-control" name="priority" required>
+                                                     <option value="Urgent">Urgent</option>
+                                                    <option value="High">High</option>
+                                                    <option value="Medium">Medium</option>
+                                                    <option value="Low">Low</option>
+                                                </select>
+                                            </div>
+
+                                            {{-- <div class="col-12 col-md-4">
+                                                <label for="field5" class="form-label">Priority</label>
+                                                <input type="text" class="form-control" id="field5"
+                                                    placeholder="Priority">
+                                            </div> --}}
                                             {{-- <div class="col-12 col-md-4">
                                         <label for="field3" class="form-label">Assign User</label>
 
@@ -158,9 +172,9 @@
                                         <input type="text" class="form-control" id="field5" placeholder="Date Due">
                                     </div> --}}
                                             <!-- <div class="col-12 col-md-4">
-                                                                                                                                <label for="field5" class="form-label">Reminders</label>
-                                                                                                                                <input type="text" class="form-control" id="field5" placeholder="Reminders">
-                                                                                                                            </div> -->
+                                                                                                                                            <label for="field5" class="form-label">Reminders</label>
+                                                                                                                                            <input type="text" class="form-control" id="field5" placeholder="Reminders">
+                                                                                                                                        </div> -->
 
                                         </div>
 
@@ -313,7 +327,7 @@
 
 
 
-                                <div class="col-md-12 p-4">
+                                {{-- <div class="col-md-12 p-4">
                                     <div class="d-flex gap-3 mb-3 align-items-center">
                                         <div>
                                             <p class="m-0">Attachments </p>
@@ -341,7 +355,7 @@
                                         </div>
 
                                     </div>
-                                </div>
+                                </div> --}}
 
 
                             </div>

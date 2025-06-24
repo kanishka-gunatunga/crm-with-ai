@@ -1884,3 +1884,10 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
 
 }
 
+.connectedSortable{
+  height: 400px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 20px;
+}
+
