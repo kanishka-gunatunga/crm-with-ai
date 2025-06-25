@@ -18,8 +18,8 @@
                                     </h3>
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#">Settings</a></li>
-                                            <li class="breadcrumb-item"><a href="#">
+                                            <li class="breadcrumb-item"><a href="{{ url('settings') }}">Settings</a></li>
+                                            <li class="breadcrumb-item"><a href="{{ url('groups') }}">
                                                     {{ __('app.settings.groups.title') }}</a></li>
                                             <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
                                                 {{ __('app.settings.groups.edit-title') }}</li>

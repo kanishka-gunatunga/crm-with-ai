@@ -18,7 +18,7 @@
                                     </h3>
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#">Leads</a></li>
+                                            <li class="breadcrumb-item"><a href="{{ url('leads') }}">Leads</a></li>
                                             <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
                                                 {{ __('app.leads.create-title') }}</li>
                                         </ol>

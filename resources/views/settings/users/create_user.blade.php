@@ -17,9 +17,9 @@
                                     </h3>
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#">Settings</a></li>
+                                            <li class="breadcrumb-item"><a href="{{ url('settings') }}">Settings</a></li>
                                             <li class="breadcrumb-item"><a
-                                                    href="#">{{ __('app.settings.users.title') }}</a></li>
+                                                    href="{{ url('users') }}">{{ __('app.settings.users.title') }}</a></li>
                                             <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
                                                 {{ __('app.settings.users.create-title') }}</li>
                                         </ol>

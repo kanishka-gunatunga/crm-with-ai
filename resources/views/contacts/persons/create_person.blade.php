@@ -19,7 +19,7 @@
 
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#">Contacts</a></li>
+                                            <li class="breadcrumb-item"><a href="{{ url('persons') }}">Perosons</a></li>
                                             <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
                                                 {{ __('app.contacts.persons.create-title') }}</li>
                                         </ol>

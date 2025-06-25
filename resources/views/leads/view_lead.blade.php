@@ -17,15 +17,12 @@
     $owner_name = UserDetails::where('id', $lead->sales_owner)->value('name');
     $person = Person::where('id', $lead->person)->first();
     $organization = Organization::where('id', $lead->organization)->first();
-
+    
     $start_date = Lead::where('id', $lead->id)->value('start_date');
-    $closed_date = Lead::where('id', $lead->id)->value('closed_date');
-    $pipeline =  Lead::where('id', $lead->id)->value('pipeline');
+    $closing_date = Lead::where('id', $lead->id)->value('closing_date');
+    $pipeline = Lead::where('id', $lead->id)->value('pipeline');
     $priority = Lead::where('id', $lead->id)->value('priority');
-
-
-   
-
+    
     $calls = collect($allItems)->where('type', 'call');
     $lunches = collect($allItems)->where('type', 'lunch');
     $meetings = collect($allItems)->where('type', 'meeting');
@@ -41,7 +38,15 @@
                         </h3>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="#">Stop & Shop</a></li>
+                                <li class="breadcrumb-item">
+                                    <a href="#">
+                                        {{ \App\Models\Organization::where(
+                                            'id',
+                                            \App\Models\Person::where('id', $lead->person)->value('organization'),
+                                        )->value('name') ?? 'N/A' }}
+                                        
+                                    </a>
+                                </li>
                                 <li class="breadcrumb-item active current-breadcrumb" aria-current="page">{{ $lead->title }}
                                 </li>
                             </ol>
@@ -179,7 +184,7 @@
                                                     <p class="field-value">{{ $pipeline }}</p>
                                                 </div>
 
-                                                
+
 
 
                                                 {{-- <div class="duration-section">
@@ -197,7 +202,7 @@
                                                     <p class="field-value">{{ $owner_name }}</p>
                                                 </div>
 
-                                                 <div class="date-due-section">
+                                                <div class="date-due-section">
                                                     <h3 class="field-label">Start Date</h3>
                                                     <p class="field-value">{{ $lead->start_date }}</p>
                                                 </div>
@@ -213,12 +218,12 @@
                                                 </div>
 
 
-                                                 </section>
-                                                {{-- <div class="start-date-section">
+                                            </section>
+                                            {{-- <div class="start-date-section">
                                                     <h3 class="field-label">Expected Close Date</h3>
                                                     <p class="field-value">{{ $lead->closing_date }}</p>
                                                 </div> --}}
-                                                {{-- <div class="pipeline-section">
+                                            {{-- <div class="pipeline-section">
                                                 <h3 class="field-label">Pipeline</h3>
                                                 <p class="field-value">Stop &amp; Shop</p>
                                             </div>
@@ -228,13 +233,13 @@
                                                 <p class="field-value">High</p>
                                             </div> --}}
 
-                                                {{-- <div class="reminders-section">
+                                            {{-- <div class="reminders-section">
                                                     <h3 class="field-label">Reminders</h3>
                                                     <p class="field-value">None</p>
                                                 </div> --}}
 
-                                               
-                                           
+
+
 
                                         </div>
 
@@ -1261,7 +1266,7 @@
                                                                 width="30" height="30">
 
                                                             <p class="person-name">
-                                                                Robert Smith
+                                                                {{ $note->person->name ?? 'Unknown Person' }}
                                                             </p>
 
 
@@ -1904,21 +1909,20 @@
                     <div class="d-flex">
                         <div class="col-5">
                             <div class="d-flex gap-3 align-items-center mb-3">
-                                <img src="{{ asset('images/user.png') }}"
-                                    class="rounded-circle object-fit-cover" alt="..." width="30"
-                                    height="30">
+                                <img src="{{ asset('images/user.png') }}" class="rounded-circle object-fit-cover"
+                                    alt="..." width="30" height="30">
 
-                                <p class="person-name">{{$user_name}}</p>
+                                <p class="person-name">{{ $user_name }}</p>
                             </div>
                         </div>
                         <div class="col-4 event-timestamp mb-3">
                             <span>{{ \Carbon\Carbon::parse($activity_log->created_at)->format('F d, Y H:i') }}</span>
                             <span>></span>
-                            <span>{{$activity_log->action}}</span>
+                            <span>{{ $activity_log->action }}</span>
                         </div>
                     </div>
                     <?php } ?>
-                    
+
                 </div>
             </div>
 
@@ -1945,8 +1949,8 @@
                             required>
                     </div>
                     <div class="mb-3">
-                        <label for="firstNameinput" class="form-label">Closed Date</label>
-                        <input type="date" class="form-control" name="closed_date" id="closed_date" required>
+                        <label for="firstNameinput" class="form-label">Closing Date</label>
+                        <input type="date" class="form-control" name="closing_date" id="closing_date" required>
                     </div>
                 </div>
                 <div class="modal-footer">

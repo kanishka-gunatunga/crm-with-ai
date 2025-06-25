@@ -19,9 +19,9 @@
                                     </h3>
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#">Settings</a></li>
+                                            <li class="breadcrumb-item"><a href="{{ url('settings') }}">Settings</a></li>
                                             <li class="breadcrumb-item"><a
-                                                    href="#">{{ __('app.settings.email-templates.title') }}</a></li>
+                                                    href="{{ url('email-templates') }}">{{ __('app.settings.email-templates.title') }}</a></li>
                                             <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
                                                 {{ __('app.settings.email-templates.create-title') }}</li>
                                         </ol>

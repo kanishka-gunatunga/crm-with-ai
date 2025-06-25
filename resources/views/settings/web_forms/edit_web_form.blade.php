@@ -17,8 +17,8 @@
                                     </h3>
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#">Settings</a></li>
-                                            <li class="breadcrumb-item"><a href="#">Web forms</a></li>
+                                            <li class="breadcrumb-item"><a href="{{ url('settings') }}">Settings</a></li>
+                                            <li class="breadcrumb-item"><a href="{{ url('web-forms') }}">Web forms</a></li>
                                             <li class="breadcrumb-item active current-breadcrumb" aria-current="page">Edit
                                                 Web form</li>
                                         </ol>

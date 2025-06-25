@@ -22,7 +22,7 @@
 
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#">Contacts</a></li>
+                                            <li class="breadcrumb-item"><a href="{{ url('persons') }}">Persons</a></li>
                                             <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
                                                 {{ __('app.contacts.persons.edit-title') }}</li>
                                         </ol>

@@ -72,8 +72,8 @@
     margin-right: 15px !important;
 }
 
-.sidenav .nav-link svg:hover {
-    stroke: var(--primary-color);
+.sidenav .nav-link svg :hover {
+    fill: var(--primary-color);
 }
 
 .navbar-nav .nav-link:hover {

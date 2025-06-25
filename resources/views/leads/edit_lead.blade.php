@@ -35,7 +35,7 @@
                                     </h3>
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#">Leads</a></li>
+                                            <li class="breadcrumb-item"><a href="{{ url('leads') }}">Leads</a></li>
                                             <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
                                                 {{ __('app.leads.edit-title') }}</li>
                                         </ol>
@@ -182,7 +182,7 @@
                                                 <label for="field2" class="form-label">Start Date</label>
                                                 <input type="date" class="form-control" name="start_date"
                                                     value="{{ old('start_date', $lead->start_date ? \Carbon\Carbon::parse($lead->start_date)->format('Y-m-d') : '') }}"
-                                                    required>
+                                                    >
                                                 @if ($errors->has('start_date'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('start_date') }}

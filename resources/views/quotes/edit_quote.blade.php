@@ -24,7 +24,7 @@
                                     </h3>
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#"> {{ __('app.quotes.title') }}</a>
+                                            <li class="breadcrumb-item"><a href="{{ url('quotes') }}"> {{ __('app.quotes.title') }}</a>
                                             </li>
                                             <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
                                                 {{ __('app.quotes.edit-title') }}</li>

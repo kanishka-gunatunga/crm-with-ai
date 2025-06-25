@@ -386,15 +386,20 @@
 .time-duration-buttons .nav-item .active {
     background-color: var(--black-color) !important;
 }
-
+/* 
 #priority-select{
     border: none;
     font-family: var(--font-family);
     font-weight: 400;
     font-size: 12px;
+} */
+.dashboard-priority{
+    border: none;
+    font-family: var(--font-family);
 }
-
-
+.successBakcgorund span{
+    font-size: 11px !important;
+}
 .birthday-table{
     border-radius: var(--primary-border-radius);
     border: 1px solid var(--primary-border-color);

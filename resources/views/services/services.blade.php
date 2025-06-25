@@ -27,7 +27,7 @@
 
                                 </div>
 
-                                <span class="button-text">Import Services</span>
+                                <span class="button-text white-btn-text">Import Services</span>
 
 
                             </button>
@@ -35,7 +35,7 @@
 
 
                         <a href="{{ url('create-service') }}">
-                            <button class="import-leads-button">
+                            <button class="create-btn">
                                 <div class="icon-container">
                                     <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
                                         xmlns="http://www.w3.org/2000/svg" class="import-icon">

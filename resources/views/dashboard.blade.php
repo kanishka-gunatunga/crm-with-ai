@@ -4,19 +4,19 @@
 
 @section('content')
 
-<?php
-use Carbon\Carbon;
-use App\Models\Lead;
-use App\Models\Person;
-use App\Models\Organization;
-?>
-<link rel="stylesheet" href="{{ asset('css/custom2.css') }}">
- 
+    <?php
+    use Carbon\Carbon;
+    use App\Models\Lead;
+    use App\Models\Person;
+    use App\Models\Organization;
+    ?>
+    <link rel="stylesheet" href="{{ asset('css/custom2.css') }}">
+
     <div class="page-content">
         <div class="container-fluid">
 
             <!-- start page title -->
-           
+
             <!-- end page title -->
 
             <!-- page-body -->
@@ -28,7 +28,7 @@ use App\Models\Organization;
                                 <div class="row ">
                                     <div class="col-md-9">
                                         <p class="stat-card-title">CUSTOMERS</p>
-                                        <h5 class="stat-card-value">{{number_format(count($all_customers))}}</h5>
+                                        <h5 class="stat-card-value">{{ number_format(count($all_customers)) }}</h5>
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-end">
                                         <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
@@ -48,15 +48,15 @@ use App\Models\Organization;
                                 <span class="badge rounded-pill stat-badge-success">
                                     <svg width="10" height="6" viewBox="0 0 10 6" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75"
-                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round"
+                                            stroke-linejoin="round" />
                                         <path
                                             d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5"
                                             stroke="#00C500" stroke-width="0.75" stroke-linecap="round"
                                             stroke-linejoin="round" />
                                     </svg>
 
-                                    +{{number_format(count($this_month_customers))}}
+                                    +{{ number_format(count($this_month_customers)) }}
 
                                 </span>
                                 <span class="stat-duration">From the last month</span>
@@ -71,7 +71,7 @@ use App\Models\Organization;
                                 <div class="row">
                                     <div class="col-md-9">
                                         <p class="stat-card-title">PRODUCTS</p>
-                                        <h5 class="stat-card-value">{{number_format(count($all_products))}}</h5>
+                                        <h5 class="stat-card-value">{{ number_format(count($all_products)) }}</h5>
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-end">
                                         <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
@@ -89,15 +89,15 @@ use App\Models\Organization;
                                 <span class="badge rounded-pill stat-badge-success">
                                     <svg width="10" height="6" viewBox="0 0 10 6" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75"
-                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round"
+                                            stroke-linejoin="round" />
                                         <path
                                             d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5"
                                             stroke="#00C500" stroke-width="0.75" stroke-linecap="round"
                                             stroke-linejoin="round" />
                                     </svg>
 
-                                    +{{number_format(count($this_month_products))}}
+                                    +{{ number_format(count($this_month_products)) }}
 
                                 </span>
                                 <span class="stat-duration">From the last month</span>
@@ -112,12 +112,11 @@ use App\Models\Organization;
                                 <div class="row ">
                                     <div class="col-md-9">
                                         <p class="stat-card-title">SERVICES</p>
-                                        <h5 class="stat-card-value">{{number_format(count($all_services))}}</h5>
+                                        <h5 class="stat-card-value">{{ number_format(count($all_services)) }}</h5>
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-end">
                                         <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                             <rect width="25" height="25" rx="5" fill="#E7F7F2" />
                                             <rect x="4.5" y="4.5" width="16" height="16"
                                                 fill="url(#pattern0_2_135)" />
@@ -148,7 +147,7 @@ use App\Models\Organization;
                                             stroke-linejoin="round" />
                                     </svg>
 
-                                    +{{number_format(count($this_month_services))}}
+                                    +{{ number_format(count($this_month_services)) }}
 
                                 </span>
                                 <span class="stat-duration">From the last month</span>
@@ -163,7 +162,7 @@ use App\Models\Organization;
                                 <div class="row ">
                                     <div class="col-md-9">
                                         <p class="stat-card-title">TOTAL LEADS</p>
-                                        <h5 class="stat-card-value">{{number_format(count($all_leads))}}</h5>
+                                        <h5 class="stat-card-value">{{ number_format(count($all_leads)) }}</h5>
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-end">
                                         <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
@@ -191,7 +190,7 @@ use App\Models\Organization;
                                     </svg>
 
 
-                                    +{{number_format(count($this_month_leads))}}
+                                    +{{ number_format(count($this_month_leads)) }}
 
                                 </span>
                                 <span class="stat-duration">From the last month</span>
@@ -206,12 +205,11 @@ use App\Models\Organization;
                                 <div class="row ">
                                     <div class="col-md-9">
                                         <p class="stat-card-title">ACTIVE LEADS</p>
-                                        <h5 class="stat-card-value">{{number_format(count($all_new_leads))}}</h5>
+                                        <h5 class="stat-card-value">{{ number_format(count($all_new_leads)) }}</h5>
                                     </div>
                                     <div class="col-md-3 d-flex justify-content-end">
                                         <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                             <rect width="25" height="25" rx="5" fill="#FFE5F9" />
                                             <rect x="5" y="5" width="16" height="16"
                                                 fill="url(#pattern0_2_173)" />
@@ -241,7 +239,7 @@ use App\Models\Organization;
                                             stroke-linejoin="round" />
                                     </svg>
 
-                                    +{{number_format(count($this_month_new_leads))}}
+                                    +{{ number_format(count($this_month_new_leads)) }}
 
                                 </span>
                                 <span class="stat-duration">From the last month</span>
@@ -256,100 +254,148 @@ use App\Models\Organization;
                         <div class="card card-default leadsOverview">
 
 
-                                <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center">
-                                    <div class="d-md-none d-flex flex-column flex-md-row justify-content-md-between align-items-md-center w-100">
-                                        <div>
-                                            <h2 class="dashboard-card-heder text-center text-md-start mb-3 mb-md-0">Leads Overview</h2>
-                                        </div>
-                                        <div class="d-flex flex-column flex-md-row gap-3 gap-md-5 w-100 w-md-auto align-items-center justify-content-center justify-content-md-start">
-                                            <div class="text-center text-md-start">
-                                                <div class="stat-duration">Overall Success rate</div>
-                                                <span class="badge rounded-pill stat-badge-success">
-                                                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" />
-                                                        <path d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" />
-                                                    </svg>
-                                                    {{number_format($overallSuccessRate)}}
-                                                </span>
-                                            </div>
-
-                                            <div class="text-center text-md-start">
-                                                <div class="stat-duration">Success Count</div>
-                                                <span class="badge rounded-pill stat-badge-success">
-                                                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" />
-                                                        <path d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" />
-                                                    </svg>
-                                                     {{number_format($wonLeadsCount)}}
-                                                </span>
-                                            </div>
-                                            <div class="time-duration-buttons dashboard-tabs w-100 w-md-auto">
-                                                <ul class="nav nav-pills d-flex justify-content-around justify-content-md-start" id="pills-tab-mobile" role="tablist">
-                                                    <li class="nav-item flex-grow-1 flex-md-grow-0 text-center" role="presentation">
-                                                        <button class="nav-link active w-100 w-md-auto" id="pills-weekly-tab-mobile" data-bs-toggle="pill" data-bs-target="#pills-weekly" type="button" role="tab" aria-controls="pills-weekly" aria-selected="true">Weekly</button>
-                                                    </li>
-                                                    <li class="nav-item flex-grow-1 flex-md-grow-0 text-center" role="presentation">
-                                                        <button class="nav-link w-100 w-md-auto" id="pills-monthly-tab-mobile" data-bs-toggle="pill" data-bs-target="#pills-monthly" type="button" role="tab" aria-controls="pills-monthly" aria-selected="false">Monthly</button>
-                                                    </li>
-                                                    <li class="nav-item flex-grow-1 flex-md-grow-0 text-center" role="presentation">
-                                                        <button class="nav-link w-100 w-md-auto" id="pills-yearly-tab-mobile" data-bs-toggle="pill" data-bs-target="#pills-yearly" type="button" role="tab" aria-controls="pills-yearly" aria-selected="false">Yearly</button>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
+                            <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center">
+                                <div
+                                    class="d-md-none d-flex flex-column flex-md-row justify-content-md-between align-items-md-center w-100">
+                                    <div>
+                                        <h2 class="dashboard-card-heder text-center text-md-start mb-3 mb-md-0">Leads
+                                            Overview</h2>
                                     </div>
-
-                                    <div class="d-none d-md-flex justify-content-between w-100">
-                                        <div>
-                                            <h2 class="dashboard-card-heder">Leads Overview</h2>
+                                    <div
+                                        class="d-flex flex-column flex-md-row gap-3 gap-md-5 w-100 w-md-auto align-items-center justify-content-center justify-content-md-start">
+                                        <div class="text-center text-md-start">
+                                            <div class="stat-duration">Overall Success rate</div>
+                                            <span class="badge rounded-pill stat-badge-success">
+                                                <svg width="10" height="6" viewBox="0 0 10 6" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path
+                                                        d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5"
+                                                        stroke="#00C500" stroke-width="0.75" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                                {{ number_format($overallSuccessRate) }}
+                                            </span>
                                         </div>
-                                        <div class="d-flex gap-5">
-                                            <div>
-                                                <div class="stat-duration">Overall Success rate</div>
-                                                <span class="badge rounded-pill stat-badge-success">
-                                                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" />
-                                                        <path d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" />
-                                                    </svg>
-                                                    {{number_format($overallSuccessRate)}}
-                                                </span>
-                                            </div>
-                                            <div>
-                                                <div class="stat-duration">Success Count</div>
-                                                <span class="badge rounded-pill stat-badge-success">
-                                                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" />
-                                                        <path d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" />
-                                                    </svg>
-                                                    {{number_format($wonLeadsCount)}}
-                                                </span>
-                                            </div>
-                                            <div class="time-duration-buttons dashboard-tabs">
-                                                <ul class="nav nav-pills" id="pills-tab-desktop" role="tablist">
-                                                    <li class="nav-item" role="presentation">
-                                                        <button class="nav-link active" id="pills-weekly-tab-desktop" data-bs-toggle="pill" data-bs-target="#pills-weekly" type="button" role="tab" aria-controls="pills-weekly" aria-selected="true">Weekly</button>
-                                                    </li>
-                                                    <li class="nav-item" role="presentation">
-                                                        <button class="nav-link" id="pills-monthly-tab-desktop" data-bs-toggle="pill" data-bs-target="#pills-monthly" type="button" role="tab" aria-controls="pills-monthly" aria-selected="false">Monthly</button>
-                                                    </li>
-                                                    <li class="nav-item" role="presentation">
-                                                        <button class="nav-link" id="pills-yearly-tab-desktop" data-bs-toggle="pill" data-bs-target="#pills-yearly" type="button" role="tab" aria-controls="pills-yearly" aria-selected="false">Yearly</button>
-                                                    </li>
-                                                </ul>
-                                            </div>
+
+                                        <div class="text-center text-md-start">
+                                            <div class="stat-duration">Success Count</div>
+                                            <span class="badge rounded-pill stat-badge-success">
+                                                <svg width="10" height="6" viewBox="0 0 10 6" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path
+                                                        d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5"
+                                                        stroke="#00C500" stroke-width="0.75" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                                {{ number_format($wonLeadsCount) }}
+                                            </span>
+                                        </div>
+                                        <div class="time-duration-buttons dashboard-tabs w-100 w-md-auto">
+                                            <ul class="nav nav-pills d-flex justify-content-around justify-content-md-start"
+                                                id="pills-tab-mobile" role="tablist">
+                                                <li class="nav-item flex-grow-1 flex-md-grow-0 text-center"
+                                                    role="presentation">
+                                                    <button class="nav-link active w-100 w-md-auto"
+                                                        id="pills-weekly-tab-mobile" data-bs-toggle="pill"
+                                                        data-bs-target="#pills-weekly" type="button" role="tab"
+                                                        aria-controls="pills-weekly" aria-selected="true">Weekly</button>
+                                                </li>
+                                                <li class="nav-item flex-grow-1 flex-md-grow-0 text-center"
+                                                    role="presentation">
+                                                    <button class="nav-link w-100 w-md-auto" id="pills-monthly-tab-mobile"
+                                                        data-bs-toggle="pill" data-bs-target="#pills-monthly"
+                                                        type="button" role="tab" aria-controls="pills-monthly"
+                                                        aria-selected="false">Monthly</button>
+                                                </li>
+                                                <li class="nav-item flex-grow-1 flex-md-grow-0 text-center"
+                                                    role="presentation">
+                                                    <button class="nav-link w-100 w-md-auto" id="pills-yearly-tab-mobile"
+                                                        data-bs-toggle="pill" data-bs-target="#pills-yearly"
+                                                        type="button" role="tab" aria-controls="pills-yearly"
+                                                        aria-selected="false">Yearly</button>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
-                            
+
+                                <div class="d-none d-md-flex justify-content-between w-100">
+                                    <div>
+                                        <h2 class="dashboard-card-heder">Leads Overview</h2>
+                                    </div>
+                                    <div class="d-flex gap-5">
+                                        <div>
+                                            <div class="stat-duration">Overall Success rate</div>
+                                            <span class="badge rounded-pill stat-badge-success">
+                                                <svg width="10" height="6" viewBox="0 0 10 6" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path
+                                                        d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5"
+                                                        stroke="#00C500" stroke-width="0.75" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                                {{ number_format($overallSuccessRate) }}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <div class="stat-duration">Success Count</div>
+                                            <span class="badge rounded-pill stat-badge-success">
+                                                <svg width="10" height="6" viewBox="0 0 10 6" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path
+                                                        d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5"
+                                                        stroke="#00C500" stroke-width="0.75" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                                {{ number_format($wonLeadsCount) }}
+                                            </span>
+                                        </div>
+                                        <div class="time-duration-buttons dashboard-tabs">
+                                            <ul class="nav nav-pills" id="pills-tab-desktop" role="tablist">
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link active" id="pills-weekly-tab-desktop"
+                                                        data-bs-toggle="pill" data-bs-target="#pills-weekly"
+                                                        type="button" role="tab" aria-controls="pills-weekly"
+                                                        aria-selected="true">Weekly</button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link" id="pills-monthly-tab-desktop"
+                                                        data-bs-toggle="pill" data-bs-target="#pills-monthly"
+                                                        type="button" role="tab" aria-controls="pills-monthly"
+                                                        aria-selected="false">Monthly</button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link" id="pills-yearly-tab-desktop"
+                                                        data-bs-toggle="pill" data-bs-target="#pills-yearly"
+                                                        type="button" role="tab" aria-controls="pills-yearly"
+                                                        aria-selected="false">Yearly</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div>
                                 <div class="tab-content" id="pills-tabContent">
-                                    <div class="tab-pane fade show active" id="pills-weekly" role="tabpanel" aria-labelledby="pills-weekly-tab">
+                                    <div class="tab-pane fade show active" id="pills-weekly" role="tabpanel"
+                                        aria-labelledby="pills-weekly-tab">
                                         <canvas id="weeklyChart"></canvas>
                                     </div>
-                                    <div class="tab-pane fade" id="pills-monthly" role="tabpanel" aria-labelledby="pills-monthly-tab">
+                                    <div class="tab-pane fade" id="pills-monthly" role="tabpanel"
+                                        aria-labelledby="pills-monthly-tab">
                                         <canvas id="monthlyChart"></canvas>
                                     </div>
-                                    <div class="tab-pane fade" id="pills-yearly" role="tabpanel" aria-labelledby="pills-yearly-tab">
+                                    <div class="tab-pane fade" id="pills-yearly" role="tabpanel"
+                                        aria-labelledby="pills-yearly-tab">
                                         <canvas id="yearlyChart"></canvas>
                                     </div>
                                 </div>
@@ -370,9 +416,14 @@ use App\Models\Organization;
                                             <h2 class="dashboard-card-heder">My Leads</h2>
                                         </div>
                                         <div class="mb-4">
-                                           <button class="btn white-btn" data-bs-toggle="offcanvas" data-bs-target="#offFilter" aria-controls="offcanvasRight">
-                                                <svg width="18" height="18" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M2.33333 2.25H11.6667C11.8214 2.25 11.9697 2.31146 12.0791 2.42085C12.1885 2.53025 12.25 2.67862 12.25 2.83333V3.7585C12.25 3.9132 12.1885 4.06155 12.0791 4.17092L8.33758 7.91242C8.22818 8.02179 8.1667 8.17014 8.16667 8.32483V12.0027C8.16666 12.0914 8.14645 12.1789 8.10755 12.2586C8.06866 12.3383 8.01211 12.4081 7.94221 12.4626C7.8723 12.5172 7.79088 12.5551 7.70414 12.5734C7.61739 12.5918 7.5276 12.5901 7.44158 12.5686L6.27492 12.2769C6.14877 12.2453 6.03681 12.1725 5.9568 12.07C5.87679 11.9674 5.83334 11.8411 5.83333 11.7111V8.32483C5.8333 8.17014 5.77182 8.02179 5.66242 7.91242L1.92092 4.17092C1.81151 4.06155 1.75003 3.9132 1.75 3.7585V2.83333C1.75 2.67862 1.81146 2.53025 1.92085 2.42085C2.03025 2.31146 2.17862 2.25 2.33333 2.25Z" stroke="#172635" stroke-width="0.875" stroke-linecap="round" stroke-linejoin="round"></path>
+                                            <button class="btn white-btn" data-bs-toggle="offcanvas"
+                                                data-bs-target="#offFilter" aria-controls="offcanvasRight">
+                                                <svg width="18" height="18" viewBox="0 0 14 15" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M2.33333 2.25H11.6667C11.8214 2.25 11.9697 2.31146 12.0791 2.42085C12.1885 2.53025 12.25 2.67862 12.25 2.83333V3.7585C12.25 3.9132 12.1885 4.06155 12.0791 4.17092L8.33758 7.91242C8.22818 8.02179 8.1667 8.17014 8.16667 8.32483V12.0027C8.16666 12.0914 8.14645 12.1789 8.10755 12.2586C8.06866 12.3383 8.01211 12.4081 7.94221 12.4626C7.8723 12.5172 7.79088 12.5551 7.70414 12.5734C7.61739 12.5918 7.5276 12.5901 7.44158 12.5686L6.27492 12.2769C6.14877 12.2453 6.03681 12.1725 5.9568 12.07C5.87679 11.9674 5.83334 11.8411 5.83333 11.7111V8.32483C5.8333 8.17014 5.77182 8.02179 5.66242 7.91242L1.92092 4.17092C1.81151 4.06155 1.75003 3.9132 1.75 3.7585V2.83333C1.75 2.67862 1.81146 2.53025 1.92085 2.42085C2.03025 2.31146 2.17862 2.25 2.33333 2.25Z"
+                                                        stroke="#172635" stroke-width="0.875" stroke-linecap="round"
+                                                        stroke-linejoin="round"></path>
                                                 </svg>
 
                                                 Filter
@@ -381,19 +432,19 @@ use App\Models\Organization;
                                         </div>
                                     </div>
                                     <div class="table-responsive">
-                                    <table id="buttons-datatables" class="display table new-table bordered-table"
-                                        style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th class="corner-left">#</th>
-                                                <th>Lead Name</th>
-                                                <th>Client</th>
-                                                <th>Date</th>
-                                                <th class="corner-right">Priority</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
+                                        <table id="buttons-datatables" class="display table new-table bordered-table"
+                                            style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th class="corner-left">#</th>
+                                                    <th>Lead Name</th>
+                                                    <th>Client</th>
+                                                    <th>Date</th>
+                                                    <th class="corner-right">Priority</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
                                             $my_leads = $all_leads->take(10);
                                             foreach ($my_leads as $my_lead) {
                                                 $person_name = Person::where('id', $my_lead->person)->value('name');
@@ -401,33 +452,44 @@ use App\Models\Organization;
                                                 $closing_date = $my_lead->closing_date ? Carbon::parse($my_lead->closing_date) : null;
                                                 $is_within_week = $closing_date && $closing_date->isBetween(Carbon::now(), Carbon::now()->addWeek());
                                             ?>
-                                            <tr>
-                                                <td>{{ $my_lead->id }}</td>
-                                                <td><a href="{{ url('view-lead/' . $my_lead->id) }}">{{ $my_lead->title }}</a></td>
-                                                <td><a href="{{ url('persons?id=' . $my_lead->person) }}">{{ $person_name }}</a></td>
-                                                <td class="successBakcgorund">
-                                                    @if ($is_within_week)
-                                                        <span class="badge rounded-pill stat-badge-danger px-4">
-                                                            {{ $closing_date->format('F j, Y') }}
-                                                        </span>
-                                                    @else
-                                                        <span class="badge rounded-pill stat-badge-success px-4">
-                                                            {{ Carbon::parse($my_lead->created_at)->format('F j, Y') }}
-                                                        </span>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <select class="priority-select" data-lead-id="{{ $my_lead->id }}">
-                                                        <option value="High" {{ $my_lead->priority == 'High' ? 'selected' : '' }}>High</option>
-                                                        <option value="Medium" {{ $my_lead->priority == 'Medium' ? 'selected' : '' }}>Medium</option>
-                                                        <option value="Low" {{ $my_lead->priority == 'Low' ? 'selected' : '' }}>Low</option>
-                                                    </select>
-                                                    
-                                                </td>
-                                            </tr>
-                                            <?php } ?>
-                                        </tbody>
-                                    </table>
+                                                <tr>
+                                                    <td>{{ $my_lead->id }}</td>
+                                                    <td><a
+                                                            href="{{ url('view-lead/' . $my_lead->id) }}">{{ $my_lead->title }}</a>
+                                                    </td>
+                                                    <td><a
+                                                            href="{{ url('persons?id=' . $my_lead->person) }}">{{ $person_name }}</a>
+                                                    </td>
+                                                    <td class="successBakcgorund">
+                                                        @if ($is_within_week)
+                                                            <span class="badge rounded-pill stat-badge-danger px-4">
+                                                                {{ $closing_date->format('F j, Y') }}
+                                                            </span>
+                                                        @else
+                                                            <span class="badge rounded-pill stat-badge-success px-4">
+                                                                {{ Carbon::parse($my_lead->created_at)->format('F j, Y') }}
+                                                            </span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <select class="priority-select dashboard-priority"
+                                                            data-lead-id="{{ $my_lead->id }}">
+                                                            <option value="High"
+                                                                {{ $my_lead->priority == 'High' ? 'selected' : '' }}>High
+                                                            </option>
+                                                            <option value="Medium"
+                                                                {{ $my_lead->priority == 'Medium' ? 'selected' : '' }}>
+                                                                Medium</option>
+                                                            <option value="Low"
+                                                                {{ $my_lead->priority == 'Low' ? 'selected' : '' }}>Low
+                                                            </option>
+                                                        </select>
+
+                                                    </td>
+                                                </tr>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -437,185 +499,261 @@ use App\Models\Organization;
 
                         <div class="mt-4">
                             <div class="card card-default leadsOverview">
-                            <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center">
-                            <div class="d-md-none d-flex flex-column flex-md-row justify-content-md-between align-items-md-center w-100">
+                                <div
+                                    class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center">
+                                    <div
+                                        class="d-md-none d-flex flex-column flex-md-row justify-content-md-between align-items-md-center w-100">
+                                        <div>
+                                            <h2 class="dashboard-card-heder text-center text-md-start mb-3 mb-md-0">Lead
+                                                Status</h2>
+                                        </div>
+                                        <div
+                                            class="d-flex flex-column flex-md-row gap-3 gap-md-5 w-100 w-md-auto align-items-center justify-content-center justify-content-md-start">
+                                            <div class="text-center text-md-start">
+                                                <div class="stat-duration">Average Time</div>
+                                                <span class="badge rounded-pill stat-badge-success">
+                                                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path
+                                                            d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5"
+                                                            stroke="#00C500" stroke-width="0.75" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+                                                    +15
+                                                </span>
+                                            </div>
+
+                                            <div class="text-center text-md-start">
+                                                <div class="stat-duration">Win</div>
+                                                <span class="badge rounded-pill stat-badge-success">
+                                                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path
+                                                            d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5"
+                                                            stroke="#00C500" stroke-width="0.75" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+                                                    +15
+                                                </span>
+                                            </div>
+                                            <div class="time-duration-buttons dashboard-tabs w-100 w-md-auto">
+                                                <ul class="nav nav-pills d-flex justify-content-around justify-content-md-start"
+                                                    id="pills-tab-mobile-status" role="tablist">
+                                                    <li class="nav-item flex-grow-1 flex-md-grow-0 text-center"
+                                                        role="presentation">
+                                                        <button class="nav-link active w-100 w-md-auto"
+                                                            id="pills-weekly-status-tab-mobile" data-bs-toggle="pill"
+                                                            data-bs-target="#pills-weekly-status" type="button"
+                                                            role="tab" aria-controls="pills-weekly-status"
+                                                            aria-selected="true">Weekly</button>
+                                                    </li>
+                                                    <li class="nav-item flex-grow-1 flex-md-grow-0 text-center"
+                                                        role="presentation">
+                                                        <button class="nav-link w-100 w-md-auto"
+                                                            id="pills-monthly-status-tab-mobile" data-bs-toggle="pill"
+                                                            data-bs-target="#pills-monthly-status" type="button"
+                                                            role="tab" aria-controls="pills-monthly-status"
+                                                            aria-selected="false">Monthly</button>
+                                                    </li>
+                                                    <li class="nav-item flex-grow-1 flex-md-grow-0 text-center"
+                                                        role="presentation">
+                                                        <button class="nav-link w-100 w-md-auto"
+                                                            id="pills-yearly-status-tab-mobile" data-bs-toggle="pill"
+                                                            data-bs-target="#pills-yearly-status" type="button"
+                                                            role="tab" aria-controls="pills-yearly-status"
+                                                            aria-selected="false">Yearly</button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-none d-md-flex justify-content-between w-100">
+                                        <div>
+                                            <h2 class="dashboard-card-heder">Lead Status</h2>
+                                        </div>
+                                        <div class="d-flex gap-5">
+                                            <div>
+                                                <div class="stat-duration">Average Time</div>
+                                                <span class="badge rounded-pill stat-badge-success">
+                                                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path
+                                                            d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5"
+                                                            stroke="#00C500" stroke-width="0.75" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+                                                    +15
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <div class="stat-duration">Win</div>
+                                                <span class="badge rounded-pill stat-badge-success">
+                                                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path
+                                                            d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5"
+                                                            stroke="#00C500" stroke-width="0.75" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+                                                    +15
+                                                </span>
+                                            </div>
+                                            <div class="time-duration-buttons dashboard-tabs">
+                                                <ul class="nav nav-pills" id="pills-tab-desktop-status" role="tablist">
+                                                    <li class="nav-item" role="presentation">
+                                                        <button class="nav-link active"
+                                                            id="pills-weekly-status-tab-desktop" data-bs-toggle="pill"
+                                                            data-bs-target="#pills-weekly-status" type="button"
+                                                            role="tab" aria-controls="pills-weekly-status"
+                                                            aria-selected="true">Weekly</button>
+                                                    </li>
+                                                    <li class="nav-item" role="presentation">
+                                                        <button class="nav-link" id="pills-monthly-status-tab-desktop"
+                                                            data-bs-toggle="pill" data-bs-target="#pills-monthly-status"
+                                                            type="button" role="tab"
+                                                            aria-controls="pills-monthly-status"
+                                                            aria-selected="false">Monthly</button>
+                                                    </li>
+                                                    <li class="nav-item" role="presentation">
+                                                        <button class="nav-link" id="pills-yearly-status-tab-desktop"
+                                                            data-bs-toggle="pill" data-bs-target="#pills-yearly-status"
+                                                            type="button" role="tab"
+                                                            aria-controls="pills-yearly-status"
+                                                            aria-selected="false">Yearly</button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div>
-                                    <h2 class="dashboard-card-heder text-center text-md-start mb-3 mb-md-0">Lead Status</h2>
-                                </div>
-                                <div class="d-flex flex-column flex-md-row gap-3 gap-md-5 w-100 w-md-auto align-items-center justify-content-center justify-content-md-start">
-                                    <div class="text-center text-md-start">
-                                        <div class="stat-duration">Average Time</div>
-                                        <span class="badge rounded-pill stat-badge-success">
-                                            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-                                            +15
-                                        </span>
+                                    <div class="tab-content" id="pills-tabContent">
+                                        <div class="tab-pane fade show active" id="pills-weekly-status" role="tabpanel"
+                                            aria-labelledby="pills-weekly-status-tab">
+                                            <canvas id="statusWeeklyChart"></canvas>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-monthly-status" role="tabpanel"
+                                            aria-labelledby="pills-monthly-status-tab">
+                                            <canvas id="statusMonthlyChart"></canvas>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-yearly-status" role="tabpanel"
+                                            aria-labelledby="pills-yearly-status-tab">
+                                            <canvas id="statusYearlyChart"></canvas>
+                                        </div>
                                     </div>
+                                </div>
 
-                                    <div class="text-center text-md-start">
-                                        <div class="stat-duration">Win</div>
-                                        <span class="badge rounded-pill stat-badge-success">
-                                            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-                                            +15
-                                        </span>
-                                    </div>
-                                    <div class="time-duration-buttons dashboard-tabs w-100 w-md-auto">
-                                        <ul class="nav nav-pills d-flex justify-content-around justify-content-md-start" id="pills-tab-mobile-status" role="tablist">
-                                            <li class="nav-item flex-grow-1 flex-md-grow-0 text-center" role="presentation">
-                                                <button class="nav-link active w-100 w-md-auto" id="pills-weekly-status-tab-mobile" data-bs-toggle="pill" data-bs-target="#pills-weekly-status" type="button" role="tab" aria-controls="pills-weekly-status" aria-selected="true">Weekly</button>
-                                            </li>
-                                            <li class="nav-item flex-grow-1 flex-md-grow-0 text-center" role="presentation">
-                                                <button class="nav-link w-100 w-md-auto" id="pills-monthly-status-tab-mobile" data-bs-toggle="pill" data-bs-target="#pills-monthly-status" type="button" role="tab" aria-controls="pills-monthly-status" aria-selected="false">Monthly</button>
-                                            </li>
-                                            <li class="nav-item flex-grow-1 flex-md-grow-0 text-center" role="presentation">
-                                                <button class="nav-link w-100 w-md-auto" id="pills-yearly-status-tab-mobile" data-bs-toggle="pill" data-bs-target="#pills-yearly-status" type="button" role="tab" aria-controls="pills-yearly-status" aria-selected="false">Yearly</button>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="d-none d-md-flex justify-content-between w-100">
-                                <div>
-                                    <h2 class="dashboard-card-heder">Lead Status</h2>
-                                </div>
-                                <div class="d-flex gap-5">
-                                    <div>
-                                        <div class="stat-duration">Average Time</div>
-                                        <span class="badge rounded-pill stat-badge-success">
-                                            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-                                            +15
-                                        </span>
-                                    </div>
-                                    <div>
-                                        <div class="stat-duration">Win</div>
-                                        <span class="badge rounded-pill stat-badge-success">
-                                            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M9 3.5V1H6.5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M9 1L6.5 3.5C6.0585 3.9415 5.838 4.162 5.5675 4.1865C5.5225 4.1905 5.4775 4.1905 5.4325 4.1865C5.162 4.1615 4.9415 3.9415 4.5 3.5C4.0585 3.0585 3.838 2.838 3.5675 2.8135C3.52259 2.80944 3.47741 2.80944 3.4325 2.8135C3.162 2.8385 2.9415 3.0585 2.5 3.5L1 5" stroke="#00C500" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-                                            +15
-                                        </span>
-                                    </div>
-                                    <div class="time-duration-buttons dashboard-tabs">
-                                        <ul class="nav nav-pills" id="pills-tab-desktop-status" role="tablist">
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link active" id="pills-weekly-status-tab-desktop" data-bs-toggle="pill" data-bs-target="#pills-weekly-status" type="button" role="tab" aria-controls="pills-weekly-status" aria-selected="true">Weekly</button>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="pills-monthly-status-tab-desktop" data-bs-toggle="pill" data-bs-target="#pills-monthly-status" type="button" role="tab" aria-controls="pills-monthly-status" aria-selected="false">Monthly</button>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="pills-yearly-status-tab-desktop" data-bs-toggle="pill" data-bs-target="#pills-yearly-status" type="button" role="tab" aria-controls="pills-yearly-status" aria-selected="false">Yearly</button>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
-                            <div>
-                                <div class="tab-content" id="pills-tabContent">
-                                    <div class="tab-pane fade show active" id="pills-weekly-status" role="tabpanel" aria-labelledby="pills-weekly-status-tab">
-                                        <canvas id="statusWeeklyChart"></canvas>
-                                    </div>
-                                    <div class="tab-pane fade" id="pills-monthly-status" role="tabpanel" aria-labelledby="pills-monthly-status-tab">
-                                        <canvas id="statusMonthlyChart"></canvas>
-                                    </div>
-                                    <div class="tab-pane fade" id="pills-yearly-status" role="tabpanel" aria-labelledby="pills-yearly-status-tab">
-                                        <canvas id="statusYearlyChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
 
-
-                        </div>
-                        </div>
-
-
-                       <div class="mt-4">
+                        <div class="mt-4">
                             <div class="card card-default leadsOverview">
-                            <div class="d-flex justify-content-between">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h2 class="dashboard-card-heder">Sources</h2>
+                                    </div>
+                                    <div class="d-flex gap-5">
+
+                                        <div class="time-duration-buttons dashboard-tabs">
+                                            <ul class="nav nav-pills " id="pills-tab" role="tablist">
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link active" id="pills-weekly-sources-tab"
+                                                        data-bs-toggle="pill" data-bs-target="#pills-weekly-sources"
+                                                        type="button" role="tab"
+                                                        aria-controls="pills-weekly-sources"
+                                                        aria-selected="true">Weekly</button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link" id="pills-monthly-sources-tab"
+                                                        data-bs-toggle="pill" data-bs-target="#pills-monthly-sources"
+                                                        type="button" role="tab"
+                                                        aria-controls="pills-monthly-sources"
+                                                        aria-selected="false">Monthly</button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link" id="pills-yearly-sources-tab"
+                                                        data-bs-toggle="pill" data-bs-target="#pills-yearly-sources"
+                                                        type="button" role="tab"
+                                                        aria-controls="pills-yearly-sources"
+                                                        aria-selected="false">Yearly</button>
+                                                </li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
                                 <div>
-                                    <h2 class="dashboard-card-heder">Sources</h2>
-                                </div>
-                                <div class="d-flex gap-5">
-                                    
-                                    <div class="time-duration-buttons dashboard-tabs">
-                                        <ul class="nav nav-pills " id="pills-tab" role="tablist">
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link active" id="pills-weekly-sources-tab" data-bs-toggle="pill" data-bs-target="#pills-weekly-sources" type="button" role="tab" aria-controls="pills-weekly-sources" aria-selected="true">Weekly</button>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="pills-monthly-sources-tab" data-bs-toggle="pill" data-bs-target="#pills-monthly-sources" type="button" role="tab" aria-controls="pills-monthly-sources" aria-selected="false">Monthly</button>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <button class="nav-link" id="pills-yearly-sources-tab" data-bs-toggle="pill" data-bs-target="#pills-yearly-sources" type="button" role="tab" aria-controls="pills-yearly-sources" aria-selected="false">Yearly</button>
-                                            </li>
-                                        </ul>
-
+                                    <div class="tab-content" id="pills-tabContent">
+                                        <div class="tab-pane fade show active" id="pills-weekly-sources" role="tabpanel"
+                                            aria-labelledby="pills-weekly-sources-tab">
+                                            <canvas id="sourcesWeeklyChart"></canvas>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-monthly-sources" role="tabpanel"
+                                            aria-labelledby="pills-monthly-sources-tab">
+                                            <canvas id="sourcesMonthlyChart"></canvas>
+                                        </div>
+                                        <div class="tab-pane fade" id="pills-yearly-sources" role="tabpanel"
+                                            aria-labelledby="pills-yearly-sources-tab">
+                                            <canvas id="sourcesYearlyChart"></canvas>
+                                        </div>
                                     </div>
                                 </div>
 
 
                             </div>
-
-                            <div>
-                                <div class="tab-content" id="pills-tabContent">
-                                    <div class="tab-pane fade show active" id="pills-weekly-sources" role="tabpanel" aria-labelledby="pills-weekly-sources-tab">
-                                        <canvas id="sourcesWeeklyChart"></canvas>
-                                    </div>
-                                    <div class="tab-pane fade" id="pills-monthly-sources" role="tabpanel" aria-labelledby="pills-monthly-sources-tab">
-                                        <canvas id="sourcesMonthlyChart"></canvas>
-                                    </div>
-                                    <div class="tab-pane fade" id="pills-yearly-sources" role="tabpanel" aria-labelledby="pills-yearly-sources-tab">
-                                        <canvas id="sourcesYearlyChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                        </div>
                         </div>
                     </div>
 
                     <div class="col-md-4">
-                       
+
 
                         <div class="card card-default">
                             <div class="card-body">
                                 <div class="calendar-container">
-                                <div class="calendar-header">
-                                    <h2 id="calendar-month" class="dashboard-card-heder">January 2025</h2>
-                                    <div class="nav-buttons">
-                                        <button id="prev-week"><i class="fa-solid fa-angle-left"></i></button>
-                                        <button id="next-week"><i class="fa-solid fa-angle-right"></i></button>
+                                    <div class="calendar-header">
+                                        <h2 id="calendar-month" class="dashboard-card-heder">January 2025</h2>
+                                        <div class="nav-buttons">
+                                            <button id="prev-week"><i class="fa-solid fa-angle-left"></i></button>
+                                            <button id="next-week"><i class="fa-solid fa-angle-right"></i></button>
+                                        </div>
+                                    </div>
+
+                                    <div class="calendar-weekdays mt-4">
+                                        <div>Sun</div>
+                                        <div>Mon</div>
+                                        <div>Tue</div>
+                                        <div>Wed</div>
+                                        <div>Thu</div>
+                                        <div>Fri</div>
+                                        <div>Sat</div>
+                                    </div>
+
+                                    <div id="calendar-days" class="calendar-days mt-4">
+                                        <!-- Dates will be injected here by JS -->
+                                    </div>
+
+                                    <div class="events-section">
+                                        <h4>Upcoming Events</h4>
+                                        <ul id="event-list" class="event-list mt-4">
+                                            <!-- Events will be injected here -->
+                                        </ul>
                                     </div>
                                 </div>
-
-                                <div class="calendar-weekdays mt-4">
-                                    <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
-                                </div>
-
-                                <div id="calendar-days" class="calendar-days mt-4">
-                                    <!-- Dates will be injected here by JS -->
-                                </div>
-
-                                <div class="events-section">
-                                    <h4>Upcoming Events</h4>
-                                    <ul id="event-list" class="event-list mt-4">
-                                        <!-- Events will be injected here -->
-                                    </ul>
-                                </div>
-                            </div>
 
 
                             </div>
@@ -633,46 +771,52 @@ use App\Models\Organization;
                                             <h2 class="dashboard-card-heder">Birthdays</h2>
                                         </div>
                                         <div class="mb-4">
-                                            <button class="btn white-btn" data-bs-toggle="offcanvas" data-bs-target="#offFilter" aria-controls="offcanvasRight">
-                                    <svg width="18" height="18" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M2.33333 2.25H11.6667C11.8214 2.25 11.9697 2.31146 12.0791 2.42085C12.1885 2.53025 12.25 2.67862 12.25 2.83333V3.7585C12.25 3.9132 12.1885 4.06155 12.0791 4.17092L8.33758 7.91242C8.22818 8.02179 8.1667 8.17014 8.16667 8.32483V12.0027C8.16666 12.0914 8.14645 12.1789 8.10755 12.2586C8.06866 12.3383 8.01211 12.4081 7.94221 12.4626C7.8723 12.5172 7.79088 12.5551 7.70414 12.5734C7.61739 12.5918 7.5276 12.5901 7.44158 12.5686L6.27492 12.2769C6.14877 12.2453 6.03681 12.1725 5.9568 12.07C5.87679 11.9674 5.83334 11.8411 5.83333 11.7111V8.32483C5.8333 8.17014 5.77182 8.02179 5.66242 7.91242L1.92092 4.17092C1.81151 4.06155 1.75003 3.9132 1.75 3.7585V2.83333C1.75 2.67862 1.81146 2.53025 1.92085 2.42085C2.03025 2.31146 2.17862 2.25 2.33333 2.25Z" stroke="#172635" stroke-width="0.875" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
+                                            <button class="btn white-btn" data-bs-toggle="offcanvas"
+                                                data-bs-target="#offFilter" aria-controls="offcanvasRight">
+                                                <svg width="18" height="18" viewBox="0 0 14 15" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M2.33333 2.25H11.6667C11.8214 2.25 11.9697 2.31146 12.0791 2.42085C12.1885 2.53025 12.25 2.67862 12.25 2.83333V3.7585C12.25 3.9132 12.1885 4.06155 12.0791 4.17092L8.33758 7.91242C8.22818 8.02179 8.1667 8.17014 8.16667 8.32483V12.0027C8.16666 12.0914 8.14645 12.1789 8.10755 12.2586C8.06866 12.3383 8.01211 12.4081 7.94221 12.4626C7.8723 12.5172 7.79088 12.5551 7.70414 12.5734C7.61739 12.5918 7.5276 12.5901 7.44158 12.5686L6.27492 12.2769C6.14877 12.2453 6.03681 12.1725 5.9568 12.07C5.87679 11.9674 5.83334 11.8411 5.83333 11.7111V8.32483C5.8333 8.17014 5.77182 8.02179 5.66242 7.91242L1.92092 4.17092C1.81151 4.06155 1.75003 3.9132 1.75 3.7585V2.83333C1.75 2.67862 1.81146 2.53025 1.92085 2.42085C2.03025 2.31146 2.17862 2.25 2.33333 2.25Z"
+                                                        stroke="#172635" stroke-width="0.875" stroke-linecap="round"
+                                                        stroke-linejoin="round"></path>
+                                                </svg>
 
-                                    Filter
+                                                Filter
 
-                                </button>
+                                            </button>
                                         </div>
                                     </div>
                                     <div class="table-responsive">
-                                    <table id="buttons-datatables" class="display table new-table bordered-table"
-                                        style="width:100%">
-                                       
-                                        <tbody>
-                                        @foreach($persons as $person)
-                                        @php
-                                            $organization = Organization::find($person->organization);
-                                            $dob = Carbon::parse($person->dob);
-                                            $age = $dob->age;
-                                            $todayFormatted = $dob->format('F d, Y');
-                                        @endphp
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img src="{{ asset('images/cake.png') }}" alt="Cake Icon">
-                                                    <div class="mx-2">
-                                                        <strong>{{ $person->name }}</strong><br>
-                                                        {{ $organization->name ?? '-' }}
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>{{ $todayFormatted }}</td>
-                                            <td>{{ $age }} Year{{ $age > 1 ? 's' : '' }} old</td>
-                                        </tr>
-                                    @endforeach
-                                        </tbody>
-                                    </table>
+                                        <table id="buttons-datatables" class="display table new-table bordered-table"
+                                            style="width:100%">
+
+                                            <tbody>
+                                                @foreach ($persons as $person)
+                                                    @php
+                                                        $organization = Organization::find($person->organization);
+                                                        $dob = Carbon::parse($person->dob);
+                                                        $age = $dob->age;
+                                                        $todayFormatted = $dob->format('F d, Y');
+                                                    @endphp
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <img src="{{ asset('images/cake.png') }}"
+                                                                    alt="Cake Icon">
+                                                                <div class="mx-2">
+                                                                    <strong>{{ $person->name }}</strong><br>
+                                                                    {{ $organization->name ?? '-' }}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>{{ $todayFormatted }}</td>
+                                                        <td>{{ $age }} Year{{ $age > 1 ? 's' : '' }} old</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                                 </div>
                             </div>
                         </div>
 
@@ -680,7 +824,11 @@ use App\Models\Organization;
                         <div class="mt-4 ">
                             <div class="card card-default">
                                 <div class="card-body p-0">
-                                        <iframe style="width:100%;border-radius:10px;" height="315" src="https://www.youtube.com/embed/668nUCeBHyY?si=oiVBORx6zDLMBeyO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                    <iframe style="width:100%;border-radius:10px;" height="315"
+                                        src="https://www.youtube.com/embed/668nUCeBHyY?si=oiVBORx6zDLMBeyO"
+                                        title="YouTube video player" frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                                 </div>
                             </div>
                         </div>
@@ -695,17 +843,17 @@ use App\Models\Organization;
                                         <div>
                                             <h2 class="dashboard-card-heder">Pipeline</h2>
                                         </div>
-                  
+
                                     </div>
-                                     <div class="dashbaord-piechart-container">
+                                    <div class="dashbaord-piechart-container">
                                         <canvas id="pipelinePieChart"></canvas>
                                         <div class="align-items-center justify-content-center text-center pie-chart-inner">
-                                            
+
                                             <span class="pepeline-text">Total Pipelines</span>
                                             <span class="pepeline-count" id="totalPipelines">0</span>
                                         </div>
                                     </div>
-                                 </div>
+                                </div>
                             </div>
                         </div>
 
@@ -719,664 +867,679 @@ use App\Models\Organization;
         </div>
     </div>
 
-<style>
-    .leadsOverview {
-        /* width: 100%;
-        max-width: 900px; */
-        /* margin: auto; */
-        background: white;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-</style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .leadsOverview {
+            /* width: 100%;
+            max-width: 900px; */
+            /* margin: auto; */
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-{{-- chart for leeds overview --}}
-<script>
-    const ctx = document.getElementById('weeklyChart').getContext('2d');
-    const ctx2 = document.getElementById('monthlyChart').getContext('2d');
-    const ctx3 = document.getElementById('yearlyChart').getContext('2d');
+    {{-- chart for leeds overview --}}
+    <script>
+        const ctx = document.getElementById('weeklyChart').getContext('2d');
+        const ctx2 = document.getElementById('monthlyChart').getContext('2d');
+        const ctx3 = document.getElementById('yearlyChart').getContext('2d');
 
-    const weeklyChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: @json($weeklyLabels),
-            datasets: [{
-                    label: 'Leads',
-                    data: @json($weeklyAllLeadsData),
-                    backgroundColor: '#4A6CF7',
-                    borderRadius: 6,
-                    barThickness: 20,
-                },
-                {
-                    label: 'Success',
-                    data: @json($weeklyWonLeadsData),
-                    backgroundColor: '#48D3FF',
-                    borderRadius: 6,
-                    barThickness: 20,
-                },
-
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                legend: {
-                    display: true,
-                    position: 'bottom',
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    // max: 100,
-                    ticks: {
-                        stepSize: 20
+        const weeklyChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: @json($weeklyLabels),
+                datasets: [{
+                        label: 'Leads',
+                        data: @json($weeklyAllLeadsData),
+                        backgroundColor: '#4A6CF7',
+                        borderRadius: 6,
+                        barThickness: 20,
                     },
-                    grid: {
-                        color: '#e0e0e0'
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            }
-        }
-    });
-    const monthlyChart = new Chart(ctx2, {
-        type: 'bar',
-        data: {
-            labels: @json($monthlyLabels),
-            datasets: [{
-                    label: 'Leads',
-                    data: @json($monthlyAllLeadsData),
-                    backgroundColor: '#4A6CF7',
-                    borderRadius: 6,
-                    barThickness: 20,
-                },
-                {
-                    label: 'Success',
-                    data: @json($monthlyWonLeadsData),
-                    backgroundColor: '#48D3FF',
-                    borderRadius: 6,
-                    barThickness: 20,
-                },
-
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                legend: {
-                    display: true,
-                    position: 'bottom',
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    // max: 100,
-                    ticks: {
-                        stepSize: 20
+                    {
+                        label: 'Success',
+                        data: @json($weeklyWonLeadsData),
+                        backgroundColor: '#48D3FF',
+                        borderRadius: 6,
+                        barThickness: 20,
                     },
-                    grid: {
-                        color: '#e0e0e0'
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            }
-        }
-    });
 
-    const yearlyChart = new Chart(ctx3, {
-        type: 'bar',
-        data: {
-            labels: @json($yearlyLabels), 
-            datasets: [{
-                    label: 'Leads',
-                    data: @json($yearlyAllLeadsData),
-                    backgroundColor: '#4A6CF7',
-                    borderRadius: 6,
-                    barThickness: 20,
-                },
-                {
-                    label: 'Success',
-                    data: @json($yearlyWonLeadsData),
-                    backgroundColor: '#48D3FF',
-                    borderRadius: 6,
-                    barThickness: 20,
-                },
-
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                legend: {
-                    display: true,
-                    position: 'bottom',
-                }
+                ]
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    // max: 100,
-                    ticks: {
-                        stepSize: 20
-                    },
-                    grid: {
-                        color: '#e0e0e0'
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            }
-        }
-    });
-</script>
-{{-- chart for lead status --}}
-<script>
-    const ctx4 = document.getElementById('statusWeeklyChart').getContext('2d');
-    const ctx5 = document.getElementById('statusMonthlyChart').getContext('2d');
-    const ctx6 = document.getElementById('statusYearlyChart').getContext('2d');
-
-    const statusWeeklyChart = new Chart(ctx4, {
-        type: 'bar',
-        data: {
-            labels: @json($weeklyLabels),
-            datasets: [{
-                    label: 'Leads',
-                     data: @json($weeklyAllLeadsData),
-                    backgroundColor: '#4A58EC',
-                    borderRadius: 6,
-                    barThickness: 20,
-                },
-                {
-                    label: 'New',
-                    data: @json($weeklyNewLeadsData),
-                    backgroundColor: '#48D3FF',
-                    borderRadius: 6,
-                    barThickness: 20,
-                },
-                {
-                    label: 'Won',
-                    data: @json($weeklyWonLeadsData),
-                    backgroundColor: '#7265F9',
-                    borderRadius: 6,
-                    barThickness: 20,
-                },
-                {
-                    label: 'Lost',
-                    data: @json($weeklyLostLeadsData),
-                    backgroundColor: '#B965F9',
-                    borderRadius: 6,
-                    barThickness: 20,
-                },
-
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                legend: {
-                    display: true,
-                    position: 'bottom',
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    // max: 100,
-                    ticks: {
-                        stepSize: 20
-                    },
-                    grid: {
-                        color: '#e0e0e0'
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            }
-        }
-    });
-
-    const statusMonthlyChart = new Chart(ctx5, {
-        type: 'bar',
-        data: {
-            labels: @json($monthlyLabels),
-            datasets: [
-                {
-                    label: 'Leads',
-                    data: @json($monthlyAllLeadsData),
-                    backgroundColor: '#4A58EC',
-                },
-                {
-                    label: 'New',
-                    data: @json($monthlyNewLeadsData),
-                    backgroundColor: '#48D3FF',
-                },
-                {
-                    label: 'Won',
-                    data: @json($monthlyWonLeadsData),
-                    backgroundColor: '#7265F9',
-                },
-                {
-                    label: 'Lost',
-                    data: @json($monthlyLostLeadsData),
-                    backgroundColor: '#B965F9',
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                legend: {
-                    display: true,
-                    position: 'bottom',
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    // max: 100,
-                    ticks: {
-                        stepSize: 20
-                    },
-                    grid: {
-                        color: '#e0e0e0'
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            }
-        }
-    });
-
-
-    const statusYearlyChart = new Chart(ctx6, {
-        type: 'bar',
-        data: {
-            labels: @json($yearlyLabels),
-            datasets: [
-                {
-                    label: 'Leads',
-                    data: @json($yearlyAllLeadsData),
-                    backgroundColor: '#4A58EC',
-                },
-                {
-                    label: 'New',
-                    data: @json($yearlyNewLeadsData),
-                    backgroundColor: '#48D3FF',
-                },
-                {
-                    label: 'Won',
-                    data: @json($yearlyWonLeadsData),
-                    backgroundColor: '#7265F9',
-                },
-                {
-                    label: 'Lost',
-                    data: @json($yearlyLostLeadsData),
-                    backgroundColor: '#B965F9',
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                legend: {
-                    display: true,
-                    position: 'bottom',
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    // max: 100,
-                    ticks: {
-                        stepSize: 20
-                    },
-                    grid: {
-                        color: '#e0e0e0'
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            }
-        }
-    });
-</script>
-@php
-    $sourceColors = ['#4A58EC', '#34C759', '#FF9500', '#FF3B30', '#AF52DE', '#5AC8FA', '#FFCC00'];
-    while (count($sourceColors) < $sourceLabels->count()) {
-        $sourceColors[] = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
-    }
-@endphp
-{{-- chart for sources --}}
-<script>
-    const sourceLabels = @json($sourceLabels);
-    const weeklySourceData = @json($weeklyData);
-    const monthlySourceData = @json($monthlyData);
-    const yearlySourceData = @json($yearlyData);
-    const sourceColors = @json($sourceColors);
-
-    const ctx7 = document.getElementById('sourcesWeeklyChart').getContext('2d');
-    const ctx8 = document.getElementById('sourcesMonthlyChart').getContext('2d');
-    const ctx9 = document.getElementById('sourcesYearlyChart').getContext('2d');
-
-     const commonOptions = {
-    responsive: true,
-    indexAxis: 'y',
-    plugins: {
-        tooltip: {
-            mode: 'index',
-            intersect: false,
-        },
-        legend: {
-            display: false,
-            position: 'bottom',
-        }
-    },
-    scales: {
-        y: {
-            beginAtZero: true,
-            ticks: {
-                stepSize: 1, // you can adjust this if needed
-            },
-            grid: { color: '#e0e0e0' }
-        },
-        x: {
-            ticks: {
-                callback: function(value) {
-                    return Number.isInteger(value) ? value : '';
-                },
-                precision: 0, // Ensure Chart.js doesn't add decimals
-            },
-            grid: { display: false }
-        }
-    }
-};
-
-
-    const sourcesWeeklyChart = new Chart(ctx7, {
-        type: 'bar',
-        data: {
-            labels: sourceLabels,
-            datasets: [{
-                label: 'Weekly Leads',
-                data: weeklySourceData,
-                backgroundColor: sourceColors,
-                borderRadius: 20,
-                barThickness: 40,
-            }]
-        },
-        options: commonOptions
-    });
-
-    const sourcesMonthlyChart = new Chart(ctx8, {
-         type: 'bar',
-        data: {
-            labels: sourceLabels,
-            datasets: [{
-                label: 'Monthly Leads',
-                data: monthlySourceData,
-                backgroundColor: sourceColors,
-                borderRadius: 20,
-                barThickness: 40,
-            }]
-        },
-        options: commonOptions
-    });
-
-    const sourcesYearlyChart = new Chart(ctx9, {
-        type: 'bar',
-        data: {
-            labels: sourceLabels,
-            datasets: [{
-                label: 'Yearly Leads',
-                data: yearlySourceData,
-                backgroundColor: sourceColors,
-                borderRadius: 20,
-                barThickness: 40,
-            }]
-        },
-        options: commonOptions
-    });
-</script>
-<script>
-        document.addEventListener('DOMContentLoaded', function () {
-
-        const pipelineChartData = @json($pieChartData);
-        const ctx = document.getElementById('pipelinePieChart').getContext('2d');
-
-        const data = {
-            labels: pipelineChartData.labels,
-            datasets: [{
-                data: pipelineChartData.data,
-                backgroundColor: [
-                    '#EF4444',
-                    '#60A5FA',
-                    '#1D4ED8',
-                    '#10B981',
-                    '#F59E0B',
-                    '#6366F1',
-                    '#EC4899'
-                ],
-                borderColor: '#ffffff',
-                borderWidth: 2,
-                hoverOffset: 4
-            }]
-        };
-
-        const config = {
-            type: 'doughnut',
-            data: data,
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
-                cutout: '70%',
                 plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    },
                     legend: {
                         display: true,
                         position: 'bottom',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        // max: 100,
+                        ticks: {
+                            stepSize: 20
+                        },
+                        grid: {
+                            color: '#e0e0e0'
+                        }
                     },
-                    tooltip: {
-                        callbacks: {
-                            label: function (context) {
-                                let label = context.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed !== null) {
-                                    label += context.parsed;
-                                }
-                                return label;
-                            }
+                    x: {
+                        grid: {
+                            display: false
                         }
                     }
                 }
             }
+        });
+        const monthlyChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: @json($monthlyLabels),
+                datasets: [{
+                        label: 'Leads',
+                        data: @json($monthlyAllLeadsData),
+                        backgroundColor: '#4A6CF7',
+                        borderRadius: 6,
+                        barThickness: 20,
+                    },
+                    {
+                        label: 'Success',
+                        data: @json($monthlyWonLeadsData),
+                        backgroundColor: '#48D3FF',
+                        borderRadius: 6,
+                        barThickness: 20,
+                    },
+
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        // max: 100,
+                        ticks: {
+                            stepSize: 20
+                        },
+                        grid: {
+                            color: '#e0e0e0'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        const yearlyChart = new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: @json($yearlyLabels),
+                datasets: [{
+                        label: 'Leads',
+                        data: @json($yearlyAllLeadsData),
+                        backgroundColor: '#4A6CF7',
+                        borderRadius: 6,
+                        barThickness: 20,
+                    },
+                    {
+                        label: 'Success',
+                        data: @json($yearlyWonLeadsData),
+                        backgroundColor: '#48D3FF',
+                        borderRadius: 6,
+                        barThickness: 20,
+                    },
+
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        // max: 100,
+                        ticks: {
+                            stepSize: 20
+                        },
+                        grid: {
+                            color: '#e0e0e0'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    {{-- chart for lead status --}}
+    <script>
+        const ctx4 = document.getElementById('statusWeeklyChart').getContext('2d');
+        const ctx5 = document.getElementById('statusMonthlyChart').getContext('2d');
+        const ctx6 = document.getElementById('statusYearlyChart').getContext('2d');
+
+        const statusWeeklyChart = new Chart(ctx4, {
+            type: 'bar',
+            data: {
+                labels: @json($weeklyLabels),
+                datasets: [{
+                        label: 'Leads',
+                        data: @json($weeklyAllLeadsData),
+                        backgroundColor: '#4A58EC',
+                        borderRadius: 6,
+                        barThickness: 20,
+                    },
+                    {
+                        label: 'New',
+                        data: @json($weeklyNewLeadsData),
+                        backgroundColor: '#48D3FF',
+                        borderRadius: 6,
+                        barThickness: 20,
+                    },
+                    {
+                        label: 'Won',
+                        data: @json($weeklyWonLeadsData),
+                        backgroundColor: '#7265F9',
+                        borderRadius: 6,
+                        barThickness: 20,
+                    },
+                    {
+                        label: 'Lost',
+                        data: @json($weeklyLostLeadsData),
+                        backgroundColor: '#B965F9',
+                        borderRadius: 6,
+                        barThickness: 20,
+                    },
+
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        // max: 100,
+                        ticks: {
+                            stepSize: 20
+                        },
+                        grid: {
+                            color: '#e0e0e0'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        const statusMonthlyChart = new Chart(ctx5, {
+            type: 'bar',
+            data: {
+                labels: @json($monthlyLabels),
+                datasets: [{
+                        label: 'Leads',
+                        data: @json($monthlyAllLeadsData),
+                        backgroundColor: '#4A58EC',
+                    },
+                    {
+                        label: 'New',
+                        data: @json($monthlyNewLeadsData),
+                        backgroundColor: '#48D3FF',
+                    },
+                    {
+                        label: 'Won',
+                        data: @json($monthlyWonLeadsData),
+                        backgroundColor: '#7265F9',
+                    },
+                    {
+                        label: 'Lost',
+                        data: @json($monthlyLostLeadsData),
+                        backgroundColor: '#B965F9',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        // max: 100,
+                        ticks: {
+                            stepSize: 20
+                        },
+                        grid: {
+                            color: '#e0e0e0'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+
+        const statusYearlyChart = new Chart(ctx6, {
+            type: 'bar',
+            data: {
+                labels: @json($yearlyLabels),
+                datasets: [{
+                        label: 'Leads',
+                        data: @json($yearlyAllLeadsData),
+                        backgroundColor: '#4A58EC',
+                    },
+                    {
+                        label: 'New',
+                        data: @json($yearlyNewLeadsData),
+                        backgroundColor: '#48D3FF',
+                    },
+                    {
+                        label: 'Won',
+                        data: @json($yearlyWonLeadsData),
+                        backgroundColor: '#7265F9',
+                    },
+                    {
+                        label: 'Lost',
+                        data: @json($yearlyLostLeadsData),
+                        backgroundColor: '#B965F9',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        // max: 100,
+                        ticks: {
+                            stepSize: 20
+                        },
+                        grid: {
+                            color: '#e0e0e0'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    @php
+        $sourceColors = ['#4A58EC', '#34C759', '#FF9500', '#FF3B30', '#AF52DE', '#5AC8FA', '#FFCC00'];
+        while (count($sourceColors) < $sourceLabels->count()) {
+            $sourceColors[] = sprintf('#%06X', mt_rand(0, 0xffffff));
+        }
+    @endphp
+    {{-- chart for sources --}}
+    <script>
+        const sourceLabels = @json($sourceLabels);
+        const weeklySourceData = @json($weeklyData);
+        const monthlySourceData = @json($monthlyData);
+        const yearlySourceData = @json($yearlyData);
+        const sourceColors = @json($sourceColors);
+
+        const ctx7 = document.getElementById('sourcesWeeklyChart').getContext('2d');
+        const ctx8 = document.getElementById('sourcesMonthlyChart').getContext('2d');
+        const ctx9 = document.getElementById('sourcesYearlyChart').getContext('2d');
+
+        const commonOptions = {
+            responsive: true,
+            indexAxis: 'y',
+            plugins: {
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                legend: {
+                    display: false,
+                    position: 'bottom',
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1, // you can adjust this if needed
+                    },
+                    grid: {
+                        color: '#e0e0e0'
+                    }
+                },
+                x: {
+                    ticks: {
+                        callback: function(value) {
+                            return Number.isInteger(value) ? value : '';
+                        },
+                        precision: 0, // Ensure Chart.js doesn't add decimals
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            }
         };
 
-        const pipelineChart = new Chart(ctx, config);
 
-        const total = data.datasets[0].data.reduce((sum, value) => sum + value, 0);
-        document.getElementById('totalPipelines').textContent = total;
-    });
+        const sourcesWeeklyChart = new Chart(ctx7, {
+            type: 'bar',
+            data: {
+                labels: sourceLabels,
+                datasets: [{
+                    label: 'Weekly Leads',
+                    data: weeklySourceData,
+                    backgroundColor: sourceColors,
+                    borderRadius: 20,
+                    barThickness: 40,
+                }]
+            },
+            options: commonOptions
+        });
+
+        const sourcesMonthlyChart = new Chart(ctx8, {
+            type: 'bar',
+            data: {
+                labels: sourceLabels,
+                datasets: [{
+                    label: 'Monthly Leads',
+                    data: monthlySourceData,
+                    backgroundColor: sourceColors,
+                    borderRadius: 20,
+                    barThickness: 40,
+                }]
+            },
+            options: commonOptions
+        });
+
+        const sourcesYearlyChart = new Chart(ctx9, {
+            type: 'bar',
+            data: {
+                labels: sourceLabels,
+                datasets: [{
+                    label: 'Yearly Leads',
+                    data: yearlySourceData,
+                    backgroundColor: sourceColors,
+                    borderRadius: 20,
+                    barThickness: 40,
+                }]
+            },
+            options: commonOptions
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const pipelineChartData = @json($pieChartData);
+            const ctx = document.getElementById('pipelinePieChart').getContext('2d');
+
+            const data = {
+                labels: pipelineChartData.labels,
+                datasets: [{
+                    data: pipelineChartData.data,
+                    backgroundColor: [
+                        '#EF4444',
+                        '#60A5FA',
+                        '#1D4ED8',
+                        '#10B981',
+                        '#F59E0B',
+                        '#6366F1',
+                        '#EC4899'
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 2,
+                    hoverOffset: 4
+                }]
+            };
+
+            const config = {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            const pipelineChart = new Chart(ctx, config);
+
+            const total = data.datasets[0].data.reduce((sum, value) => sum + value, 0);
+            document.getElementById('totalPipelines').textContent = total;
+        });
     </script>
 
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const calendarDays = document.getElementById('calendar-days');
-    const calendarMonth = document.getElementById('calendar-month');
-    const prevWeekBtn = document.getElementById('prev-week');
-    const nextWeekBtn = document.getElementById('next-week');
-    const eventList = document.getElementById('event-list');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarDays = document.getElementById('calendar-days');
+            const calendarMonth = document.getElementById('calendar-month');
+            const prevWeekBtn = document.getElementById('prev-week');
+            const nextWeekBtn = document.getElementById('next-week');
+            const eventList = document.getElementById('event-list');
 
-    let currentDate = new Date();
+            let currentDate = new Date();
 
-    function formatDate(date) {
-        return date.toISOString().split('T')[0]; // YYYY-MM-DD
-    }
-
-    function renderWeek(date) {
-        calendarDays.innerHTML = '';
-
-        const startOfWeek = new Date(date);
-        startOfWeek.setDate(date.getDate() - date.getDay()); // Sunday
-
-        for (let i = 0; i < 7; i++) {
-            const day = new Date(startOfWeek);
-            day.setDate(startOfWeek.getDate() + i);
-
-            const dayDiv = document.createElement('div');
-            dayDiv.textContent = day.getDate();
-            dayDiv.dataset.date = formatDate(day);
-
-            // Highlight today
-            const today = new Date();
-            if (
-                day.getDate() === today.getDate() &&
-                day.getMonth() === today.getMonth() &&
-                day.getFullYear() === today.getFullYear()
-            ) {
-                dayDiv.classList.add('active');
+            function formatDate(date) {
+                return date.toISOString().split('T')[0]; // YYYY-MM-DD
             }
 
-            dayDiv.addEventListener('click', function () {
-                document.querySelectorAll('#calendar-days div').forEach(el => el.classList.remove('active'));
-                this.classList.add('active');
-                fetchEvents(this.dataset.date);
-            });
+            function renderWeek(date) {
+                calendarDays.innerHTML = '';
 
-            calendarDays.appendChild(dayDiv);
-        }
+                const startOfWeek = new Date(date);
+                startOfWeek.setDate(date.getDate() - date.getDay()); // Sunday
 
-        // Update month heading
-        const currentMonthName = startOfWeek.toLocaleString('default', { month: 'long' });
-        calendarMonth.textContent = `${currentMonthName} ${startOfWeek.getFullYear()}`;
-    }
+                for (let i = 0; i < 7; i++) {
+                    const day = new Date(startOfWeek);
+                    day.setDate(startOfWeek.getDate() + i);
 
-    function fetchEvents(date) {
-        console.log(date);
-        fetch(`{{ url("get-events") }}/${date}`, {
-            method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-        .then(response => response.json())
-        .then(events => {
-            eventList.innerHTML = '';
-            if (events.length === 0) {
-                eventList.innerHTML = '<li>No events</li>';
-                return;
-            }
-            events.forEach(event => {
-                const li = document.createElement('li');
-                const colorClass = event.is_complete ===  1 ? 'red' : 'green';
-                li.innerHTML = `<span class="dot ${colorClass}"></span> ${event.time} – ${event.title}`;
-                eventList.appendChild(li);
-            });
-        })
-        .catch(err => {
-            console.error('Error fetching events', err);
-        });
-    }
+                    const dayDiv = document.createElement('div');
+                    dayDiv.textContent = day.getDate();
+                    dayDiv.dataset.date = formatDate(day);
 
-    prevWeekBtn.addEventListener('click', () => {
-        currentDate.setDate(currentDate.getDate() - 7);
-        renderWeek(currentDate);
-    });
+                    // Highlight today
+                    const today = new Date();
+                    const isToday =
+                        day.getDate() === today.getDate() &&
+                        day.getMonth() === today.getMonth() &&
+                        day.getFullYear() === today.getFullYear();
 
-    nextWeekBtn.addEventListener('click', () => {
-        currentDate.setDate(currentDate.getDate() + 7);
-        renderWeek(currentDate);
-    });
+                    const isSelected =
+                        day.getDate() === currentDate.getDate() &&
+                        day.getMonth() === currentDate.getMonth() &&
+                        day.getFullYear() === currentDate.getFullYear();
 
-    renderWeek(currentDate);
-    fetchEvents(formatDate(currentDate));
-});
-</script>
-<script>
-    $(document).ready(function () {
-        $('.priority-select').on('change', function () {
-            var leadId = $(this).data('lead-id');
-            var newPriority = $(this).val();
+                    if (isToday) {
+                        dayDiv.classList.add('today');
+                    }
+                    if (isSelected) {
+                        dayDiv.classList.add('active');
+                    }
 
-            $.ajax({
-                url: '{{ url("/update-lead-priority") }}',
-                method: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    lead_id: leadId,
-                    priority: newPriority
-                },
-                success: function (response) {
-                    Swal.fire({
-                        toast: true,
-                        icon: 'success',
-                        title: 'Priority updated successfully',
-                        showConfirmButton: false,
-                        timer: 2000,
-                        timerProgressBar: true
-                    }); 
-                },
-                error: function (xhr) {
-                    Swal.fire({
-                        toast: true,
-                        icon: 'error',
-                        title: 'Failed to update priority',
-                        showConfirmButton: false,
-                        timer: 2000,
-                        timerProgressBar: true
+                    dayDiv.addEventListener('click', function() {
+                        document.querySelectorAll('#calendar-days div').forEach(el => el.classList.remove(
+                            'active'));
+                        this.classList.add('active');
+                        fetchEvents(this.dataset.date);
                     });
+
+                    calendarDays.appendChild(dayDiv);
                 }
+
+                // Update month heading
+                const currentMonthName = startOfWeek.toLocaleString('default', {
+                    month: 'long'
+                });
+                calendarMonth.textContent = `${currentMonthName} ${startOfWeek.getFullYear()}`;
+            }
+
+            function fetchEvents(date) {
+                console.log(date);
+                fetch(`{{ url('get-events') }}/${date}`, {
+                        method: 'GET',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(events => {
+                        eventList.innerHTML = '';
+                        if (events.length === 0) {
+                            eventList.innerHTML = '<li>No events</li>';
+                            return;
+                        }
+                        events.forEach(event => {
+                            const li = document.createElement('li');
+                            const colorClass = event.is_complete === 1 ? 'red' : 'green';
+                            li.innerHTML =
+                                `<span class="dot ${colorClass}"></span> ${event.time} – ${event.title}`;
+                            eventList.appendChild(li);
+                        });
+                    })
+                    .catch(err => {
+                        console.error('Error fetching events', err);
+                    });
+            }
+
+            prevWeekBtn.addEventListener('click', () => {
+                currentDate.setDate(currentDate.getDate() - 7);
+                renderWeek(currentDate);
+            });
+
+            nextWeekBtn.addEventListener('click', () => {
+                currentDate.setDate(currentDate.getDate() + 7);
+                renderWeek(currentDate);
+            });
+
+            renderWeek(currentDate);
+            fetchEvents(formatDate(currentDate));
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.priority-select').on('change', function() {
+                var leadId = $(this).data('lead-id');
+                var newPriority = $(this).val();
+
+                $.ajax({
+                    url: '{{ url('/update-lead-priority') }}',
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        lead_id: leadId,
+                        priority: newPriority
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            toast: true,
+                            icon: 'success',
+                            title: 'Priority updated successfully',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true
+                        });
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            toast: true,
+                            icon: 'error',
+                            title: 'Failed to update priority',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true
+                        });
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 @endsection

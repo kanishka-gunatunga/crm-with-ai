@@ -14,7 +14,7 @@
                             </h3>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">Mail</a></li>
+                                    <li class="breadcrumb-item"><a href="{{ url('emails') }}">Mail</a></li>
                                     <li class="breadcrumb-item active current-breadcrumb" aria-current="page">Compose mail
                                     </li>
                                 </ol>
