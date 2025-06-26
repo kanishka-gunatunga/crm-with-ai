@@ -130,10 +130,12 @@
                                                     value="{{ $quote->state }}">
                                             </div>
                                             <div class="col-12 col-md-4">
-                                                <label for="Country" class="form-label">Country</label>
-                                                <input type="text" class="form-control" id="Country"
-                                                    placeholder="Country" name="country" required
-                                                    value="{{ $quote->country }}">
+                                                <label for="assign_user" class="form-label">Country</label>
+                                                <select class="myDropdown form-control" name="country" required>
+                                                    <option selected=""></option>
+                                                    
+                                                    <option value="{{ $quote->country }}" selected>{{ $quote->country }}</option>
+                                                </select>
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="City" class="form-label">City</label>
@@ -170,10 +172,12 @@
                                                     value="{{ $quote->shipping_state }}">
                                             </div>
                                             <div class="col-12 col-md-4">
-                                                <label for="Country" class="form-label">Country</label>
-                                                <input type="text" class="form-control" id="Country"
-                                                    placeholder="Country" name="shipping_country" required
-                                                    value="{{ $quote->shipping_country }}">
+                                                <label for="assign_user" class="form-label">Country</label>
+                                                <select class="myDropdown form-control" name="country" required>
+                                                    <option selected=""></option>
+
+                                                    <option value="{{ $quote->shipping_country }}" selected>{{ $quote->shipping_country }}</option>
+                                                </select>
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="City" class="form-label">City</label>

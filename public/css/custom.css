@@ -51,6 +51,30 @@ body {
   background-color: #F6F6F8 !important;
 }
 
+select, .select2-container--default .select2-selection--single .select2-selection__arrow {
+  appearance: none;
+  /* Remove default arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg width="10" height="5" viewBox="0 0 10 5" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.5 0.75L5 4.25L1.5 0.75" stroke="black" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  /* your custom arrow icon */
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  /* place the icon on the right */
+  background-size: 12px;
+  padding-right: 30px;
+  /* give space for the icon */
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b{
+  display: none;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow
+{
+  top: 9px !important;
+}
+
 .btn-primary {
   background-color: var(--primary-color) !important;
 }
@@ -140,9 +164,17 @@ body {
   max-width: 1200px;
 } */
 
+
+
 .lead-card {
   max-width: 300px;
 }
+
+/* @media screen and (min-width: 768px) and (max-width: 1px) {
+  .leads-container {
+    gap: 1rem !important;
+  }
+} */
 
 .task-card {
   /* max-width: 236px; */

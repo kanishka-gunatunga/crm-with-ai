@@ -18,7 +18,8 @@
                                     </h3>
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="{{ url('quotes') }}"> {{ __('app.quotes.title') }}</a>
+                                            <li class="breadcrumb-item"><a href="{{ url('quotes') }}">
+                                                    {{ __('app.quotes.title') }}</a>
                                             </li>
                                             <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
                                                 {{ __('app.quotes.create-title') }}</li>
@@ -51,6 +52,7 @@
                                                         <?php } ?>
                                                     </select>
                                                 </div>
+                                                
                                                 <div class="col-12 col-md-4">
                                                     <label for="assign_user" class="form-label">Sales Owner</label>
                                                     <select class="myDropdown form-control" name="owner" required>
@@ -65,7 +67,8 @@
                                                     <input type="text" class="form-control" name="subject"
                                                         value="{{ old('subject') }}" required>
                                                     @if ($errors->has('subject'))
-                                                        <div class="alert alert-danger mt-2">{{ $errors->first('subject') }}
+                                                        <div class="alert alert-danger mt-2">
+                                                            {{ $errors->first('subject') }}
                                                             </li>
                                                         </div>
                                                     @endif
@@ -118,9 +121,11 @@
                                                     placeholder="Province" name="state" required>
                                             </div>
                                             <div class="col-12 col-md-4">
-                                                <label for="Country" class="form-label">Country</label>
-                                                <input type="text" class="form-control" id="Country"
-                                                    placeholder="Country" name="country" required>
+                                                <label for="assign_user" class="form-label">Country</label>
+                                                <select class="myDropdown form-control" name="country" required>
+                                                    <option selected=""></option>
+                                                    <option value="Sri Lanka">Sri Lanka</option>
+                                                </select>
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="City" class="form-label">City</label>
@@ -154,9 +159,11 @@
                                                     placeholder="Province" name="shipping_state" required>
                                             </div>
                                             <div class="col-12 col-md-4">
-                                                <label for="Country" class="form-label">Country</label>
-                                                <input type="text" class="form-control" id="Country"
-                                                    placeholder="Country" name="shipping_country" required>
+                                                <label for="assign_user" class="form-label">Country</label>
+                                                <select class="myDropdown form-control" name="shipping_country" required>
+                                                    <option selected=""></option>
+                                                    <option value="Sri Lanka">Sri Lanka</option>
+                                                </select>
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="City" class="form-label">City</label>
@@ -179,7 +186,7 @@
                                             <div class="table-responsive">
                                                 <div class="d-flex justify-content-between align-items-center mb-5">
                                                     <h5 class="card-title">{{ __('app.quotes.quote-items') }}</h5>
-                                                    <button class="import-leads-button" type="button" id="add-product">
+                                                    <button class="create-btn" type="button" id="add-product">
                                                         <div class="icon-container">
                                                             <svg width="20" height="20" viewBox="0 0 20 20"
                                                                 fill="none" xmlns="http://www.w3.org/2000/svg">

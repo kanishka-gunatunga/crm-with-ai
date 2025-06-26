@@ -7,7 +7,7 @@ if ($role->permission_type !== 'all') {
     $is_all_access = false;
 }
 $permissions = $role->permissions;
- if (is_string($permissions)) {
+if (is_string($permissions)) {
     $permissions = json_decode($permissions, true);
 }
 ?>
@@ -15,6 +15,7 @@ $permissions = $role->permissions;
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <nav class="sidenav" id="sidebar">
+        <p class="sidebar-title">MENU</p>
         <ul class="navbar-nav">
             <?php 
             $dashboard_access = false;
@@ -64,7 +65,7 @@ $permissions = $role->permissions;
                 }
             }
 
-            if ($leads_access) { ?>    
+            if ($leads_access) { ?>
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('leads') ? 'active' : '' }}" href="{{ url('leads') }}"
                     aria-current="page">
@@ -89,7 +90,7 @@ $permissions = $role->permissions;
                 }
             }
 
-            if ($quotes_access) { ?>  
+            if ($quotes_access) { ?>
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('quotes') ? 'active' : '' }}" href="{{ url('quotes') }}">
                     <svg width="24" height="23" viewBox="0 0 24 23" fill="none"
@@ -113,7 +114,7 @@ $permissions = $role->permissions;
                 }
             }
 
-            if ($activities_access) { ?> 
+            if ($activities_access) { ?>
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('activities') ? 'active' : '' }}" href="{{ url('activities') }}">
 
@@ -141,7 +142,7 @@ $permissions = $role->permissions;
                 }
             }
 
-            if ($contacts_access) { ?>     
+            if ($contacts_access) { ?>
             <li class="nav-item dropdown">
                 <a class="nav-link" data-bs-toggle="collapse" href="#contactCollapse" role="button"
                     aria-expanded="false" aria-controls="contactCollapse">
@@ -254,7 +255,7 @@ $permissions = $role->permissions;
                         </svg>
                         {{ __('app.layouts.organizations') }}
                     </a>
-                     <?php } ?>
+                    <?php } ?>
                 </div>
             </div>
 
@@ -269,7 +270,7 @@ $permissions = $role->permissions;
                 }
             }
 
-            if ($products_access) { ?>            
+            if ($products_access) { ?>
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('products') ? 'active' : '' }}" href="{{ url('products') }}">
 
@@ -294,7 +295,7 @@ $permissions = $role->permissions;
                 }
             }
 
-            if ($services_access) { ?> 
+            if ($services_access) { ?>
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('services') ? 'active' : '' }}" href="{{ url('services') }}">
                     <svg width="23" height="23" viewBox="0 0 23 23" fill="none"
@@ -307,7 +308,7 @@ $permissions = $role->permissions;
 
                     {{ __('app.layouts.services') }}</a>
             </li>
-            <?php } ?>    
+            <?php } ?>
             <?php 
             $mail_access = false;
             if ($is_all_access) {
@@ -318,7 +319,7 @@ $permissions = $role->permissions;
                 }
             }
 
-            if ($mail_access) { ?>    
+            if ($mail_access) { ?>
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('emails') ? 'active' : '' }}" href="{{ url('emails') }}">
                     <svg width="23" height="23" viewBox="0 0 23 23" fill="none"
@@ -334,9 +335,9 @@ $permissions = $role->permissions;
 
                     {{ __('app.layouts.mail.title') }}</a>
             </li>
-            <?php } ?> 
+            <?php } ?>
 
-                <?php 
+            <?php 
             $settings_access = false;
             if ($is_all_access) {
                 $settings_access = true;
@@ -346,7 +347,7 @@ $permissions = $role->permissions;
                 }
             }
 
-            if ($settings_access) { ?>  
+            if ($settings_access) { ?>
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('settings') ? 'active' : '' }}" href="{{ url('settings') }}">
 
@@ -360,7 +361,7 @@ $permissions = $role->permissions;
 
                     {{ __('app.layouts.settings') }}</a>
             </li>
-            <?php } ?> 
+            <?php } ?>
             <?php 
             $configuration_access = false;
             if ($is_all_access) {
@@ -371,7 +372,7 @@ $permissions = $role->permissions;
                 }
             }
 
-            if ($configuration_access) { ?>     
+            if ($configuration_access) { ?>
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('configuration') ? 'active' : '' }}"
                     href="{{ url('configuration') }}">
@@ -386,7 +387,7 @@ $permissions = $role->permissions;
 
                     {{ __('app.layouts.configuration') }}</a>
             </li>
-            <?php } ?> 
+            <?php } ?>
 
         </ul>
     </nav>

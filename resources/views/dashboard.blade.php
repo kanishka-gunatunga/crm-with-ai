@@ -416,22 +416,127 @@
                                             <h2 class="dashboard-card-heder">My Leads</h2>
                                         </div>
                                         <div class="mb-4">
-                                            <button class="btn white-btn" data-bs-toggle="offcanvas"
-                                                data-bs-target="#offFilter" aria-controls="offcanvasRight">
+                                            <button class="btn white-btn" data-bs-toggle="collapse"
+                                                href="#collapseFilter-myLeads">
+                                                {{-- <button class="btn white-btn" data-bs-toggle="offcanvas" data-bs-target="#offFilter"
+                                        aria-controls="offcanvasRight"> --}}
                                                 <svg width="18" height="18" viewBox="0 0 14 15" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
                                                     <path
                                                         d="M2.33333 2.25H11.6667C11.8214 2.25 11.9697 2.31146 12.0791 2.42085C12.1885 2.53025 12.25 2.67862 12.25 2.83333V3.7585C12.25 3.9132 12.1885 4.06155 12.0791 4.17092L8.33758 7.91242C8.22818 8.02179 8.1667 8.17014 8.16667 8.32483V12.0027C8.16666 12.0914 8.14645 12.1789 8.10755 12.2586C8.06866 12.3383 8.01211 12.4081 7.94221 12.4626C7.8723 12.5172 7.79088 12.5551 7.70414 12.5734C7.61739 12.5918 7.5276 12.5901 7.44158 12.5686L6.27492 12.2769C6.14877 12.2453 6.03681 12.1725 5.9568 12.07C5.87679 11.9674 5.83334 11.8411 5.83333 11.7111V8.32483C5.8333 8.17014 5.77182 8.02179 5.66242 7.91242L1.92092 4.17092C1.81151 4.06155 1.75003 3.9132 1.75 3.7585V2.83333C1.75 2.67862 1.81146 2.53025 1.92085 2.42085C2.03025 2.31146 2.17862 2.25 2.33333 2.25Z"
                                                         stroke="#172635" stroke-width="0.875" stroke-linecap="round"
-                                                        stroke-linejoin="round"></path>
+                                                        stroke-linejoin="round" />
                                                 </svg>
 
                                                 Filter
 
                                             </button>
                                         </div>
+
+
+                                        <div class="col-5 position-absolute filter-search">
+                                            <div class="collapse card card-default" id="collapseFilter-myLeads">
+                                                <div
+                                                    class="d-flex justify-content-between align-items-center mb-3 card-header">
+                                                    <span></span>
+                                                    <button type="button" class="btn-close" data-bs-toggle="collapse"
+                                                        data-bs-target="#collapseFilter-myLeads" aria-label="Close"></button>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div>
+
+                                                        <form action="" method="get"
+                                                            enctype="multipart/form-data">
+                                                            <div class="row">
+                                                                <div class="col-md-12 mb-3">
+                                                                    <label for="subject"
+                                                                        class="form-label">Subject</label>
+                                                                    <input type="text" class="form-control"
+                                                                        name="subject" value="{{ request('subject') }}">
+                                                                </div>
+
+                                                                <div class="col-md-12 mb-3">
+                                                                    <label for="owner" class="form-label">Sales
+                                                                        Owner</label>
+                                                                    <select class="form-control" name="owner">
+                                                                        <option value="">Select Owner</option>
+                                                                        {{-- @foreach ($owners as $owner)
+                                                                            <option value="{{ $owner->user_id }}"
+                                                                                {{ request('owner') == $owner->user_id ? 'selected' : '' }}>
+                                                                                {{ $owner->name }}
+                                                                            </option>
+                                                                        @endforeach --}}
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="col-md-12 mb-3">
+                                                                    <label for="person"
+                                                                        class="form-label">Person</label>
+                                                                    <select class="form-control" name="person">
+                                                                        <option value="">Select Person</option>
+                                                                        {{-- @foreach ($persons as $person)
+                                                                            <option value="{{ $person->id }}"
+                                                                                {{ request('person') == $person->id ? 'selected' : '' }}>
+                                                                                {{ $person->name }}
+                                                                            </option>
+                                                                        @endforeach --}}
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="expire_start_date"
+                                                                        class="form-label">Expire
+                                                                        Start</label>
+                                                                    <input type="date" class="form-control"
+                                                                        name="expire_start_date"
+                                                                        value="{{ request('expire_start_date') }}"
+                                                                        >
+                                                                </div>
+
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="expire_end_date" class="form-label">Expire
+                                                                        End</label>
+                                                                    <input type="date" class="form-control"
+                                                                        name="expire_end_date"
+                                                                        value="{{ request('expire_end_date') }}">
+                                                                </div>
+
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="created_start_date"
+                                                                        class="form-label">Create
+                                                                        Start</label>
+                                                                    <input type="date" class="form-control"
+                                                                        name="created_start_date"
+                                                                        value="{{ request('created_start_date') }}">
+                                                                </div>
+
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="created_end_date"
+                                                                        class="form-label">Create
+                                                                        End</label>
+                                                                    <input type="date" class="form-control"
+                                                                        name="created_end_date"
+                                                                        value="{{ request('created_end_date') }}">
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div
+                                                                class="d-flex justify-content-center gap-3 align-items-center">
+                                                                <button type="submit" class="btn save-btn">Apply
+                                                                    Filter</button>
+                                                                <a href="{{ url('quotes') }}"
+                                                                    class="btn clear-all-btn">Clear</a>
+                                                            </div>
+
+
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="table-responsive">
+                                    <div class="table-responsive my-leads-table">
                                         <table id="buttons-datatables" class="display table new-table bordered-table"
                                             style="width:100%">
                                             <thead>
@@ -771,19 +876,118 @@
                                             <h2 class="dashboard-card-heder">Birthdays</h2>
                                         </div>
                                         <div class="mb-4">
-                                            <button class="btn white-btn" data-bs-toggle="offcanvas"
-                                                data-bs-target="#offFilter" aria-controls="offcanvasRight">
+                                            <button class="btn white-btn" data-bs-toggle="collapse"
+                                                href="#collapseFilter">
+                                                {{-- <button class="btn white-btn" data-bs-toggle="offcanvas" data-bs-target="#offFilter"
+                                        aria-controls="offcanvasRight"> --}}
                                                 <svg width="18" height="18" viewBox="0 0 14 15" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
                                                     <path
                                                         d="M2.33333 2.25H11.6667C11.8214 2.25 11.9697 2.31146 12.0791 2.42085C12.1885 2.53025 12.25 2.67862 12.25 2.83333V3.7585C12.25 3.9132 12.1885 4.06155 12.0791 4.17092L8.33758 7.91242C8.22818 8.02179 8.1667 8.17014 8.16667 8.32483V12.0027C8.16666 12.0914 8.14645 12.1789 8.10755 12.2586C8.06866 12.3383 8.01211 12.4081 7.94221 12.4626C7.8723 12.5172 7.79088 12.5551 7.70414 12.5734C7.61739 12.5918 7.5276 12.5901 7.44158 12.5686L6.27492 12.2769C6.14877 12.2453 6.03681 12.1725 5.9568 12.07C5.87679 11.9674 5.83334 11.8411 5.83333 11.7111V8.32483C5.8333 8.17014 5.77182 8.02179 5.66242 7.91242L1.92092 4.17092C1.81151 4.06155 1.75003 3.9132 1.75 3.7585V2.83333C1.75 2.67862 1.81146 2.53025 1.92085 2.42085C2.03025 2.31146 2.17862 2.25 2.33333 2.25Z"
                                                         stroke="#172635" stroke-width="0.875" stroke-linecap="round"
-                                                        stroke-linejoin="round"></path>
+                                                        stroke-linejoin="round" />
                                                 </svg>
 
                                                 Filter
 
                                             </button>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="col-9 position-absolute filter-search">
+                                        <div class="collapse card card-default" id="collapseFilter">
+                                            <div
+                                                class="d-flex justify-content-between align-items-center mb-3 card-header">
+                                                <span></span>
+                                                <button type="button" class="btn-close" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseFilter" aria-label="Close"></button>
+                                            </div>
+                                            <div class="card-body">
+                                                <div>
+
+                                                    <form action="" method="get" enctype="multipart/form-data">
+                                                        <div class="row">
+                                                            <div class="col-md-12 mb-3">
+                                                                <label for="subject" class="form-label">Subject</label>
+                                                                <input type="text" class="form-control" name="subject"
+                                                                    value="{{ request('subject') }}">
+                                                            </div>
+
+                                                            <div class="col-md-12 mb-3">
+                                                                <label for="owner" class="form-label">Sales
+                                                                    Owner</label>
+                                                                <select class="form-control" name="owner">
+                                                                    <option value="">Select Owner</option>
+                                                                    {{-- @foreach ($owners as $owner)
+                                                                            <option value="{{ $owner->user_id }}"
+                                                                                {{ request('owner') == $owner->user_id ? 'selected' : '' }}>
+                                                                                {{ $owner->name }}
+                                                                            </option>
+                                                                        @endforeach --}}
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="col-md-12 mb-3">
+                                                                <label for="person" class="form-label">Person</label>
+                                                                <select class="form-control" name="person">
+                                                                    <option value="">Select Person</option>
+                                                                    {{-- @foreach ($persons as $person)
+                                                                            <option value="{{ $person->id }}"
+                                                                                {{ request('person') == $person->id ? 'selected' : '' }}>
+                                                                                {{ $person->name }}
+                                                                            </option>
+                                                                        @endforeach --}}
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="col-md-6 mb-3">
+                                                                <label for="expire_start_date" class="form-label">Expire
+                                                                    Start</label>
+                                                                <input type="date" class="form-control"
+                                                                    name="expire_start_date"
+                                                                    value="{{ request('expire_start_date') }}">
+                                                            </div>
+
+                                                            <div class="col-md-6 mb-3">
+                                                                <label for="expire_end_date" class="form-label">Expire
+                                                                    End</label>
+                                                                <input type="date" class="form-control"
+                                                                    name="expire_end_date"
+                                                                    value="{{ request('expire_end_date') }}">
+                                                            </div>
+
+                                                            <div class="col-md-6 mb-3">
+                                                                <label for="created_start_date" class="form-label">Create
+                                                                    Start</label>
+                                                                <input type="date" class="form-control"
+                                                                    name="created_start_date"
+                                                                    value="{{ request('created_start_date') }}">
+                                                            </div>
+
+                                                            <div class="col-md-6 mb-3">
+                                                                <label for="created_end_date" class="form-label">Create
+                                                                    End</label>
+                                                                <input type="date" class="form-control"
+                                                                    name="created_end_date"
+                                                                    value="{{ request('created_end_date') }}">
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div
+                                                            class="d-flex justify-content-center gap-3 align-items-center">
+                                                            <button type="submit" class="btn save-btn">Apply
+                                                                Filter</button>
+                                                            <a href="{{ url('quotes') }}"
+                                                                class="btn clear-all-btn">Clear</a>
+                                                        </div>
+
+
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="table-responsive">
@@ -870,7 +1074,7 @@
     <style>
         .leadsOverview {
             /* width: 100%;
-            max-width: 900px; */
+                            max-width: 900px; */
             /* margin: auto; */
             background: white;
             padding: 30px;

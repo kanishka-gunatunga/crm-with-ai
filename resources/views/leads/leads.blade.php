@@ -46,8 +46,7 @@
                             Leads
                         </h3>
                         <div class="d-flex gap-3">
-
-
+                            
                             <button class="import-leads-button">
                                 <div class="icon-container">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -61,7 +60,9 @@
 
                                 </div>
 
-                                <select class="pipeline-selection" id="pipeline-select" name="state" required>
+                                
+
+                                <select class="pipeline-selection tagselect" id="pipeline-select" name="state" required>
                                     @foreach ($pipelines as $pipe)
                                         <option value="{{ $pipe->id }}"
                                             {{ $pipeline->id == $pipe->id ? 'selected' : '' }}>
@@ -69,7 +70,7 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                {{-- <span class="button-text white-btn-text">Import leads</span> --}}
+                                
                             </button>
 
 
@@ -133,7 +134,7 @@
 
                                                             Excel</a>
                                                     </li>
-                                                    <li  class="export-item">
+                                                    <li class="export-item">
                                                         <a href="{{ url('export-leads/csv') }}">
 
                                                             <svg width="18" height="18" viewBox="0 0 13 13"
@@ -185,7 +186,7 @@
 
 
                 <div class="col-12">
-                    <div class="d-flex card-container gap-1">
+                    <div class="d-flex card-container gap-1 leads-container">
                         <?php
                 $orderedStages = collect($stages)->sortBy(function ($stage) {
                     if ($stage->name == 'New') {
@@ -246,13 +247,13 @@
                                                     <time class="due-date">{{ $lead->closing_date }}</time>
                                                 </div>
                                                 <?php if ($lead->priority == 'Low') { ?>
-                                                    <span class="priority-badge low">Low</span>
+                                                <span class="priority-badge low">Low</span>
                                                 <?php } elseif ($lead->priority == 'Medium') { ?>
-                                                    <span class="priority-badge medium">Medium</span>
+                                                <span class="priority-badge medium">Medium</span>
                                                 <?php } elseif ($lead->priority == 'High') { ?>
-                                                    <span class="priority-badge high">High</span>
+                                                <span class="priority-badge high">High</span>
                                                 <?php } else { ?>
-                                                    <span class="priority-badge urgent">Urgent</span>
+                                                <span class="priority-badge urgent">Urgent</span>
                                                 <?php } ?>
                                             </header>
                                             <main class="task-content">
@@ -269,8 +270,9 @@
                                             <div class="divider"></div>
                                             <footer class="task-footer">
                                                 <div class="assignee-info">
-                                                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/f003d3c100b2517a9a663b0743b6c252f551c39f?placeholderIfAbsent=true&apiKey=58cf9ebae01449cda017611d277ef437"
-                                                        class="avatar" alt="Ronald Richards" />
+                                                <img class="avatar" src="{{ asset('uploads/persons/pictures/' . \App\Models\Person::where('id', $lead->person)->value('picture')) }}" alt="Assignee Picture">
+
+
                                                     <a href="{{ url('persons?id=' . $lead->person) }}">
                                                         <span class="assignee-name">{{ $person_name }}</span>
                                                     </a>
@@ -390,6 +392,7 @@
     </div>
     <script>
         $(document).ready(function() {
+            
             $('#pipeline-select').on('change', function() {
                 const selectedPipelineId = $(this).val();
                 console.log("Selected Pipeline ID:", selectedPipelineId);
