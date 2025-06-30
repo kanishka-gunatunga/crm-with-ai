@@ -132,7 +132,7 @@
                                             <div class="col-12">
                                                 <label for="field5"
                                                     class="form-label">{{ __('app.activities.description') }}</label>
-                                                <textarea class="form-control" placeholder="Description" id="field5" rows="5" name="description">{{ $activity->description }}</textarea>
+                                                <textarea class="form-control description-form-control" placeholder="Description" id="field5" rows="5" name="description">{{ $activity->description }}</textarea>
 
                                             </div>
                                         </div>

@@ -3,6 +3,8 @@
 @section('content')
     <form action="" method="post" enctype="multipart/form-data" data-parsley-validate>
         @csrf
+
+        
         <div class="d-flex flex-column min-vh-100">
             <div class="flex-grow-1">
                 <!-- Scrollable Content -->
@@ -19,7 +21,7 @@
                                         <ol class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="{{ url('services') }}">Services</a></li>
                                             <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
-                                                Library</li>
+                                                Edit service</li>
                                         </ol>
                                     </nav>
                                 </div>
@@ -67,7 +69,7 @@
                                     <div class="card-body">
                                         <div class="col-12">
                                             <label for="field5" class="form-label">Description</label>
-                                            <textarea class="form-control" placeholder="Description" id="field5" rows="5" name="description">{{ $service->description }}</textarea>
+                                            <textarea class="form-control description-form-control" placeholder="Description" id="field5" rows="5" name="description">{{ $service->description }}</textarea>
                                             @if ($errors->has('description'))
                                                 <div class="alert alert-danger mt-2">{{ $errors->first('description') }}
                                                     </li>

@@ -92,6 +92,9 @@
     background-color: #F4F7FF;
     border-right: 5px solid var(--primary-color);
 }
+.accordion-header{
+    padding: 20px;
+}
 
 /* .nav-item .active{
     background-color: var(--blue-shading);

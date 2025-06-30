@@ -1380,6 +1380,10 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
 
 .action-icons {
   gap: 5px !important;
+  min-height: 36px !important;
+  display: flex;
+  
+  align-items: center !important;
 }
 
 
@@ -2011,4 +2015,8 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
 
 div.dataTables_wrapper div.dataTables_filter {
   padding: 10px;
+}
+
+.description-form-control{
+  height: revert !important;
 }

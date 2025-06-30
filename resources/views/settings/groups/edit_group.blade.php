@@ -68,7 +68,7 @@
 
                                             <div class="col-12 ">
                                                 <label for="date_start" class="form-label">Description</label>
-                                                <textarea class="form-control" placeholder="Description" id="field5" rows="5" name="description">{{ $group->description }}</textarea>
+                                                <textarea class="form-control description-form-control" placeholder="Description" id="field5" rows="5" name="description">{{ $group->description }}</textarea>
                                             </div>
 
                                         </div>

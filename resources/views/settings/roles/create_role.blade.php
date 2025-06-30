@@ -71,7 +71,7 @@
 
                                             <div class="col-12 ">
                                                 <label for="date_start" class="form-label">Description</label>
-                                                <textarea class="form-control" placeholder="Description" id="field5" rows="5" name="description" required></textarea>
+                                                <textarea class="form-control description-form-control" placeholder="Description" id="field5" rows="5" name="description" required></textarea>
                                             </div>
                                             <div class="col-md-12" style="display:none;" id="permissions-col">
                                                 <div class="row">

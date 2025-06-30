@@ -107,7 +107,7 @@
 
                                             <div class="col-12">
                                                 <label for="field5" class="form-label">Description</label>
-                                                <textarea class="form-control" placeholder="Description" id="field5" rows="5" name="description"
+                                                <textarea class="form-control description-form-control" placeholder="Description" id="field5" rows="5" name="description"
                                                     value="{{ old('description') }}"></textarea>
 
                                             </div>

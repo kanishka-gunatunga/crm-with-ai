@@ -68,7 +68,7 @@
                                     <div class="card-body">
                                         <div class="col-12">
                                             <label for="field5" class="form-label">Description</label>
-                                            <textarea class="form-control" placeholder="Description" id="field5" rows="5" name="description">{{ old('description') }}</textarea>
+                                            <textarea class="form-control description-form-control" placeholder="Description" id="field5" rows="5" name="description">{{ old('description') }}</textarea>
 
                                         </div>
                                     </div>

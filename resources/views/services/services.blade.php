@@ -12,7 +12,7 @@
                     <div class="d-flex gap-3">
 
 
-                        <a href="../leads/create-lead.php">
+                        {{-- <a href="../leads/create-lead.php">
                             <button class="import-leads-button">
                                 <div class="icon-container">
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
@@ -31,7 +31,7 @@
 
 
                             </button>
-                        </a>
+                        </a> --}}
 
 
                         <a href="{{ url('create-service') }}">
