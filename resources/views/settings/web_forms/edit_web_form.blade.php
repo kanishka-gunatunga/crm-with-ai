@@ -143,7 +143,7 @@
                                                     <div class="row">
 
                                                         <!--end col-->
-                                                        <div class="col-md-2">
+                                                        <div class="col-md-4 col-6">
                                                             <div class="mb-3">
                                                                 <label for="firstNameinput" class="form-label">Background
                                                                     Color</label>
@@ -165,7 +165,7 @@
                                                                 @endif
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-2">
+                                                        <div class="col-md-4 col-6">
                                                             <div class="mb-3">
                                                                 <label for="firstNameinput" class="form-label">Form
                                                                     Background Color</label>
@@ -188,7 +188,7 @@
                                                                 @endif
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-2">
+                                                        <div class="col-md-4 col-6">
                                                             <div class="mb-3">
                                                                 <label for="firstNameinput" class="form-label">Form Title
                                                                     Color</label>
@@ -209,7 +209,7 @@
                                                                 @endif
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-2">
+                                                        <div class="col-md-4 col-6">
                                                             <div class="mb-3">
                                                                 <label for="firstNameinput" class="form-label">Form Submit
                                                                     Button Color</label>
@@ -231,7 +231,7 @@
                                                                 @endif
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-2">
+                                                        <div class="col-md-4 col-6">
                                                             <div class="mb-3">
                                                                 <label for="firstNameinput" class="form-label">Attribute
                                                                     Label Color</label>

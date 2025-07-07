@@ -21,7 +21,8 @@
                                         <ol class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="{{ url('settings') }}">Settings</a></li>
                                             <li class="breadcrumb-item"><a
-                                                    href="{{ url('email-templates') }}">{{ __('app.settings.email-templates.title') }}</a></li>
+                                                    href="{{ url('email-templates') }}">{{ __('app.settings.email-templates.title') }}</a>
+                                            </li>
                                             <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
                                                 {{ __('app.settings.email-templates.create-title') }}</li>
                                         </ol>
@@ -56,159 +57,369 @@
                                                 <label for="exampleFormControlTextarea5"
                                                     class="form-label">{{ __('app.settings.email-templates.subject') }}</label>
                                                 <div class="input-group">
+                                                    <div class="input-group-text form-control p-0 me-4 email-template-tags-dropdown">
+                                                        <select class="form-control" name="template_tags-dropdown"
+                                                            id="template-tags-dropdown">
+                                                            <optgroup label="Leads">
+                                                                <option value="{%leads.title%}">
+                                                                    Title
+                                                                </option>
+                                                                <option value="{%leads.lead_value%}">
+                                                                    Lead Value
+                                                                </option>
+                                                                <option value="{%leads.lead_source_id%}">
+                                                                    Source
+                                                                </option>
+                                                                <option value="{%leads.lead_type_id%}">
+                                                                    Type
+                                                                </option>
+                                                                <option value="{%leads.user_id%}">
+                                                                    Sales Owner
+                                                                </option>
+                                                                <option value="{%leads.expected_close_date%}">
+                                                                    Expected Close Date
+                                                                </option>
+                                                                <option value="{%leads.lead_pipeline_stage_id%}">
+                                                                    Stage
+                                                                </option>
+                                                            </optgroup>
+                                                            <optgroup label="Activities">
+                                                                <option value="{%activities.title%}">
+                                                                    Title
+                                                                </option>
+                                                                <option value="{%activities.type%}">
+                                                                    Type
+                                                                </option>
+                                                                <option value="{%activities.location%}">
+                                                                    Location
+                                                                </option>
+                                                                <option value="{%activities.comment%}">
+                                                                    Comment
+                                                                </option>
+                                                                <option value="{%activities.schedule_from%}">
+                                                                    Schedule From
+                                                                </option>
+                                                                <option value="{%activities.schedule_to%}">
+                                                                    Schedule To
+                                                                </option>
+                                                                <option value="{%activities.user_id%}">
+                                                                    User
+                                                                </option>
+                                                                <option value="{%activities.participants%}">
+                                                                    Participants
+                                                                </option>
+                                                            </optgroup>
+                                                            <optgroup label="Persons">
+                                                                <option value="{%persons.name%}">
+                                                                    Name
+                                                                </option>
+                                                                <option value="{%persons.emails%}">
+                                                                    Emails
+                                                                </option>
+                                                                <option value="{%persons.contact_numbers%}">
+                                                                    Contact Numbers
+                                                                </option>
+                                                                <option value="{%persons.organization_id%}">
+                                                                    Organization
+                                                                </option>
+                                                            </optgroup>
+                                                            <optgroup label="Quotes">
+                                                                <option value="{%quotes.user_id%}">
+                                                                    Sales Owner
+                                                                </option>
+                                                                <option value="{%quotes.subject%}">
+                                                                    Subject
+                                                                </option>
+                                                                <option value="{%quotes.discount_percent%}">
+                                                                    Discount Percent
+                                                                </option>
+                                                                <option value="{%quotes.discount_amount%}">
+                                                                    Discount Amount
+                                                                </option>
+                                                                <option value="{%quotes.tax_amount%}">
+                                                                    Tax Amount
+                                                                </option>
+                                                                <option value="{%quotes.adjustment_amount%}">
+                                                                    Adjustment Amount
+                                                                </option>
+                                                                <option value="{%quotes.sub_total%}">
+                                                                    Sub Total
+                                                                </option>
+                                                                <option value="{%quotes.grand_total%}">
+                                                                    Grand Total
+                                                                </option>
+                                                                <option value="{%quotes.expired_at%}">
+                                                                    Expired At
+                                                                </option>
+                                                                <option value="{%quotes.person_id%}">
+                                                                    Person
+                                                                </option>
+                                                            </optgroup>
+                                                        </select>
+                                                    </div>
 
-                                                    <select class=" form-control" name="template_tags-dropdown"
-                                                        id="template-tags-dropdown">
-                                                        <optgroup label="Leads">
-                                                            <option value="{%leads.title%}">
-                                                                Title
-                                                            </option>
-                                                            <option value="{%leads.lead_value%}">
-                                                                Lead Value
-                                                            </option>
-                                                            <option value="{%leads.lead_source_id%}">
-                                                                Source
-                                                            </option>
-                                                            <option value="{%leads.lead_type_id%}">
-                                                                Type
-                                                            </option>
-                                                            <option value="{%leads.user_id%}">
-                                                                Sales Owner
-                                                            </option>
-                                                            <option value="{%leads.expected_close_date%}">
-                                                                Expected Close Date
-                                                            </option>
-                                                            <option value="{%leads.lead_pipeline_stage_id%}">
-                                                                Stage
-                                                            </option>
-                                                        </optgroup>
-                                                        <optgroup label="Activities">
-                                                            <option value="{%activities.title%}">
-                                                                Title
-                                                            </option>
-                                                            <option value="{%activities.type%}">
-                                                                Type
-                                                            </option>
-                                                            <option value="{%activities.location%}">
-                                                                Location
-                                                            </option>
-                                                            <option value="{%activities.comment%}">
-                                                                Comment
-                                                            </option>
-                                                            <option value="{%activities.schedule_from%}">
-                                                                Schedule From
-                                                            </option>
-                                                            <option value="{%activities.schedule_to%}">
-                                                                Schedule To
-                                                            </option>
-                                                            <option value="{%activities.user_id%}">
-                                                                User
-                                                            </option>
-                                                            <option value="{%activities.participants%}">
-                                                                Participants
-                                                            </option>
-                                                        </optgroup>
-                                                        <optgroup label="Persons">
-                                                            <option value="{%persons.name%}">
-                                                                Name
-                                                            </option>
-                                                            <option value="{%persons.emails%}">
-                                                                Emails
-                                                            </option>
-                                                            <option value="{%persons.contact_numbers%}">
-                                                                Contact Numbers
-                                                            </option>
-                                                            <option value="{%persons.organization_id%}">
-                                                                Organization
-                                                            </option>
-                                                        </optgroup>
-                                                        <optgroup label="Quotes">
-                                                            <option value="{%quotes.user_id%}">
-                                                                Sales Owner
-                                                            </option>
-                                                            <option value="{%quotes.subject%}">
-                                                                Subject
-                                                            </option>
-                                                            <option value="{%quotes.discount_percent%}">
-                                                                Discount Percent
-                                                            </option>
-                                                            <option value="{%quotes.discount_amount%}">
-                                                                Discount Amount
-                                                            </option>
-                                                            <option value="{%quotes.tax_amount%}">
-                                                                Tax Amount
-                                                            </option>
-                                                            <option value="{%quotes.adjustment_amount%}">
-                                                                Adjustment Amount
-                                                            </option>
-                                                            <option value="{%quotes.sub_total%}">
-                                                                Sub Total
-                                                            </option>
-                                                            <option value="{%quotes.grand_total%}">
-                                                                Grand Total
-                                                            </option>
-                                                            <option value="{%quotes.expired_at%}">
-                                                                Expired At
-                                                            </option>
-                                                            <option value="{%quotes.person_id%}">
-                                                                Person
-                                                            </option>
-                                                        </optgroup>
-                                                    </select>
+                                                        <input type="text" class="form-control" id="email-subject"
+                                                            name="subject" placeholder="Enter email subject" required>
+                                                    </div>
 
+                                                    {{-- <div class="input-group mb-3">
+                                                    <div class="input-group-text form-control p-0">
+                                                        <select class=" form-control" name="template_tags-dropdown"
+                                                            id="template-tags-dropdown w-100">
+                                                            <optgroup label="Leads">
+                                                                <option value="{%leads.title%}">
+                                                                    Title
+                                                                </option>
+                                                                <option value="{%leads.lead_value%}">
+                                                                    Lead Value
+                                                                </option>
+                                                                <option value="{%leads.lead_source_id%}">
+                                                                    Source
+                                                                </option>
+                                                                <option value="{%leads.lead_type_id%}">
+                                                                    Type
+                                                                </option>
+                                                                <option value="{%leads.user_id%}">
+                                                                    Sales Owner
+                                                                </option>
+                                                                <option value="{%leads.expected_close_date%}">
+                                                                    Expected Close Date
+                                                                </option>
+                                                                <option value="{%leads.lead_pipeline_stage_id%}">
+                                                                    Stage
+                                                                </option>
+                                                            </optgroup>
+                                                            <optgroup label="Activities">
+                                                                <option value="{%activities.title%}">
+                                                                    Title
+                                                                </option>
+                                                                <option value="{%activities.type%}">
+                                                                    Type
+                                                                </option>
+                                                                <option value="{%activities.location%}">
+                                                                    Location
+                                                                </option>
+                                                                <option value="{%activities.comment%}">
+                                                                    Comment
+                                                                </option>
+                                                                <option value="{%activities.schedule_from%}">
+                                                                    Schedule From
+                                                                </option>
+                                                                <option value="{%activities.schedule_to%}">
+                                                                    Schedule To
+                                                                </option>
+                                                                <option value="{%activities.user_id%}">
+                                                                    User
+                                                                </option>
+                                                                <option value="{%activities.participants%}">
+                                                                    Participants
+                                                                </option>
+                                                            </optgroup>
+                                                            <optgroup label="Persons">
+                                                                <option value="{%persons.name%}">
+                                                                    Name
+                                                                </option>
+                                                                <option value="{%persons.emails%}">
+                                                                    Emails
+                                                                </option>
+                                                                <option value="{%persons.contact_numbers%}">
+                                                                    Contact Numbers
+                                                                </option>
+                                                                <option value="{%persons.organization_id%}">
+                                                                    Organization
+                                                                </option>
+                                                            </optgroup>
+                                                            <optgroup label="Quotes">
+                                                                <option value="{%quotes.user_id%}">
+                                                                    Sales Owner
+                                                                </option>
+                                                                <option value="{%quotes.subject%}">
+                                                                    Subject
+                                                                </option>
+                                                                <option value="{%quotes.discount_percent%}">
+                                                                    Discount Percent
+                                                                </option>
+                                                                <option value="{%quotes.discount_amount%}">
+                                                                    Discount Amount
+                                                                </option>
+                                                                <option value="{%quotes.tax_amount%}">
+                                                                    Tax Amount
+                                                                </option>
+                                                                <option value="{%quotes.adjustment_amount%}">
+                                                                    Adjustment Amount
+                                                                </option>
+                                                                <option value="{%quotes.sub_total%}">
+                                                                    Sub Total
+                                                                </option>
+                                                                <option value="{%quotes.grand_total%}">
+                                                                    Grand Total
+                                                                </option>
+                                                                <option value="{%quotes.expired_at%}">
+                                                                    Expired At
+                                                                </option>
+                                                                <option value="{%quotes.person_id%}">
+                                                                    Person
+                                                                </option>
+                                                            </optgroup>
+                                                        </select>
+                                                    </div>
                                                     <input type="text" class="form-control" id="email-subject"
                                                         name="subject" placeholder="Enter email subject" required>
+                                                </div> --}}
                                                 </div>
+
+                                            </div>
+                                            {{-- <div class="input-group mb-3">
+                                            <div class="input-group-text form-control">
+                                                <select class=" form-control" name="template_tags-dropdown"
+                                                    id="template-tags-dropdown">
+                                                    <optgroup label="Leads">
+                                                        <option value="{%leads.title%}">
+                                                            Title
+                                                        </option>
+                                                        <option value="{%leads.lead_value%}">
+                                                            Lead Value
+                                                        </option>
+                                                        <option value="{%leads.lead_source_id%}">
+                                                            Source
+                                                        </option>
+                                                        <option value="{%leads.lead_type_id%}">
+                                                            Type
+                                                        </option>
+                                                        <option value="{%leads.user_id%}">
+                                                            Sales Owner
+                                                        </option>
+                                                        <option value="{%leads.expected_close_date%}">
+                                                            Expected Close Date
+                                                        </option>
+                                                        <option value="{%leads.lead_pipeline_stage_id%}">
+                                                            Stage
+                                                        </option>
+                                                    </optgroup>
+                                                    <optgroup label="Activities">
+                                                        <option value="{%activities.title%}">
+                                                            Title
+                                                        </option>
+                                                        <option value="{%activities.type%}">
+                                                            Type
+                                                        </option>
+                                                        <option value="{%activities.location%}">
+                                                            Location
+                                                        </option>
+                                                        <option value="{%activities.comment%}">
+                                                            Comment
+                                                        </option>
+                                                        <option value="{%activities.schedule_from%}">
+                                                            Schedule From
+                                                        </option>
+                                                        <option value="{%activities.schedule_to%}">
+                                                            Schedule To
+                                                        </option>
+                                                        <option value="{%activities.user_id%}">
+                                                            User
+                                                        </option>
+                                                        <option value="{%activities.participants%}">
+                                                            Participants
+                                                        </option>
+                                                    </optgroup>
+                                                    <optgroup label="Persons">
+                                                        <option value="{%persons.name%}">
+                                                            Name
+                                                        </option>
+                                                        <option value="{%persons.emails%}">
+                                                            Emails
+                                                        </option>
+                                                        <option value="{%persons.contact_numbers%}">
+                                                            Contact Numbers
+                                                        </option>
+                                                        <option value="{%persons.organization_id%}">
+                                                            Organization
+                                                        </option>
+                                                    </optgroup>
+                                                    <optgroup label="Quotes">
+                                                        <option value="{%quotes.user_id%}">
+                                                            Sales Owner
+                                                        </option>
+                                                        <option value="{%quotes.subject%}">
+                                                            Subject
+                                                        </option>
+                                                        <option value="{%quotes.discount_percent%}">
+                                                            Discount Percent
+                                                        </option>
+                                                        <option value="{%quotes.discount_amount%}">
+                                                            Discount Amount
+                                                        </option>
+                                                        <option value="{%quotes.tax_amount%}">
+                                                            Tax Amount
+                                                        </option>
+                                                        <option value="{%quotes.adjustment_amount%}">
+                                                            Adjustment Amount
+                                                        </option>
+                                                        <option value="{%quotes.sub_total%}">
+                                                            Sub Total
+                                                        </option>
+                                                        <option value="{%quotes.grand_total%}">
+                                                            Grand Total
+                                                        </option>
+                                                        <option value="{%quotes.expired_at%}">
+                                                            Expired At
+                                                        </option>
+                                                        <option value="{%quotes.person_id%}">
+                                                            Person
+                                                        </option>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                            <input type="text" class="form-control" id="email-subject" name="subject"
+                                                placeholder="Enter email subject" required>
+                                        </div> --}}
+
+                                        </div>
+                                    </div>
+
+                                    <div class="card card-default mb-4">
+
+                                        <div class="card-body">
+
+                                            <div class="row g-4">
+
+
+                                                <div class="col-12 ">
+                                                    <label for="summernote"
+                                                        class="form-label">{{ __('app.settings.email-templates.content') }}</label>
+                                                    <textarea class="form-control w-100" id="summernote" rows="12" name="content" required></textarea>
+                                                </div>
+
                                             </div>
 
                                         </div>
-
                                     </div>
+
                                 </div>
-
-                                <div class="card card-default mb-4">
-
-                                    <div class="card-body">
-
-                                        <div class="row g-4">
-
-
-                                            <div class="col-12 ">
-                                                <label for="summernote"
-                                                    class="form-label">{{ __('app.settings.email-templates.content') }}</label>
-                                                <textarea class="form-control w-100" id="summernote" rows="12" name="content" required></textarea>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-
                             </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 action-bar">
+                    <div class="d-flex gap-2 justify-content-between">
+                        <div>
+                            <a href=""><button type="button" class="btn clear-all-btn">Clear
+                                    All</button></a>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn save-btn">Save</button>
+                            <a href="{{ url('email-templates') }}"><button type="button"
+                                    class="btn cancel-btn">Cancel</button></a>
                         </div>
 
-
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 action-bar">
-                <div class="d-flex gap-2 justify-content-between">
-                    <div>
-                        <a href=""><button type="button" class="btn clear-all-btn">Clear
-                                All</button></a>
-                    </div>
-                    <div>
-                        <button type="submit" class="btn save-btn">Save</button>
-                        <a href="{{ url('email-templates') }}"><button type="button"
-                                class="btn cancel-btn">Cancel</button></a>
                     </div>
 
                 </div>
-
             </div>
-        </div>
     </form>
 
 

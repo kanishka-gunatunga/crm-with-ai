@@ -25,32 +25,32 @@ use PDF;
 use Mail;
 use League\Csv\Writer;
 use App\Mail\LeadSendEmail;
+
 date_default_timezone_set('Asia/Colombo');
 
 class EmailsController extends Controller
 {
     public function emails(Request $request)
     {
-        if($request->isMethod('get')){
+        if ($request->isMethod('get')) {
 
             $sent_emails = SentEmails::get();
 
             return view('mail.mail', [
                 'sent_emails' => $sent_emails
             ]);
-         }
-        
+        }
     }
-   
+
     public function compose_email(Request $request)
     {
-        if($request->isMethod('post')){
+        if ($request->isMethod('post')) {
             $request->validate([
                 'to' => 'required',
                 'subject' => 'required|string|max:255',
                 'body' => 'required|string',
             ]);
-    
+
             $sent_email =  new SentEmails();
             $sent_email->to = $request->to;
             $sent_email->cc = $request->cc;
@@ -71,27 +71,26 @@ class EmailsController extends Controller
             $sent_email->save();
 
             Mail::to($request->to)
-            ->cc($request->cc ?? [])
-            ->bcc($request->bcc ?? [])
-            ->send(new LeadSendEmail($sent_email));
+                ->cc($request->cc ?? [])
+                ->bcc($request->bcc ?? [])
+                ->send(new LeadSendEmail($sent_email));
 
             return back()->with('success', 'Email sent successfully.');
-        }else{
+        } else {
             return view('mail.compose-mail');
         }
-        
     }
 
-    
-    public function view_email(Request $request)
+
+    public function view_email(Request $request, $uid)
     {
-        if($request->isMethod('post')){
+        if ($request->isMethod('post')) {
             $request->validate([
                 'to' => 'required',
                 'subject' => 'required|string|max:255',
                 'body' => 'required|string',
             ]);
-    
+
             $sent_email =  new SentEmails();
             $sent_email->to = $request->to;
             $sent_email->cc = $request->cc;
@@ -112,28 +111,32 @@ class EmailsController extends Controller
             $sent_email->save();
 
             Mail::to($request->to)
-            ->cc($request->cc ?? [])
-            ->bcc($request->bcc ?? [])
-            ->send(new LeadSendEmail($sent_email));
+                ->cc($request->cc ?? [])
+                ->bcc($request->bcc ?? [])
+                ->send(new LeadSendEmail($sent_email));
 
             return back()->with('success', 'Email sent successfully.');
-        }else{
-            return view('mail.email-view');
+        } else {
+            // return view('mail.email-view');
+            $sent_email = SentEmails::find($uid);
+            // dd($sent_email);
+            // $sent_email = SentEmails::find($uid);
+            if (!$sent_email) {
+                return redirect()->back()->with('error', 'Email not found.');
+            }
+
+            return view('mail.email-view', ['mail' => $sent_email]);
         }
-        
     }
-public function delete_selected_emails(Request $request)
-{
-    $emailIds = $request->input('selected_emails', []);
-    
-    if (!empty($emailIds)) {
-        SentEmails::whereIn('id', $emailIds)->delete();
-        return back()->with('success', 'Selected emails deleted successfully.');
+    public function delete_selected_emails(Request $request)
+    {
+        $emailIds = $request->input('selected_emails', []);
+
+        if (!empty($emailIds)) {
+            SentEmails::whereIn('id', $emailIds)->delete();
+            return back()->with('success', 'Selected emails deleted successfully.');
+        }
+
+        return back()->with('error', 'No attributes selected.');
     }
-
-    return back()->with('error', 'No attributes selected.');
 }
-}
-
-
-

@@ -59,7 +59,7 @@ $personOrganizationField = collect($person_attributes)->firstWhere('name', 'orga
 
                     @if($personNameField)
                         <div class="mb-3">
-                            <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}}">
+                            <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}} !important">
                                 {{ $personNameField['label'] ?? 'Name' }}
                             </label>
                             <input 
@@ -75,7 +75,7 @@ $personOrganizationField = collect($person_attributes)->firstWhere('name', 'orga
                     @endif
                     @if($personEmailField)
                     <div class="mb-3">
-                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}}">
+                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}} !important">
                             {{ $personEmailField['label'] ?? '' }}
                         </label>
                         <input 
@@ -92,7 +92,7 @@ $personOrganizationField = collect($person_attributes)->firstWhere('name', 'orga
 
                 @if($personPhoneField)
                     <div class="mb-3">
-                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}}">
+                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}} !important">
                             {{ $personPhoneField['label'] ?? '' }}
                         </label>
                         <input 
@@ -112,7 +112,7 @@ $personOrganizationField = collect($person_attributes)->firstWhere('name', 'orga
                     $organizations = Organization::get();
                     ?>
                     <div class="mb-3">
-                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}}">
+                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}} !important">
                             {{ $personOrganizationField['label'] ?? '' }}
                         </label>
                         <select class="form-select" name="person_organization" aria-label="Default select example" {{ !empty($personOrganizationField['required']) ? 'required' : '' }}>
@@ -138,7 +138,7 @@ $personOrganizationField = collect($person_attributes)->firstWhere('name', 'orga
 
                 @if($leadTitleField)
                     <div class="mb-3">
-                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}}">
+                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}} !important">
                             {{ $leadTitleField['label'] ?? '' }}
                         </label>
                         <input 
@@ -154,7 +154,7 @@ $personOrganizationField = collect($person_attributes)->firstWhere('name', 'orga
                 @endif
                 @if($leadValueField)
                     <div class="mb-3">
-                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}}">
+                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}} !important">
                             {{ $leadValueField['label'] ?? '' }}
                         </label>
                         <input 
@@ -170,7 +170,7 @@ $personOrganizationField = collect($person_attributes)->firstWhere('name', 'orga
                 @endif
                 @if($leadDescriptionField)
                     <div class="mb-3">
-                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}}">
+                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}} !important">
                             {{ $leadDescriptionField['label'] ?? '' }}
                         </label>
                         <textarea style="height:unset;" class="form-control" id="exampleFormControlTextarea1"  name="lead_description" rows="3" placeholder="{{ $leadDescriptionField['placeholder'] ?? '' }}" {{ !empty($leadDescriptionField['required']) ? 'required' : '' }}></textarea>
@@ -183,7 +183,7 @@ $personOrganizationField = collect($person_attributes)->firstWhere('name', 'orga
                     $sources = Source::get();
                     ?>
                     <div class="mb-3">
-                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}}">
+                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}} !important">
                             {{ $leadSourceField['label'] ?? '' }}
                         </label>
                         <select class="form-select" name="lead_source" aria-label="Default select example" {{ !empty($leadSourceField['required']) ? 'required' : '' }}>
@@ -200,7 +200,7 @@ $personOrganizationField = collect($person_attributes)->firstWhere('name', 'orga
                     $types = Type::get();
                     ?>
                     <div class="mb-3">
-                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}}">
+                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}} !important">
                             {{ $leadTypeField['label'] ?? '' }}
                         </label>
                         <select class="form-select" name="lead_type" aria-label="Default select example" {{ !empty($leadTypeField['required']) ? 'required' : '' }}>
@@ -217,7 +217,7 @@ $personOrganizationField = collect($person_attributes)->firstWhere('name', 'orga
                     $owners = UserDetails::get();
                     ?>
                     <div class="mb-3">
-                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}}">
+                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}} !important">
                             {{ $leadOwnerField['label'] ?? '' }}
                         </label>
                         <select class="form-select" name="lead_owner" aria-label="Default select example" {{ !empty($leadOwnerField['required']) ? 'required' : '' }}>
@@ -231,7 +231,7 @@ $personOrganizationField = collect($person_attributes)->firstWhere('name', 'orga
                 @endif
                 @if($leadClosingField)
                     <div class="mb-3">
-                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}}">
+                        <label for="username" class="form-label" style="color:{{$form->lable_color ?? '#546e7a'}} !important">
                             {{ $leadClosingField['label'] ?? '' }}
                         </label>
                         <input 

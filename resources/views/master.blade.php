@@ -232,7 +232,7 @@
     });
 
     $(document).ready(function() {
-        $('.summernoteNormal').summernote();
+        $('#summernote').summernote();
     });
 
 
@@ -297,10 +297,10 @@
     });
 </script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
 
         // Case 1: For delete links (e.g., <a href="...">)
-        $(document).on('click', '.delete-link-confirm', function (e) {
+        $(document).on('click', '.delete-link-confirm', function(e) {
             e.preventDefault();
             const url = $(this).attr('href');
 
@@ -320,7 +320,7 @@
         });
 
         // Case 2: For form submits (e.g., <button type="submit"> inside a <form>)
-        $(document).on('click', '.delete-form-confirm', function (e) {
+        $(document).on('click', '.delete-form-confirm', function(e) {
             e.preventDefault();
             const form = $(this).closest('form');
 
@@ -343,21 +343,21 @@
 </script>
 
 <script>
-  function toggleDropdown(id) {
-    const el = document.getElementById(id);
-    const allDropdowns = document.querySelectorAll('.dropdown-menu');
-    allDropdowns.forEach(d => {
-      if (d.id !== id) d.style.display = 'none';
-    });
-    el.style.display = (el.style.display === 'block') ? 'none' : 'block';
-  }
-
-  // Optional: Close on outside click
-  document.addEventListener('click', function (e) {
-    if (!e.target.closest('.user-profile') && !e.target.closest('.notification-wrapper')) {
-      document.querySelectorAll('.dropdown-menu').forEach(el => el.style.display = 'none');
+    function toggleDropdown(id) {
+        const el = document.getElementById(id);
+        const allDropdowns = document.querySelectorAll('.dropdown-menu');
+        allDropdowns.forEach(d => {
+            if (d.id !== id) d.style.display = 'none';
+        });
+        el.style.display = (el.style.display === 'block') ? 'none' : 'block';
     }
-  });
+
+    // Optional: Close on outside click
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.user-profile') && !e.target.closest('.notification-wrapper')) {
+            document.querySelectorAll('.dropdown-menu').forEach(el => el.style.display = 'none');
+        }
+    });
 </script>
 
 </html>

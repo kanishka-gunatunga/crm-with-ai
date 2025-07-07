@@ -184,7 +184,7 @@ Route::get( '/delete-selected-webforms', [WebFormController::class, 'delete_sele
 //Emails
 Route::get( '/emails', [EmailsController::class, 'emails'])->middleware(['auth']);
 Route::match(['get', 'post'],'compose-email', [EmailsController::class, 'compose_email'])->middleware(['auth']);
-Route::match(['get', 'post'],'view-email', [EmailsController::class, 'view_email'])->middleware(['auth']);
+Route::match(['get', 'post'], 'view-email/{id}', [EmailsController::class, 'view_email'])->middleware(['auth']);
 Route::get( '/delete-selected-emails', [EmailsController::class, 'delete_selected_emails'])->middleware(['auth']);
 });
 
