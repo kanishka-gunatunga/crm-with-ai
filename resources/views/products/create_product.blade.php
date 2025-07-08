@@ -6,7 +6,7 @@
         <!-- Scrollable Content -->
         <div class="d-flex flex-column min-vh-100">
             <div class="flex-grow-1">
-                <div class="main-scrollable">
+                <div class="main-scrollable ">
 
                     <div class="page-container">
 

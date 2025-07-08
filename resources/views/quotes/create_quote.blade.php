@@ -55,7 +55,7 @@
                                                 
                                                 <div class="col-12 col-md-4">
                                                     <label for="assign_user" class="form-label">Sales Owner</label>
-                                                    <select class="myDropdown form-control" name="owner" required>
+                                                    <select class="myDropdown form-control" name="owner" required >
                                                         <option selected=""></option>
                                                         <?php foreach($owners as $owner){ ?>
                                                         <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>

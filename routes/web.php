@@ -179,7 +179,7 @@ Route::get( '/view-web-form/{uuid}', [WebFormController::class, 'view_web_form']
 Route::get('/embed/web-form/{uuid}', [WebFormController::class, 'serveEmbedScript']);
 Route::post('web-form-submit/{uuid}', [WebFormController::class, 'web_form_submit']);
 Route::match(['get', 'post'],'edit-web-form/{id}', [WebFormController::class, 'edit_web_form'])->middleware(['auth', 'permission:webForms-edit']);
-Route::get( '/delete-selected-webforms', [WebFormController::class, 'delete_selected_webforms'])->middleware(['auth', 'permission:webForms-delete']);
+Route::post( '/delete-selected-webforms', [WebFormController::class, 'delete_selected_webforms'])->middleware(['auth', 'permission:webForms-delete']);
 
 //Emails
 Route::get( '/emails', [EmailsController::class, 'emails'])->middleware(['auth']);

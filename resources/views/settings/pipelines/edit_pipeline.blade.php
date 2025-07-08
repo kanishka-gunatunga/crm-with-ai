@@ -20,7 +20,7 @@
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
                                             <li class="breadcrumb-item"><a
-                                                    href="#">{{ __('app.settings.pipelines.title') }}</a></li>
+                                                    href="{{ url('pipelines') }}">{{ __('app.settings.pipelines.title') }}</a></li>
                                             <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
                                                 {{ __('app.settings.pipelines.edit-title') }}</li>
                                         </ol>
@@ -95,10 +95,10 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td><input type="text" class="form-control" name="stages[]"
+                                                    <td><input type="text" class="form-control" 
                                                             value="New" readonly required></td>
                                                     <td><input type="number" step="any" class="form-control"
-                                                            name="probabilities[]" value="100" readonly required></td>
+                                                             value="100" readonly required></td>
                                                     <td></td>
                                                 </tr>
                                                 <?php foreach($pipeline->stages as $stage){ 
@@ -120,17 +120,17 @@
                                                 </tr>
                                                 <?php }  }?>
                                                 <tr>
-                                                    <td><input type="text" class="form-control" name="stages[]"
+                                                    <td><input type="text" class="form-control" 
                                                             value="Won" readonly required></td>
                                                     <td><input type="number" step="any" class="form-control"
-                                                            name="probabilities[]" value="100" readonly required></td>
+                                                             value="100" readonly required></td>
                                                     <td></td>
                                                 </tr>
                                                 <tr>
-                                                    <td><input type="text" class="form-control" name="stages[]"
+                                                    <td><input type="text" class="form-control" 
                                                             value="Lost" readonly required></td>
                                                     <td><input type="number" step="any" class="form-control"
-                                                            name="probabilities[]" value="0" readonly required></td>
+                                                            value="0" readonly required></td>
                                                     <td></td>
                                                 </tr>
                                             </tbody>
@@ -204,6 +204,7 @@
                 let newRow = document.createElement("tr");
                 newRow.innerHTML = `
             <td><input type="text" class="form-control" name="stages[]" required ></td>
+            <input type="hidden" class="form-control" name="id[]" value="New">
             <td><input type="number" step="any" class="form-control" name="probabilities[]" required></td>
             <td><i class="fa-solid fa-trash delete-stage remove-append-item mx-2"></i></td>
         `;

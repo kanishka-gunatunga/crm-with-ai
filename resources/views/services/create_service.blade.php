@@ -67,7 +67,7 @@
                                     <div class="card-body">
                                         <div class="col-12">
                                             <label for="field5" class="form-label">Description</label>
-                                            <textarea class="form-control description-form-control" placeholder="Description" id="field5" rows="5" name="description"></textarea>
+                                            <textarea class="description-text-area" placeholder="Description" id="field5" rows="5" name="description" ></textarea>
                                             @if ($errors->has('description'))
                                                 <div class="alert alert-danger mt-2">{{ $errors->first('description') }}
                                                     </li>

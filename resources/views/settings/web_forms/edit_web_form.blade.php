@@ -50,7 +50,9 @@
                                                     data-bs-target="#tab2" type="button" role="tab"
                                                     aria-controls="tab2" aria-selected="false">Embed</button>
                                                 <a class="btn white-btn tab-button" target="_blank"
-                                                    href="http://127.0.0.1:8000/view-web-form/414f94db-b735-4bb7-bd6c-034eb307f83a">Preview</a>
+                                                    href="{{ url('/view-web-form/' . $form->uid) }}">Preview</a>
+
+                                                    {{-- uid pass --}}
                                             </div>
                                         </div>
                                         <div class="tab-content mt-4" id="nav-tabContent">
@@ -294,6 +296,10 @@
                                                                             value="Name">
 
                                                                     </div>
+
+
+
+
                                                                     <div class="col-md-6">
                                                                         <label for="firstNameinput"
                                                                             class="form-label">Field Placeholder</label>

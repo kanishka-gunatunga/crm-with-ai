@@ -38,6 +38,7 @@ class PipelineController extends Controller
             return view('settings.pipelines.create_pipeline');
         }
         if($request->isMethod('post')){
+            // dd($request->all());
             $request->validate([
                 'name' => 'required|string',
                 'rotting_days' => 'required|integer',
@@ -151,6 +152,8 @@ public function edit_pipeline($id, Request $request)
     }
 
     if ($request->isMethod('post')) {
+
+        // dd($request->all());
         $request->validate([
             'name' => 'required|string',
             'rotting_days' => 'required|integer',
@@ -178,7 +181,7 @@ public function edit_pipeline($id, Request $request)
         foreach ($request->stages as $index => $stageName) {
             $stageId = $request->id[$index];
 
-            if ($stageId === 'new') {
+            if ($stageId === 'New') {
                 PipelineStage::create([
                     'pipeline_id' => $pipeline->id,
                     'name' => $stageName,

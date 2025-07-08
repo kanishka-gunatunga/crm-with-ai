@@ -23,7 +23,7 @@
                                         <ol class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="{{ url('products') }}">Products</a></li>
                                             <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
-                                                Library</li>
+                                                Edit Product</li>
                                         </ol>
                                     </nav>
                                 </div>

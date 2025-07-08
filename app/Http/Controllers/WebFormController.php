@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lead;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
@@ -128,7 +129,7 @@ class WebFormController extends Controller
     }
     public function delete_web_form($id,Request $request)
     {
-        if($request('get')){
+        if($request ->isMethod('get')){
             WebForm::where('id',$id)->delete();
             return redirect()->back()->with('success', 'Web form deleted successfully!');
          }
@@ -217,9 +218,9 @@ public function serveEmbedScript($uid)
 
     return response($script, 200)->header('Content-Type', 'application/javascript');
 }
-public function web_form_submit($uid)
+public function web_form_submit($uid, Request $request)
 {
-    $form = WebForm::where('uuid', $uuid)->firstOrFail();
+    $form = WebForm::where('uid', $uid)->firstOrFail();
 
     $emails = [];
     $contactNumbers = [];
@@ -239,7 +240,7 @@ public function web_form_submit($uid)
     $person->contact_numbers =$contactNumbers;
     $person->save();
 
-    if($form->create_lead_enabled == on){
+    if($form->create_lead_enabled == 'on'){
         $pipeline = Pipeline::where('is_default', 'on')->first();
         $lead =  new Lead();
         $lead->title = $request->lead_title;
