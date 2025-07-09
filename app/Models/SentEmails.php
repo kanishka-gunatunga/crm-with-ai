@@ -19,7 +19,8 @@ class SentEmails extends Model
         'bcc',
         'subject',
         'body',
-        'attachments'
+        'attachments',
+        'favourite',
     ];
 
     protected $casts = [

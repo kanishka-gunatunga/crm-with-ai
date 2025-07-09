@@ -186,6 +186,7 @@ Route::get( '/emails', [EmailsController::class, 'emails'])->middleware(['auth']
 Route::match(['get', 'post'],'compose-email', [EmailsController::class, 'compose_email'])->middleware(['auth']);
 Route::match(['get', 'post'], 'view-email/{id}', [EmailsController::class, 'view_email'])->middleware(['auth']);
 Route::get( '/delete-selected-emails', [EmailsController::class, 'delete_selected_emails'])->middleware(['auth']);
+Route::post('/toggle-favourite/{id}', [EmailsController::class, 'toggleFavourite'])->middleware(['auth']);
 });
 
 Route::get('/lang/{locale}', function ($locale) {

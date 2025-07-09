@@ -52,10 +52,10 @@
                                                         <?php } ?>
                                                     </select>
                                                 </div>
-                                                
+
                                                 <div class="col-12 col-md-4">
                                                     <label for="assign_user" class="form-label">Sales Owner</label>
-                                                    <select class="myDropdown form-control" name="owner" required >
+                                                    <select class="myDropdown form-control" name="owner" required>
                                                         <option selected=""></option>
                                                         <?php foreach($owners as $owner){ ?>
                                                         <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
@@ -82,7 +82,7 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="col-12 col-md-4">
+                                                <div class="col-12 col-md-4 selection-div">
                                                     <label for="terms" class="form-label">Person</label>
                                                     <select class="myDropdown form-control" name="person" required>
                                                         <option selected=""></option>
@@ -318,6 +318,7 @@
             }
 
             initializeSelect2();
+
 
             function calculateRow(row) {
                 let quantity = parseFloat(row.find('input[name="quantity[]"]').val()) || 0;

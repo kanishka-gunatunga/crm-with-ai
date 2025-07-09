@@ -132,11 +132,43 @@
 
 <script>
     $(document).ready(function() {
+
+        // Initialize Select2 for .myDropdown
         $('.myDropdown').select2({
-            // placeholder: "Assign User",
             allowClear: true
+        }).on('select2:open', function() {
+            console.log('Select2 dropdown opened');
+            moveParsleyError
+        (); // Move the parsley error message after select2 container after initialization
         });
+
+        // Initialize Select2 for .tagselect with tags enabled
+        $('.tagselect').select2({
+            tags: true,
+        });
+
+        // Function to move the parsley error message to the last position of the parent container
+        function moveParsleyError() {
+            console.log('Moving parsley error message');
+            $('.parsley-errors-list').each(function() {
+                var parentDiv = $(this).closest(
+                '.col-12'); // Get the closest container of the error message
+                $(this).appendTo(
+                parentDiv); // Move the error message to the last position of the parent div
+            });
+        }
+
+        // Move parsley errors for any existing errors when the document loads
+        moveParsleyError();
+
     });
+
+    // $(document).ready(function() {
+    //     $('.myDropdown').select2({
+    //         // placeholder: "Assign User",
+    //         allowClear: true
+    //     });
+    // });
     document.addEventListener('DOMContentLoaded', function() {
 
         const tablesToExport = document.querySelectorAll('.data-table-export');
@@ -200,11 +232,11 @@
         });
     });
 </script>
-<script>
+{{-- <script>
     $('.tagselect').select2({
         tags: true,
     });
-</script>
+</script> --}}
 
 
 <script>

@@ -60,37 +60,40 @@
                                                 @endif
                                             </div>
                                             <div class="col-12 col-md-4">
-                                            <label for="field2" class="form-label">Pipeline</label>
-                                            <select class="form-control tagselect" name="pipeline" required>
-                                                <option value="">Select a pipeline</option>
-                                                <?php foreach($pipelines as $pipeline){ ?>
-                                                <option value="{{ $pipeline->id }}" {{ session('pipeline_id') == $pipeline->id ? 'selected' : '' }}>{{ $pipeline->name }}</option>
-                                                <?php } ?>
-                                            </select>
-                                            @if ($errors->has('pipeline'))
-                                                <div class="alert alert-danger mt-2">
-                                                    {{ $errors->first('pipeline') }}
-                                                </div>
-                                            @endif
+                                                <label for="field2" class="form-label">Pipeline</label>
+                                                <select class="form-control tagselect" name="pipeline" required>
+                                                    <option value="">Select a pipeline</option>
+                                                    <?php foreach($pipelines as $pipeline){ ?>
+                                                    <option value="{{ $pipeline->id }}"
+                                                        {{ session('pipeline_id') == $pipeline->id ? 'selected' : '' }}>
+                                                        {{ $pipeline->name }}</option>
+                                                    <?php } ?>
+                                                </select>
+                                                @if ($errors->has('pipeline'))
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $errors->first('pipeline') }}
+                                                    </div>
+                                                @endif
                                             </div>
                                             @php
                                                 $selectedStage = request('stage') ?? old('stage');
                                             @endphp
                                             <div class="col-12 col-md-4">
-                                            <label for="field2" class="form-label">Stage</label>
-                                            <select class="form-control tagselect" name="stage" required>
-                                                <option value="">Select a stage</option>
-                                                <?php foreach($stages as $stage){ ?>
-                                                <option value="{{ $stage->id }}" {{ $selectedStage == $stage->id ? 'selected' : '' }}>
-                                                    {{ $stage->name }}
-                                                </option>
-                                                <?php } ?>
-                                            </select>
-                                            @if ($errors->has('stage'))
-                                                <div class="alert alert-danger mt-2">
-                                                    {{ $errors->first('stage') }}
-                                                </div>
-                                            @endif
+                                                <label for="field2" class="form-label">Stage</label>
+                                                <select class="form-control tagselect" name="stage" required>
+                                                    <option value="">Select a stage</option>
+                                                    <?php foreach($stages as $stage){ ?>
+                                                    <option value="{{ $stage->id }}"
+                                                        {{ $selectedStage == $stage->id ? 'selected' : '' }}>
+                                                        {{ $stage->name }}
+                                                    </option>
+                                                    <?php } ?>
+                                                </select>
+                                                @if ($errors->has('stage'))
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $errors->first('stage') }}
+                                                    </div>
+                                                @endif
                                             </div>
 
                                             <div class="col-12 col-md-4">
@@ -174,7 +177,7 @@
                                             </div>
 
 
-                                            
+
 
                                             {{-- <div class="col-12 col-md-4">
                                                 <label for="field5" class="form-label">Priority</label>
@@ -219,9 +222,9 @@
                                         <input type="text" class="form-control" id="field5" placeholder="Date Due">
                                     </div> --}}
                                             <!-- <div class="col-12 col-md-4">
-                                                                                                                                                    <label for="field5" class="form-label">Reminders</label>
-                                                                                                                                                    <input type="text" class="form-control" id="field5" placeholder="Reminders">
-                                                                                                                                                </div> -->
+                                                                                                                                                                    <label for="field5" class="form-label">Reminders</label>
+                                                                                                                                                                    <input type="text" class="form-control" id="field5" placeholder="Reminders">
+                                                                                                                                                                </div> -->
 
                                         </div>
 
@@ -441,34 +444,34 @@
         function addEmailField(email = '', type = 'work', index = emailCounter) {
             const inputFieldContainer = $('#input-fields-container');
             const emailField = `
-    <div class="col-12 col-md-4 email-field-${index} mt-1">
-        <label for="field1" class="form-label">{{ __('app.leads.emails') }}</label>
-        <input type="email" class="form-control" name="emails[]" value="${email}" required>
-        
-        <div class="mt-4 mt-lg-0">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="email_types[${index}]"
-                    id="email-work-${index}" ${type === 'work' ? 'checked' : ''} value="work">
-                <label class="form-check-label" for="email-work-${index}">{{ __('app.common.work') }}</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="email_types[${index}]"
-                    id="email-home-${index}" ${type === 'home' ? 'checked' : ''} value="home">
-                <label class="form-check-label" for="email-home-${index}">{{ __('app.common.home') }}</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <button class="btn trash-icon-btn " onclick="removeEmailField(this)">
-                                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M4.44137 13.0221C4.1026 13.0221 3.81269 12.9016 3.57164 12.6606C3.3306 12.4195 3.20987 12.1294 3.20946 11.7902V3.78281H2.59351V2.55089H5.67329V1.93494H9.36902V2.55089H12.4488V3.78281H11.8328V11.7902C11.8328 12.129 11.7123 12.4191 11.4713 12.6606C11.2302 12.902 10.9401 13.0226 10.6009 13.0221H4.44137ZM10.6009 3.78281H4.44137V11.7902H10.6009V3.78281ZM5.67329 10.5583H6.9052V5.01472H5.67329V10.5583ZM8.13711 10.5583H9.36902V5.01472H8.13711V10.5583Z"
-                                            fill="#ED2227" />
-                                    </svg>
+                        <div class="col-12 col-md-4 email-field-${index} mt-1">
+                            <label for="field1" class="form-label">{{ __('app.leads.emails') }}</label>
+                            <input type="email" class="form-control" name="emails[]" value="${email}" required>
+                            
+                            <div class="mt-4 mt-lg-0">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="email_types[${index}]"
+                                        id="email-work-${index}" ${type === 'work' ? 'checked' : ''} value="work">
+                                    <label class="form-check-label" for="email-work-${index}">{{ __('app.common.work') }}</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="email_types[${index}]"
+                                        id="email-home-${index}" ${type === 'home' ? 'checked' : ''} value="home">
+                                    <label class="form-check-label" for="email-home-${index}">{{ __('app.common.home') }}</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <button class="btn trash-icon-btn " onclick="removeEmailField(this)">
+                                                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M4.44137 13.0221C4.1026 13.0221 3.81269 12.9016 3.57164 12.6606C3.3306 12.4195 3.20987 12.1294 3.20946 11.7902V3.78281H2.59351V2.55089H5.67329V1.93494H9.36902V2.55089H12.4488V3.78281H11.8328V11.7902C11.8328 12.129 11.7123 12.4191 11.4713 12.6606C11.2302 12.902 10.9401 13.0226 10.6009 13.0221H4.44137ZM10.6009 3.78281H4.44137V11.7902H10.6009V3.78281ZM5.67329 10.5583H6.9052V5.01472H5.67329V10.5583ZM8.13711 10.5583H9.36902V5.01472H8.13711V10.5583Z"
+                                                                fill="#ED2227" />
+                                                        </svg>
 
-                                </button>
-            </div>
-        </div>
-    </div>`;
+                                                    </button>
+                                </div>
+                            </div>
+                        </div>`;
 
             inputFieldContainer.append(emailField);
             emailCounter++;
@@ -477,34 +480,34 @@
         function addNumberField(number = '', type = 'work', index = numberCounter) {
             const inputFieldContainer = $('#input-fields-container');
             const numberField = `
-    <div class="col-12 col-md-4 number-field-${index} mt-1">
-        <label for="field1" class="form-label">{{ __('app.leads.contact-numbers') }}</label>
-        <input type="text" class="form-control" name="contact_numbers[]" value="${number}">
-        
-        <div class="mt-4 mt-lg-0">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="number_types[${index}]"
-                    id="number-work-${index}" ${type === 'work' ? 'checked' : ''} value="work">
-                <label class="form-check-label" for="number-work-${index}">{{ __('app.common.work') }}</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="number_types[${index}]"
-                    id="number-home-${index}" ${type === 'home' ? 'checked' : ''} value="home">
-                <label class="form-check-label" for="number-home-${index}">{{ __('app.common.home') }}</label>
-            </div>
-            <div class="form-check form-check-inline">
-               <button class="btn trash-icon-btn " onclick="removeNumberField(this)">
-                                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M4.44137 13.0221C4.1026 13.0221 3.81269 12.9016 3.57164 12.6606C3.3306 12.4195 3.20987 12.1294 3.20946 11.7902V3.78281H2.59351V2.55089H5.67329V1.93494H9.36902V2.55089H12.4488V3.78281H11.8328V11.7902C11.8328 12.129 11.7123 12.4191 11.4713 12.6606C11.2302 12.902 10.9401 13.0226 10.6009 13.0221H4.44137ZM10.6009 3.78281H4.44137V11.7902H10.6009V3.78281ZM5.67329 10.5583H6.9052V5.01472H5.67329V10.5583ZM8.13711 10.5583H9.36902V5.01472H8.13711V10.5583Z"
-                                            fill="#ED2227" />
-                                    </svg>
+                            <div class="col-12 col-md-4 number-field-${index} mt-1">
+                                <label for="field1" class="form-label">{{ __('app.leads.contact-numbers') }}</label>
+                                <input type="text" class="form-control" name="contact_numbers[]" value="${number}">
+                                
+                                <div class="mt-4 mt-lg-0">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="number_types[${index}]"
+                                            id="number-work-${index}" ${type === 'work' ? 'checked' : ''} value="work">
+                                        <label class="form-check-label" for="number-work-${index}">{{ __('app.common.work') }}</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="number_types[${index}]"
+                                            id="number-home-${index}" ${type === 'home' ? 'checked' : ''} value="home">
+                                        <label class="form-check-label" for="number-home-${index}">{{ __('app.common.home') }}</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                    <button class="btn trash-icon-btn " onclick="removeNumberField(this)">
+                                                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M4.44137 13.0221C4.1026 13.0221 3.81269 12.9016 3.57164 12.6606C3.3306 12.4195 3.20987 12.1294 3.20946 11.7902V3.78281H2.59351V2.55089H5.67329V1.93494H9.36902V2.55089H12.4488V3.78281H11.8328V11.7902C11.8328 12.129 11.7123 12.4191 11.4713 12.6606C11.2302 12.902 10.9401 13.0226 10.6009 13.0221H4.44137ZM10.6009 3.78281H4.44137V11.7902H10.6009V3.78281ZM5.67329 10.5583H6.9052V5.01472H5.67329V10.5583ZM8.13711 10.5583H9.36902V5.01472H8.13711V10.5583Z"
+                                                                    fill="#ED2227" />
+                                                            </svg>
 
-                                </button>
-            </div>
-        </div>
-    </div>`;
+                                                        </button>
+                                    </div>
+                                </div>
+                            </div>`;
 
             inputFieldContainer.append(numberField);
             numberCounter++;
@@ -521,53 +524,53 @@
         function addProductField() {
             const productFieldsContainer = $('#product-fields');
             const productField = `
-    <div class="row align-items-center product-field">
-    <div class="col-md-12">
-            <div class="mb-3">
-                <label for="firstNameinput" class="form-label">{{ __('app.leads.products') }}</label>
-                <select class="form-control product-select" name="products[]" required onchange="updatePrice(this)">
-                    <option hidden selected></option>
-                     <?php foreach($products as $product){ ?> 
-                    <option value="product||{{ $product->id }}" data-price="{{ $product->cost }}">{{ $product->name }}</option>
-                    <?php } ?>
-                    <?php foreach($services as $service){ ?> 
-                        <option value="service||{{ $service->id }}" data-price="{{ $service->cost }}">{{ $service->name }}</option>
-                    <?php } ?>
-                </select>
-            </div>
-    </div>
-    <div class="col-md-4">
-        <div class="mb-3">
-            <label for="firstNameinput" class="form-label">{{ __('app.leads.price') }}</label>
-            <input type="number" step="any" class="form-control price-input" name="prices[]"  required oninput="calculateAmount(this)">
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="mb-3">
-            <label for="firstNameinput" class="form-label">{{ __('app.leads.quantity') }}</label>
-            <input type="number" step="any" class="form-control quantity-input" name="quantities[]"  required oninput="calculateAmount(this)">
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="mb-3">
-            <label for="firstNameinput" class="form-label">{{ __('app.leads.amount') }}</label>
-            <input type="number" step="any" class="form-control amount-input" name="amounts[]" readonly  required>
-        </div>
-    </div>
-    <div class="col-md-1">
-        <div class="mb-3">
-        <button class="btn trash-icon-btn " onclick="removeProductField(this)">
-                                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M4.44137 13.0221C4.1026 13.0221 3.81269 12.9016 3.57164 12.6606C3.3306 12.4195 3.20987 12.1294 3.20946 11.7902V3.78281H2.59351V2.55089H5.67329V1.93494H9.36902V2.55089H12.4488V3.78281H11.8328V11.7902C11.8328 12.129 11.7123 12.4191 11.4713 12.6606C11.2302 12.902 10.9401 13.0226 10.6009 13.0221H4.44137ZM10.6009 3.78281H4.44137V11.7902H10.6009V3.78281ZM5.67329 10.5583H6.9052V5.01472H5.67329V10.5583ZM8.13711 10.5583H9.36902V5.01472H8.13711V10.5583Z"
-                                            fill="#ED2227" />
-                                    </svg>
+                                    <div class="row align-items-center product-field">
+                                    <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label for="firstNameinput" class="form-label">{{ __('app.leads.products') }}</label>
+                                                <select class="form-control product-select" name="products[]" required onchange="updatePrice(this)">
+                                                    <option hidden selected></option>
+                                                    <?php foreach($products as $product){ ?> 
+                                                    <option value="product||{{ $product->id }}" data-price="{{ $product->cost }}">{{ $product->name }}</option>
+                                                    <?php } ?>
+                                                    <?php foreach($services as $service){ ?> 
+                                                        <option value="service||{{ $service->id }}" data-price="{{ $service->cost }}">{{ $service->name }}</option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="firstNameinput" class="form-label">{{ __('app.leads.price') }}</label>
+                                            <input type="number" step="any" class="form-control price-input" name="prices[]"  required oninput="calculateAmount(this)">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label for="firstNameinput" class="form-label">{{ __('app.leads.quantity') }}</label>
+                                            <input type="number" step="any" class="form-control quantity-input" name="quantities[]"  required oninput="calculateAmount(this)">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="firstNameinput" class="form-label">{{ __('app.leads.amount') }}</label>
+                                            <input type="number" step="any" class="form-control amount-input" name="amounts[]" readonly  required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="mb-3">
+                                        <button class="btn trash-icon-btn " onclick="removeProductField(this)">
+                                                                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
+                                                                        xmlns="http://www.w3.org/2000/svg">
+                                                                        <path
+                                                                            d="M4.44137 13.0221C4.1026 13.0221 3.81269 12.9016 3.57164 12.6606C3.3306 12.4195 3.20987 12.1294 3.20946 11.7902V3.78281H2.59351V2.55089H5.67329V1.93494H9.36902V2.55089H12.4488V3.78281H11.8328V11.7902C11.8328 12.129 11.7123 12.4191 11.4713 12.6606C11.2302 12.902 10.9401 13.0226 10.6009 13.0221H4.44137ZM10.6009 3.78281H4.44137V11.7902H10.6009V3.78281ZM5.67329 10.5583H6.9052V5.01472H5.67329V10.5583ZM8.13711 10.5583H9.36902V5.01472H8.13711V10.5583Z"
+                                                                            fill="#ED2227" />
+                                                                    </svg>
 
-                                </button>
-        </div>
-    </div>
-    </div>`;
+                                                                </button>
+                                        </div>
+                                    </div>
+                                    </div>`;
             productFieldsContainer.append(productField);
 
             $(`.product-select`).select2({
@@ -584,6 +587,7 @@
     </script>
     <script>
         $(document).ready(function() {
+            // Initialize the select2 with tags functionality
             $('#person-select').select2({
                 tags: true,
                 tokenSeparators: [','],
@@ -601,9 +605,45 @@
                     };
                 }
             });
+
+            // Initialize the second select2 (organization)
             $('#organization-select').select2({});
+
+            // Function to clear email and contact number fields
+            function clearFields() {
+                $('#email-fields').html('');
+                $('#number-fields').html('');
+            }
+
+            // Function to add email input fields dynamically
+            function addEmailField(emailValue = '', emailLabel = '', index = 0) {
+                let emailHtml = `
+
+            <div class="email-field">
+                <label for="firstNameinput" class="form-label">Email</label>
+                <input type="email" name="emails[${index}]" value="${emailValue}" placeholder="Email ${emailLabel}" class="form-control">
+            </div>`;
+                $('#email-fields').append(emailHtml);
+            }
+
+            // Function to add contact number input fields dynamically
+            function addNumberField(numberValue = '', numberLabel = '', index = 0) {
+                let numberHtml = `
+            <div class="number-field">
+                <label for="firstNameinput" class="form-label">Contact Number</label>
+                <input type="text" name="contact_numbers[${index}]" value="${numberValue}" placeholder="Contact Number ${numberLabel}" class="form-control">
+            
+            </div>`;
+                $('#number-fields').append(numberHtml);
+            }
+
+            // Event handler for the person select dropdown change
             $('#person-select').on('change', function() {
                 let personId = $(this).val();
+
+                // Clear the fields when a new person is selected
+                clearFields();
+
                 if (personId) {
                     $.ajax({
                         url: '{{ url('get-contact-person-details') }}/' + personId,
@@ -613,6 +653,7 @@
 
                             let organizationSelect = $('#organization-select');
 
+                            // Handling organization selection
                             if (response.organization) {
                                 organizationSelect.empty().trigger("change");
                                 let newOption = new Option(response.organization_name, response
@@ -622,22 +663,20 @@
                                 organizationSelect.val(null).trigger("change");
                             }
 
-                            $('#email-fields').html('');
+                            // Adding the emails
                             if (response.emails.length > 0) {
                                 response.emails.forEach((email, index) => {
                                     addEmailField(email.value, email.label, index);
                                 });
-                                emailCounter = response.emails.length;
                             } else {
                                 addEmailField();
                             }
 
-                            $('#number-fields').html('');
+                            // Adding the contact numbers
                             if (response.contact_numbers.length > 0) {
                                 response.contact_numbers.forEach((number, index) => {
                                     addNumberField(number.value, number.label, index);
                                 });
-                                numberCounter = response.contact_numbers.length;
                             } else {
                                 addNumberField();
                             }
@@ -646,7 +685,21 @@
                 }
             });
 
+            // Handle the close button click event (if any)
+            $('#person-select').on('select2:clear', function() {
+                clearFields(); // Clear the email and number fields when the selection is cleared
+            });
+
+            // Optional: Add remove button functionality for email and number fields
+            $(document).on('click', '.remove-email', function() {
+                $(this).parent().remove(); // Remove the email field
+            });
+
+            $(document).on('click', '.remove-number', function() {
+                $(this).parent().remove(); // Remove the number field
+            });
         });
+
 
         function removeProductField(element) {
             const productField = element.closest('.product-field');
@@ -685,37 +738,40 @@
     </script>
 
 
-<script>
-$(document).ready(function () {
+    <script>
+        $(document).ready(function() {
 
 
-    $('select[name="pipeline"]').on('change', function () {
-        let pipelineId = $(this).val();
+            $('select[name="pipeline"]').on('change', function() {
+                let pipelineId = $(this).val();
 
-        if (pipelineId) {
-            $.ajax({
-                url: '{{ url('get-stages-by-pipeline') }}/' + pipelineId,
-                type: 'GET',
-                success: function (data) {
-                    let $stageSelect = $('select[name="stage"]');
+                if (pipelineId) {
+                    $.ajax({
+                        url: '{{ url('get-stages-by-pipeline') }}/' + pipelineId,
+                        type: 'GET',
+                        success: function(data) {
+                            let $stageSelect = $('select[name="stage"]');
 
-                    $stageSelect.empty().append('<option value="">Select a stage</option>');
+                            $stageSelect.empty().append(
+                                '<option value="">Select a stage</option>');
 
-                    $.each(data, function (key, stage) {
-                        $stageSelect.append('<option value="' + stage.id + '">' + stage.name + '</option>');
+                            $.each(data, function(key, stage) {
+                                $stageSelect.append('<option value="' + stage.id +
+                                    '">' + stage.name + '</option>');
+                            });
+
+                            $stageSelect.val(null).trigger('change');
+                        },
+                        error: function() {
+                            alert('Failed to load stages. Please try again.');
+                        }
                     });
-
-                    $stageSelect.val(null).trigger('change');
-                },
-                error: function () {
-                    alert('Failed to load stages. Please try again.');
+                } else {
+                    let $stageSelect = $('select[name="stage"]');
+                    $stageSelect.empty().append('<option value="">Select a stage</option>').val(null)
+                        .trigger('change');
                 }
             });
-        } else {
-            let $stageSelect = $('select[name="stage"]');
-            $stageSelect.empty().append('<option value="">Select a stage</option>').val(null).trigger('change');
-        }
-    });
-});
-</script>
+        });
+    </script>
 @endsection

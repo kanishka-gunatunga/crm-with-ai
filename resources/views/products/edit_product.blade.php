@@ -71,7 +71,8 @@
                                     <div class="card-body">
                                         <div class="col-12">
                                             <label for="field5" class="form-label">Description</label>
-                                            <textarea class="form-control description-form-control" placeholder="Description" id="field5" rows="5" name="description">{{ $product->description }}</textarea>
+                                            <textarea class="form-control description-form-control" placeholder="Description" id="field5" rows="5"
+                                                name="description">{{ $product->description }}</textarea>
 
                                         </div>
                                     </div>
@@ -91,23 +92,22 @@
 
                 </div>
 
-                
+
             </div>
 
 
             <div class="col-12 action-bar">
-                    <div class="d-flex gap-2 justify-content-between">
-                        <div>
-                            <a href=""><button type="button" class="btn clear-all-btn">Clear All</button></a>
-                        </div>
-                        <div>
-                            <button type="submit" class="btn save-btn">Save</button>
-                            <a href="{{ url('products') }}"><button type="button"
-                                    class="btn cancel-btn">Cancel</button></a>
-                        </div>
-
+                <div class="d-flex gap-2 justify-content-between">
+                    <div>
+                        <a href=""><button type="button" class="btn clear-all-btn">Clear All</button></a>
                     </div>
+                    <div>
+                        <button type="submit" class="btn save-btn">Save</button>
+                        <a href="{{ url('products') }}"><button type="button" class="btn cancel-btn">Cancel</button></a>
+                    </div>
+
                 </div>
+            </div>
         </div>
     </form>
     <!-- Bottom Action Buttons -->

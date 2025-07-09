@@ -109,7 +109,7 @@
                                                     </p>
 
                                                     <p>
-                                                       BCC : {{ $mail->bcc[0] ?? '' }}
+                                                        BCC : {{ $mail->bcc[0] ?? '' }}
                                                     </p>
 
                                                     <p>
@@ -129,14 +129,19 @@
                                         <span
                                             class="time-ago">({{ optional($mail->created_at)->diffForHumans() ?? '' }})</span>
                                     </div>
-                                    <a href="">
+                                    <button class="text-muted border-0 bg-transparent p-0"
+                                        onclick="favouriteMail({{ $mail->id }})"
+                                        id="favourite-button-{{ $mail->id }}">
+
+                                        <!-- SVG Icon for Favourite Button -->
                                         <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
+                                            xmlns="http://www.w3.org/2000/svg" id="favourite-icon-{{ $mail->id }}">
                                             <path
                                                 d="M12.8848 8.20312L13.0615 8.61914L13.5117 8.6582L18.3301 9.06641L14.6699 12.2383L14.3281 12.5352L14.4307 12.9756L15.5303 17.6885L11.3877 15.1885L11 14.9541L10.6123 15.1885L6.46875 17.6885L7.56836 12.9756L7.6709 12.5352L7.3291 12.2383L3.66797 9.06641L8.4873 8.6582L8.9375 8.61914L9.11426 8.20312L10.999 3.75488L12.8848 8.20312Z"
                                                 stroke="black" stroke-opacity="0.37" stroke-width="1.5" />
                                         </svg>
-                                    </a>
+                                    </button>
+
 
                                     <a href="">
                                         <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
@@ -225,6 +230,65 @@
     </div>
 
     <script>
+        function favouriteMail(id) {
+
+            // Console log to check the ID
+            console.log("id:", id);
+
+            var csrfToken = "{{ csrf_token() }}"; // CSRF token for Laravel security
+            console.log("CSRF Token:", csrfToken); // To debug and ensure CSRF token is available
+
+            $.ajax({
+                url: "{{ url('toggle-favourite') }}/" + id, // URL to the controller action
+                method: "POST",
+                data: {
+                    _token: csrfToken, // CSRF token for security
+                    mail_id: id // The ID of the mail to toggle the favourite status
+                },
+
+                
+
+                // This was incorrectly placed inside the data object, moving it outside
+                success: function(response) {
+                    if (response.success) {
+                        // Update the button's visual state based on the server response
+                        var favouriteButton = document.getElementById('favourite-button-' + id);
+                        var favouriteIcon = document.getElementById('favourite-icon-' + id);
+
+                        console.log("Response from server:", response); // To debug and check the response
+
+                        // Toggle the 'favourited' class and change the stroke color
+                        favouriteButton.classList.toggle('favourited', response.favourited);
+
+                        // Change the icon color or animation when favourited
+                        if (response.favourited) {
+                            favouriteIcon.setAttribute('stroke', '#FFD700'); // Gold color when favourited
+                            console.log("Mail favourited:", id); // Log when mail is favourited
+                        } else {
+                            favouriteIcon.setAttribute('stroke', 'black'); // Default black color
+                        }
+
+                        // Show a success message with toastr
+                        toastr.success(response.message);
+                    } else {
+                        console.log("Error toggling favourite status:", response.message); // Log error message
+                        toastr.error(response.message); // Handle failure message
+                    }
+                },
+
+                
+                error: function(xhr, status, error) {
+
+                    console.log("Data not being sent:", {
+                    _token: csrfToken,
+                    mail_id: id
+                }), // To debug and check the data being sent
+                    console.error("Error toggling favourite status outside:", error); // Log the error
+                    toastr.error("Error toggling favourite status");
+                }
+            });
+        }
+
         const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
         const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
 
@@ -243,5 +307,9 @@
 
         // Optionally, you can trigger the popover manually if you need to
         // popoverTrigger.show();
+
+
+
+        // favourite mail function
     </script>
 @endsection

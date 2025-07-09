@@ -2086,3 +2086,12 @@ div.dataTables_wrapper div.dataTables_filter {
   line-height: 100%;
   color: var(--black-color) !important;
 }
+
+
+.favourited {
+    background-color: #FFD700; /* Gold background when favourited */
+    border-radius: 50%; /* Rounded button */
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.8); /* Optional: Glow effect */
+}
+
+

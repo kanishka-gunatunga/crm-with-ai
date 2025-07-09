@@ -396,6 +396,9 @@
 
                                     </div>
                                 </div>
+
+
+                                
                                 <div class="card card-default mt-3">
                                     <div class="card-body">
                                         <div class="col-12">
@@ -620,70 +623,116 @@
         }
     </script>
     <script>
-        $(document).ready(function() {
-            $('#person-select').select2({
-                tags: true,
-                tokenSeparators: [','],
-                placeholder: "Select or type to add",
-                allowClear: true,
-                createTag: function(params) {
-                    var term = $.trim(params.term);
-                    if (term === '') {
-                        return null;
-                    }
-                    return {
-                        id: term,
-                        text: term,
-                        newTag: true
-                    };
+          $(document).ready(function() {
+        // Initialize select2 with tags functionality for person-select
+        $('#person-select').select2({
+            tags: true,
+            tokenSeparators: [','],
+            placeholder: "Select or type to add",
+            allowClear: true,
+            createTag: function(params) {
+                var term = $.trim(params.term);
+                if (term === '') {
+                    return null;
                 }
-            });
-            $('#organization-select').select2({});
-            $('#person-select').on('change', function() {
-                let personId = $(this).val();
-                if (personId) {
-                    $.ajax({
-                        url: '{{ url('get-contact-person-details') }}/' + personId,
-                        type: 'GET',
-                        success: function(response) {
-                            console.log(response);
-
-                            let organizationSelect = $('#organization-select');
-
-                            if (response.organization) {
-                                organizationSelect.empty().trigger("change");
-                                let newOption = new Option(response.organization_name, response
-                                    .organization, true, true);
-                                organizationSelect.append(newOption).trigger("change");
-                            } else {
-                                organizationSelect.val(null).trigger("change");
-                            }
-
-                            $('#email-fields').html('');
-                            if (response.emails.length > 0) {
-                                response.emails.forEach((email, index) => {
-                                    addEmailField(email.value, email.label, index);
-                                });
-                                emailCounter = response.emails.length;
-                            } else {
-                                addEmailField();
-                            }
-
-                            $('#number-fields').html('');
-                            if (response.contact_numbers.length > 0) {
-                                response.contact_numbers.forEach((number, index) => {
-                                    addNumberField(number.value, number.label, index);
-                                });
-                                numberCounter = response.contact_numbers.length;
-                            } else {
-                                addNumberField();
-                            }
-                        }
-                    });
-                }
-            });
-
+                return {
+                    id: term,
+                    text: term,
+                    newTag: true
+                };
+            }
         });
+
+        // Initialize the second select2 (organization-select)
+        $('#organization-select').select2({});
+
+        // Function to clear email and contact number fields
+        function clearFields() {
+            $('#email-fields').html('');
+            $('#number-fields').html('');
+        }
+
+        // Function to add email input fields dynamically
+        function addEmailField(emailValue = '', emailLabel = '', index = 0) {
+            let emailHtml = `
+                <div class="email-field">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" name="emails[${index}]" value="${emailValue}" placeholder="Email ${emailLabel}" class="form-control">
+                </div>`;
+            $('#email-fields').append(emailHtml);
+        }
+
+        // Function to add contact number input fields dynamically
+        function addNumberField(numberValue = '', numberLabel = '', index = 0) {
+            let numberHtml = `
+                <div class="number-field">
+                    <label for="contact" class="form-label">Contact Number</label>
+                    <input type="text" name="contact_numbers[${index}]" value="${numberValue}" placeholder="Contact Number ${numberLabel}" class="form-control">
+                </div>`;
+            $('#number-fields').append(numberHtml);
+        }
+
+        // Event handler for person select dropdown change
+        $('#person-select').on('change', function() {
+            let personId = $(this).val();
+            
+            // Clear the fields when a new person is selected
+            clearFields();
+
+            if (personId) {
+                $.ajax({
+                    url: '{{ url('get-contact-person-details') }}/' + personId,
+                    type: 'GET',
+                    success: function(response) {
+                        console.log(response);
+
+                        let organizationSelect = $('#organization-select');
+
+                        // Handling organization selection
+                        if (response.organization) {
+                            organizationSelect.empty().trigger("change");
+                            let newOption = new Option(response.organization_name, response.organization, true, true);
+                            organizationSelect.append(newOption).trigger("change");
+                        } else {
+                            organizationSelect.val(null).trigger("change");
+                        }
+
+                        // Adding the emails
+                        if (response.emails.length > 0) {
+                            response.emails.forEach((email, index) => {
+                                addEmailField(email.value, email.label, index);
+                            });
+                        } else {
+                            addEmailField();
+                        }
+
+                        // Adding the contact numbers
+                        if (response.contact_numbers.length > 0) {
+                            response.contact_numbers.forEach((number, index) => {
+                                addNumberField(number.value, number.label, index);
+                            });
+                        } else {
+                            addNumberField();
+                        }
+                    }
+                });
+            }
+        });
+
+        // Handle the close button click event (if any)
+        $('#person-select').on('select2:clear', function() {
+            clearFields(); // Clear the email and number fields when the selection is cleared
+        });
+
+        // Optional: Add remove button functionality for email and number fields
+        $(document).on('click', '.remove-email', function() {
+            $(this).parent().remove(); // Remove the email field
+        });
+
+        $(document).on('click', '.remove-number', function() {
+            $(this).parent().remove(); // Remove the number field
+        });
+    });
 
         function removeProductField(element) {
             const productField = element.closest('.product-field');

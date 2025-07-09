@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
@@ -22,7 +23,7 @@ use App\Models\SentEmails;
 
 use File;
 use PDF;
-use Mail;
+// use Mail;
 use League\Csv\Writer;
 use App\Mail\LeadSendEmail;
 
@@ -138,5 +139,32 @@ class EmailsController extends Controller
         }
 
         return back()->with('error', 'No attributes selected.');
+    }
+
+    public function toggleFavourite($id, Request $request)
+    {
+        // Find the mail by ID
+        $mail = Mail::find($id);
+
+        // Check if the mail exists
+        if (!$mail) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mail not found.'
+            ], 404);
+        }
+
+        // Toggle the 'favourited' status
+        $mail->favourited = !$mail->favourited;
+
+        // Save the updated mail object
+        $mail->save();
+
+        // Return a response with the updated status
+        return response()->json([
+            'success' => true,
+            'favourited' => $mail->favourited,
+            'message' => $mail->favourited ? 'Mail marked as favourite' : 'Mail removed from favourites'
+        ]);
     }
 }

@@ -746,12 +746,14 @@
                                     </div>
                                     {{-- notes --}}
                                     <div>
+                                        
+
+                                        @foreach ($notes as $note)
                                         <div>
                                             <h5 class="mb-3 card-title">Notes</h5>
                                         </div>
-
-                                        @foreach ($notes as $note)
                                             <div class="d-flex">
+                                                
                                                 <div class="col-5">
                                                     <div class="d-flex gap-3 align-items-center mb-3">
                                                         <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
