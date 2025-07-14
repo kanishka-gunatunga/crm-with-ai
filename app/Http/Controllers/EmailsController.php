@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
