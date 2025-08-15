@@ -232,59 +232,78 @@
     <script>
         function favouriteMail(id) {
 
+
+
             // Console log to check the ID
-            console.log("id:", id);
+            // console.log("id:", id);
 
-            var csrfToken = "{{ csrf_token() }}"; // CSRF token for Laravel security
-            console.log("CSRF Token:", csrfToken); // To debug and ensure CSRF token is available
+            // var csrfToken = "{{ csrf_token() }}"; // CSRF token for Laravel security
+            // console.log("CSRF Token:", csrfToken); // To debug and ensure CSRF token is available
 
+            // $.ajax({
+            //     url: "{{ url('toggle-favourite') }}/" + id, // URL to the controller action
+            //     method: "POST",
+            //     data: {
+            //         _token: csrfToken, // CSRF token for security
+            //         mail_id: id // The ID of the mail to toggle the favourite status
+            //     },
+
+
+
+            //     // This was incorrectly placed inside the data object, moving it outside
+            //     // success: function(response) {
+            //     //     console.log("Response from server:", response);
+            //     //     if (response.success) {
+            //     //         // Update the button's visual state based on the server response
+            //     //         var favouriteButton = document.getElementById('favourite-button-' + id);
+            //     //         var favouriteIcon = document.getElementById('favourite-icon-' + id);
+
+            //     //         console.log("Response from server:", response); // To debug and check the response
+
+            //     //         // Toggle the 'favourited' class and change the stroke color
+            //     //         favouriteButton.classList.toggle('favourited', response.favourited);
+
+            //     //         // Change the icon color or animation when favourited
+            //     //         if (response.favourited) {
+            //     //             favouriteIcon.setAttribute('stroke', '#FFD700'); // Gold color when favourited
+            //     //             console.log("Mail favourited:", id); // Log when mail is favourited
+            //     //         } else {
+            //     //             favouriteIcon.setAttribute('stroke', 'black'); // Default black color
+            //     //         }
+
+            //     //         // Show a success message with toastr
+            //     //         toastr.success(response.message);
+            //     //     } else {
+            //     //         console.log("Error toggling favourite status:", response.message); // Log error message
+            //     //         toastr.error(response.message); // Handle failure message
+            //     //     }
+            //     // },
+
+
+            //     error: function(xhr, status, error) {
+
+            //         console.log("Data not being sent:", {
+            //         _token: csrfToken,
+            //         mail_id: id
+            //     }), // To debug and check the data being sent
+            //         console.error("Error toggling favourite status outside:", error); // Log the error
+            //         toastr.error("Error toggling favourite status");
+            //     }
+            // });
+
+            // alert("Email favourited successfully!");
             $.ajax({
-                url: "{{ url('toggle-favourite') }}/" + id, // URL to the controller action
+                url: "{{ url('toggle-favourite') }}/" + id,
                 method: "POST",
                 data: {
-                    _token: csrfToken, // CSRF token for security
-                    mail_id: id // The ID of the mail to toggle the favourite status
-                },
-
-                
-
-                // This was incorrectly placed inside the data object, moving it outside
-                success: function(response) {
-                    if (response.success) {
-                        // Update the button's visual state based on the server response
-                        var favouriteButton = document.getElementById('favourite-button-' + id);
-                        var favouriteIcon = document.getElementById('favourite-icon-' + id);
-
-                        console.log("Response from server:", response); // To debug and check the response
-
-                        // Toggle the 'favourited' class and change the stroke color
-                        favouriteButton.classList.toggle('favourited', response.favourited);
-
-                        // Change the icon color or animation when favourited
-                        if (response.favourited) {
-                            favouriteIcon.setAttribute('stroke', '#FFD700'); // Gold color when favourited
-                            console.log("Mail favourited:", id); // Log when mail is favourited
-                        } else {
-                            favouriteIcon.setAttribute('stroke', 'black'); // Default black color
-                        }
-
-                        // Show a success message with toastr
-                        toastr.success(response.message);
-                    } else {
-                        console.log("Error toggling favourite status:", response.message); // Log error message
-                        toastr.error(response.message); // Handle failure message
-                    }
-                },
-
-                
-                error: function(xhr, status, error) {
-
-                    console.log("Data not being sent:", {
-                    _token: csrfToken,
+                    _token: "{{ csrf_token() }}",
                     mail_id: id
-                }), // To debug and check the data being sent
-                    console.error("Error toggling favourite status outside:", error); // Log the error
-                    toastr.error("Error toggling favourite status");
+                },
+                success: function(response) {
+                    console.log("Dummy AJAX success:", response);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Dummy AJAX error:", error);
                 }
             });
         }

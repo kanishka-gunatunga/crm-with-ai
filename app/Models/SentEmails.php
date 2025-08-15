@@ -20,7 +20,7 @@ class SentEmails extends Model
         'subject',
         'body',
         'attachments',
-        'favourite',
+        'is_favourite',
     ];
 
     protected $casts = [
