@@ -34,7 +34,7 @@
                 </div>
 
                 <main class="email-container">
-                    <div class="card card-default" style="height: calc(100vh - 190px);">
+                    <div class="card card-default">
                         <div class="card-body">
                             <header class="email-header">
                                 <h1 class="email-subject">
@@ -134,12 +134,18 @@
                                         id="favourite-button-{{ $mail->id }}">
 
                                         <!-- SVG Icon for Favourite Button -->
-                                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg" id="favourite-icon-{{ $mail->id }}">
+                                        <svg width="22" height="22" viewBox="0 0 22 22"
+                                            xmlns="http://www.w3.org/2000/svg" id="favourite-icon-{{ $mail->id }}"
+                                            @if ($mail->is_favourite) fill="yellow"
+                                                stroke="yellow"
+                                            @else
+                                                fill="none"
+                                                stroke="black"
+                                                stroke-opacity="0.37" @endif>
                                             <path
-                                                d="M12.8848 8.20312L13.0615 8.61914L13.5117 8.6582L18.3301 9.06641L14.6699 12.2383L14.3281 12.5352L14.4307 12.9756L15.5303 17.6885L11.3877 15.1885L11 14.9541L10.6123 15.1885L6.46875 17.6885L7.56836 12.9756L7.6709 12.5352L7.3291 12.2383L3.66797 9.06641L8.4873 8.6582L8.9375 8.61914L9.11426 8.20312L10.999 3.75488L12.8848 8.20312Z"
-                                                stroke="black" stroke-opacity="0.37" stroke-width="1.5" />
+                                                d="M12.8848 8.20312L13.0615 8.61914L13.5117 8.6582L18.3301 9.06641L14.6699 12.2383L14.3281 12.5352L14.4307 12.9756L15.5303 17.6885L11.3877 15.1885L11 14.9541L10.6123 15.1885L6.46875 17.6885L7.56836 12.9756L7.6709 12.5352L7.3291 12.2383L3.66797 9.06641L8.4873 8.6582L8.9375 8.61914L9.11426 8.20312L10.999 3.75488L12.8848 8.20312Z" />
                                         </svg>
+
                                     </button>
 
 
@@ -183,7 +189,10 @@
                                     alt="Email attachment" class="email-attachment" />
 
                                 <div class="email-action-buttons">
-                                    <button class="email-action-button reply-button">
+
+
+
+                                    <button type="submit" class="email-action-button reply-button" id="reply-button">
                                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <g clip-path="url(#clip0_542_1578)">
@@ -200,6 +209,7 @@
 
                                         <span class="email-button-text">Reply</span>
                                     </button>
+
                                     <button class="email-action-button forward-button">
                                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -218,8 +228,42 @@
 
                                         <span class="email-button-text">Forward</span>
                                     </button>
+
+
                                 </div>
+
+
                             </section>
+
+                            <div class="mt-3" id="reply-card">
+                                {{-- <div class="reply-section">
+                                    <div class="col-10">
+                                        <label for="field5" class="form-label">Description</label>
+
+                                        <textarea class="summernoteNormal" id="summernote" name="body"></textarea>
+
+                                    </div>
+
+
+                                    <div class="col-10 mt-3">
+                                        <label for="firstNameinput"
+                                            class="form-label">{{ __('app.datagrid.attachments') }}</label>
+                                        <input class="form-control" type="file" id="formFile" name="attchments[]"
+                                            multiple>
+                                    </div>
+
+
+                                    <div class="col-10 mt-3">
+                                        <div class="d-flex gap-2 justify-content-end">
+                                            <button type="submit" class="btn save-btn">Send</button>
+                                        </div>
+
+                                    </div>
+
+                                </div> --}}
+
+
+                            </div>
                         </div>
 
                     </div>
@@ -231,81 +275,39 @@
 
     <script>
         function favouriteMail(id) {
-
-
-
-            // Console log to check the ID
-            // console.log("id:", id);
-
-            // var csrfToken = "{{ csrf_token() }}"; // CSRF token for Laravel security
-            // console.log("CSRF Token:", csrfToken); // To debug and ensure CSRF token is available
-
-            // $.ajax({
-            //     url: "{{ url('toggle-favourite') }}/" + id, // URL to the controller action
-            //     method: "POST",
-            //     data: {
-            //         _token: csrfToken, // CSRF token for security
-            //         mail_id: id // The ID of the mail to toggle the favourite status
-            //     },
-
-
-
-            //     // This was incorrectly placed inside the data object, moving it outside
-            //     // success: function(response) {
-            //     //     console.log("Response from server:", response);
-            //     //     if (response.success) {
-            //     //         // Update the button's visual state based on the server response
-            //     //         var favouriteButton = document.getElementById('favourite-button-' + id);
-            //     //         var favouriteIcon = document.getElementById('favourite-icon-' + id);
-
-            //     //         console.log("Response from server:", response); // To debug and check the response
-
-            //     //         // Toggle the 'favourited' class and change the stroke color
-            //     //         favouriteButton.classList.toggle('favourited', response.favourited);
-
-            //     //         // Change the icon color or animation when favourited
-            //     //         if (response.favourited) {
-            //     //             favouriteIcon.setAttribute('stroke', '#FFD700'); // Gold color when favourited
-            //     //             console.log("Mail favourited:", id); // Log when mail is favourited
-            //     //         } else {
-            //     //             favouriteIcon.setAttribute('stroke', 'black'); // Default black color
-            //     //         }
-
-            //     //         // Show a success message with toastr
-            //     //         toastr.success(response.message);
-            //     //     } else {
-            //     //         console.log("Error toggling favourite status:", response.message); // Log error message
-            //     //         toastr.error(response.message); // Handle failure message
-            //     //     }
-            //     // },
-
-
-            //     error: function(xhr, status, error) {
-
-            //         console.log("Data not being sent:", {
-            //         _token: csrfToken,
-            //         mail_id: id
-            //     }), // To debug and check the data being sent
-            //         console.error("Error toggling favourite status outside:", error); // Log the error
-            //         toastr.error("Error toggling favourite status");
-            //     }
-            // });
-
-            // alert("Email favourited successfully!");
             $.ajax({
-                url: "{{ url('toggle-favourite') }}/" + id,
+                url: "/toggle-favourite/" + id,
                 method: "POST",
                 data: {
                     _token: "{{ csrf_token() }}",
                     mail_id: id
                 },
                 success: function(response) {
-                    console.log("Dummy AJAX success:", response);
+                    console.log("AJAX success:", response);
+
+                    let icon = document.getElementById("favourite-icon-" + id);
+
+                    if (response.favourited) {
+                        // If favourited → make star yellow
+                        icon.setAttribute("fill", "yellow");
+                        icon.setAttribute("stroke", "yellow");
+                        icon.removeAttribute("stroke-opacity");
+                    } else {
+                        // If not favourited → reset to normal
+                        icon.setAttribute("fill", "none");
+                        icon.setAttribute("stroke", "black");
+                        icon.setAttribute("stroke-opacity", "0.37");
+                    }
                 },
                 error: function(xhr, status, error) {
-                    console.error("Dummy AJAX error:", error);
+                    console.error("AJAX error:", error);
+                    console.log("Data sent:", {
+                        _token: "{{ csrf_token() }}",
+                        mail_id: id
+                    });
                 }
             });
+
         }
 
         const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
@@ -329,6 +331,163 @@
 
 
 
-        // favourite mail function
+        // // reply mail
+        // document.getElementById('reply-button').addEventListener('click', function() {
+        //     // Handle reply mail action
+        //     console.log("Reply mail button clicked");
+
+        //     $('#summernote').summernote({
+        //         tabsize: 2,
+        //         height: 200
+        //     });
+        // });
     </script>
+    {{-- <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Listen for all reply button clicks
+            $(document).on('click', '.reply-button', function() {
+                let emailId = $(this).data('email-id');
+                let container = $(this).closest('.card-body').find('.email-content');
+
+                // Prevent multiple reply cards under same email
+                if (container.find('.reply-card').length === 0) {
+                    let replyCard = `
+                <div class="card reply-card mt-3">
+                    <div class="card-body">
+                        <form method="POST" action="{{ url('compose-email') }}" enctype="multipart/form-data">
+                            @csrf
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control summernoteNormal" name="body"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Attachments</label>
+                                <input class="form-control" type="file" name="attchments[]" multiple>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                               <button type="submit" class="btn save-btn">Send</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+
+                    container.append(replyCard);
+
+                    // Initialize Summernote for this textarea
+                    container.find('.summernoteNormal').summernote({
+                        tabsize: 2,
+                        height: 200
+                    });
+                }
+            });
+        });
+    </script> --}}
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Listen for all reply button clicks
+        $(document).on('click', '.reply-button', function() {
+            let emailId = $(this).data('email-id');
+            let container = $(this).closest('.card-body').find('.email-content');
+
+            // Prevent multiple reply cards under same email
+            if (container.find('.reply-card').length === 0) {
+                let replyCard = `
+                <div class="card reply-card mt-3">
+                    <div class="card-body">
+                        <form class="reply-form">
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control summernoteNormal" name="body"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Attachments</label>
+                                <input class="form-control" type="file" name="attchments[]" multiple>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                               <button type="submit" class="btn save-btn">Send</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                `;
+
+                container.append(replyCard);
+
+                // Initialize Summernote for this textarea
+                container.find('.summernoteNormal').summernote({
+                    tabsize: 2,
+                    height: 200
+                });
+            }
+        });
+
+        // Handle send button click (dummy)
+        $(document).on('submit', '.reply-form', function(e) {
+            e.preventDefault();
+
+            let container = $(this).closest('.email-content');
+            let replyCard = $(this).closest('.reply-card');
+            let message = replyCard.find('.summernoteNormal').val();
+
+            // Replace reply card with the "sent email" dummy
+            replyCard.replaceWith(`
+                <div class="card mt-3 bg-light">
+                    <div class="card-body">
+                        <p class="m-2"><strong>You replied:</strong></p>
+                        <div class="p-2 border rounded">${message}</div>
+                    </div>
+                </div>
+
+
+                <div class="email-action-buttons mt-4">
+                    <button type="submit" class="email-action-button reply-button" id="reply-button">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_542_1578)">
+                                <path
+                                    d="M8.33333 7.50033V4.16699L2.5 10.0003L8.33333 15.8337V12.417C12.5 12.417 15.4167 13.7503 17.5 16.667C16.6667 12.5003 14.1667 8.33366 8.33333 7.50033Z"
+                                    fill="black" fill-opacity="0.54" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_542_1578">
+                                    <rect width="20" height="20" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+
+                        <span class="email-button-text">Reply</span>
+                    </button>
+
+                    <button class="email-action-button forward-button">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_542_1587)">
+                                <path
+                                    d="M10.0004 6.66634V3.33301L16.6671 9.99967L10.0004 16.6663V13.333H3.33374V6.66634H10.0004Z"
+                                    fill="black" fill-opacity="0.54" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_542_1587">
+                                    <rect width="20" height="20" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+
+
+                        <span class="email-button-text">Forward</span>
+                    </button>
+
+
+                </div>
+            `);
+        });
+    });
+</script>
+
 @endsection

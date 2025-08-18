@@ -37,10 +37,19 @@ class EmailsController extends Controller
         if ($request->isMethod('get')) {
 
             $sent_emails = SentEmails::get();
-
             return view('mail.mail', [
-                'sent_emails' => $sent_emails
+                'sent_emails' => $sent_emails,
+                
             ]);
+        }
+    }
+
+
+    public function fetch_favourite_emails(Request $request)
+    {
+        if ($request->isMethod('get')) {
+            $favourite_emails = SentEmails::where('is_favourite', 1)->get();
+             return response()->json($favourite_emails);
         }
     }
 
@@ -144,28 +153,47 @@ class EmailsController extends Controller
 
     public function toggleFavourite($id, Request $request)
     {
-        // Find the mail by ID
-        $mail = Mail::find($id);
-
-        // Check if the mail exists
-        if (!$mail) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Mail not found.'
-            ], 404);
-        }
-
-        // Toggle the 'favourited' status
-        $mail->favourited = !$mail->favourited;
-
-        // Save the updated mail object
+        
+        
+        $mail = SentEmails::find($id);
+        
+        $mail->is_favourite = !$mail->is_favourite;
         $mail->save();
 
-        // Return a response with the updated status
         return response()->json([
             'success' => true,
-            'favourited' => $mail->favourited,
-            'message' => $mail->favourited ? 'Mail marked as favourite' : 'Mail removed from favourites'
+            'favourited' => (bool) $mail->is_favourite, // Ensure it's a boolean in the response
+            'message' => $mail->is_favourite ? 'Mail marked as favourite' : 'Mail removed from favourites'
         ]);
     }
+
+
+    public function reply(Request $request, $parentId)
+{
+    $request->validate([
+        'body' => 'required|string',
+    ]);
+
+    $parentEmail = SentEmails::findOrFail($parentId);
+
+    $reply = new SentEmails();
+    $reply->to = $parentEmail->to;   // replies usually go to original sender/recipient
+    $reply->cc = $request->cc ?? [];
+    $reply->bcc = $request->bcc ?? [];
+    $reply->subject = $parentEmail->subject; // usually same subject
+    $reply->body = $request->body;
+    $reply->attachments = [];
+
+    $reply->parent_id = $parentEmail->id; // <<=== important
+    $reply->save();
+
+    // Send the actual mail
+    Mail::to($reply->to)
+        ->cc($reply->cc ?? [])
+        ->bcc($reply->bcc ?? [])
+        ->send(new LeadSendEmail($reply));
+
+    return back()->with('success', 'Reply sent successfully.');
+}
+
 }

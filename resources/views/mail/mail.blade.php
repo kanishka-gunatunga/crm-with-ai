@@ -81,7 +81,7 @@
                                             action="{{ url('delete-selected-emails') }}">
                                             @csrf
                                             <div class="table-responsive">
-                                                <table class="table new-table data-table-export" id="newTable">
+                                                <table class="table new-table data-table-export" >
 
                                                     <thead>
                                                         <tr>
@@ -158,7 +158,7 @@
                                         action="{{ url('delete-selected-emails') }}">
                                         @csrf
                                         <div class="table-responsive">
-                                            <table class="table new-table data-table-export" id="newTable">
+                                            {{-- <table class="table new-table data-table-export">
 
                                                 <thead>
                                                     <tr>
@@ -220,7 +220,7 @@
 
 
                                                 </tbody>
-                                            </table>
+                                            </table> --}}
 
                                         </div>
                                         <button type="submit"
@@ -228,14 +228,13 @@
                                             Selected</button>
                                     </form>
                                 </div>
-                                <div class="tab-pane fade" id="favourite-tab-content">
-                                    <div class="text-center py-5 text-muted"> favourite emails to show.</div>
-
+                                <div class="tab-pane fade" id="favourite-tab-content" role="tabpanel"
+                                    aria-labelledby="favourite-tab-button">
                                     <form id="bulk-delete-form" method="POST"
                                         action="{{ url('delete-selected-emails') }}">
                                         @csrf
                                         <div class="table-responsive">
-                                            <table class="table new-table data-table-export" id="newTable">
+                                            <table class="table new-table data-table-export" id="favouriteTable">
 
                                                 <thead>
                                                     <tr>
@@ -247,55 +246,8 @@
                                                         <th class="corner-right">Actions</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                    @foreach ($sent_emails as $sent_email)
-                                                        <tr>
-                                                            <td><input type="checkbox" name="selected_emails[]"
-                                                                    value="{{ $sent_email->id }}"></td>
-                                                            <td>{{ $sent_email->subject }}</td>
-                                                            <td><?php echo \Illuminate\Support\Str::limit(strip_tags($sent_email->body), 150); ?></td>
-                                                            <td>{{ \Carbon\Carbon::parse($sent_email->created_at)->format('M j, Y') }}
-                                                            </td>
-                                                            <td class="action-icons d-flex gx-3">
-                                                                <a href="{{ url('delete-email/' . $sent_email->id) }}"
-                                                                    class="delete-link-confirm">
-                                                                    <div class="text-muted" type="button">
-                                                                        <svg width="20" height="20"
-                                                                            viewBox="0 0 18 18" fill="none"
-                                                                            xmlns="http://www.w3.org/2000/svg">
-                                                                            <rect width="18" height="18"
-                                                                                rx="2.90323" fill="#FFE9E5" />
-                                                                            <path
-                                                                                d="M6.9431 12.7013C6.71689 12.7013 6.52331 12.6208 6.36236 12.4599C6.20141 12.2989 6.12079 12.1052 6.12052 11.8787V6.53197H5.70923V5.70939H7.76568V5.2981H10.2334V5.70939H12.2899V6.53197H11.8786V11.8787C11.8786 12.105 11.7981 12.2987 11.6372 12.4599C11.4762 12.6211 11.2825 12.7016 11.056 12.7013H6.9431ZM11.056 6.53197H6.9431V11.8787H11.056V6.53197ZM7.76568 11.0562H8.58826V7.35455H7.76568V11.0562ZM9.41084 11.0562H10.2334V7.35455H9.41084V11.0562Z"
-                                                                                fill="#ED2227" />
-                                                                        </svg>
-                                                                    </div>
-                                                                </a>
-                                                                <a target="_blank"
-                                                                    href="{{ url('view-email/' . $sent_email->id) }}">
-                                                                    <div class="text-muted" type="button">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                                            width="18" height="18"
-                                                                            viewBox="0 0 18 18" fill="none">
-                                                                            <rect width="18" height="18"
-                                                                                rx="2.90323" fill="#DAFFE1" />
-                                                                            <path
-                                                                                d="M9.06445 6.43457C11.8438 6.43457 13.127 9.0002 13.127 9.0002C13.127 9.0002 11.8438 11.5658 9.06445 11.5658C6.28508 11.5658 5.00195 9.0002 5.00195 9.0002C5.00195 9.0002 6.28508 6.43457 9.06445 6.43457Z"
-                                                                                stroke="#0AC900" stroke-width="0.580625"
-                                                                                stroke-linejoin="round" />
-                                                                            <path
-                                                                                d="M10.277 9C10.2808 9.16646 10.2512 9.33199 10.1901 9.48687C10.1289 9.64175 10.0375 9.78285 9.92105 9.9019C9.80464 10.0209 9.66562 10.1155 9.51215 10.1801C9.35868 10.2447 9.19385 10.2779 9.02734 10.2779C8.86084 10.2779 8.69601 10.2447 8.54254 10.1801C8.38907 10.1155 8.25005 10.0209 8.13363 9.9019C8.01722 9.78285 7.92576 9.64175 7.86463 9.48687C7.8035 9.33199 7.77393 9.16646 7.77766 9C7.77766 8.66848 7.90935 8.35054 8.14377 8.11612C8.37819 7.8817 8.69614 7.75 9.02766 7.75C9.35918 7.75 9.67712 7.8817 9.91154 8.11612C10.146 8.35054 10.2777 8.66848 10.2777 9H10.277Z"
-                                                                                stroke="#0AC900" stroke-width="0.580625"
-                                                                                stroke-linejoin="round" />
-                                                                        </svg>
-                                                                    </div>
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-
-
-
+                                                <tbody id="favourite-table-body">
+    
                                                 </tbody>
                                             </table>
 
@@ -355,4 +307,71 @@
             checkboxes.forEach(cb => cb.checked = event.target.checked);
         });
     </script>
+
+
+    <script>
+        $(document).ready(function() {
+            // Fetch favourite emails and populate the table
+            function fetchFavouriteEmails() {
+                $.ajax({
+                    url: '{{ url('favourite-emails') }}',
+                    method: 'GET',
+                    success: function(data) {
+                        let tbody = $('#favourite-table-body');
+                        tbody.empty(); // Clear existing rows
+                        console.log(data); // Log the fetched data for debugging
+                        data.forEach(email => {
+                            tbody.append(`
+                                <tr>
+                                    <td><input type="checkbox" name="selected_emails[]" value="${email.id}"></td>
+                                    <td>${email.subject}</td>
+                                    <td>${email.body.substring(0, 150)}</td>
+                                    <td>${new Date(email.created_at).toLocaleDateString()}</td>
+                                    <td class="action-icons d-flex gx-3">
+                                        <a href="{{ url('delete-email/' . $sent_email->id) }}"
+                                            class="delete-link-confirm">
+                                            <div class="text-muted" type="button">
+                                                <svg width="20" height="20"
+                                                    viewBox="0 0 18 18" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect width="18" height="18"
+                                                        rx="2.90323" fill="#FFE9E5" />
+                                                    <path
+                                                        d="M6.9431 12.7013C6.71689 12.7013 6.52331 12.6208 6.36236 12.4599C6.20141 12.2989 6.12079 12.1052 6.12052 11.8787V6.53197H5.70923V5.70939H7.76568V5.2981H10.2334V5.70939H12.2899V6.53197H11.8786V11.8787C11.8786 12.105 11.7981 12.2987 11.6372 12.4599C11.4762 12.6211 11.2825 12.7016 11.056 12.7013H6.9431ZM11.056 6.53197H6.9431V11.8787H11.056V6.53197ZM7.76568 11.0562H8.58826V7.35455H7.76568V11.0562ZM9.41084 11.0562H10.2334V7.35455H9.41084V11.0562Z"
+                                                        fill="#ED2227" />
+                                                </svg>
+                                            </div>
+                                        </a>
+                                        <a target="_blank"
+                                            href="{{ url('view-email/' . $sent_email->id) }}">
+                                            <div class="text-muted" type="button">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    width="18" height="18"
+                                                    viewBox="0 0 18 18" fill="none">
+                                                    <rect width="18" height="18"
+                                                        rx="2.90323" fill="#DAFFE1" />
+                                                    <path
+                                                        d="M9.06445 6.43457C11.8438 6.43457 13.127 9.0002 13.127 9.0002C13.127 9.0002 11.8438 11.5658 9.06445 11.5658C6.28508 11.5658 5.00195 9.0002 5.00195 9.0002C5.00195 9.0002 6.28508 6.43457 9.06445 6.43457Z"
+                                                        stroke="#0AC900" stroke-width="0.580625"
+                                                        stroke-linejoin="round" />
+                                                    <path
+                                                        d="M10.277 9C10.2808 9.16646 10.2512 9.33199 10.1901 9.48687C10.1289 9.64175 10.0375 9.78285 9.92105 9.9019C9.80464 10.0209 9.66562 10.1155 9.51215 10.1801C9.35868 10.2447 9.19385 10.2779 9.02734 10.2779C8.86084 10.2779 8.69601 10.2447 8.54254 10.1801C8.38907 10.1155 8.25005 10.0209 8.13363 9.9019C8.01722 9.78285 7.92576 9.64175 7.86463 9.48687C7.8035 9.33199 7.77393 9.16646 7.77766 9C7.77766 8.66848 7.90935 8.35054 8.14377 8.11612C8.37819 7.8817 8.69614 7.75 9.02766 7.75C9.35918 7.75 9.67712 7.8817 9.91154 8.11612C10.146 8.35054 10.2777 8.66848 10.2777 9H10.277Z"
+                                                        stroke="#0AC900" stroke-width="0.580625"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                            </div>
+                                        </a>
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                    }
+                });
+            }
+
+            fetchFavouriteEmails();
+        });
+    </script>
+
+    
 @endsection

@@ -188,6 +188,8 @@ Route::match(['get', 'post'], 'view-email/{id}', [EmailsController::class, 'view
 Route::get( '/delete-selected-emails', [EmailsController::class, 'delete_selected_emails'])->middleware(['auth']);
 Route::post('/toggle-favourite/{id}', [EmailsController::class, 'toggleFavourite'])->middleware(['auth']);
 });
+Route::get('/favourite-emails', [EmailsController::class, 'fetch_favourite_emails'])->middleware(['auth']);
+Route::post('/emails/{id}/reply', [EmailsController::class, 'reply'])->name('emails.reply');
 
 Route::get('/lang/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'es', 'fa', 'tr', 'ar'])) {
