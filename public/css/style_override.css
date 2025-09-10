@@ -1,3 +1,25 @@
+
+/*temporary hide some components in lead and dashboard*/
+
+.dashbaord-piechart-container .pie-chart-inner{
+    display:none !important;
+}
+
+.notification-card .notification-icon{
+    display:none !important;
+}
+
+.task-footer .action-btn{
+     display:none !important;
+}
+
+.email-templates-card{
+    display:none !important;
+}
+
+
+/*-------------------------------------*/
+
 .dashboard-card-heder{
     font-family: var(--font-family);
     font-weight: 800;
@@ -229,11 +251,13 @@ body{
     width: 300px;
 }
 .dashbaord-piechart-container .pie-chart-inner{
+    
     top: 110px;
     left: 92px;
     border-radius: 50%;
     height: 150px;
     width: 150px;
+    
 }
 }
 @media (max-width: 1300px) {

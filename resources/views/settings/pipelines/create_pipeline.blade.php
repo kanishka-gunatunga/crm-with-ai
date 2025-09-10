@@ -87,7 +87,7 @@
                                             <thead>
                                                 <tr>
                                                     <th scope="col">{{ __('app.settings.pipelines.name') }}</th>
-                                                    <th scope="col">{{ __('app.settings.pipelines.probability') }}</th>
+                                                    <!--<th scope="col">{{ __('app.settings.pipelines.probability') }}</th>-->
                                                     <th scope="col"></th>
                                                 </tr>
                                             </thead>
@@ -95,33 +95,33 @@
                                                 <tr>
                                                     <td><input type="text" class="form-control" name="stages[]"
                                                             value="New" readonly required></td>
-                                                    <td><input type="number" step="any" class="form-control"
-                                                            name="probabilities[]" value="100" readonly required></td>
+                                                    <!--<td><input type="number" step="any" class="form-control"-->
+                                                    <!--        name="probabilities[]" value="100" readonly required></td>-->
                                                     <td></td>
                                                 </tr>
-                                                <tr>
-                                                    <td><input type="text" class="form-control" name="stages[]" required>
-                                                    </td>
-                                                    <td><input type="number" step="any" class="form-control"
-                                                            name="probabilities[]" required></td>
-                                                    <td>
-                                                        <i
-                                                            class="fa-solid fa-trash delete-stage remove-append-item mx-2"></i>
+                                                <!--<tr>-->
+                                                <!--    <td><input type="text" class="form-control" name="stages[]" >-->
+                                                <!--    </td>-->
+                                                <!--    <td><input type="number" step="any" class="form-control"-->
+                                                <!--            name="probabilities[]" required></td>-->
+                                                <!--    <td>-->
+                                                <!--        <i-->
+                                                <!--            class="fa-solid fa-trash delete-stage remove-append-item mx-2"></i>-->
 
-                                                    </td>
-                                                </tr>
+                                                <!--    </td>-->
+                                                <!--</tr>-->
                                                 <tr>
                                                     <td><input type="text" class="form-control" name="stages[]"
                                                             value="Won" readonly required></td>
-                                                    <td><input type="number" step="any" class="form-control"
-                                                            name="probabilities[]" value="100" readonly required></td>
+                                                    <!--<td><input type="number" step="any" class="form-control"-->
+                                                    <!--        name="probabilities[]" value="100" readonly required></td>-->
                                                     <td></td>
                                                 </tr>
                                                 <tr>
                                                     <td><input type="text" class="form-control" name="stages[]"
-                                                            value="Lost" readonly required></td>
-                                                    <td><input type="number" step="any" class="form-control"
-                                                            name="probabilities[]" value="0" readonly required></td>
+                                                            value="Lost" readonly ></td>
+                                                    <!--<td><input type="number" step="any" class="form-control"-->
+                                                    <!--        name="probabilities[]" value="0" readonly required></td>-->
                                                     <td></td>
                                                 </tr>
                                             </tbody>
@@ -192,9 +192,13 @@
                 let winRow = tableBody.querySelector("tr:nth-last-child(2)");
 
                 let newRow = document.createElement("tr");
-                newRow.innerHTML = `
+        //         newRow.innerHTML = `
+        //     <td><input type="text" class="form-control" name="stages[]" required ></td>
+        //     <td><input type="number" step="any" class="form-control" name="probabilities[]" required></td>
+        //     <td><i class="fa-solid fa-trash delete-stage remove-append-item mx-2"></i></td>
+        // `;
+         newRow.innerHTML = `
             <td><input type="text" class="form-control" name="stages[]" required ></td>
-            <td><input type="number" step="any" class="form-control" name="probabilities[]" required></td>
             <td><i class="fa-solid fa-trash delete-stage remove-append-item mx-2"></i></td>
         `;
 

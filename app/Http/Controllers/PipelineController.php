@@ -44,8 +44,8 @@ class PipelineController extends Controller
                 'rotting_days' => 'required|integer',
                 'stages' => 'required|array',
                 'stages.*' => 'required|string',
-                'probabilities' => 'required|array',
-                'probabilities.*' => 'required|integer',
+                // 'probabilities' => 'required|array',
+                // 'probabilities.*' => 'required|integer',
             ]);
             $pipelines = Pipeline::get();
 
@@ -65,24 +65,50 @@ class PipelineController extends Controller
                 PipelineStage::create([
                     'pipeline_id' => $pipeline->id,
                     'name' => $stageName,
-                    'probability' => $request->probabilities[$index],
+                    // 'probability' => $request->probabilities[$index],
                 ]);
             }
     
             return redirect()->back()->with('success', 'Pipeline created successfully!');
         }
     }
-    public function delete_pipeline($id,Request $request)
-    {
-        if($request->isMethod('get')){
-            Pipeline::where('id',$id)->delete();
-            PipelineStage::where('pipeline_id',$id)->delete();
+    public function delete_pipeline($id, Request $request)
+{
+    if ($request->isMethod('get')) {
 
-            return redirect()->back()->with('success', 'Pipeline deleted successfully!');
+        $pipeline = Pipeline::find($id);
 
-         }
-        
+        if (!$pipeline) {
+            return redirect()->back()->with('fail', 'Pipeline not found!');
+        }
+
+        // Check if this is the last pipeline
+        $totalPipelines = Pipeline::count();
+        if ($totalPipelines <= 1) {
+            return redirect()->back()->with('fail', 'Cannot delete the last remaining pipeline.');
+        }
+
+        // Delete associated stages
+        PipelineStage::where('pipeline_id', $id)->delete();
+
+        // Delete the pipeline
+        $pipeline->delete();
+
+        // Handle session pipeline_id
+        if (session()->has('pipeline_id') && session('pipeline_id') == $id) {
+            // Set session to the first available pipeline
+            $nextPipeline = Pipeline::first();
+            if ($nextPipeline) {
+                session(['pipeline_id' => $nextPipeline->id]);
+            } else {
+                session()->forget('pipeline_id');
+            }
+        }
+
+        return redirect()->back()->with('success', 'Pipeline deleted successfully!');
     }
+}
+
 //     public function edit_pipeline($id, Request $request)
 // {
 //     if ($request->isMethod('get')) {
@@ -157,10 +183,10 @@ public function edit_pipeline($id, Request $request)
         $request->validate([
             'name' => 'required|string',
             'rotting_days' => 'required|integer',
-            'stages' => 'required|array',
+            'stages' => 'nullable|array',
             'stages.*' => 'required|string',
-            'probabilities' => 'required|array',
-            'probabilities.*' => 'required|integer',
+            // 'probabilities' => 'required|array',
+            // 'probabilities.*' => 'required|integer',
         ]);
 
         $pipeline = Pipeline::findOrFail($id);
@@ -178,21 +204,21 @@ public function edit_pipeline($id, Request $request)
             'is_default' => $shouldBeDefault ? 'on' : 'off',
         ]);
 
-        foreach ($request->stages as $index => $stageName) {
+       foreach ($request->stages ?? [] as $index => $stageName) {
             $stageId = $request->id[$index];
 
             if ($stageId === 'New') {
                 PipelineStage::create([
                     'pipeline_id' => $pipeline->id,
                     'name' => $stageName,
-                    'probability' => $request->probabilities[$index],
+                    // 'probability' => $request->probabilities[$index],
                 ]);
             } else {
                 $stage = PipelineStage::find($stageId);
                 if ($stage) {
                     $stage->update([
                         'name' => $stageName,
-                        'probability' => $request->probabilities[$index],
+                        // 'probability' => $request->probabilities[$index],
                     ]);
                 }
             }

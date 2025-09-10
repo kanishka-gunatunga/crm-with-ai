@@ -89,7 +89,7 @@
                                             <thead>
                                                 <tr>
                                                     <th scope="col">{{ __('app.settings.pipelines.name') }}</th>
-                                                    <th scope="col">{{ __('app.settings.pipelines.probability') }}</th>
+                                                    <!--<th scope="col">{{ __('app.settings.pipelines.probability') }}</th>-->
                                                     <th scope="col"></th>
                                                 </tr>
                                             </thead>
@@ -110,9 +110,9 @@
                                                         <input type="hidden" class="form-control" name="id[]"
                                                             value="{{ $stage->id }}">
                                                     </td>
-                                                    <td><input type="number" step="any" class="form-control"
-                                                            name="probabilities[]" value="{{ $stage->probability }}"
-                                                            required></td>
+                                                    <!--<td><input type="number" step="any" class="form-control"-->
+                                                    <!--        name="probabilities[]" value="{{ $stage->probability }}"-->
+                                                    <!--        required></td>-->
                                                     <td><a href="{{ url('delete-stage/' . $stage->id . '') }}"
                                                             class="delete-link-confirm"><i
                                                                 class="fa-solid fa-trash  remove-append-item mx-2"></i></a>
@@ -202,10 +202,15 @@
                 let winRow = tableBody.querySelector("tr:nth-last-child(2)");
 
                 let newRow = document.createElement("tr");
-                newRow.innerHTML = `
+        //         newRow.innerHTML = `
+        //     <td><input type="text" class="form-control" name="stages[]" required ></td>
+        //     <input type="hidden" class="form-control" name="id[]" value="New">
+        //     <td><input type="number" step="any" class="form-control" name="probabilities[]" required></td>
+        //     <td><i class="fa-solid fa-trash delete-stage remove-append-item mx-2"></i></td>
+        // `;
+         newRow.innerHTML = `
             <td><input type="text" class="form-control" name="stages[]" required ></td>
             <input type="hidden" class="form-control" name="id[]" value="New">
-            <td><input type="number" step="any" class="form-control" name="probabilities[]" required></td>
             <td><i class="fa-solid fa-trash delete-stage remove-append-item mx-2"></i></td>
         `;
 
