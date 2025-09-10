@@ -208,6 +208,10 @@ public function import_persons(Request $request)
         $header = array_shift($rows);
 
         foreach ($rows as $row) {
+
+            if (empty(array_filter($row))) {
+                continue;
+            }
             $record = array_combine($header, $row);
 
             if(!Person::where("name", $record['Name'])->whereJsonContains("emails->value", $record['Email'])

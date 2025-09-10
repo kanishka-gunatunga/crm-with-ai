@@ -7,22 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class SentEmails extends Model
+class MailReplies extends Model
 {
     use HasFactory;
 
-    protected $table = 'sent_emails';
+    protected $table = 'mail_replies';
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'lead_id',
+
         'to',
         'cc',
         'bcc',
         'subject',
         'body',
         'attachments',
-        'is_favourite',
         'parent_id'
     ];
 
@@ -31,17 +30,16 @@ class SentEmails extends Model
         'cc' => 'array',
         'bcc' => 'array',
         'attachments' => 'array',
-        'is_favourite' => 'boolean',
     ];
 
-    // Parent (the email this one replies to)
+    // Parent SentEmail (the email this reply belongs to)
     public function parent(): BelongsTo
     {
         return $this->belongsTo(SentEmails::class, 'parent_id');
     }
 
-    // Replies (all emails that replied to this one)
-    public function replies()
+    // Replies (all MailReplies for this SentEmail)
+    public function replies(): HasMany
     {
         return $this->hasMany(MailReplies::class, 'parent_id');
     }

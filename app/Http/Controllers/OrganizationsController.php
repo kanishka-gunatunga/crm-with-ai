@@ -169,6 +169,9 @@ class OrganizationsController extends Controller
             $header = array_shift($rows);
 
             foreach ($rows as $row) {
+                if (empty(array_filter($row))) {
+                continue;
+            }
                 $record = array_combine($header, $row);
 
                 // Skip if name already exists

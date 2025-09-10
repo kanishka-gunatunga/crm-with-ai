@@ -45,22 +45,24 @@
                                                 <div class="col-12 col-md-4">
                                                     <label for="assign_user"
                                                         class="form-label">{{ __('app.quotes.lead') }}</label>
-                                                    <select class="myDropdown form-control " name="lead" required>
+                                                    <select class="myDropdown form-control " name="lead" data-parsley-errors-container="#lead-errors" required>
                                                         <option selected=""></option>
                                                         <?php foreach($leads as $lead){ ?>
                                                         <option value="{{ $lead->id }}">{{ $lead->title }}</option>
                                                         <?php } ?>
                                                     </select>
+                                                    <div id="lead-errors"></div>
                                                 </div>
 
                                                 <div class="col-12 col-md-4">
                                                     <label for="assign_user" class="form-label">Sales Owner</label>
-                                                    <select class="myDropdown form-control" name="owner" required>
+                                                    <select class="myDropdown form-control" name="owner" data-parsley-errors-container="#owner-errors" required>
                                                         <option selected=""></option>
                                                         <?php foreach($owners as $owner){ ?>
-                                                        <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
+                                                            <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
                                                         <?php } ?>
                                                     </select>
+                                                    <div id="owner-errors"></div>
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label for="assign_user" class="form-label">Subject</label>
@@ -78,18 +80,20 @@
                                                     <div class="input-group">
                                                         <input type="date" class="form-control" id="expired_at"
                                                             placeholder="Expired At" name="expired_at"
-                                                            value="{{ old('expired_at') }}" required>
+                                                            value="{{ old('expired_at') }}" data-parsley-errors-container="#expired-at-errors" required>
 
                                                     </div>
+                                                    <div id="expired-at-errors"></div>
                                                 </div>
                                                 <div class="col-12 col-md-4 selection-div">
                                                     <label for="terms" class="form-label">Person</label>
-                                                    <select class="myDropdown form-control" name="person" required>
+                                                    <select class="myDropdown form-control" name="person" data-parsley-errors-container="#person-errors" required>
                                                         <option selected=""></option>
                                                         <?php foreach($persons as $person){ ?>
                                                         <option value="{{ $person->id }}">{{ $person->name }}</option>
                                                         <?php } ?>
                                                     </select>
+                                                    <div id="person-errors"></div>
                                                 </div>
 
                                                 <div class="col-12 col-md-4">
@@ -122,10 +126,11 @@
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="assign_user" class="form-label">Country</label>
-                                                <select class="myDropdown form-control" name="country" required>
+                                                <select class="myDropdown form-control" name="country" data-parsley-errors-container="#country-errors" required>
                                                     <option selected=""></option>
                                                     <option value="Sri Lanka">Sri Lanka</option>
                                                 </select>
+                                                <div id="country-errors"></div>
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="City" class="form-label">City</label>
@@ -160,10 +165,11 @@
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="assign_user" class="form-label">Country</label>
-                                                <select class="myDropdown form-control" name="shipping_country" required>
+                                                <select class="myDropdown form-control" name="shipping_country" data-parsley-errors-container="#shipping-country-errors" required>
                                                     <option selected=""></option>
                                                     <option value="Sri Lanka">Sri Lanka</option>
                                                 </select>
+                                                <div id="shipping-country-errors"></div>
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="City" class="form-label">City</label>

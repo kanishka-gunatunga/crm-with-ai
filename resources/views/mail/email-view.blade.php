@@ -179,6 +179,7 @@
                             </section>
 
                             <section class="email-content">
+                                <input type="hidden" id="parent_id" value="{{ $mail->id ?? '' }}">
                                 <p class="email-body">
                                     {!! $mail->body ?? 'Email Body' !!}
                                 </p>
@@ -235,35 +236,43 @@
 
                             </section>
 
-                            <div class="mt-3" id="reply-card">
-                                {{-- <div class="reply-section">
-                                    <div class="col-10">
-                                        <label for="field5" class="form-label">Description</label>
+                            <div class="mt-3">
 
-                                        <textarea class="summernoteNormal" id="summernote" name="body"></textarea>
+                                {{-- Show replies from DB --}}
+                                @if ($mail->replies->count())
+                                    @foreach ($mail->replies as $reply)
+                                        <div class="card mt-3 bg-light">
+                                            <div class="card-body">
+                                                <p class="m-2"><strong>You replied:</strong></p>
+                                                <div class="p-2 border rounded">
+                                                    {!! $reply->body !!}
+                                                </div>
 
-                                    </div>
+                                                @if (!empty($reply->attachments))
+                                                    <div class="mt-2">
+                                                        <strong>Attachments:</strong>
+                                                        <ul>
+                                                            @foreach ($reply->attachments as $file)
+                                                                <li>
+                                                                    <a href="{{ asset('uploads/leads/email_attachments/' . $file) }}"
+                                                                        target="_blank">
+                                                                        {{ $file }}
+                                                                    </a>
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                @endif
 
-
-                                    <div class="col-10 mt-3">
-                                        <label for="firstNameinput"
-                                            class="form-label">{{ __('app.datagrid.attachments') }}</label>
-                                        <input class="form-control" type="file" id="formFile" name="attchments[]"
-                                            multiple>
-                                    </div>
-
-
-                                    <div class="col-10 mt-3">
-                                        <div class="d-flex gap-2 justify-content-end">
-                                            <button type="submit" class="btn save-btn">Send</button>
+                                                <small class="text-muted">Sent on
+                                                    {{ $reply->created_at->format('d M Y, h:i A') }}</small>
+                                            </div>
                                         </div>
-
-                                    </div>
-
-                                </div> --}}
-
+                                    @endforeach
+                                @endif
 
                             </div>
+                            <div class="mt-3" id="reply-card"></div>
                         </div>
 
                     </div>
@@ -272,6 +281,8 @@
             </div>
         </div>
     </div>
+
+
 
     <script>
         function favouriteMail(id) {
@@ -325,101 +336,39 @@
                 return document.getElementById('popover-content').innerHTML;
             }
         });
-
-        // Optionally, you can trigger the popover manually if you need to
-        // popoverTrigger.show();
-
-
-
-        // // reply mail
-        // document.getElementById('reply-button').addEventListener('click', function() {
-        //     // Handle reply mail action
-        //     console.log("Reply mail button clicked");
-
-        //     $('#summernote').summernote({
-        //         tabsize: 2,
-        //         height: 200
-        //     });
-        // });
     </script>
-    {{-- <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Listen for all reply button clicks
-            $(document).on('click', '.reply-button', function() {
-                let emailId = $(this).data('email-id');
-                let container = $(this).closest('.card-body').find('.email-content');
 
-                // Prevent multiple reply cards under same email
-                if (container.find('.reply-card').length === 0) {
-                    let replyCard = `
-                <div class="card reply-card mt-3">
-                    <div class="card-body">
-                        <form method="POST" action="{{ url('compose-email') }}" enctype="multipart/form-data">
-                            @csrf
-                            <div class="mb-3">
-                                <label class="form-label">Description</label>
-                                <textarea class="form-control summernoteNormal" name="body"></textarea>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Attachments</label>
-                                <input class="form-control" type="file" name="attchments[]" multiple>
-                            </div>
-
-                            <div class="d-flex justify-content-end">
-                               <button type="submit" class="btn save-btn">Send</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            `;
-
-                    container.append(replyCard);
-
-                    // Initialize Summernote for this textarea
-                    container.find('.summernoteNormal').summernote({
-                        tabsize: 2,
-                        height: 200
-                    });
-                }
-            });
-        });
-    </script> --}}
 
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Listen for all reply button clicks
         $(document).on('click', '.reply-button', function() {
-            let emailId = $(this).data('email-id');
-            let container = $(this).closest('.card-body').find('.email-content');
+            let parent_id = document.getElementById('parent_id').value;
+            let container = $("#reply-card");
 
-            // Prevent multiple reply cards under same email
-            if (container.find('.reply-card').length === 0) {
+           
+            if (container.find('.reply-form').length === 0) {
                 let replyCard = `
-                <div class="card reply-card mt-3">
-                    <div class="card-body">
-                        <form class="reply-form">
-                            <div class="mb-3">
-                                <label class="form-label">Description</label>
-                                <textarea class="form-control summernoteNormal" name="body"></textarea>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Attachments</label>
-                                <input class="form-control" type="file" name="attchments[]" multiple>
-                            </div>
-
-                            <div class="d-flex justify-content-end">
-                               <button type="submit" class="btn save-btn">Send</button>
-                            </div>
-                        </form>
-                    </div>
+            <div class="card reply-card mt-3">
+                <div class="card-body">
+                    <form class="reply-form" action="/emails/reply/${parent_id}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control summernoteNormal" name="body"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Attachments</label>
+                            <input class="form-control" type="file" name="attchments[]" multiple>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn save-btn">Send</button>
+                        </div>
+                    </form>
                 </div>
-                `;
-
+            </div>
+        `;
                 container.append(replyCard);
 
-                // Initialize Summernote for this textarea
+                // Init summernote
                 container.find('.summernoteNormal').summernote({
                     tabsize: 2,
                     height: 200
@@ -427,67 +376,37 @@
             }
         });
 
-        // Handle send button click (dummy)
+        // Handle reply submit
         $(document).on('submit', '.reply-form', function(e) {
             e.preventDefault();
 
-            let container = $(this).closest('.email-content');
-            let replyCard = $(this).closest('.reply-card');
-            let message = replyCard.find('.summernoteNormal').val();
+            let form = $(this);
+            let formData = new FormData(this);
 
-            // Replace reply card with the "sent email" dummy
-            replyCard.replaceWith(`
-                <div class="card mt-3 bg-light">
-                    <div class="card-body">
-                        <p class="m-2"><strong>You replied:</strong></p>
-                        <div class="p-2 border rounded">${message}</div>
-                    </div>
-                </div>
+            $.ajax({
+                url: form.attr('action'),
+                method: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(res) {
+                    // remove form
+                    form.closest('.reply-card').remove();
 
-
-                <div class="email-action-buttons mt-4">
-                    <button type="submit" class="email-action-button reply-button" id="reply-button">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_542_1578)">
-                                <path
-                                    d="M8.33333 7.50033V4.16699L2.5 10.0003L8.33333 15.8337V12.417C12.5 12.417 15.4167 13.7503 17.5 16.667C16.6667 12.5003 14.1667 8.33366 8.33333 7.50033Z"
-                                    fill="black" fill-opacity="0.54" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_542_1578">
-                                    <rect width="20" height="20" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-
-                        <span class="email-button-text">Reply</span>
-                    </button>
-
-                    <button class="email-action-button forward-button">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_542_1587)">
-                                <path
-                                    d="M10.0004 6.66634V3.33301L16.6671 9.99967L10.0004 16.6663V13.333H3.33374V6.66634H10.0004Z"
-                                    fill="black" fill-opacity="0.54" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_542_1587">
-                                    <rect width="20" height="20" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-
-
-                        <span class="email-button-text">Forward</span>
-                    </button>
-
-
-                </div>
-            `);
+                    // append reply to bottom of #reply-card
+                    $("#reply-card").append(`
+                            <div class="card mt-3 bg-light">
+                                <div class="card-body">
+                                    <p class="m-2"><strong>You replied:</strong></p>
+                                    <div class="p-2 border rounded">${formData.get('body')}</div>
+                                </div>
+                            </div>
+                        `);
+                },
+                error: function(err) {
+                    alert("Something went wrong. Try again!");
+                }
+            });
         });
-    });
-</script>
-
+    </script>
 @endsection

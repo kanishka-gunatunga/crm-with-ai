@@ -27,6 +27,7 @@ use PDF;
 // use Mail;
 use League\Csv\Writer;
 use App\Mail\LeadSendEmail;
+use App\Models\MailReplies;
 
 date_default_timezone_set('Asia/Colombo');
 
@@ -39,7 +40,7 @@ class EmailsController extends Controller
             $sent_emails = SentEmails::get();
             return view('mail.mail', [
                 'sent_emails' => $sent_emails,
-                
+
             ]);
         }
     }
@@ -49,7 +50,7 @@ class EmailsController extends Controller
     {
         if ($request->isMethod('get')) {
             $favourite_emails = SentEmails::where('is_favourite', 1)->get();
-             return response()->json($favourite_emails);
+            return response()->json($favourite_emails);
         }
     }
 
@@ -92,7 +93,6 @@ class EmailsController extends Controller
         }
     }
 
-
     public function view_email(Request $request, $uid)
     {
         if ($request->isMethod('post')) {
@@ -128,10 +128,7 @@ class EmailsController extends Controller
 
             return back()->with('success', 'Email sent successfully.');
         } else {
-            // return view('mail.email-view');
-            $sent_email = SentEmails::find($uid);
-            // dd($sent_email);
-            // $sent_email = SentEmails::find($uid);
+            $sent_email = SentEmails::find($uid);  
             if (!$sent_email) {
                 return redirect()->back()->with('error', 'Email not found.');
             }
@@ -153,10 +150,10 @@ class EmailsController extends Controller
 
     public function toggleFavourite($id, Request $request)
     {
-        
-        
+
+
         $mail = SentEmails::find($id);
-        
+
         $mail->is_favourite = !$mail->is_favourite;
         $mail->save();
 
@@ -168,32 +165,31 @@ class EmailsController extends Controller
     }
 
 
-    public function reply(Request $request, $parentId)
-{
-    $request->validate([
-        'body' => 'required|string',
-    ]);
+    public function reply(Request $request, $Id)
+    {
+        $request->validate([
+            'body' => 'required|string',
+        ]);
 
-    $parentEmail = SentEmails::findOrFail($parentId);
+        $parentEmail = SentEmails::findOrFail($Id);
 
-    $reply = new SentEmails();
-    $reply->to = $parentEmail->to;   // replies usually go to original sender/recipient
-    $reply->cc = $request->cc ?? [];
-    $reply->bcc = $request->bcc ?? [];
-    $reply->subject = $parentEmail->subject; // usually same subject
-    $reply->body = $request->body;
-    $reply->attachments = [];
+        $reply = new MailReplies();
+        $reply->to = $parentEmail->to;   // replies usually go to original sender/recipient
+        $reply->cc = $request->cc ?? [];
+        $reply->bcc = $request->bcc ?? [];
+        $reply->subject = $parentEmail->subject; // usually same subject
+        $reply->body = $request->body;
+        $reply->attachments = [];
 
-    $reply->parent_id = $parentEmail->id; // <<=== important
-    $reply->save();
+        $reply->parent_id = $parentEmail->id; // 
+        $reply->save();
 
-    // Send the actual mail
-    Mail::to($reply->to)
-        ->cc($reply->cc ?? [])
-        ->bcc($reply->bcc ?? [])
-        ->send(new LeadSendEmail($reply));
+        // Send the actual mail
+        Mail::to($reply->to)
+            ->cc($reply->cc ?? [])
+            ->bcc($reply->bcc ?? [])
+            ->send(new LeadSendEmail($reply));
 
-    return back()->with('success', 'Reply sent successfully.');
-}
-
+        return back()->with('success', 'Reply sent successfully.');
+    }
 }

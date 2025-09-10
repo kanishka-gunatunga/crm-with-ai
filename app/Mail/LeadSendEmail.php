@@ -2,6 +2,7 @@
 namespace App\Mail;
 
 use App\Models\SentEmails;
+use App\Models\MailReplies;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -13,7 +14,8 @@ class LeadSendEmail extends Mailable
 
     public $leadMail;
 
-    public function __construct(SentEmails $leadMail)
+
+    public function __construct($leadMail )
     {
         $this->leadMail = $leadMail;
     }
