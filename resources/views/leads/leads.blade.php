@@ -46,7 +46,7 @@
                             Leads
                         </h3>
                         <div class="d-flex gap-3">
-                            
+
                             <button class="import-leads-button">
                                 <div class="icon-container">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -60,7 +60,7 @@
 
                                 </div>
 
-                                
+
 
                                 <select class="pipeline-selection tagselect" id="pipeline-select" name="state" required>
                                     @foreach ($pipelines as $pipe)
@@ -70,7 +70,7 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                
+
                             </button>
 
 
@@ -270,7 +270,9 @@
                                             <div class="divider"></div>
                                             <footer class="task-footer">
                                                 <div class="assignee-info">
-                                                <img class="avatar" src="{{ asset('uploads/persons/pictures/' . \App\Models\Person::where('id', $lead->person)->value('picture')) }}" alt="Assignee Picture">
+                                                    <img class="avatar"
+                                                        src="{{ asset('uploads/persons/pictures/' . \App\Models\Person::where('id', $lead->person)->value('picture')) }}"
+                                                        alt="Assignee Picture">
 
 
                                                     <a href="{{ url('persons?id=' . $lead->person) }}">
@@ -392,7 +394,7 @@
     </div>
     <script>
         $(document).ready(function() {
-            
+
             $('#pipeline-select').on('change', function() {
                 const selectedPipelineId = $(this).val();
                 console.log("Selected Pipeline ID:", selectedPipelineId);
@@ -452,13 +454,16 @@
                             return;
                         }
 
-                        updateLeadStage(leadId, newStage, leadValue, oldStage);
+                        // Only update if the stage actually changed
+                        if (oldStage !== newStage) {
+                            updateLeadStage(leadId, newStage, leadValue, oldStage);
+                        } else {
+                            console.log("Item moved within the same stage - no update needed");
+                        }
                     }
-
                 });
             });
         });
-
 
         function updateLeadStage(leadId, newStage, leadValue, oldStage) {
             console.log("leadId:", leadId);
@@ -476,7 +481,6 @@
                     new_stage_id: newStage
                 },
                 success: function(response) {
-                    toastr.success("Lead stage updated successfully");
                     var oldStageValueElement = document.getElementById('stage-value-' + oldStage);
                     var newStageValueElement = document.getElementById('stage-value-' + newStage);
 
@@ -488,7 +492,6 @@
                     oldStageValueElement.innerText = "$" + (oldStageValue - leadValue).toLocaleString();
                     newStageValueElement.innerText = "$" + (newStageValue + leadValue).toLocaleString();
 
-
                     let oldStageList = document.querySelector(`[data-status="${oldStage}"]`);
                     let newStageList = document.querySelector(`[data-status="${newStage}"]`);
 
@@ -497,12 +500,14 @@
 
                     document.getElementById('stage-count-' + oldStage).innerText = oldStageCount;
                     document.getElementById('stage-count-' + newStage).innerText = newStageCount;
+
+                    toastr.success("Lead stage updated successfully");
                 },
                 error: function(xhr, status, error) {
-                    // console.error("Error updating lead stage", error);
                     toastr.error("Error updating lead stage");
                 }
             });
+
         }
     </script>
 @endsection
