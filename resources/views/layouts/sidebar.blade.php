@@ -175,7 +175,7 @@ $is_contact_section_active = $is_persons_active || $is_organizations_active;
 
                     if ($persons_access): ?>
                             <a href="{{ url('persons') }}"
-                                class="dropdown-item nav-link {{ request()->is('persons') ? 'active' : '' }}">
+                                class="dropdown-item nav-link person-class {{ request()->is('persons') ? 'active' : '' }}">
                                 <svg width="23" height="23" viewBox="0 0 23 23" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;">
                                     <path
@@ -283,7 +283,7 @@ $is_contact_section_active = $is_persons_active || $is_organizations_active;
             }
 
             if ($mail_access) { ?>
-            <li class="nav-item">
+            <li class="nav-item stroke-nav-item">
                 <a class="nav-link {{ request()->is('emails') ? 'active' : '' }}" href="{{ url('emails') }}">
                     <svg width="23" height="23" viewBox="0 0 23 23" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -355,3 +355,26 @@ $is_contact_section_active = $is_persons_active || $is_organizations_active;
         </ul>
     </nav>
 </div>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Select all links with person-class
+    const personLinks = document.querySelectorAll(".nav-link.person-class");
+
+    personLinks.forEach(link => {
+        // Check if current URL contains the link's href (works for /persons or /persons/123)
+        if (window.location.pathname.startsWith(new URL(link.href).pathname)) {
+            link.classList.add("active"); // Ensure active is added
+            const paths = link.querySelectorAll("path");
+            paths.forEach(path => {
+                path.style.fill = "inherit";
+                path.style.stroke = "var(--primary-color)";
+            });
+        }
+    });
+});
+</script>
+
+
