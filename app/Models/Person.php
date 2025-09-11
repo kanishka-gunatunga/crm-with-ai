@@ -29,4 +29,9 @@ class Person extends Model
     {
         return $this->hasMany(Lead::class, 'person');
     }
+
+     public function organization()
+    {
+        return $this->belongsTo(Organization::class, 'organization');
+    }
 }

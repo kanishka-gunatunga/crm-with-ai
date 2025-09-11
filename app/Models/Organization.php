@@ -26,4 +26,9 @@ class Organization extends Model
         'emails' => 'array'
     ];
 
+
+    public function persons()
+    {
+        return $this->hasMany(Person::class, 'organization');
+    }
 }

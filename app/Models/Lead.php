@@ -36,5 +36,19 @@ class Lead extends Model
     {
         return $this->belongsTo(Person::class, 'person');
     }
+    public function source()
+    {
+        return $this->belongsTo(Source::class, 'source');
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(Type::class, 'type');
+    }
+
+    public function salesOwner()
+    {
+        return $this->belongsTo(UserDetails::class, 'sales_owner');
+    }
 
 }
