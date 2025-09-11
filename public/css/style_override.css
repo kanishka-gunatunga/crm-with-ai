@@ -1,0 +1,339 @@
+
+/*temporary hide some components in lead and dashboard*/
+
+.dashbaord-piechart-container .pie-chart-inner{
+    display:none !important;
+}
+
+.notification-card .notification-icon{
+    display:none !important;
+}
+
+.task-footer .action-btn{
+     display:none !important;
+}
+
+.email-templates-card{
+    display:none !important;
+}
+
+
+/*-------------------------------------*/
+
+.dashboard-card-heder{
+    font-family: var(--font-family);
+    font-weight: 800;
+    font-size: 17px;
+    color: var(--black-color);
+    margin-bottom: 15px;
+}
+.dashboard-tabs .nav-pills{
+margin-bottom: 0px;
+}
+.dashboard-tabs {
+    background-color: #F0F0FF;
+    border-radius: 5px;
+}
+.dashboard-tabs .nav-pills .nav-link {
+    color: var(--black-color);
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 10px;
+    background-color: transparent !important;
+}
+.dashboard-tabs .nav-pills .nav-link.active {
+    color: #fff;
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 10px;
+    background-color: var(--black-color) !important;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+
+.nav-buttons button {
+  background: #FAFAFF;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  color:#556476;
+}
+.nav-buttons button:hover {
+  background: #4A58EC;
+  color:#fff;
+}
+.calendar-weekdays,
+.calendar-days {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.calendar-weekdays div,
+.calendar-days div {
+  text-align: center;
+  width: 35px;
+  cursor: pointer;
+  font-family: var(--font-family);
+    font-weight: 700;
+    font-size: 10px;
+    color: #556476;
+}
+
+.calendar-days div {
+  background: #f2f4f8;
+  border-radius: 50%;
+  padding: 8px 0;
+  cursor: pointer;
+  font-family: var(--font-family);
+font-weight: 700;
+font-size: 10px;
+color: #556476;
+}
+
+.calendar-days .active {
+  background: #4f5dff;
+  color: white;
+  font-weight: bold;
+}
+
+.events-section {
+  margin-top: 20px;
+}
+
+.events-section h4 {
+ font-family: var(--font-family);
+font-weight: 600;
+font-size: 9px;
+color: var(--black-color);
+}
+
+.event-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.event-list li {
+   font-family: var(--font-family);
+font-weight: 600;
+font-size: 9px;
+color: var(--black-color);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.red {
+  background: red;
+}
+
+.green {
+  background: green;
+}
+.bordered-table{
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 10px;
+  overflow: hidden; 
+  width: 100%;
+  border: 1px solid #ddd;
+}
+.bordered-table tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+}
+.my-leads-table .bordered-table tbody tr:last-child{
+  border-bottom: 1px solid #ddd;
+}
+
+.bordered-table tbody tr:last-child {
+  border-bottom: none;
+}
+.main-content{
+    width: 100%;
+
+}
+.dashbaord-piechart-container{
+    width: 400px;
+}
+.dashbaord-piechart-container .pie-chart-inner{
+    position: absolute;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    top: 135px;
+    left: 115px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    height: 200px;
+    width: 200px;
+}
+.dashbaord-piechart-container .pepeline-count{
+    font-family: var(--font-family);
+    font-weight: 800;
+    font-size: 15px;
+    text-align: center;
+    color: var(--black-color);
+
+}
+.dashbaord-piechart-container .pepeline-text{
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 9px;
+    text-align: center;
+    color: #556476;
+
+}
+.dashboard-top-col{
+    width: 20%;
+}
+body{
+  /* overflow: hidden; */
+}
+.page-content{
+    /* height: 100vh;
+    overflow: auto;
+    margin-bottom: 50px; */
+}
+.logo-and-search{
+  display: flex;
+}
+.logo-and-search .logo-section{
+  width: 229px;;
+}
+#user-dropdown{
+  display: none; 
+  position:absolute; 
+   right: 10px; 
+   top: 65px; 
+   background: white; 
+   border: 1px solid #ccc; 
+   padding: 10px; 
+   border-radius: 8px; 
+   min-width: 150px; 
+   box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+   z-index: 999;
+}
+#user-dropdown a{
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 10px;
+    line-height: 100%;
+    color: #556476;
+    text-decoration: none;
+   
+}
+.hamburger {
+   position: unset;
+  padding: 0px; 
+}
+.mobile-nav{
+  display: none;
+}
+@media (max-width: 1600px) {
+.dashbaord-piechart-container{
+    width: 300px;
+}
+.dashbaord-piechart-container .pie-chart-inner{
+    
+    top: 110px;
+    left: 92px;
+    border-radius: 50%;
+    height: 150px;
+    width: 150px;
+    
+}
+}
+@media (max-width: 1300px) {
+.dashbaord-piechart-container{
+    width: 250px;
+}
+.dashbaord-piechart-container .pie-chart-inner{
+    top: 100px;
+    left: 80px;
+    border-radius: 50%;
+    height: 120px;
+    width: 120px;
+}
+}
+@media (max-width: 1100px) {
+.dashbaord-piechart-container{
+    width: 200px;
+}
+.dashbaord-piechart-container .pie-chart-inner{
+    top: 100px;
+    left: 80px;
+    border-radius: 50%;
+    height: 120px;
+    width: 120px;
+}
+}
+@media (max-width: 600px) {
+  .dashbaord-piechart-container{
+    width: 300px;
+     overflow: scroll;
+    }
+    .dashbaord-piechart-container .pie-chart-inner {
+    position: absolute;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    top: 110px;
+    left: 100px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    height: 130px;
+    width: 130px;
+}
+.dashboard-top-col{
+    width: 100%;
+}
+.logo-and-search .logo-section{
+  display: none;
+}
+.header-nav{
+  height: auto;
+}
+.main-header{
+  height: unset;
+  padding: 10px;
+
+}
+.header-nav{
+ padding: 0px; 
+}
+.mobile-nav{
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+    justify-content: space-between;
+}
+.user-profile {
+        width: 120px;
+}
+.search-input-wrapper {
+    width: 175px;
+}
+#user-dropdown{
+
+   top: 110px; 
+
+}
+}

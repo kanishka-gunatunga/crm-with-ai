@@ -28,6 +28,8 @@ class Lead extends Model
         'won_value',
         'closed_date',
         'reason',
+        'priority',
+        'start_date',
     ];
 
     public function person()

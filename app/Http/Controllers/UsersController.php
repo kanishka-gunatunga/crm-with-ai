@@ -107,7 +107,7 @@ class UsersController extends Controller
     }
     public function delete_user($id,Request $request)
     {
-        if($request('get')){
+        if ($request->isMethod('get')) {
             User::where('id',$id)->delete();
             UserDetails::where('user_id',$id)->delete();
             return redirect()->back()->with('success', 'User deleted successfully!');

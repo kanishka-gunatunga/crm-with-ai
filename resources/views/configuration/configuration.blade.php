@@ -10,12 +10,11 @@
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <h3 class="page-title">
-                                       Configuration
+                                       {{ __('app.configuration.title') }}
                                     </h3>
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#">Configurations</a></li>
-                                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">Library</li>
+                                            <li class="breadcrumb-item"><a href="#">{{ __('app.configuration.title') }}</a></li>
                                         </ol>
                                     </nav>
                                 </div>
@@ -92,69 +91,81 @@
 
                         <div class="col-12">
                             <div class="card-container">
-                                <form>
+                        
                                     <div class="card card-default">
                                         <div class="card-body">
 
 
-                                            <div class="row g-4">
-                                                <div class="col-12 col-md-4">
-                                                    <label for="field1" class="form-label">Name</label>
-                                                    <input type="text" class="form-control" id="field1" placeholder="Name">
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label for="field1" class="form-label">SKU</label>
-                                                    <input type="text" class="form-control" id="field1" placeholder="SKU">
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label for="field1" class="form-label">Quantity</label>
-                                                    <input type="text" class="form-control" id="field1" placeholder="Quantity">
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label for="field1" class="form-label">Unit Cost</label>
-                                                    <input type="text" class="form-control" id="field1" placeholder="Unit Cost">
-                                                </div>
+                                             <form action="{{ route('lang.switch', app()->getLocale()) }}" method="GET" class="d-inline">
+                                                <label for="firstNameinput" class="form-label">{{ __('app.configuration.locale') }}</label>
+                                                <select onchange="location = this.value;" class="form-select">
+                                                    <option value="{{ route('lang.switch', 'en') }}" {{ app()->getLocale() == 'en' ? 'selected' : '' }}>English</option>
+                                                    <option value="{{ route('lang.switch', 'fa') }}" {{ app()->getLocale() == 'fa' ? 'selected' : '' }}>فارسی</option>
+                                                    <option value="{{ route('lang.switch', 'tr') }}" {{ app()->getLocale() == 'tr' ? 'selected' : '' }}>Turkçe</option>
+                                                    <option value="{{ route('lang.switch', 'ar') }}" {{ app()->getLocale() == 'ar' ? 'selected' : '' }}>Arabic</option>
+                                                    <option value="{{ route('lang.switch', 'es') }}" {{ app()->getLocale() == 'es' ? 'selected' : '' }}>Spanish</option>
+                                                </select>
+                                            </form>
 
-                                            </div>
-
-
+                                            <div style="width:250px;" class="mb-4">
+                                    <img src="{{ asset('uploads/'.$config->logo) }}" class="img-fluid" id="company-logo" style="width: 100%;object-fit: cover;">
+                                    </div>
+                  
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="firstNameinput" class="form-label">Company Logo</label>
+                                        <input  type="file" name="company_logo" id="company_logo"  class="form-control" onchange="previewAndUploadImage(this)" required>
+                                    </div>
+                                </div>
                                         </div>
 
                                     </div>
-                                    <div class="card card-default mt-3">
-                                        <div class="card-body">
-                                            <div class="col-12">
-                                                <label for="field5" class="form-label">Description</label>
-                                                <textarea class="form-control" placeholder="Description" id="field5" rows="5"></textarea>
-
-                                            </div>
-                                        </div>
-                                    </div>
+                                   
 
 
 
-
-                                </form>
+                  
                             </div>
                         </div>
 
                     </div>
                 </div>
 
-                <!-- Bottom Action Buttons -->
-                <div class="col-12 action-bar">
-                    <div class="d-flex gap-2 justify-content-between">
-                        <div>
-                            <button type="submit" class="btn clear-all-btn">Clear All</button>
-                        </div>
-                        <div>
-                            <button type="submit" class="btn save-btn">Save</button>
-                            <button type="submit" class="btn cancel-btn">Cancel</button>
-                        </div>
+        
+            <script>
+function previewAndUploadImage(input) {
+    let imgPreview = document.getElementById("company-logo");
 
-                    </div>
+    if (input.files && input.files[0]) {
+        let file = input.files[0];
+        let reader = new FileReader();
 
-                </div>
+        reader.onload = function (e) {
+            imgPreview.src = e.target.result;
+        };
 
+        reader.readAsDataURL(file);
+
+        let formData = new FormData();
+        formData.append("company_logo", file);
+        formData.append("_token", '{{ csrf_token() }}');
+
+        fetch("{{url('update-company-logo')}}", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("Image uploaded successfully:");
+
+            } else {
+                console.error("Error uploading image", data);
+            }
+        })
+        .catch(error => console.error("Fetch error:", error));
+    }
+}
+</script>       
 
 @endsection

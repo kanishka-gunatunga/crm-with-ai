@@ -1,22 +1,28 @@
-
 @extends('master')
 
 @section('content')
+    <form action="" method="post" enctype="multipart/form-data" data-parsley-validate>
+        @csrf
 
-
-  <!-- Scrollable Content -->
+        <div class="d-flex flex-column min-vh-100">
+            <div class="flex-grow-1">
+                <!-- Scrollable Content -->
                 <div class="main-scrollable">
                     <div class="page-container">
+
                         <div class="page-title-container mb-0">
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <h3 class="page-title">
-                                        Create Quote
+                                        {{ __('app.quotes.create-title') }}
                                     </h3>
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#">Quotes</a></li>
-                                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">Create Quote</li>
+                                            <li class="breadcrumb-item"><a href="{{ url('quotes') }}">
+                                                    {{ __('app.quotes.title') }}</a>
+                                            </li>
+                                            <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
+                                                {{ __('app.quotes.create-title') }}</li>
                                         </ol>
                                     </nav>
                                 </div>
@@ -37,48 +43,64 @@
                                         <form>
                                             <div class="row g-4">
                                                 <div class="col-12 col-md-4">
-                                                    <label for="assign_user" class="form-label">Lead</label>
-                                                    <select class="myDropdown form-control  ">
-                                                        <option value="1">Option 1</option>
-                                                        <option value="2">Option 2</option>
-                                                        <option value="3">Option 3</option>
+                                                    <label for="assign_user"
+                                                        class="form-label">{{ __('app.quotes.lead') }}</label>
+                                                    <select class="myDropdown form-control " name="lead" data-parsley-errors-container="#lead-errors" required>
+                                                        <option selected=""></option>
+                                                        <?php foreach($leads as $lead){ ?>
+                                                        <option value="{{ $lead->id }}">{{ $lead->title }}</option>
+                                                        <?php } ?>
                                                     </select>
+                                                    <div id="lead-errors"></div>
                                                 </div>
+
                                                 <div class="col-12 col-md-4">
                                                     <label for="assign_user" class="form-label">Sales Owner</label>
-                                                    <select class="myDropdown form-control  ">
-                                                        <option value="1">Option 1</option>
-                                                        <option value="2">Option 2</option>
-                                                        <option value="3">Option 3</option>
+                                                    <select class="myDropdown form-control" name="owner" data-parsley-errors-container="#owner-errors" required>
+                                                        <option selected=""></option>
+                                                        <?php foreach($owners as $owner){ ?>
+                                                            <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
+                                                        <?php } ?>
                                                     </select>
+                                                    <div id="owner-errors"></div>
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label for="assign_user" class="form-label">Subject</label>
-                                                    <select class="myDropdown form-control">
-                                                        <option value="1">Option 1</option>
-                                                        <option value="2">Option 2</option>
-                                                        <option value="3">Option 3</option>
-                                                    </select>
+                                                    <input type="text" class="form-control" name="subject"
+                                                        value="{{ old('subject') }}" required>
+                                                    @if ($errors->has('subject'))
+                                                        <div class="alert alert-danger mt-2">
+                                                            {{ $errors->first('subject') }}
+                                                            </li>
+                                                        </div>
+                                                    @endif
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label for="expired_at" class="form-label">Expired At</label>
                                                     <div class="input-group">
-                                                        <input type="date" class="form-control" id="expired_at" placeholder="Expired At">
+                                                        <input type="date" class="form-control" id="expired_at"
+                                                            placeholder="Expired At" name="expired_at"
+                                                            value="{{ old('expired_at') }}" data-parsley-errors-container="#expired-at-errors" required>
 
                                                     </div>
+                                                    <div id="expired-at-errors"></div>
                                                 </div>
-                                                <div class="col-12 col-md-4">
+                                                <div class="col-12 col-md-4 selection-div">
                                                     <label for="terms" class="form-label">Person</label>
-                                                    <select class="myDropdown form-control">
-                                                        <option value="1">Option 1</option>
-                                                        <option value="2">Option 2</option>
-                                                        <option value="3">Option 3</option>
+                                                    <select class="myDropdown form-control" name="person" data-parsley-errors-container="#person-errors" required>
+                                                        <option selected=""></option>
+                                                        <?php foreach($persons as $person){ ?>
+                                                        <option value="{{ $person->id }}">{{ $person->name }}</option>
+                                                        <?php } ?>
                                                     </select>
+                                                    <div id="person-errors"></div>
                                                 </div>
 
                                                 <div class="col-12 col-md-4">
-                                                    <label for="date_start" class="form-label">Description</label>
-                                                    <input type="text" class="form-control" id="date_start" placeholder="Date Start">
+                                                    <label for="date_start" class="form-label"
+                                                        name="description">Description</label>
+                                                    <input type="text" class="form-control" id="date_start"
+                                                        placeholder="Description">
                                                 </div>
 
                                             </div>
@@ -93,24 +115,32 @@
                                         <h5 class="mb-3 card-title">Billing Address</h5>
                                         <div class="row g-4">
                                             <div class="col-12 col-md-4">
-                                                <label for="No" class="form-label">No.</label>
-                                                <input type="text" class="form-control" id="No" placeholder="No">
+                                                <label for="No" class="form-label">Address</label>
+                                                <input type="text" class="form-control" id="No" placeholder="No"
+                                                    name="address" required>
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Province" class="form-label">Province</label>
-                                                <input type="text" class="form-control" id="Province" placeholder="Province">
+                                                <input type="text" class="form-control" id="Province"
+                                                    placeholder="Province" name="state" required>
                                             </div>
                                             <div class="col-12 col-md-4">
-                                                <label for="Country" class="form-label">Country</label>
-                                                <input type="text" class="form-control" id="Country" placeholder="Country">
+                                                <label for="assign_user" class="form-label">Country</label>
+                                                <select class="myDropdown form-control" name="country" data-parsley-errors-container="#country-errors" required>
+                                                    <option selected=""></option>
+                                                    <option value="Sri Lanka">Sri Lanka</option>
+                                                </select>
+                                                <div id="country-errors"></div>
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="City" class="form-label">City</label>
-                                                <input type="text" class="form-control" id="City" placeholder="City">
+                                                <input type="text" class="form-control" id="City" name="city"
+                                                    placeholder="City" value="" required>
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Postal Code" class="form-label">Postal Code</label>
-                                                <input type="text" class="form-control" id="Postal Code" placeholder="Postal Code">
+                                                <input type="text" class="form-control" id="Postal Code"
+                                                    name="post_code" placeholder="Post Code" value="" required>
                                             </div>
 
                                         </div>
@@ -124,24 +154,33 @@
                                         <h5 class="mb-3 card-title">Shipping Address</h5>
                                         <div class="row g-4">
                                             <div class="col-12 col-md-4">
-                                                <label for="No" class="form-label">No.</label>
-                                                <input type="text" class="form-control" id="No" placeholder="No">
+                                                <label for="No" class="form-label">Address</label>
+                                                <input type="text" class="form-control" id="No"
+                                                    placeholder="No" name="shipping_address" required>
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Province" class="form-label">Province</label>
-                                                <input type="text" class="form-control" id="Province" placeholder="Province">
+                                                <input type="text" class="form-control" id="Province"
+                                                    placeholder="Province" name="shipping_state" required>
                                             </div>
                                             <div class="col-12 col-md-4">
-                                                <label for="Country" class="form-label">Country</label>
-                                                <input type="text" class="form-control" id="Country" placeholder="Country">
+                                                <label for="assign_user" class="form-label">Country</label>
+                                                <select class="myDropdown form-control" name="shipping_country" data-parsley-errors-container="#shipping-country-errors" required>
+                                                    <option selected=""></option>
+                                                    <option value="Sri Lanka">Sri Lanka</option>
+                                                </select>
+                                                <div id="shipping-country-errors"></div>
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="City" class="form-label">City</label>
-                                                <input type="text" class="form-control" id="City" placeholder="City">
+                                                <input type="text" class="form-control" id="City"
+                                                    name="shipping_city" placeholder="City" value="" required>
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Postal Code" class="form-label">Postal Code</label>
-                                                <input type="text" class="form-control" id="Postal Code" placeholder="Postal Code">
+                                                <input type="text" class="form-control" id="Postal Code"
+                                                    name="shipping_post_code" placeholder="Post Code" value=""
+                                                    required>
                                             </div>
 
                                         </div>
@@ -152,15 +191,18 @@
                                         <div class="row g-4">
                                             <div class="table-responsive">
                                                 <div class="d-flex justify-content-between align-items-center mb-5">
-                                                    <h5 class="card-title">Quotes</h5>
-                                                    <button class="import-leads-button">
+                                                    <h5 class="card-title">{{ __('app.quotes.quote-items') }}</h5>
+                                                    <button class="create-btn" type="button" id="add-product">
                                                         <div class="icon-container">
-                                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M8.625 9.375H4.5V8.625H8.625V4.5H9.375V8.625H13.5V9.375H9.375V13.5H8.625V9.375Z" fill="white" />
+                                                            <svg width="20" height="20" viewBox="0 0 20 20"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M8.625 9.375H4.5V8.625H8.625V4.5H9.375V8.625H13.5V9.375H9.375V13.5H8.625V9.375Z"
+                                                                    fill="white" />
                                                             </svg>
 
                                                         </div>
-                                                        <span class="button-text">Add Item</span>
+                                                        <span class="button-text">{{ __('app.common.add_more') }}</span>
                                                     </button>
 
                                                 </div>
@@ -168,7 +210,7 @@
                                                     <thead>
                                                         <tr>
 
-                                                            <th class="corner-left">Name</th>
+                                                            <th class="corner-left" style="width:400px;">Name</th>
                                                             <th>Quantity</th>
                                                             <th>Price</th>
                                                             <th>Amount</th>
@@ -179,90 +221,194 @@
                                                             <th class="corner-right">Actions</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
-                                                        <?php for ($i = 0; $i < 10; $i++): ?>
-                                                            <tr>
-
-                                                                <td>Infinity CRM</td>
-                                                                <td>1</td>
-                                                                <td>$1345</td>
-                                                                <td>$766</td>
-                                                                <td>
-
-                                                                    <select id="terms" class="form-control dropdown">
-                                                                        <option value="1">Option 1</option>
-                                                                        <option value="2">Option 2</option>
-                                                                        <option value="3">Option 3</option>
-
-                                                                    </select>
-                                                                </td>
-
-                                                                <td>$120</td>
-                                                                <td>$545</td>
-
-                                                                <td class="action-icons d-flex gx-3">
-                                                                    <div class="text-muted" type="button">
-                                                                        <svg width="20" height="20" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                            <rect width="18" height="18" rx="2.90323" fill="#FFE9E5" />
-                                                                            <path d="M6.9431 12.7013C6.71689 12.7013 6.52331 12.6208 6.36236 12.4599C6.20141 12.2989 6.12079 12.1052 6.12052 11.8787V6.53197H5.70923V5.70939H7.76568V5.2981H10.2334V5.70939H12.2899V6.53197H11.8786V11.8787C11.8786 12.105 11.7981 12.2987 11.6372 12.4599C11.4762 12.6211 11.2825 12.7016 11.056 12.7013H6.9431ZM11.056 6.53197H6.9431V11.8787H11.056V6.53197ZM7.76568 11.0562H8.58826V7.35455H7.76568V11.0562ZM9.41084 11.0562H10.2334V7.35455H9.41084V11.0562Z" fill="#ED2227" />
-                                                                        </svg>
-                                                                    </div>
-
-                                                                </td>
-                                                            </tr>
-                                                        <?php endfor; ?>
-
-
+                                                    <tbody id="products-tbody">
 
                                                     </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th colspan="6" style="text-align:right">
+                                                                {{ __('app.quotes.sub-total') }}</th>
+                                                            <th id="sub-total"></th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th colspan="6" style="text-align:right">
+                                                                {{ __('app.quotes.discount') }} -</th>
+                                                            <th id="discount-total"></th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th colspan="6" style="text-align:right">
+                                                                {{ __('app.quotes.tax') }} +</th>
+                                                            <th id="tax-total"></th>
+                                                        </tr>
 
+                                                        <tr>
+                                                            <th colspan="6" style="text-align:right">
+                                                                {{ __('app.quotes.total') }}</th>
+                                                            <th id="order-total"></th>
+                                                        </tr>
+                                                    </tfoot>
                                                 </table>
                                             </div>
 
                                         </div>
 
-                                        
+                                        <input type="hidden" class="form-control" name="discount_total_amount"
+                                            id="discount_total_amount" readonly value="0">
+                                        <input type="hidden" class="form-control" name="tax_total_amount"
+                                            id="tax_total_amount" readonly value="0">
+                                        <input type="hidden" class="form-control" name="order_total_input"
+                                            id="order_total_input" readonly value="0">
                                     </div>
                                 </div>
 
 
-                                <!-- <div class="col-12 bottom-actions-bar">
-                                    <div class="d-flex gap-2 mt-3 justify-content-between">
-                                        <div>
-                                            <button type="submit" class="btn clear-all-btn">Clear All</button>
-                                        </div>
-                                        <div>
-                                            <button type="submit" class="btn save-btn">Save</button>
-                                            <button type="submit" class="btn cancel-btn">Cancel</button>
-                                        </div>
-
-                                    </div>
-
-                                </div> -->
-                                </form>
                             </div>
+
                         </div>
+
 
                     </div>
                 </div>
-
-                <!-- Bottom Action Buttons -->
-                <div class="col-12 action-bar">
-                    <div class="d-flex gap-2 justify-content-between">
-                        <div>
-                            <button type="submit" class="btn clear-all-btn">Clear All</button>
-                        </div>
-                        <div>
-                            <button type="submit" class="btn save-btn">Save</button>
-                            <button type="submit" class="btn cancel-btn">Cancel</button>
-                        </div>
-
+            </div>
+            <div class="col-12 action-bar">
+                <div class="d-flex gap-2 justify-content-between">
+                    <div>
+                        <a href=""><button type="button" class="btn clear-all-btn">Clear
+                                All</button></a>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn save-btn">Save</button>
+                        <a href="{{ url('quotes') }}"><button type="button" class="btn cancel-btn">Cancel</button></a>
                     </div>
 
                 </div>
 
+            </div>
+        </div>
+    </form>
+    <!-- Bottom Action Buttons -->
 
+    <script>
+        $(document).ready(function() {
+            @if (Session::has('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: "{{ Session::get('success') }}",
+                    confirmButtonColor: '#3085d6'
+                });
+            @endif
+
+            @if (Session::has('fail'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "{{ Session::get('fail') }}",
+                    confirmButtonColor: '#d33'
+                });
+            @endif
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+
+            function initializeSelect2() {
+                $(".product-select").select2({
+                    placeholder: "Select a product",
+                    allowClear: true
+                }).on('change', function() {
+                    let row = $(this).closest('tr');
+                    let price = $(this).find(':selected').data('price');
+                    row.find('input[name="price[]"]').val(price).trigger('input');
+                });
+            }
+
+            initializeSelect2();
+
+
+            function calculateRow(row) {
+                let quantity = parseFloat(row.find('input[name="quantity[]"]').val()) || 0;
+                let price = parseFloat(row.find('input[name="price[]"]').val()) || 0;
+                let discount = parseFloat(row.find('input[name="discount[]"]').val()) || 0;
+                let tax = parseFloat(row.find('input[name="tax[]"]').val()) || 0;
+
+                let amount = quantity * price;
+                let discountAmount = (amount * discount) / 100;
+                let taxableAmount = amount - discountAmount;
+                let taxAmount = (taxableAmount * tax) / 100;
+                let total = taxableAmount + taxAmount;
+
+                row.find('input[name="amount[]"]').val(amount.toFixed(2));
+                row.find('input[name="total[]"]').val(total.toFixed(2));
+
+                updateTotals();
+            }
+
+            function updateTotals() {
+                let subtotal = 0,
+                    totalDiscount = 0,
+                    totalTax = 0,
+                    grandTotal = 0;
+
+                $('#products-tbody tr').each(function() {
+                    let amount = parseFloat($(this).find('input[name="amount[]"]').val()) || 0;
+                    let discount = parseFloat($(this).find('input[name="discount[]"]').val()) || 0;
+                    let tax = parseFloat($(this).find('input[name="tax[]"]').val()) || 0;
+                    let total = parseFloat($(this).find('input[name="total[]"]').val()) || 0;
+
+                    subtotal += amount;
+                    totalDiscount += (amount * discount) / 100;
+                    totalTax += ((amount - (amount * discount) / 100) * tax) / 100;
+                    grandTotal += total;
+                });
+
+                $('#sub-total').text(subtotal.toFixed(2));
+                $('#discount-total').text(totalDiscount.toFixed(2));
+                $('#discount_total_amount').val(totalDiscount.toFixed(2));
+                $('#tax-total').text(totalTax.toFixed(2));
+                $('#tax_total_amount').val(totalTax.toFixed(2));
+                $('#order-total').text(grandTotal.toFixed(2));
+                $('#order_total_input').val(grandTotal.toFixed(2));
+            }
+
+            $('#products-tbody').on('input',
+                'input[name="quantity[]"], input[name="price[]"], input[name="discount[]"], input[name="tax[]"]',
+                function() {
+                    calculateRow($(this).closest('tr'));
+                });
+
+            $('#products-tbody').on('click', '.remove-product', function() {
+                $(this).closest('tr').remove();
+                updateTotals();
+            });
+
+            $('#add-product').on('click', function() {
+                let newRow = `
+            <tr>
+                <td>
+                    <select class="form-control product-select" name="products[]" required>
+                        <option hidden selected></option>
+                         <?php foreach($products as $product){ ?> 
+                        <option value="product||{{ $product->id }}" data-price="{{ $product->cost }}">{{ $product->name }}</option>
+                        <?php } ?>
+                        <?php foreach($services as $service){ ?> 
+                        <option value="service||{{ $service->id }}" data-price="{{ $service->cost }}">{{ $service->name }}</option>
+                        <?php } ?>
+                    </select>
+                    <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]" placeholder="Notes"></textarea>
+                </td>
+                <td><input type="number" step="any" class="form-control" name="quantity[]" required></td>
+                <td><input type="number" step="any" class="form-control" name="price[]" required></td>
+                <td><input type="number" step="any" class="form-control" name="amount[]" readonly required></td>
+                <td><input type="number" step="any" class="form-control" name="discount[]"></td>
+                <td><input type="number" step="any" class="form-control" name="tax[]"></td>
+                <td><input type="number" step="any" class="form-control" name="total[]" readonly></td>
+                <td><i class="fa-solid fa-trash remove-product remove-append-item mx-2"></i></td>
+            </tr>
+        `;
+                $('#products-tbody').append(newRow);
+                initializeSelect2();
+            });
+        });
+    </script>
 @endsection
-
-
-

@@ -88,6 +88,17 @@ public function delete_stage($id,Request $request)
      }
     
 }
+public function delete_selected_sources(Request $request)
+{
+    $sourceIds = $request->input('selected_sources', []);
+    
+    if (!empty($sourceIds)) {
+        Source::whereIn('id', $sourceIds)->delete();
+        return back()->with('success', 'Selected soruces deleted successfully.');
+    }
+
+    return back()->with('error', 'No attributes selected.');
+}
 }
 
 

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SentEmails extends Model
 {
@@ -19,14 +21,28 @@ class SentEmails extends Model
         'bcc',
         'subject',
         'body',
-        'attachments'
+        'attachments',
+        'is_favourite',
+        'parent_id'
     ];
 
     protected $casts = [
-        'to' => 'array', 
-        'cc' => 'array', 
-        'bcc' => 'array',   
-        'attachments' => 'array',   
+        'to' => 'array',
+        'cc' => 'array',
+        'bcc' => 'array',
+        'attachments' => 'array',
+        'is_favourite' => 'boolean',
     ];
 
+    // Parent (the email this one replies to)
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(SentEmails::class, 'parent_id');
+    }
+
+    // Replies (all emails that replied to this one)
+    public function replies()
+    {
+        return $this->hasMany(MailReplies::class, 'parent_id');
+    }
 }

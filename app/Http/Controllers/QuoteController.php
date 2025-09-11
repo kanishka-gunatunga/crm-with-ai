@@ -43,23 +43,28 @@ class QuoteController extends Controller
     public function quotes(Request $request)
     {
         if ($request->isMethod('post')) {
+
+            $core = Configuration::first();
+
+            if (!$core) {
+                $core = new Configuration();
+            }
+
+            $imag_name = $core->quote_logo;
+
             if ($request->hasFile('quote_logo')) {
+                $image = $request->file('quote_logo');
+                $imag_name = time() . '-quote-logo-.' . $image->extension();
+                $image->move(public_path('uploads/'), $imag_name);
+            }
 
-
-            $image = $request->file('quote_logo');
-           
-            $imag_name = time().'-quote-logo-.'.$image->extension();
-            $image->move(public_path('uploads/'), $imag_name);
-            
-            $core =  Configuration::first();;
             $core->terms = $request->terms;
             $core->quote_logo = $imag_name;
-            $core->update();
+            $core->save(); 
 
+            return redirect()->back()->with('success', 'Settings Saved');
+        }
 
-               return redirect()->back()->with('success', 'Settings Saved');
-        }
-        }
         if ($request->isMethod('get')) {
         $quotesQuery = Quote::query();
 
@@ -328,11 +333,16 @@ class QuoteController extends Controller
             $quote->update();
 
             QuoteProduct::where('quote_id',$id)->delete();
-            if ($request->has('products')) {
+             if ($request->has('products')) {
             foreach ($request->products as $index => $product_id) {
+                $values = explode('||', $product_id);
+                $type = $values[0]; 
+                $product = $values[1];
+
                 QuoteProduct::create([
                     'quote_id' => $id,
-                    'product_id' => $product_id,
+                    'type' => $type,
+                    'product_id' => $product,
                     'note' =>  $request->note[$index],
                     'quantity' => $request->quantity[$index],
                     'price' => $request->price[$index],

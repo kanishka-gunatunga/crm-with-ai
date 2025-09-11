@@ -230,7 +230,7 @@
         'quotes' => [
             'title'               => 'Quotes',
             'quote'               => 'Quote',
-            'create-title'        => 'Create Quote',
+            'create-title'        => 'New Quotes',
             'edit-title'          => 'Edit Quote',
             'save-btn-title'      => 'Save as Quote',
             'back'                => 'Back',
@@ -389,10 +389,10 @@
         'sessions' => [
             'login' => [
                 'title'             => 'Login',
-                'welcome'           => 'Welcome Back',
+                'welcome'           => 'Welcome to',
                 'email'             => 'Email',
                 'password'          => 'Password',
-                'login'             => 'Login',
+                'login'             => 'LOGIN',
                 'forgot-password'   => 'Forgot Password?',
                 'login-error'       => 'Please check your credentials and try again.',
                 'activate-warning'  => 'Your account is yet to be activated, please contact administrator.',
