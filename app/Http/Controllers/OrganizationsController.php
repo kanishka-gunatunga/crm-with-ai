@@ -156,51 +156,99 @@ class OrganizationsController extends Controller
         return back()->with('error', 'No organizations selected.');
     }
     public function import_organizations(Request $request)
-    {
-        if ($request->isMethod('post')) {
+{
+    if ($request->isMethod('post')) {
 
-            $request->validate([
-                'organizations' => 'required|mimes:xls,xlsx,csv',
-            ]);
+        $request->validate([
+            'organizations' => 'required|mimes:xls,xlsx,csv',
+        ]);
 
-            $data = Excel::toArray([], $request->file('organizations'));
+        $data = Excel::toArray([], $request->file('organizations'));
+        $rows = $data[0] ?? [];
+        if (empty($rows)) {
+            return back()->with('error', 'Empty file');
+        }
 
-            $rows = $data[0];
-            $header = array_shift($rows);
+        $header = array_map('trim', $rows[0]); // normalize headers
+        array_shift($rows); // remove header
 
-            foreach ($rows as $row) {
-                if (empty(array_filter($row))) {
+        $seen = [];
+        $inserted = 0;
+        $skipped = 0;
+
+        foreach ($rows as $row) {
+            if (empty(array_filter($row))) continue;
+
+            $record = array_combine($header, $row);
+
+            $name = trim($record['Name'] ?? '');
+            $address = trim($record['Address'] ?? '');
+            $country = trim($record['Country'] ?? '');
+            $state = trim($record['State'] ?? '');
+            $city = trim($record['City'] ?? '');
+            $postCode = trim($record['Post Code'] ?? '');
+            $rawEmails = trim($record['Emails'] ?? '');
+
+            if (!$name || !$rawEmails) {
+                $skipped++;
                 continue;
             }
-                $record = array_combine($header, $row);
 
-                // Skip if name already exists
-                if (!Organization::where("name", $record['Name'])->exists()) {
+            // split multiple emails by comma
+            $emailList = array_filter(array_map(fn($e) => strtolower(trim($e)), explode(',', $rawEmails)));
 
-                    // Process emails (comma-separated)
-                    $emails = [];
-                    $emailList = explode(',', $record['Emails']);
-                    foreach ($emailList as $email) {
-                        $emails[] = [
-                            'value' => trim($email),
-                            'label' => 'work'
-                        ];
-                    }
-
-                    // Create new organization
-                    $organization = new Organization();
-                    $organization->name = $record['Name'] ?? null;
-                    $organization->address = $record['Address'] ?? null;
-                    $organization->country = $record['Country'] ?? null;
-                    $organization->state = $record['State'] ?? null;
-                    $organization->city = $record['City'] ?? null;
-                    $organization->post_code = $record['Post Code'] ?? null;
-                    $organization->emails = $emails;
-                    $organization->save();
-                }
+            if (empty($emailList)) {
+                $skipped++;
+                continue;
             }
 
-            return back()->with('success', 'Organizations Successfully Imported');
+            // dedupe inside the file (use first email for key)
+            $fileKey = $name . '|' . implode(',', $emailList);
+            if (isset($seen[$fileKey])) {
+                $skipped++;
+                continue;
+            }
+            $seen[$fileKey] = true;
+
+            // check in DB if same name + any of these emails exist
+            $exists = Organization::where('name', $name)
+                ->where(function ($q) use ($emailList) {
+                    foreach ($emailList as $email) {
+                        $q->orWhereRaw("JSON_SEARCH(emails, 'one', ?, NULL, '$[*].value') IS NOT NULL", [$email]);
+                    }
+                })
+                ->exists();
+
+            if ($exists) {
+                $skipped++;
+                continue;
+            }
+
+            // format emails
+            $emails = [];
+            foreach ($emailList as $email) {
+                $emails[] = [
+                    'value' => $email,
+                    'label' => 'work'
+                ];
+            }
+
+            // save organization
+            $org = new Organization();
+            $org->name = $name;
+            $org->address = $address;
+            $org->country = $country;
+            $org->state = $state;
+            $org->city = $city;
+            $org->post_code = $postCode;
+            $org->emails = $emails;
+            $org->save();
+
+            $inserted++;
         }
+
+        return back()->with('success', "Imported: $inserted, Skipped: $skipped");
     }
+}
+
 }

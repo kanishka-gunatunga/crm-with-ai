@@ -196,50 +196,69 @@ public function delete_selected_persons(Request $request)
 }
 public function import_persons(Request $request)
 {
-    if ($request->isMethod('post')) {
+    $request->validate([
+        'persons' => 'required|mimes:xls,xlsx,csv',
+    ]);
 
-        $request->validate([
-            'persons' => 'required|mimes:xls,xlsx,csv',
-        ]);
+    $data = Excel::toArray([], $request->file('persons'));
+    $rows = $data[0] ?? [];
 
-        $data = Excel::toArray([], $request->file('persons'));
+    if (empty($rows)) {
+        return back()->with('error', 'Empty file');
+    }
 
-        $rows = $data[0]; 
-        $header = array_shift($rows);
+    $header = array_map('trim', $rows[0]); // first row: Name, Email, Number
+    array_shift($rows); // remove header
 
-        foreach ($rows as $row) {
+    $seen = []; // track duplicates inside file
+    $inserted = 0;
+    $skipped = 0;
 
-            if (empty(array_filter($row))) {
-                continue;
-            }
-            $record = array_combine($header, $row);
+    foreach ($rows as $row) {
+        if (empty(array_filter($row))) continue;
 
-            if(!Person::where("name", $record['Name'])->whereJsonContains("emails->value", $record['Email'])
-            ->whereJsonContains("contact_numbers->value", $record['Number'])->exists()){
-                $emails = [];
-                $contactNumbers = [];
+        $record = array_combine($header, $row);
 
-                $person = new Person();
-                $person->name = $record['Name'] ?? null;
-                $emails[] = [ 
-                    'value' => $record['Email'],
-                    'label' => 'work'
-                ];
-                $contactNumbers[] = [
-                    'value' => $record['Number'],
-                    'label' => 'work'
-                ];
-                $person->emails = $emails;
-                $person->contact_numbers =$contactNumbers;
-                $person->save();
-           
-            }
-            
+        $name = trim($record['Name'] ?? '');
+        $email = strtolower(trim($record['Email'] ?? ''));
+        $number = preg_replace('/\D+/', '', $record['Number'] ?? ''); // keep only digits
+
+        if (!$email || !$number) {
+            $skipped++;
+            continue;
         }
 
-        return back()->with('success', 'Persons Successfully Imported');
+        // dedupe inside the uploaded file
+        $fileKey = $email . '|' . $number;
+        if (isset($seen[$fileKey])) {
+            $skipped++;
+            continue;
+        }
+        $seen[$fileKey] = true;
+
+        // check DB if already exists
+        $exists = Person::whereRaw("JSON_SEARCH(emails, 'one', ?, NULL, '$[*].value') IS NOT NULL", [$email])
+            ->whereRaw("JSON_SEARCH(contact_numbers, 'one', ?, NULL, '$[*].value') IS NOT NULL", [$number])
+            ->exists();
+
+        if ($exists) {
+            $skipped++;
+            continue;
+        }
+
+        // create person
+        $person = new Person();
+        $person->name = $name;
+        $person->emails = [['value' => $email, 'label' => 'work']];
+        $person->contact_numbers = [['value' => $number, 'label' => 'work']];
+        $person->save();
+
+        $inserted++;
     }
+
+    return back()->with('success', "Imported: $inserted, Skipped: $skipped");
 }
+
 }
 
 
