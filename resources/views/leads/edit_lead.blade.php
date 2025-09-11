@@ -119,7 +119,7 @@
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Source</label>
-                                                <select class="form-control tagselect" name="source" required>
+                                                <select class="form-control tagselect" name="source" required data-parsley-errors-container="#source-value-errors">
                                                     <option selected hidden value="{{ $lead->source }}">
                                                         {{ $source_name }}
                                                     </option>
@@ -127,11 +127,12 @@
                                                     <option value="{{ $source->id }}">{{ $source->name }}</option>
                                                     <?php } ?>
                                                 </select>
-                                                @if ($errors->has('source'))
+                                                <div id="source-value-errors"></div>
+                                                {{-- @if ($errors->has('source'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('source') }}
                                                     </div>
-                                                @endif
+                                                @endif --}}
                                             </div>
 
 
