@@ -280,18 +280,19 @@
                                                 <label for="field1"
                                                     class="form-label">{{ __('app.leads.name') }}</label>
                                                 <select class="form-control stagselect" id="person-select" name="person"
-                                                    required>
+                                                    required data-parsley-errors-container="#person-value-errors">
                                                     <option selected hidden value="{{ $lead->person ?? '' }}">
                                                         {{ $person->name ?? '' }}</option>
                                                     <?php foreach($persons as $person){ ?>
                                                     <option value="{{ $person->id }}">{{ $person->name }}</option>
                                                     <?php } ?>
                                                 </select>
-                                                @if ($errors->has('person'))
+                                                <div id="person-value-errors"></div>
+                                                {{-- @if ($errors->has('person'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('person') }}
                                                     </div>
-                                                @endif
+                                                @endif --}}
                                             </div>
 
 

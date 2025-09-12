@@ -82,7 +82,7 @@ class LeadController extends Controller
             }
 
             $filteredLeads = $leadFilters->get();
-
+            $userId = Auth::id();
             $leadsGroupedByStage = $filteredLeads->groupBy('stage');
 
             return view('leads.leads', [
@@ -90,7 +90,8 @@ class LeadController extends Controller
                 'pipeline' => $pipeline,
                 'stages' => $stages,
                 'pipelines' => $pipelines,
-                'leadsGroupedByStage' => $leadsGroupedByStage
+                'leadsGroupedByStage' => $leadsGroupedByStage,
+                'userId' => $userId
             ]);
         }
     }
@@ -312,7 +313,8 @@ class LeadController extends Controller
             ]);
 
             if (Person::where("id", $request->person)->exists()) {
-                $person = Person::findOrFail($id);
+                // $person = Person::findOrFail($id);
+                $person = Person::findOrFail($request->person);
                 $person->organization = $request->organization;
                 if ($request->has('emails')) {
                     $emails = [];

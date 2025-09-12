@@ -2103,3 +2103,12 @@ div.dataTables_wrapper div.dataTables_filter {
   box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
   /* Optional: Glow effect */
 }
+
+
+.select2-results__option--selectable {
+  font-family: var(--font-family) !important;
+}
+
+.select2-results__option--selectable:hover {
+  background-color: var(--blue-shading) !important;
+}
