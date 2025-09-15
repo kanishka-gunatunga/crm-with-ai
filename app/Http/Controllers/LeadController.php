@@ -91,7 +91,8 @@ class LeadController extends Controller
                 'stages' => $stages,
                 'pipelines' => $pipelines,
                 'leadsGroupedByStage' => $leadsGroupedByStage,
-                'userId' => $userId
+                'userId' => $userId,
+                
             ]);
         }
     }
@@ -1301,5 +1302,43 @@ class LeadController extends Controller
         $stages = PipelineStage::where('pipeline_id', $pipelineId)->get();
 
         return response()->json($stages);
+    }
+
+
+    public function assigned_to_me(Request $request)
+    {
+        // Validate incoming request
+        $request->validate([
+            'lead_id' => 'required|exists:leads,id',
+            'user_id' => 'required|exists:users,id',
+            // 'pipeline' => 'required|exists:pipelines,id',
+            'stages' => 'required',
+        ]);
+
+        // Find the lead
+        $lead = Lead::find($request->lead_id);
+
+        if ($lead) {
+            // Change sales_owner to the user_id from AJAX
+            $lead->sales_owner = $request->user_id;
+
+            // Change stage to the first stage from stages array
+            if (is_array($request->stages) && count($request->stages) > 0) {
+                $lead->stage = $request->stages[0]['id'] ?? $lead->stage;
+            }
+
+            $lead->save();
+
+            // Log activity
+            $activity_history = new ActivityHistory();
+            $activity_history->lead_id = $lead->id;
+            $activity_history->user_id = $request->user_id;
+            $activity_history->action = "Lead assigned to user (#{$request->user_id}) and stage changed to (#{$lead->stage})";
+            $activity_history->save();
+
+            return response()->json(['success' => true, 'message' => 'Lead assigned successfully']);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Lead not found']);
     }
 }
