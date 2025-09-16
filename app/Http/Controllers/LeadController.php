@@ -1322,11 +1322,6 @@ class LeadController extends Controller
             // Change sales_owner to the user_id from AJAX
             $lead->sales_owner = $request->user_id;
 
-            // Change stage to the first stage from stages array
-            if (is_array($request->stages) && count($request->stages) > 0) {
-                $lead->stage = $request->stages[0]['id'] ?? $lead->stage;
-            }
-
             $lead->save();
 
             // Log activity
