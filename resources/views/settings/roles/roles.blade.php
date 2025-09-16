@@ -155,7 +155,7 @@
                                                     <th>{{ __('app.datagrid.name') }}</th>
                                                     <th>{{ __('app.datagrid.description') }}</th>
                                                     <th>{{ __('app.datagrid.permission_type') }}</th>
-                                                    {{-- <th>{{ __('app.leads.actions') }}</th> --}}
+                                                    <th>{{ __('app.leads.actions') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -169,8 +169,8 @@
                                                     <td class="">{{ $role->description }}</td>
                                                     <td class="">{{ $role->permission_type }}</td>
 
-                                                    {{-- <td class="action-icons d-flex gx-3">
-                                                        <a href="{{ url('delete-role/' . $role->id) }}"
+                                                    <td class="action-icons d-flex gx-3">
+                                                        {{-- <a href="{{ url('delete-role/' . $role->id) }}"
                                                             class="delete-link-confirm">
                                                             <div class="text-muted" type="button">
                                                                 <svg width="20" height="20" viewBox="0 0 18 18"
@@ -182,7 +182,7 @@
                                                                         fill="#ED2227" />
                                                                 </svg>
                                                             </div>
-                                                        </a>
+                                                        </a> --}}
                                                         <a href="{{ url('edit-role/' . $role->id) }}">
                                                             <div class="text-muted" type="button">
                                                                 <svg width="20" height="20" viewBox="0 0 18 18"
@@ -196,7 +196,7 @@
                                                             </div>
                                                         </a>
 
-                                                    </td> --}}
+                                                    </td>
                                                 </tr>
                                                 <?php } ?>
 
