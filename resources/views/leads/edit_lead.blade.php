@@ -14,12 +14,19 @@
     
     $source_name = Source::where('id', $lead->source)->value('name');
     $type_name = Type::where('id', $lead->type)->value('name');
-    $owner_name = UserDetails::where('id', $lead->sales_owner)->value('name');
+    $owner_name = UserDetails::where('id', $lead->sales_owner)->first();
+    var_dump($owner_name);
     $person = Person::where('id', $lead->person)->first();
     $organization = null;
     if ($person && $person->organization) {
         $organization = Organization::where('id', $person->organization)->first();
     }
+    
+    $userRoleId = auth()->user()->role;
+    $currentUserId = auth()->user()->id ?? auth()->id();
+
+    // var_dump($currentUserId);
+
     ?>
     <!-- Scrollable Content -->
     <!-- Scrollable Content -->
@@ -119,7 +126,8 @@
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Source</label>
-                                                <select class="form-control tagselect" name="source" required data-parsley-errors-container="#source-value-errors">
+                                                <select class="form-control tagselect" name="source" required
+                                                    data-parsley-errors-container="#source-value-errors">
                                                     <option selected hidden value="{{ $lead->source }}">
                                                         {{ $source_name }}
                                                     </option>
@@ -154,17 +162,24 @@
 
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Sales Owner</label>
-                                                <select class="form-control" data-choices id="choices-single-default"
-                                                    name="sales_owner" required>
-
-                                                    <option selected hidden value="{{ $lead->sales_owner }}">
-                                                        {{ $owner_name }}
-                                                    </option>
-
-                                                    <?php foreach($owners as $owner){ ?>
-                                                    <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
-                                                    <?php } ?>
-                                                </select>
+                                                @if ($userRoleId == 2)
+                                                    <select class="form-control" data-choices id="choices-single-default"
+                                                        name="sales_owner" required>
+                                                        <option selected hidden value="{{ $lead->sales_owner }}">
+                                                            {{ $owner_name }}
+                                                        </option>
+                                                        <?php foreach($owners as $owner){ ?>
+                                                        <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
+                                                        <?php } ?>
+                                                    </select>
+                                                @elseif ($userRoleId == 3)
+                                                    <select class="form-control" name="sales_owner" >
+                                                        <option value="{{ $owner_name }}" selected>
+                                                            {{ $owner_name }}
+                                                        </option>
+                                                    </select>
+                                                    <input type="hidden" name="sales_owner" value="{{ $currentUserId }}">
+                                                @endif
                                                 @if ($errors->has('sales_owner'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('sales_owner') }}
@@ -261,9 +276,9 @@
                                         <input type="text" class="form-control" id="field5" placeholder="Date Due">
                                     </div> --}}
                                             <!-- <div class="col-12 col-md-4">
-                                                                                                                                                        <label for="field5" class="form-label">Reminders</label>
-                                                                                                                                                        <input type="text" class="form-control" id="field5" placeholder="Reminders">
-                                                                                                                                                    </div> -->
+                                                                                                                                                                <label for="field5" class="form-label">Reminders</label>
+                                                                                                                                                                <input type="text" class="form-control" id="field5" placeholder="Reminders">
+                                                                                                                                                            </div> -->
 
                                         </div>
 

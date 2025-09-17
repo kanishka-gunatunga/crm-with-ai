@@ -168,28 +168,6 @@ $is_contact_section_active = $is_persons_active || $is_organizations_active;
                         aria-labelledby="headingContacts" data-bs-parent="#sidebarAccordionContacts">
                         <div class="accordion-body p-0">
                             <?php 
-                    $persons_access = false;
-                    if ($is_all_access || in_array('persons', $permissions)) {
-                        $persons_access = true;
-                    }
-
-                    if ($persons_access): ?>
-                            <a href="{{ url('persons') }}"
-                                class="dropdown-item nav-link person-class {{ request()->is('persons') ? 'active' : '' }}">
-                                <svg width="23" height="23" viewBox="0 0 23 23" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;">
-                                    <path
-                                        d="M11.7229 9.66683C13.748 9.66683 15.3896 8.02521 15.3896 6.00016C15.3896 3.97512 13.748 2.3335 11.7229 2.3335C9.6979 2.3335 8.05627 3.97512 8.05627 6.00016C8.05627 8.02521 9.6979 9.66683 11.7229 9.66683Z"
-                                        stroke="#556476" stroke-width="1.5" />
-                                    <path
-                                        d="M19.0563 16.542C19.0563 18.8199 19.0563 20.667 11.723 20.667C4.38965 20.667 4.38965 18.8199 4.38965 16.542C4.38965 14.2641 7.67315 12.417 11.723 12.417C15.7728 12.417 19.0563 14.2641 19.0563 16.542Z"
-                                        stroke="#556476" stroke-width="1.5" />
-                                </svg>
-                                {{ __('app.layouts.persons') }}
-                            </a>
-                            <?php endif; ?>
-
-                            <?php 
                     $organizations_access = false;
                     if ($is_all_access || in_array('organizations', $permissions)) {
                         $organizations_access = true;
@@ -215,7 +193,30 @@ $is_contact_section_active = $is_persons_active || $is_organizations_active;
 
                                 {{ __('app.layouts.organizations') }}
                             </a>
+                    <?php endif; ?>
+                            <?php 
+                    $persons_access = false;
+                    if ($is_all_access || in_array('persons', $permissions)) {
+                        $persons_access = true;
+                    }
+
+                    if ($persons_access): ?>
+                            <a href="{{ url('persons') }}"
+                                class="dropdown-item nav-link person-class {{ request()->is('persons') ? 'active' : '' }}">
+                                <svg width="23" height="23" viewBox="0 0 23 23" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;">
+                                    <path
+                                        d="M11.7229 9.66683C13.748 9.66683 15.3896 8.02521 15.3896 6.00016C15.3896 3.97512 13.748 2.3335 11.7229 2.3335C9.6979 2.3335 8.05627 3.97512 8.05627 6.00016C8.05627 8.02521 9.6979 9.66683 11.7229 9.66683Z"
+                                        stroke="#556476" stroke-width="1.5" />
+                                    <path
+                                        d="M19.0563 16.542C19.0563 18.8199 19.0563 20.667 11.723 20.667C4.38965 20.667 4.38965 18.8199 4.38965 16.542C4.38965 14.2641 7.67315 12.417 11.723 12.417C15.7728 12.417 19.0563 14.2641 19.0563 16.542Z"
+                                        stroke="#556476" stroke-width="1.5" />
+                                </svg>
+                                {{ __('app.layouts.persons') }}
+                            </a>
                             <?php endif; ?>
+
+                            
                         </div>
                     </div>
                 </div>
@@ -359,22 +360,20 @@ $is_contact_section_active = $is_persons_active || $is_organizations_active;
 
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    // Select all links with person-class
-    const personLinks = document.querySelectorAll(".nav-link.person-class");
+    document.addEventListener("DOMContentLoaded", function() {
+        // Select all links with person-class
+        const personLinks = document.querySelectorAll(".nav-link.person-class");
 
-    personLinks.forEach(link => {
-        // Check if current URL contains the link's href (works for /persons or /persons/123)
-        if (window.location.pathname.startsWith(new URL(link.href).pathname)) {
-            link.classList.add("active"); // Ensure active is added
-            const paths = link.querySelectorAll("path");
-            paths.forEach(path => {
-                path.style.fill = "inherit";
-                path.style.stroke = "var(--primary-color)";
-            });
-        }
+        personLinks.forEach(link => {
+            // Check if current URL contains the link's href (works for /persons or /persons/123)
+            if (window.location.pathname.startsWith(new URL(link.href).pathname)) {
+                link.classList.add("active"); // Ensure active is added
+                const paths = link.querySelectorAll("path");
+                paths.forEach(path => {
+                    path.style.fill = "inherit";
+                    path.style.stroke = "var(--primary-color)";
+                });
+            }
+        });
     });
-});
 </script>
-
-

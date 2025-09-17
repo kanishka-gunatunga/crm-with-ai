@@ -1,7 +1,10 @@
 
  <?php
 use App\Models\Configuration;
+use App\Models\UserDetails;
 $config = Configuration::first();
+
+$user = UserDetails::where('user_id', Auth::id())->first();
 ?>
 <header class="main-header">
         <nav class="mobile-nav">
@@ -57,7 +60,8 @@ $config = Configuration::first();
                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/ff47f92652fd0ea04e7b5613333c3cc085fa3036?placeholderIfAbsent=true"
                         alt=""
                         class="user-avatar" />
-                    <span class="user-name">David Johnson</span>
+                    <span class="user-name">{{ $user->name }}</span>
+                    
                     <button class="dropdown-button" aria-label="User menu" >
                         <svg
                             width="10"

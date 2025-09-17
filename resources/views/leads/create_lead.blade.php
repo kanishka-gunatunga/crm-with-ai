@@ -140,7 +140,7 @@
                                                     name="sales_owner" required>
 
                                                     <?php foreach($owners as $owner){ ?>
-                                                    <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
+                                                        <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
                                                     <?php } ?>
                                                 </select>
                                                 @if ($errors->has('sales_owner'))

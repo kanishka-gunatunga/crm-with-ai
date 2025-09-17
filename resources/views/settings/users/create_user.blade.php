@@ -156,11 +156,6 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <!-- <div class="col-12 col-md-4">
-                                                                        <label for="date_start" class="form-label">Description</label>
-                                                                        <input type="text" class="form-control" id="date_start" placeholder="Date Start">
-                                                                    </div> -->
-
                                         </div>
 
                                     </div>
