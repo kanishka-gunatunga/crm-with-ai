@@ -35,6 +35,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 
 use App\Mail\LeadSendEmail;
+use Carbon\Carbon;
 use File;
 use PDF;
 use Mail;
@@ -92,7 +93,7 @@ class LeadController extends Controller
                 'pipelines' => $pipelines,
                 'leadsGroupedByStage' => $leadsGroupedByStage,
                 'userId' => $userId,
-                
+
             ]);
         }
     }
@@ -165,18 +166,24 @@ class LeadController extends Controller
                 'source' => 'required',
                 'pipeline' => 'required',
                 'stage' => 'required',
+                'person' => 'required', // Good practice to validate the person field
             ]);
 
+            $person = null; // Initialize person variable
+
+            // Check if the person exists by ID and update them
             if (Person::where("id", $request->person)->exists()) {
-                $person = Person::findOrFail($id);
+                // BUG FIX: Use $request->person instead of the undefined $id
+                $person = Person::findOrFail($request->person);
                 $person->organization = $request->organization;
+
+                // The rest of your update logic for emails/contacts is fine
                 if ($request->has('emails')) {
                     $emails = [];
                     foreach ($request->input('emails') as $key => $email) {
-                        $emailType = $request->input("email_types.{$key}");
                         $emails[] = [
                             'value' => $email,
-                            'label' => $emailType
+                            'label' => $request->input("email_types.{$key}")
                         ];
                     }
                     $person->emails = $emails;
@@ -185,51 +192,45 @@ class LeadController extends Controller
                 if ($request->has('contact_numbers')) {
                     $contactNumbers = [];
                     foreach ($request->input('contact_numbers') as $key => $contactNumber) {
-                        $numberType = $request->input("number_types.{$key}");
                         $contactNumbers[] = [
                             'value' => $contactNumber,
-                            'label' => $numberType
+                            'label' => $request->input("number_types.{$key}")
                         ];
                     }
                     $person->contact_numbers = $contactNumbers;
                 }
                 $person->update();
-            } else {
+            } else { // Or create a new person if they don't exist
                 $person = new Person();
-                $person->name = $request->person;
+                $person->name = $request->person; // Assuming person name is sent if ID doesn't exist
                 $person->organization = $request->organization;
+
+                // Your logic for creating emails/contacts is fine
                 if ($request->has('emails')) {
                     $emails = [];
                     foreach ($request->input('emails') as $key => $email) {
-                        $emailType = $request->input("email_types.{$key}");
-
                         $emails[] = [
                             'value' => $email,
-                            'label' => $emailType
+                            'label' => $request->input("email_types.{$key}")
                         ];
                     }
-
                     $person->emails = $emails;
                 }
-
                 if ($request->has('contact_numbers')) {
                     $contactNumbers = [];
                     foreach ($request->input('contact_numbers') as $key => $contactNumber) {
-                        $numberType = $request->input("number_types.{$key}");
-
                         $contactNumbers[] = [
                             'value' => $contactNumber,
-                            'label' => $numberType
+                            'label' => $request->input("number_types.{$key}")
                         ];
                     }
-
                     $person->contact_numbers = $contactNumbers;
                 }
-
                 $person->save();
             }
 
-            $lead =  new Lead();
+            // Lead creation logic
+            $lead = new Lead();
             $lead->title = $request->title;
             $lead->lead_value = $request->lead_value;
             $lead->source = $request->source;
@@ -246,6 +247,7 @@ class LeadController extends Controller
             $lead->person = $person->id;
             $lead->save();
 
+            // Product logic (unchanged)
             if ($request->has('products')) {
                 foreach ($request->products as $index => $product_id) {
                     $values = explode('||', $product_id);
@@ -263,7 +265,8 @@ class LeadController extends Controller
                 }
             }
 
-            $activity_history =  new ActivityHistory();
+            // Activity history logic (unchanged)
+            $activity_history = new ActivityHistory();
             $activity_history->lead_id = $lead->id;
             $activity_history->user_id = Auth::user()->id;
             $activity_history->action = "Lead created";
@@ -1105,8 +1108,6 @@ class LeadController extends Controller
         return response()->json(['success' => false]);
     }
 
-
-
     public function import_leads(Request $request)
     {
         if ($request->isMethod('post')) {
@@ -1115,64 +1116,130 @@ class LeadController extends Controller
                 'leads' => 'required|mimes:xls,xlsx,csv',
             ]);
 
-            $data = Excel::toArray([], $request->file('leads'));
+            $authUser = Auth::user();
 
+
+            // dd($authUser);
+            $salesOwnerId = null;
+
+            
+            if ($authUser) {
+                
+                if ($authUser->role == 2) {
+                    // For users with role_id 2, the sales_owner should be null
+                    
+                    $salesOwnerId = null;
+                } else if ($authUser->role == 3) {
+                   
+                    // For users with role_id 3, the sales_owner should be the user's ID
+                    $salesOwnerId = $authUser->id;
+                }
+            }
+
+            
+
+            $data = Excel::toArray([], $request->file('leads'));
             $rows = $data[0];
             $header = array_shift($rows);
 
             foreach ($rows as $row) {
                 $record = array_combine($header, $row);
 
-                if (Person::where("name", $record['Contact Person Name'])->whereJsonContains("emails->value", $record['Contact Person Email'])
-                    ->whereJsonContains("contact_numbers->value", $record['Contact Person Number'])->exists()
-                ) {
-                    $person = Person::where("name", $record['Contact Person Name'])->whereJsonContains("emails->value", $record['Contact Person Email'])->whereJsonContains("contact_numbers->value", $record['Contact Person Number'])->first();
-                } else {
-                    $emails = [];
-                    $contactNumbers = [];
 
-                    $person = new Person();
-                    $person->name = $record['Contact Person Name'] ?? null;
-                    $emails[] = [
-                        'value' => $record['Contact Person Email'],
-                        'label' => 'work'
-                    ];
-                    $contactNumbers[] = [
-                        'value' => $record['Contact Person Number'],
-                        'label' => 'work'
-                    ];
-                    $person->emails = $emails;
-                    $person->contact_numbers = $contactNumbers;
-                    $person->save();
+                if (empty(array_filter($record))) {
+                    continue;
+                }
+
+
+                if (empty($record['Lead Title'])) {
+                    continue;
+                }
+
+                // Check for duplicate leads (unchanged)
+                $leadExists = Lead::where('title', $record['Lead Title'] ?? null)
+                    ->where('lead_value', $record['Lead Value'] ?? null)
+                    ->exists();
+                if ($leadExists) {
+                    continue;
+                }
+
+
+                $personId = null; // Default to null
+
+                $personName = $record['Contact Person Name'] ?? null;
+                $personEmail = $record['Contact Person Email'] ?? null;
+                $personNumber = $record['Contact Person Number'] ?? null;
+
+                // Only proceed if there is at least some contact information
+                if ($personName || $personEmail || $personNumber) {
+                    $person = null;
+
+                    // Try to find an existing person by unique email or number
+                    if ($personEmail || $personNumber) {
+                        $person = Person::query()
+                            ->when($personEmail, function ($query, $personEmail) {
+                                $query->orWhereJsonContains('emails->value', $personEmail);
+                            })
+                            ->when($personNumber, function ($query, $personNumber) {
+                                $query->orWhereJsonContains('contact_numbers->value', $personNumber);
+                            })
+                            ->first();
+                    }
+
+                    // If no person was found, and we have a name, create a new one.
+                    if (!$person && $personName) {
+                        $person = new Person();
+                        $person->name = $personName;
+
+                        $emails = [];
+                        if ($personEmail) {
+                            $emails[] = ['value' => $personEmail, 'label' => 'work'];
+                        }
+                        $person->emails = $emails;
+
+                        $contactNumbers = [];
+                        if ($personNumber) {
+                            $contactNumbers[] = ['value' => $personNumber, 'label' => 'work'];
+                        }
+                        $person->contact_numbers = $contactNumbers;
+
+                        $person->save();
+                    }
+
+                    if ($person) {
+                        $personId = $person->id;
+                    }
                 }
 
                 $id = session('pipeline_id');
 
+                // Date parsing logic (unchanged)
                 $rawDate = $record['Expected Closing Date'] ?? null;
                 $closingDate = null;
-
                 if ($rawDate) {
                     if (is_numeric($rawDate)) {
-                        $closingDate = \Carbon\Carbon::instance(ExcelDate::excelToDateTimeObject($rawDate))->format('Y-m-d');
+                        $closingDate = Carbon::instance(ExcelDate::excelToDateTimeObject($rawDate))->format('Y-m-d');
                     } else {
-                        $closingDate = \Carbon\Carbon::parse($rawDate)->format('Y-m-d');
+                        $closingDate = Carbon::parse($rawDate)->format('Y-m-d');
                     }
                 }
 
-                $lead =  new Lead();
+                // Lead creation with fixes applied
+                $lead = new Lead();
                 $lead->title = $record['Lead Title'] ?? null;
                 $lead->lead_value = $record['Lead Value'] ?? null;
-                $lead->sales_owner = Auth::user()->id;
+                $lead->sales_owner = $salesOwnerId;
                 $lead->closing_date = $closingDate;
                 $lead->description = $record['Description'] ?? null;
                 $lead->status = 'active';
                 $lead->category = 'qualified';
                 $lead->pipeline = $id;
                 $lead->stage = PipelineStage::where('id', $id)->where('name', 'New')->value('id');
-                $lead->person = $person->id;
+                $lead->person = $personId;
                 $lead->save();
 
-                $activity_history =  new ActivityHistory();
+                // Activity history logic (unchanged)
+                $activity_history = new ActivityHistory();
                 $activity_history->lead_id = $lead->id;
                 $activity_history->user_id = Auth::user()->id;
                 $activity_history->action = "Lead created";
@@ -1182,6 +1249,82 @@ class LeadController extends Controller
             return back()->with('success', 'Leads Successfully Imported');
         }
     }
+
+    // public function import_leads(Request $request)
+    // {
+    //     if ($request->isMethod('post')) {
+
+    //         $request->validate([
+    //             'leads' => 'required|mimes:xls,xlsx,csv',
+    //         ]);
+
+    //         $data = Excel::toArray([], $request->file('leads'));
+
+    //         $rows = $data[0];
+    //         $header = array_shift($rows);
+
+    //         foreach ($rows as $row) {
+    //             $record = array_combine($header, $row);
+
+    //             if (Person::where("name", $record['Contact Person Name'])->whereJsonContains("emails->value", $record['Contact Person Email'])
+    //                 ->whereJsonContains("contact_numbers->value", $record['Contact Person Number'])->exists()
+    //             ) {
+    //                 $person = Person::where("name", $record['Contact Person Name'])->whereJsonContains("emails->value", $record['Contact Person Email'])->whereJsonContains("contact_numbers->value", $record['Contact Person Number'])->first();
+    //             } else {
+    //                 $emails = [];
+    //                 $contactNumbers = [];
+
+    //                 $person = new Person();
+    //                 $person->name = $record['Contact Person Name'] ?? null;
+    //                 $emails[] = [
+    //                     'value' => $record['Contact Person Email'],
+    //                     'label' => 'work'
+    //                 ];
+    //                 $contactNumbers[] = [
+    //                     'value' => $record['Contact Person Number'],
+    //                     'label' => 'work'
+    //                 ];
+    //                 $person->emails = $emails;
+    //                 $person->contact_numbers = $contactNumbers;
+    //                 $person->save();
+    //             }
+
+    //             $id = session('pipeline_id');
+
+    //             $rawDate = $record['Expected Closing Date'] ?? null;
+    //             $closingDate = null;
+
+    //             if ($rawDate) {
+    //                 if (is_numeric($rawDate)) {
+    //                     $closingDate = \Carbon\Carbon::instance(ExcelDate::excelToDateTimeObject($rawDate))->format('Y-m-d');
+    //                 } else {
+    //                     $closingDate = \Carbon\Carbon::parse($rawDate)->format('Y-m-d');
+    //                 }
+    //             }
+
+    //             $lead =  new Lead();
+    //             $lead->title = $record['Lead Title'] ?? null;
+    //             $lead->lead_value = $record['Lead Value'] ?? null;
+    //             $lead->sales_owner = Auth::user()->id;
+    //             $lead->closing_date = $closingDate;
+    //             $lead->description = $record['Description'] ?? null;
+    //             $lead->status = 'active';
+    //             $lead->category = 'qualified';
+    //             $lead->pipeline = $id;
+    //             $lead->stage = PipelineStage::where('id', $id)->where('name', 'New')->value('id');
+    //             $lead->person = $person->id;
+    //             $lead->save();
+
+    //             $activity_history =  new ActivityHistory();
+    //             $activity_history->lead_id = $lead->id;
+    //             $activity_history->user_id = Auth::user()->id;
+    //             $activity_history->action = "Lead created";
+    //             $activity_history->save();
+    //         }
+
+    //         return back()->with('success', 'Leads Successfully Imported');
+    //     }
+    // }
 
 
     public function create_lead_api(Request $request)

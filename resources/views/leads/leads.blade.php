@@ -294,12 +294,26 @@
 
                                                     <time class="due-date">{{ $lead->closing_date }}</time>
                                                 </div>
+
+
                                                 <div class="priority-section d-flex align-items-center gap-2">
-                                                    @if ($stage->name == 'New' && $lead->sales_owner == auth()->user()->id)
+                                                    @if (auth()->user()->role == 2)
+                                                        @if ($lead->salesOwner)
+                                                            <div class="assigned-wrapper"
+                                                                data-sales-owner="{{ $lead->salesOwner->name }}">
+                                                                <img src="{{ asset('images/assigned.svg') }}"
+                                                                    alt="assigned" class="assigned-icon" tabindex="0">
+
+                                                                    
+                                                            </div>
+                                                        @endif
+                                                    @elseif ($stage->name == 'New' && $lead->sales_owner == auth()->user()->id)
                                                         <div>
                                                             <img src="{{ asset('images/assigned.svg') }}" alt="">
                                                         </div>
                                                     @endif
+
+
 
                                                     <div>
                                                         <?php if ($lead->priority == 'Low') { ?>
@@ -385,29 +399,6 @@
     </div>
 
 
-
-
-    {{-- <div class="modal fade exportTypes" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myLargeModalLabel">Export Leads</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <div class="row"> --}}
-
-    <!-- Collapse Button for Export Types -->
-    {{-- <div class="col-md-12 text-center mb-3">
-        <button class="btn btn-primary" type="button" >
-            Export Leads
-        </button>
-    </div>
-     --}}
 
 
 
@@ -597,5 +588,64 @@
             });
 
         }
+
+
+
+        // const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        // const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // create one tooltip element used for all icons
+            const tooltip = document.createElement('div');
+            tooltip.className = 'assigned-tooltip';
+            tooltip.setAttribute('role', 'tooltip');
+            document.body.appendChild(tooltip);
+
+            // attach listeners
+            document.querySelectorAll('.assigned-wrapper').forEach(wrapper => {
+                const img = wrapper.querySelector('.assigned-icon');
+                const name = (wrapper.dataset.salesOwner || '').trim();
+
+                if (!img) return;
+
+                function show() {
+                    if (!name || name === 'N/A') return; // optional: don't show for N/A
+                    tooltip.textContent = name;
+                    tooltip.classList.add('show');
+
+                    // position tooltip above the icon, centered
+                    const rect = img.getBoundingClientRect();
+                    const top = window.scrollY + rect.top - tooltip.offsetHeight - 8;
+                    let left = rect.left + rect.width / 2 - tooltip.offsetWidth / 2;
+
+                    // keep inside viewport with small margin
+                    left = Math.max(8, Math.min(left, window.innerWidth - tooltip.offsetWidth - 8));
+
+                    tooltip.style.left = left + 'px';
+                    tooltip.style.top = top + 'px';
+                }
+
+                function hide() {
+                    tooltip.classList.remove('show');
+                }
+
+                img.addEventListener('mouseenter', show);
+                img.addEventListener('mouseleave', hide);
+                // keyboard accessible
+                img.addEventListener('focus', show);
+                img.addEventListener('blur', hide);
+
+                // hide tooltip on scroll to avoid wrong position
+                window.addEventListener('scroll', hide, {
+                    passive: true
+                });
+                window.addEventListener('resize', hide);
+            });
+        });
+    </script>
+
+
+
 @endsection

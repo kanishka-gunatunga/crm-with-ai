@@ -2112,3 +2112,25 @@ div.dataTables_wrapper div.dataTables_filter {
 .select2-results__option--selectable:hover {
   background-color: var(--blue-shading) !important;
 }
+
+
+
+
+.assigned-tooltip {
+            position: absolute;
+            padding: 6px 9px;
+            font-size: 13px;
+            background: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            border-radius: 6px;
+            pointer-events: none;
+            /* doesn't block mouse */
+            white-space: nowrap;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity .12s ease;
+        }
+
+        .assigned-tooltip.show {
+            opacity: 1;
+        }

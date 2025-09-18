@@ -79,7 +79,8 @@
                                     </div>
 
                                     <div class="col-md-1 col-12 d-flex justify-content-end gap-2 align-items-start">
-                                         <a href="{{ url('quotes') }}"><button type="button" class="btn cancel-btn">Cancel</button></a>
+                                        <a href="{{ url('quotes') }}"><button type="button"
+                                                class="btn cancel-btn">Cancel</button></a>
                                         <button type="submit" class="btn save-btn">Save</button>
                                     </div>
 
@@ -248,21 +249,30 @@
                                             </thead>
                                             <tbody>
 
-                                                <?php foreach($quotes as $quote){
-                                        $owner_name = UserDetails::where('id', $quote->owner)->value('name');
-                                        $person_name = Person::where('id', $quote->person)->value('name');
-                                        $sub_total = 0;
-                                        $products = QuoteProduct::where('quote_id', $quote->id)->get();
-                                        foreach($products as $product){
-                                    
-                                            $amount = $product->price * $product->quantity;
-                                            $discount_amount = ($amount * $product->discount) / 100;
-                                            $tax_amount = ($amount - $discount_amount) * ($product->tax / 100);
-                                            $total = $amount - $discount_amount + $tax_amount;
-                                    
-                                            $sub_total += $amount;
-                                        }
-                                    ?>
+                                                <?php
+                                                    
+                                                    $user = Auth::user();
+                                                    if ($user->role == 2) {
+                                                        $filteredQuotes = $quotes;
+                                                    } elseif ($user->role == 3) {
+                                                        $filteredQuotes = $quotes->where('owner', $user->id);
+                                                    } else {
+                                                        $filteredQuotes = collect();
+                                                    }
+
+                                                    foreach($filteredQuotes as $quote){
+                                                        $owner_name = UserDetails::where('id', $quote->owner)->value('name');
+                                                        $person_name = Person::where('id', $quote->person)->value('name');
+                                                        $sub_total = 0;
+                                                        $products = QuoteProduct::where('quote_id', $quote->id)->get();
+                                                        foreach($products as $product){
+                                                            $amount = $product->price * $product->quantity;
+                                                            $discount_amount = ($amount * $product->discount) / 100;
+                                                            $tax_amount = ($amount - $discount_amount) * ($product->tax / 100);
+                                                            $total = $amount - $discount_amount + $tax_amount;
+                                                            $sub_total += $amount;
+                                                        }
+                                                ?>
                                                 <tr class="odd gradeX">
                                                     <td><input type="checkbox" name="selected_quotes[]"
                                                             value="{{ $quote->id }}"></td>

@@ -136,19 +136,33 @@
 
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Sales Owner</label>
-                                                <select class="form-control" data-choices id="choices-single-default"
-                                                    name="sales_owner" required>
-
-                                                    <?php foreach($owners as $owner){ ?>
-                                                        <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
-                                                    <?php } ?>
-                                                </select>
+                                                @if (auth()->user()->role == 2)
+                                                    <select class="form-control" data-choices id="choices-single-default"
+                                                        name="sales_owner" required>
+                                                        <?php foreach($owners as $owner){ ?>
+                                                            <option value="{{ $owner->user_id }}" {{ auth()->user()->id == $owner->user_id ? 'selected' : '' }}>
+                                                                {{ $owner->name }}
+                                                            </option>
+                                                        <?php } ?>
+                                                    </select>
+                                                @elseif (auth()->user()->role == 3)
+                                                    <select class="form-control" name="sales_owner" required disabled>
+                                                        <?php foreach($owners as $owner){ ?>
+                                                            <option value="{{ $owner->user_id }}" {{ auth()->user()->id == $owner->user_id ? 'selected' : '' }}>
+                                                                {{ $owner->name }}
+                                                            </option>
+                                                        <?php } ?>
+                                                    </select>
+                                                    <input type="hidden" name="sales_owner" value="{{ $owner->user_id }}">
+                                                @endif
                                                 @if ($errors->has('sales_owner'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('sales_owner') }}
                                                     </div>
                                                 @endif
                                             </div>
+
+                                           
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Priority</label>
                                                 <select class="form-control" name="priority" required>
@@ -247,11 +261,13 @@
                                             <div class="col-12 col-md-4">
                                                 <label for="field1"
                                                     class="form-label">{{ __('app.leads.name') }}</label>
+
+                                                    
                                                 <select class="form-control stagselect" id="person-select" name="person"
                                                     required data-parsley-errors-container="#person-value-errors">
                                                     <option hidden selected></option>
                                                     <?php foreach($persons as $person){ ?>
-                                                    <option value="{{ $person->id }}">{{ $person->name }}</option>
+                                                        <option value="{{ $person->id }}">{{ $person->name }}</option>
                                                     <?php } ?>
                                                 </select>
                                                 <div id="person-value-errors"></div>

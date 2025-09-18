@@ -15,7 +15,7 @@
     $source_name = Source::where('id', $lead->source)->value('name');
     $type_name = Type::where('id', $lead->type)->value('name');
     $owner_name = UserDetails::where('id', $lead->sales_owner)->first();
-    var_dump($owner_name);
+    // var_dump($owner_name);
     $person = Person::where('id', $lead->person)->first();
     $organization = null;
     if ($person && $person->organization) {
@@ -24,9 +24,9 @@
     
     $userRoleId = auth()->user()->role;
     $currentUserId = auth()->user()->id ?? auth()->id();
-
+    
     // var_dump($currentUserId);
-
+    
     ?>
     <!-- Scrollable Content -->
     <!-- Scrollable Content -->
@@ -69,7 +69,7 @@
                                             <div class="col-12 col-md-4">
                                                 <label for="field1" class="form-label">Title</label>
                                                 <input type="text" class="form-control" name="title"
-                                                    value="{{ old('title', isset($lead) ? $lead->title : '') }}" required>
+                                                    value="{{ old('title', isset($lead) ? $lead->title : '') }}">
                                                 @if ($errors->has('title'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('title') }}
@@ -79,8 +79,7 @@
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Lead Value ($)</label>
                                                 <input type="number" step="any" class="form-control" name="lead_value"
-                                                    value="{{ old('lead_value', isset($lead) ? $lead->lead_value : '') }}"
-                                                    required>
+                                                    value="{{ old('lead_value', isset($lead) ? $lead->lead_value : '') }}">
                                                 @if ($errors->has('lead_value'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('lead_value') }}
@@ -90,7 +89,7 @@
 
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Pipeline</label>
-                                                <select class="form-control tagselect" name="pipeline" required>
+                                                <select class="form-control tagselect" name="pipeline">
                                                     <option value="">Select a pipeline</option>
                                                     <?php foreach($pipelines as $pipeline){ ?>
                                                     <option value="{{ $pipeline->id }}"
@@ -109,7 +108,7 @@
                                             @endphp
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Stage</label>
-                                                <select class="form-control tagselect" name="stage" required>
+                                                <select class="form-control tagselect" name="stage">
                                                     <option value="">Select a stage</option>
                                                     <?php foreach($stages as $stage){ ?>
                                                     <option value="{{ $stage->id }}"
@@ -126,10 +125,10 @@
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Source</label>
-                                                <select class="form-control tagselect" name="source" required
+                                                <select class="form-control tagselect" name="source"
                                                     data-parsley-errors-container="#source-value-errors">
                                                     <option selected hidden value="{{ $lead->source }}">
-                                                        {{ $source_name }}
+                                                        {{ $lead->source ? $source_name : '' }}
                                                     </option>
                                                     <?php foreach($sources as $source){ ?>
                                                     <option value="{{ $source->id }}">{{ $source->name }}</option>
@@ -147,7 +146,7 @@
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Type</label>
                                                 <select class="form-control" data-choices id="choices-single-default"
-                                                    name="type" required>
+                                                    name="type">
                                                     <?php foreach($types as $type){ ?>
                                                     <option value="{{ $type->id }}">{{ $type->name }}</option>
                                                     <?php } ?>
@@ -164,31 +163,39 @@
                                                 <label for="field2" class="form-label">Sales Owner</label>
                                                 @if ($userRoleId == 2)
                                                     <select class="form-control" data-choices id="choices-single-default"
-                                                        name="sales_owner" required>
+                                                        name="sales_owner">
+                                                        <!-- Show current owner as hidden selected option -->
                                                         <option selected hidden value="{{ $lead->sales_owner }}">
-                                                            {{ $owner_name }}
+                                                            {{ $owners->firstWhere('id', $lead->sales_owner)?->name ?? '' }}
                                                         </option>
-                                                        <?php foreach($owners as $owner){ ?>
-                                                        <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
-                                                        <?php } ?>
+
+                                                        <!-- List all owners -->
+                                                        @foreach ($owners as $owner)
+                                                            <option value="{{ $owner->id }}"
+                                                                {{ $owner->id == $lead->sales_owner ? 'selected' : '' }}>
+                                                                {{ $owner->name }}
+                                                            </option>
+                                                        @endforeach
                                                     </select>
                                                 @elseif ($userRoleId == 3)
-                                                    <select class="form-control" name="sales_owner" >
-                                                        <option value="{{ $owner_name }}" selected>
-                                                            {{ $owner_name }}
+                                                    <select class="form-control" name="sales_owner">
+                                                        <option value="{{ $currentUserId }}" selected>
+                                                            {{ $owners->firstWhere('id', $currentUserId)?->name ?? '' }}
                                                         </option>
                                                     </select>
                                                     <input type="hidden" name="sales_owner" value="{{ $currentUserId }}">
                                                 @endif
+
                                                 @if ($errors->has('sales_owner'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('sales_owner') }}
                                                     </div>
                                                 @endif
+
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Priority</label>
-                                                <select class="form-control" name="priority" required>
+                                                <select class="form-control" name="priority">
 
                                                     <option selected hidden value="{{ $lead->priority }}">
                                                         {{ $lead->priority }}
@@ -215,8 +222,7 @@
                                                 <label for="field2" class="form-label">Expected Closing
                                                     Date</label>
                                                 <input type="date" class="form-control" name="closing_date"
-                                                    value="{{ old('closing_date', $lead->closing_date ? \Carbon\Carbon::parse($lead->closing_date)->format('Y-m-d') : '') }}"
-                                                    required>
+                                                    value="{{ old('closing_date', $lead->closing_date ? \Carbon\Carbon::parse($lead->closing_date)->format('Y-m-d') : '') }}">
                                                 @if ($errors->has('closing_date'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('closing_date') }}
@@ -276,9 +282,9 @@
                                         <input type="text" class="form-control" id="field5" placeholder="Date Due">
                                     </div> --}}
                                             <!-- <div class="col-12 col-md-4">
-                                                                                                                                                                <label for="field5" class="form-label">Reminders</label>
-                                                                                                                                                                <input type="text" class="form-control" id="field5" placeholder="Reminders">
-                                                                                                                                                            </div> -->
+                                                                                                                                                                    <label for="field5" class="form-label">Reminders</label>
+                                                                                                                                                                    <input type="text" class="form-control" id="field5" placeholder="Reminders">
+                                                                                                                                                                </div> -->
 
                                         </div>
 
@@ -295,7 +301,7 @@
                                                 <label for="field1"
                                                     class="form-label">{{ __('app.leads.name') }}</label>
                                                 <select class="form-control stagselect" id="person-select" name="person"
-                                                    required data-parsley-errors-container="#person-value-errors">
+                                                    data-parsley-errors-container="#person-value-errors">
                                                     <option selected hidden value="{{ $lead->person ?? '' }}">
                                                         {{ $person->name ?? '' }}</option>
                                                     <?php foreach($persons as $person){ ?>
@@ -505,7 +511,7 @@
             const emailField = `
     <div class="col-12 col-md-4 email-field-${index} mt-1">
         <label for="field1" class="form-label">{{ __('app.leads.emails') }}</label>
-        <input type="email" class="form-control" name="emails[]" value="${email}" required>
+        <input type="email" class="form-control" name="emails[]" value="${email}">
         
         <div class="mt-4 mt-lg-0">
             <div class="form-check form-check-inline">
@@ -587,7 +593,7 @@
     <div class="col-md-12">
             <div class="mb-3">
                 <label for="firstNameinput" class="form-label">{{ __('app.leads.products') }}</label>
-                <select class="form-control product-select" name="products[]" required onchange="updatePrice(this)">
+                <select class="form-control product-select" name="products[]" onchange="updatePrice(this)">
                     <option hidden selected></option>
                      <?php foreach($products as $product){ ?> 
                     <option value="product||{{ $product->id }}" data-price="{{ $product->cost }}">{{ $product->name }}</option>
@@ -601,19 +607,19 @@
     <div class="col-md-4">
         <div class="mb-3">
             <label for="firstNameinput" class="form-label">{{ __('app.leads.price') }}</label>
-            <input type="number" step="any" class="form-control price-input" name="prices[]"  required oninput="calculateAmount(this)">
+            <input type="number" step="any" class="form-control price-input" name="prices[]"  oninput="calculateAmount(this)">
         </div>
     </div>
     <div class="col-md-3">
         <div class="mb-3">
             <label for="firstNameinput" class="form-label">{{ __('app.leads.quantity') }}</label>
-            <input type="number" step="any" class="form-control quantity-input" name="quantities[]"  required oninput="calculateAmount(this)">
+            <input type="number" step="any" class="form-control quantity-input" name="quantities[]"   oninput="calculateAmount(this)">
         </div>
     </div>
     <div class="col-md-4">
         <div class="mb-3">
             <label for="firstNameinput" class="form-label">{{ __('app.leads.amount') }}</label>
-            <input type="number" step="any" class="form-control amount-input" name="amounts[]" readonly  required>
+            <input type="number" step="any" class="form-control amount-input" name="amounts[]" readonly  >
         </div>
     </div>
     <div class="col-md-1">
