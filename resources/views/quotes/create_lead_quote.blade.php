@@ -149,14 +149,17 @@ $organization = Organization::where('id', $person->organization)->first();
                                             <div class="table-responsive">
                                                 <div class="d-flex justify-content-between align-items-center mb-5">
                                                     <h5 class="card-title">{{ __('app.quotes.quote-items') }}</h5>
-                                                    <button class="import-leads-button" type="button" id="add-product">
+                                                    <button class="create-btn" type="button" id="add-product">
                                                         <div class="icon-container">
-                                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M8.625 9.375H4.5V8.625H8.625V4.5H9.375V8.625H13.5V9.375H9.375V13.5H8.625V9.375Z" fill="white" />
+                                                            <svg width="20" height="20" viewBox="0 0 20 20"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M8.625 9.375H4.5V8.625H8.625V4.5H9.375V8.625H13.5V9.375H9.375V13.5H8.625V9.375Z"
+                                                                    fill="white" />
                                                             </svg>
 
                                                         </div>
-                                                        <span class="button-text" >{{ __('app.common.add_more') }}</span>
+                                                        <span class="button-text">{{ __('app.common.add_more') }}</span>
                                                     </button>
 
                                                 </div>

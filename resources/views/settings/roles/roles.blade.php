@@ -150,7 +150,7 @@
 
                                             <thead>
                                                 <tr>
-                                                    <th class="corner-left"><input type="checkbox" id="select-all"></th>
+                                                    {{-- <th class="corner-left"><input type="checkbox" id="select-all"></th> --}}
                                                     <th>{{ __('app.datagrid.id') }}</th>
                                                     <th>{{ __('app.datagrid.name') }}</th>
                                                     <th>{{ __('app.datagrid.description') }}</th>
@@ -162,15 +162,15 @@
                                                 <?php foreach($roles as $role){
                                    ?>
                                                 <tr class="odd gradeX">
-                                                    <td><input type="checkbox" name="selected_roles[]"
-                                                            value="{{ $role->id }}"></td>
+                                                    {{-- <td><input type="checkbox" name="selected_roles[]"
+                                                            value="{{ $role->id }}"></td> --}}
                                                     <td class="">{{ $role->id }} </td>
                                                     <td class="">{{ $role->name }} </td>
                                                     <td class="">{{ $role->description }}</td>
                                                     <td class="">{{ $role->permission_type }}</td>
 
                                                     <td class="action-icons d-flex gx-3">
-                                                        <a href="{{ url('delete-role/' . $role->id) }}"
+                                                        {{-- <a href="{{ url('delete-role/' . $role->id) }}"
                                                             class="delete-link-confirm">
                                                             <div class="text-muted" type="button">
                                                                 <svg width="20" height="20" viewBox="0 0 18 18"
@@ -182,7 +182,7 @@
                                                                         fill="#ED2227" />
                                                                 </svg>
                                                             </div>
-                                                        </a>
+                                                        </a> --}}
                                                         <a href="{{ url('edit-role/' . $role->id) }}">
                                                             <div class="text-muted" type="button">
                                                                 <svg width="20" height="20" viewBox="0 0 18 18"
@@ -203,8 +203,8 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <button type="submit" class="btn btn-danger btn-sm mb-2 delete-form-confirm">Delete
-                                        Selected</button>
+                                    {{-- <button type="submit" class="btn btn-danger btn-sm mb-2 delete-form-confirm">Delete
+                                        Selected</button> --}}
                                 </form>
                             </div>
 

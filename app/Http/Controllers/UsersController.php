@@ -92,7 +92,7 @@ class UsersController extends Controller
                   "email" => $request->email,
                   "password" => Hash::make($request->password),
                   "role" => $request->role,
-                  "status" => $request->status
+                  "status" => $request->status ?? 'active',
                ]);
     
                $userDetails = new UserDetails();
@@ -132,7 +132,7 @@ class UsersController extends Controller
         ]);
 
     if(!$request->password == null || !$request->password_confirmation == null){
-        $this->validate($request, [
+        $request->validate([
             "password" => "required | confirmed | min:6",
            ]);
 

@@ -14,9 +14,19 @@
     
     $source_name = Source::where('id', $lead->source)->value('name');
     $type_name = Type::where('id', $lead->type)->value('name');
-    $owner_name = UserDetails::where('id', $lead->sales_owner)->value('name');
+    $owner_name = UserDetails::where('id', $lead->sales_owner)->first();
+    var_dump($owner_name);
     $person = Person::where('id', $lead->person)->first();
-    $organization = Organization::where('id', $person->organization)->first();
+    $organization = null;
+    if ($person && $person->organization) {
+        $organization = Organization::where('id', $person->organization)->first();
+    }
+    
+    $userRoleId = auth()->user()->role;
+    $currentUserId = auth()->user()->id ?? auth()->id();
+
+    // var_dump($currentUserId);
+
     ?>
     <!-- Scrollable Content -->
     <!-- Scrollable Content -->
@@ -79,41 +89,45 @@
                                             </div>
 
                                             <div class="col-12 col-md-4">
-                                            <label for="field2" class="form-label">Pipeline</label>
-                                            <select class="form-control tagselect" name="pipeline" required>
-                                                <option value="">Select a pipeline</option>
-                                                <?php foreach($pipelines as $pipeline){ ?>
-                                                <option value="{{ $pipeline->id }}" {{ $lead->pipeline == $pipeline->id ? 'selected' : '' }}>{{ $pipeline->name }}</option>
-                                                <?php } ?>
-                                            </select>
-                                            @if ($errors->has('pipeline'))
-                                                <div class="alert alert-danger mt-2">
-                                                    {{ $errors->first('pipeline') }}
-                                                </div>
-                                            @endif
+                                                <label for="field2" class="form-label">Pipeline</label>
+                                                <select class="form-control tagselect" name="pipeline" required>
+                                                    <option value="">Select a pipeline</option>
+                                                    <?php foreach($pipelines as $pipeline){ ?>
+                                                    <option value="{{ $pipeline->id }}"
+                                                        {{ $lead->pipeline == $pipeline->id ? 'selected' : '' }}>
+                                                        {{ $pipeline->name }}</option>
+                                                    <?php } ?>
+                                                </select>
+                                                @if ($errors->has('pipeline'))
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $errors->first('pipeline') }}
+                                                    </div>
+                                                @endif
                                             </div>
                                             @php
                                                 $selectedStage = $lead->stage;
                                             @endphp
                                             <div class="col-12 col-md-4">
-                                            <label for="field2" class="form-label">Stage</label>
-                                            <select class="form-control tagselect" name="stage" required>
-                                                <option value="">Select a stage</option>
-                                                <?php foreach($stages as $stage){ ?>
-                                                <option value="{{ $stage->id }}" {{ $selectedStage == $stage->id ? 'selected' : '' }}>
-                                                    {{ $stage->name }}
-                                                </option>
-                                                <?php } ?>
-                                            </select>
-                                            @if ($errors->has('stage'))
-                                                <div class="alert alert-danger mt-2">
-                                                    {{ $errors->first('stage') }}
-                                                </div>
-                                            @endif
+                                                <label for="field2" class="form-label">Stage</label>
+                                                <select class="form-control tagselect" name="stage" required>
+                                                    <option value="">Select a stage</option>
+                                                    <?php foreach($stages as $stage){ ?>
+                                                    <option value="{{ $stage->id }}"
+                                                        {{ $selectedStage == $stage->id ? 'selected' : '' }}>
+                                                        {{ $stage->name }}
+                                                    </option>
+                                                    <?php } ?>
+                                                </select>
+                                                @if ($errors->has('stage'))
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $errors->first('stage') }}
+                                                    </div>
+                                                @endif
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Source</label>
-                                                <select class="form-control tagselect" name="source" required>
+                                                <select class="form-control tagselect" name="source" required
+                                                    data-parsley-errors-container="#source-value-errors">
                                                     <option selected hidden value="{{ $lead->source }}">
                                                         {{ $source_name }}
                                                     </option>
@@ -121,11 +135,12 @@
                                                     <option value="{{ $source->id }}">{{ $source->name }}</option>
                                                     <?php } ?>
                                                 </select>
-                                                @if ($errors->has('source'))
+                                                <div id="source-value-errors"></div>
+                                                {{-- @if ($errors->has('source'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('source') }}
                                                     </div>
-                                                @endif
+                                                @endif --}}
                                             </div>
 
 
@@ -147,17 +162,24 @@
 
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Sales Owner</label>
-                                                <select class="form-control" data-choices id="choices-single-default"
-                                                    name="sales_owner" required>
-
-                                                    <option selected hidden value="{{ $lead->sales_owner }}">
-                                                        {{ $owner_name }}
-                                                    </option>
-
-                                                    <?php foreach($owners as $owner){ ?>
-                                                    <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
-                                                    <?php } ?>
-                                                </select>
+                                                @if ($userRoleId == 2)
+                                                    <select class="form-control" data-choices id="choices-single-default"
+                                                        name="sales_owner" required>
+                                                        <option selected hidden value="{{ $lead->sales_owner }}">
+                                                            {{ $owner_name }}
+                                                        </option>
+                                                        <?php foreach($owners as $owner){ ?>
+                                                        <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
+                                                        <?php } ?>
+                                                    </select>
+                                                @elseif ($userRoleId == 3)
+                                                    <select class="form-control" name="sales_owner" >
+                                                        <option value="{{ $owner_name }}" selected>
+                                                            {{ $owner_name }}
+                                                        </option>
+                                                    </select>
+                                                    <input type="hidden" name="sales_owner" value="{{ $currentUserId }}">
+                                                @endif
                                                 @if ($errors->has('sales_owner'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('sales_owner') }}
@@ -181,8 +203,7 @@
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Start Date</label>
                                                 <input type="date" class="form-control" name="start_date"
-                                                    value="{{ old('start_date', $lead->start_date ? \Carbon\Carbon::parse($lead->start_date)->format('Y-m-d') : '') }}"
-                                                    >
+                                                    value="{{ old('start_date', $lead->start_date ? \Carbon\Carbon::parse($lead->start_date)->format('Y-m-d') : '') }}">
                                                 @if ($errors->has('start_date'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('start_date') }}
@@ -255,9 +276,9 @@
                                         <input type="text" class="form-control" id="field5" placeholder="Date Due">
                                     </div> --}}
                                             <!-- <div class="col-12 col-md-4">
-                                                                                                                                                    <label for="field5" class="form-label">Reminders</label>
-                                                                                                                                                    <input type="text" class="form-control" id="field5" placeholder="Reminders">
-                                                                                                                                                </div> -->
+                                                                                                                                                                <label for="field5" class="form-label">Reminders</label>
+                                                                                                                                                                <input type="text" class="form-control" id="field5" placeholder="Reminders">
+                                                                                                                                                            </div> -->
 
                                         </div>
 
@@ -274,18 +295,19 @@
                                                 <label for="field1"
                                                     class="form-label">{{ __('app.leads.name') }}</label>
                                                 <select class="form-control stagselect" id="person-select" name="person"
-                                                    required>
-                                                    <option selected hidden value="{{ $lead->person }}">
-                                                        {{ $person->name }}</option>
+                                                    required data-parsley-errors-container="#person-value-errors">
+                                                    <option selected hidden value="{{ $lead->person ?? '' }}">
+                                                        {{ $person->name ?? '' }}</option>
                                                     <?php foreach($persons as $person){ ?>
                                                     <option value="{{ $person->id }}">{{ $person->name }}</option>
                                                     <?php } ?>
                                                 </select>
-                                                @if ($errors->has('person'))
+                                                <div id="person-value-errors"></div>
+                                                {{-- @if ($errors->has('person'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('person') }}
                                                     </div>
-                                                @endif
+                                                @endif --}}
                                             </div>
 
 
@@ -398,7 +420,7 @@
                                 </div>
 
 
-                                
+
                                 <div class="card card-default mt-3">
                                     <div class="card-body">
                                         <div class="col-12">
@@ -623,116 +645,117 @@
         }
     </script>
     <script>
-          $(document).ready(function() {
-        // Initialize select2 with tags functionality for person-select
-        $('#person-select').select2({
-            tags: true,
-            tokenSeparators: [','],
-            placeholder: "Select or type to add",
-            allowClear: true,
-            createTag: function(params) {
-                var term = $.trim(params.term);
-                if (term === '') {
-                    return null;
+        $(document).ready(function() {
+            // Initialize select2 with tags functionality for person-select
+            $('#person-select').select2({
+                tags: true,
+                tokenSeparators: [','],
+                placeholder: "Select or type to add",
+                allowClear: true,
+                createTag: function(params) {
+                    var term = $.trim(params.term);
+                    if (term === '') {
+                        return null;
+                    }
+                    return {
+                        id: term,
+                        text: term,
+                        newTag: true
+                    };
                 }
-                return {
-                    id: term,
-                    text: term,
-                    newTag: true
-                };
+            });
+
+            // Initialize the second select2 (organization-select)
+            $('#organization-select').select2({});
+
+            // Function to clear email and contact number fields
+            function clearFields() {
+                $('#email-fields').html('');
+                $('#number-fields').html('');
             }
-        });
 
-        // Initialize the second select2 (organization-select)
-        $('#organization-select').select2({});
-
-        // Function to clear email and contact number fields
-        function clearFields() {
-            $('#email-fields').html('');
-            $('#number-fields').html('');
-        }
-
-        // Function to add email input fields dynamically
-        function addEmailField(emailValue = '', emailLabel = '', index = 0) {
-            let emailHtml = `
+            // Function to add email input fields dynamically
+            function addEmailField(emailValue = '', emailLabel = '', index = 0) {
+                let emailHtml = `
                 <div class="email-field">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" name="emails[${index}]" value="${emailValue}" placeholder="Email ${emailLabel}" class="form-control">
                 </div>`;
-            $('#email-fields').append(emailHtml);
-        }
+                $('#email-fields').append(emailHtml);
+            }
 
-        // Function to add contact number input fields dynamically
-        function addNumberField(numberValue = '', numberLabel = '', index = 0) {
-            let numberHtml = `
+            // Function to add contact number input fields dynamically
+            function addNumberField(numberValue = '', numberLabel = '', index = 0) {
+                let numberHtml = `
                 <div class="number-field">
                     <label for="contact" class="form-label">Contact Number</label>
                     <input type="text" name="contact_numbers[${index}]" value="${numberValue}" placeholder="Contact Number ${numberLabel}" class="form-control">
                 </div>`;
-            $('#number-fields').append(numberHtml);
-        }
-
-        // Event handler for person select dropdown change
-        $('#person-select').on('change', function() {
-            let personId = $(this).val();
-            
-            // Clear the fields when a new person is selected
-            clearFields();
-
-            if (personId) {
-                $.ajax({
-                    url: '{{ url('get-contact-person-details') }}/' + personId,
-                    type: 'GET',
-                    success: function(response) {
-                        console.log(response);
-
-                        let organizationSelect = $('#organization-select');
-
-                        // Handling organization selection
-                        if (response.organization) {
-                            organizationSelect.empty().trigger("change");
-                            let newOption = new Option(response.organization_name, response.organization, true, true);
-                            organizationSelect.append(newOption).trigger("change");
-                        } else {
-                            organizationSelect.val(null).trigger("change");
-                        }
-
-                        // Adding the emails
-                        if (response.emails.length > 0) {
-                            response.emails.forEach((email, index) => {
-                                addEmailField(email.value, email.label, index);
-                            });
-                        } else {
-                            addEmailField();
-                        }
-
-                        // Adding the contact numbers
-                        if (response.contact_numbers.length > 0) {
-                            response.contact_numbers.forEach((number, index) => {
-                                addNumberField(number.value, number.label, index);
-                            });
-                        } else {
-                            addNumberField();
-                        }
-                    }
-                });
+                $('#number-fields').append(numberHtml);
             }
-        });
 
-        // Handle the close button click event (if any)
-        $('#person-select').on('select2:clear', function() {
-            clearFields(); // Clear the email and number fields when the selection is cleared
-        });
+            // Event handler for person select dropdown change
+            $('#person-select').on('change', function() {
+                let personId = $(this).val();
 
-        // Optional: Add remove button functionality for email and number fields
-        $(document).on('click', '.remove-email', function() {
-            $(this).parent().remove(); // Remove the email field
-        });
+                // Clear the fields when a new person is selected
+                clearFields();
 
-        $(document).on('click', '.remove-number', function() {
-            $(this).parent().remove(); // Remove the number field
+                if (personId) {
+                    $.ajax({
+                        url: '{{ url('get-contact-person-details') }}/' + personId,
+                        type: 'GET',
+                        success: function(response) {
+                            console.log(response);
+
+                            let organizationSelect = $('#organization-select');
+
+                            // Handling organization selection
+                            if (response.organization) {
+                                organizationSelect.empty().trigger("change");
+                                let newOption = new Option(response.organization_name, response
+                                    .organization, true, true);
+                                organizationSelect.append(newOption).trigger("change");
+                            } else {
+                                organizationSelect.val(null).trigger("change");
+                            }
+
+                            // Adding the emails
+                            if (response.emails.length > 0) {
+                                response.emails.forEach((email, index) => {
+                                    addEmailField(email.value, email.label, index);
+                                });
+                            } else {
+                                addEmailField();
+                            }
+
+                            // Adding the contact numbers
+                            if (response.contact_numbers.length > 0) {
+                                response.contact_numbers.forEach((number, index) => {
+                                    addNumberField(number.value, number.label, index);
+                                });
+                            } else {
+                                addNumberField();
+                            }
+                        }
+                    });
+                }
+            });
+
+            // Handle the close button click event (if any)
+            $('#person-select').on('select2:clear', function() {
+                clearFields(); // Clear the email and number fields when the selection is cleared
+            });
+
+            // Optional: Add remove button functionality for email and number fields
+            $(document).on('click', '.remove-email', function() {
+                $(this).parent().remove(); // Remove the email field
+            });
+
+            $(document).on('click', '.remove-number', function() {
+                $(this).parent().remove(); // Remove the number field
+            });
         });
-    });
 
         function removeProductField(element) {
             const productField = element.closest('.product-field');

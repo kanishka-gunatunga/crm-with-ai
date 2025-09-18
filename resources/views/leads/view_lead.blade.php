@@ -44,7 +44,7 @@
                                             'id',
                                             \App\Models\Person::where('id', $lead->person)->value('organization'),
                                         )->value('name') ?? 'N/A' }}
-                                        
+
                                     </a>
                                 </li>
                                 <li class="breadcrumb-item active current-breadcrumb" aria-current="page">{{ $lead->title }}
@@ -53,75 +53,146 @@
                         </nav>
                     </div>
 
-                    <div class="d-flex gap-3">
-                        <div class="shading-button">
-                            <div class="btn green lead-status-dropdown" id="statusWrapper">
+                    <div class="d-flex gap-3 align-items-center">
 
-                                @php
-                                    $orderedStages = collect($stages)
-                                        ->sortBy(function ($stage) {
-                                            return match ($stage->name) {
-                                                'New' => 1,
-                                                'Won', 'Lost' => 9999,
-                                                default => 500,
-                                            };
-                                        })
-                                        ->values();
+                        @if (auth()->user()->role == '2')
+                            <div class="shading-button">
+                                <div class="btn green lead-status-dropdown" id="statusWrapper">
 
-                                    $currentStageIndex = $orderedStages->search(
-                                        fn($stage) => $stage->id == $lead->stage,
-                                    );
-                                    $finalStages = ['main' => [], 'won_lost' => []];
+                                    @php
+                                        $orderedStages = collect($stages)
+                                            ->sortBy(function ($stage) {
+                                                return match ($stage->name) {
+                                                    'New' => 1,
+                                                    'Won', 'Lost' => 9999,
+                                                    default => 500,
+                                                };
+                                            })
+                                            ->values();
 
-                                    foreach ($orderedStages as $stage) {
-                                        if ($stage->name === 'Won' || $stage->name === 'Lost') {
-                                            $finalStages['won_lost'][] = $stage;
-                                        } else {
-                                            $finalStages['main'][] = $stage;
+                                        $currentStageIndex = $orderedStages->search(
+                                            fn($stage) => $stage->id == $lead->stage,
+                                        );
+                                        $finalStages = ['main' => [], 'won_lost' => []];
+
+                                        foreach ($orderedStages as $stage) {
+                                            if ($stage->name === 'Won' || $stage->name === 'Lost') {
+                                                $finalStages['won_lost'][] = $stage;
+                                            } else {
+                                                $finalStages['main'][] = $stage;
+                                            }
                                         }
-                                    }
-                                @endphp
+                                    @endphp
 
-                                <select id="leadStatusSelect" class="form-select" data-lead-id="{{ $lead->id }}">
-                                    <option value="">-- Select Stage --</option>
+                                    <select id="leadStatusSelect" class="form-select" data-lead-id="{{ $lead->id }}">
+                                        <option value="">-- Select Stage --</option>
 
-                                    @foreach ($finalStages['main'] as $stage)
-                                        @php
-                                            $class =
-                                                $stage->name === 'New'
-                                                    ? 'blue'
-                                                    : ($stage->name === 'Pending'
-                                                        ? 'orange'
-                                                        : '');
-                                        @endphp
-                                        <option value="{{ $stage->id }}"
-                                            data-color="{{ $class === 'blue' ? '#4A58EC' : ($class === 'orange' ? '#FF932F' : '#000') }}"
-                                            data-class="{{ $class }}" data-stage-id="{{ $stage->id }}"
-                                            @if ($lead->stage == $stage->id) selected @endif>
-                                            {{ $stage->name }}
-                                        </option>
-                                    @endforeach
+                                        @foreach ($finalStages['main'] as $stage)
+                                            @php
+                                                $class =
+                                                    $stage->name === 'New'
+                                                        ? 'blue'
+                                                        : ($stage->name === 'Pending'
+                                                            ? 'orange'
+                                                            : '');
+                                            @endphp
+                                            <option value="{{ $stage->id }}"
+                                                data-color="{{ $class === 'blue' ? '#4A58EC' : ($class === 'orange' ? '#FF932F' : '#000') }}"
+                                                data-class="{{ $class }}" data-stage-id="{{ $stage->id }}"
+                                                @if ($lead->stage == $stage->id) selected @endif>
+                                                {{ $stage->name }}
+                                            </option>
+                                        @endforeach
 
-                                    @foreach ($finalStages['won_lost'] as $stage)
-                                        @php
-                                            $color = $stage->name === 'Won' ? '#00C500' : '#ED2227';
-                                            $class = $stage->name === 'Won' ? 'green' : 'red';
-                                        @endphp
-                                        <option value="{{ $stage->id }}" data-color="{{ $color }}"
-                                            data-class="{{ $class }}" data-stage-id="{{ $stage->id }}"
-                                            @if ($lead->stage == $stage->id) selected @endif>
-                                            {{ $stage->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                        @foreach ($finalStages['won_lost'] as $stage)
+                                            @php
+                                                $color = $stage->name === 'Won' ? '#00C500' : '#ED2227';
+                                                $class = $stage->name === 'Won' ? 'green' : 'red';
+                                            @endphp
+                                            <option value="{{ $stage->id }}" data-color="{{ $color }}"
+                                                data-class="{{ $class }}" data-stage-id="{{ $stage->id }}"
+                                                @if ($lead->stage == $stage->id) selected @endif>
+                                                {{ $stage->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div>
+                        @elseif (auth()->user()->role == '3')
+                            @if ($lead->sales_owner != auth()->user()->id)
+                                <div>
+                                    <button class="btn save-btn" id="assignToMeBtn">Assign to me</button>
+                                </div>
+                            @else
+                                <div class="shading-button">
+                                    <div class="btn green lead-status-dropdown" id="statusWrapper">
 
+                                        @php
+                                            $orderedStages = collect($stages)
+                                                ->sortBy(function ($stage) {
+                                                    return match ($stage->name) {
+                                                        'New' => 1,
+                                                        'Won', 'Lost' => 9999,
+                                                        default => 500,
+                                                    };
+                                                })
+                                                ->values();
 
+                                            $currentStageIndex = $orderedStages->search(
+                                                fn($stage) => $stage->id == $lead->stage,
+                                            );
+                                            $finalStages = ['main' => [], 'won_lost' => []];
+
+                                            foreach ($orderedStages as $stage) {
+                                                if ($stage->name === 'Won' || $stage->name === 'Lost') {
+                                                    $finalStages['won_lost'][] = $stage;
+                                                } else {
+                                                    $finalStages['main'][] = $stage;
+                                                }
+                                            }
+                                        @endphp
+
+                                        <select id="leadStatusSelect" class="form-select"
+                                            data-lead-id="{{ $lead->id }}">
+                                            <option value="">-- Select Stage --</option>
+
+                                            @foreach ($finalStages['main'] as $stage)
+                                                @php
+                                                    $class =
+                                                        $stage->name === 'New'
+                                                            ? 'blue'
+                                                            : ($stage->name === 'Pending'
+                                                                ? 'orange'
+                                                                : '');
+                                                @endphp
+                                                <option value="{{ $stage->id }}"
+                                                    data-color="{{ $class === 'blue' ? '#4A58EC' : ($class === 'orange' ? '#FF932F' : '#000') }}"
+                                                    data-class="{{ $class }}" data-stage-id="{{ $stage->id }}"
+                                                    @if ($lead->stage == $stage->id) selected @endif>
+                                                    {{ $stage->name }}
+                                                </option>
+                                            @endforeach
+
+                                            @foreach ($finalStages['won_lost'] as $stage)
+                                                @php
+                                                    $color = $stage->name === 'Won' ? '#00C500' : '#ED2227';
+                                                    $class = $stage->name === 'Won' ? 'green' : 'red';
+                                                @endphp
+                                                <option value="{{ $stage->id }}" data-color="{{ $color }}"
+                                                    data-class="{{ $class }}" data-stage-id="{{ $stage->id }}"
+                                                    @if ($lead->stage == $stage->id) selected @endif>
+                                                    {{ $stage->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            @endif
+                        @endif
                         <div>
                             <a data-url="{{ url('delete-lead/' . $lead->id) }}" id="myButton">
                                 {{-- <a href="{{ url('delete-lead/' . $lead->id) }}" id="deleteLeadButton"> --}}
-                                <button class="btn trash-icon-btn ">
+                                <button class="btn trash-icon-btn mt-0">
                                     <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -197,10 +268,12 @@
 
                                         <div class="col-12 col-md-6 col-lg-4">
                                             <section class="secondary-info">
-                                                <div class="terms-section">
-                                                    <h3 class="field-label">Sales Owner</h3>
-                                                    <p class="field-value">{{ $owner_name }}</p>
-                                                </div>
+                                                @if (auth()->user()->role == '2')
+                                                    <div class="terms-section">
+                                                        <h3 class="field-label">Sales Owner</h3>
+                                                        <p class="field-value">{{ $owner_name }}</p>
+                                                    </div>
+                                                @endif
 
                                                 <div class="date-due-section">
                                                     <h3 class="field-label">Start Date</h3>
@@ -262,7 +335,8 @@
                                             <div class="col-12 mt-3">
                                                 <div class="d-flex gap-2 justify-content-between">
                                                     <div>
-                                                        <button type="button" class="btn clear-all-btn">Clear All</button>
+                                                        <button type="button" class="btn clear-all-btn">Clear
+                                                            All</button>
                                                     </div>
                                                     <div>
                                                         <button type="submit" class="btn save-btn">Save</button>
@@ -746,14 +820,14 @@
                                     </div>
                                     {{-- notes --}}
                                     <div>
-                                        
+
 
                                         @foreach ($notes as $note)
-                                        <div>
-                                            <h5 class="mb-3 card-title">Notes</h5>
-                                        </div>
+                                            <div>
+                                                <h5 class="mb-3 card-title">Notes</h5>
+                                            </div>
                                             <div class="d-flex">
-                                                
+
                                                 <div class="col-5">
                                                     <div class="d-flex gap-3 align-items-center mb-3">
                                                         <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
@@ -2013,6 +2087,51 @@
                 });
             @endif
         });
+        $('#assignToMeBtn').on('click', function() {
+            var leadId = '{{ $lead->id }}';
+            var userId = '{{ auth()->user()->id }}';
+            var pipeline = '{{ $pipeline }}';
+            var stages = @json($stages);
+            // Get the first stage not equal to New, Won, or Lost
+            var firstNormalStage = stages.find(function(stage) {
+                return stage.name !== 'New' && stage.name !== 'Won' && stage.name !== 'Lost';
+            });
+            console.log('First normal stage:', firstNormalStage);
+
+            console.log('Assign to me clicked');
+            console.log('Lead ID:', leadId);
+            console.log('User ID:', userId);
+            console.log('Pipeline:', pipeline);
+            console.log('Stages:', stages);
+
+            $.ajax({
+
+                url: '{{ url('assigned-to-me') }}',
+                type: 'POST',
+                data: {
+                    lead_id: leadId,
+                    user_id: userId,
+                    pipeline: pipeline,
+                    stages: stages,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    console.log('Backend response:', response);
+                    if (response.success) {
+                        toastr.success('Lead assigned successfully');
+                        location.reload();
+                    } else {
+                        toastr.error('Failed to assign lead');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log('AJAX error:', error);
+                    alert('An error occurred while assigning the lead.');
+                }
+            });
+        });
+
+
 
 
         $(document).ready(function() {

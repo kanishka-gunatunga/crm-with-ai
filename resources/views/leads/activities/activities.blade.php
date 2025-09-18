@@ -185,7 +185,7 @@
                                                         <div class="col-md-12 mb-3">
                                                             <label for="is_done" class="form-label">Is Done</label>
                                                             <select class="form-control" name="is_done">
-                                                                <option value="">Select</option>
+                                                                
                                                                 <option value="1"
                                                                     {{ request('is_done') == 1 ? 'selected' : '' }}>Yes
                                                                 </option>

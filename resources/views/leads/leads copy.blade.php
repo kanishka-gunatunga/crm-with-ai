@@ -198,59 +198,11 @@
                     }
                     return 500;
                 })->values();
-                $userRoleId = auth()->user()->role;
-                $currentUserId = auth()->user()->id ?? auth()->id();
-
-                // $currentUser = auth()->user();
-                // $userRoleId = $currentUser ? $currentUser->role_id : 2;
-                // $currentUserId = $currentUser ? $currentUser->id : 0;
-                
-                // Debug output - you can see this in the page source
-                echo "<!-- Debug: User Role ID: " . $userRoleId . " -->";
-                echo "<!-- Debug: Current User ID: " . $currentUserId . " -->";
-
-                
-
-
-                // foreach ($orderedStages as $stage) {
-                //     $stage_value = 0;
-                //     $leads = $leadsGroupedByStage->get($stage->id, collect());
                 foreach ($orderedStages as $stage) {
-                $stage_value = 0;
-
-                if ($userRoleId == 2) {
-                    // Admin - show all leads for the stage
+                    $stage_value = 0;
                     $leads = $leadsGroupedByStage->get($stage->id, collect());
-                } elseif ($userRoleId == 3) {
-                    // Sales
-                    if ($stage->name == 'New') {
-                        
-                        // Merge all leads and then keep only unassigned OR owned by current user
-                        $allLeadsFromAllStages = collect();
-                        foreach ($leadsGroupedByStage as $stageId => $stageLeads) {
-                            $allLeadsFromAllStages = $allLeadsFromAllStages->merge($stageLeads);
-                        }
-                        $leads = $allLeadsFromAllStages->filter(function($lead) use ($currentUserId, $stage) {
-                            return (is_null($lead->sales_owner) || $lead->sales_owner == $currentUserId) && ($lead->stage == $stage->id) ;
-                        });
-
-                        
-                    } else {
-                        // Other stages: only leads owned by current user
-                        $stageLeads = $leadsGroupedByStage->get($stage->id, collect());
-                        $leads = $stageLeads->filter(function($lead) use ($currentUserId) {
-                            return $lead->sales_owner == $currentUserId;
-                        });
-                    }
-                } else {
-                    // Other roles: show no leads
-                    $leads = collect();
-                }
-
-                $stage_value = $leads->sum('lead_value');
-
-
-                            ?>
+                    $stage_value = $leads->sum('lead_value');
+                ?>
                         <div class="col-md-3">
                             <div class="card card-default lead-card ">
                                 <div class="card-body">
@@ -259,8 +211,6 @@
                                             <div class="notification-content new w-100">
                                                 <div class="d-flex align-items-center gap-2">
                                                     <span class="notification-label">{{ $stage->name }} </span>
-
-
                                                     <span class="notification-badge"
                                                         id="stage-count-{{ $stage->id }}">{{ $leads->where('stage', $stage->id)->count() }}</span>
                                                 </div>
@@ -294,28 +244,16 @@
 
                                                     <time class="due-date">{{ $lead->closing_date }}</time>
                                                 </div>
-                                                <div class="priority-section d-flex align-items-center gap-2">
-                                                    @if ($stage->name == 'New' && $lead->sales_owner == auth()->user()->id)
-                                                        <div>
-                                                            <img src="{{ asset('images/assigned.svg') }}" alt="">
-                                                        </div>
-                                                    @endif
-
-                                                    <div>
-                                                        <?php if ($lead->priority == 'Low') { ?>
-                                                        <span class="priority-badge low">Low</span>
-                                                        <?php } elseif ($lead->priority == 'Medium') { ?>
-                                                        <span class="priority-badge medium">Medium</span>
-                                                        <?php } elseif ($lead->priority == 'High') { ?>
-                                                        <span class="priority-badge high">High</span>
-                                                        <?php } else { ?>
-                                                        <span class="priority-badge urgent">Urgent</span>
-                                                        <?php } ?>
-                                                    </div>
-                                                </div>
-
+                                                <?php if ($lead->priority == 'Low') { ?>
+                                                <span class="priority-badge low">Low</span>
+                                                <?php } elseif ($lead->priority == 'Medium') { ?>
+                                                <span class="priority-badge medium">Medium</span>
+                                                <?php } elseif ($lead->priority == 'High') { ?>
+                                                <span class="priority-badge high">High</span>
+                                                <?php } else { ?>
+                                                <span class="priority-badge urgent">Urgent</span>
+                                                <?php } ?>
                                             </header>
-
                                             <main class="task-content">
                                                 <a href="{{ url('view-lead/' . $lead->id) }}">
                                                     <h2 class="task-title">{{ $lead->title }}</h2>
@@ -330,18 +268,9 @@
                                             <div class="divider"></div>
                                             <footer class="task-footer">
                                                 <div class="assignee-info">
-                                                    @php
-                                                        $personPicture = \App\Models\Person::where(
-                                                            'id',
-                                                            $lead->person,
-                                                        )->value('picture');
-                                                        $avatarSrc = $personPicture
-                                                            ? asset('uploads/persons/pictures/' . $personPicture)
-                                                            : asset('images/avatar.png');
-                                                    @endphp
-                                                    <img class="avatar" src="{{ $avatarSrc }}"
+                                                    <img class="avatar"
+                                                        src="{{ asset('uploads/persons/pictures/' . \App\Models\Person::where('id', $lead->person)->value('picture')) }}"
                                                         alt="Assignee Picture">
-
 
 
                                                     <a href="{{ url('persons?id=' . $lead->person) }}">
@@ -495,28 +424,9 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.task-list').forEach(function(stage) {
-                // Check if this stage is "New" by looking at the stage name in the notification-label
-                const stageCard = stage.closest('.lead-card');
-                const stageNameElement = stageCard.querySelector('.notification-label');
-                const stageName = stageNameElement ? stageNameElement.textContent.trim() : '';
-                const isNewStage = stageName === 'New';
-
                 new Sortable(stage, {
                     group: 'leads', // This allows dragging between lists
                     animation: 150,
-                    disabled: isNewStage, // Disable sorting for New stage
-                    onStart: function(evt) {
-                        // Additional check: prevent dragging items FROM New stage
-                        const fromStageCard = evt.from.closest('.lead-card');
-                        const fromStageNameElement = fromStageCard.querySelector(
-                            '.notification-label');
-                        const fromStageName = fromStageNameElement ? fromStageNameElement
-                            .textContent.trim() : '';
-
-                        if (fromStageName === 'New') {
-                            return false; // Cancel the drag
-                        }
-                    },
                     onEnd: function(evt) {
                         console.log("Sort ended");
 

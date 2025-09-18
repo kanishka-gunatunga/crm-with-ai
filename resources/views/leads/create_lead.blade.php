@@ -41,23 +41,29 @@
                                         <div class="row g-4">
                                             <div class="col-12 col-md-4">
                                                 <label for="field1" class="form-label">Title</label>
-                                                <input type="text" class="form-control" name="title"
-                                                    value="{{ old('title') }}" required>
                                                 @if ($errors->has('title'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('title') }}
                                                     </div>
                                                 @endif
+                                                <input type="text" class="form-control" name="title"
+                                                    value="{{ old('title') }}" required>
+
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Lead Value ($)</label>
-                                                <input type="number" step="any" class="form-control" name="lead_value"
-                                                    value="{{ old('lead_value') }}" required>
-                                                @if ($errors->has('lead_value'))
+                                                {{-- @if ($errors->has('lead_value'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('lead_value') }}
                                                     </div>
-                                                @endif
+                                                @endif --}}
+
+                                                
+                                                <input type="number" step="any" class="form-control" name="lead_value"
+                                                    value="{{ old('lead_value') }}" required
+                                                    data-parsley-errors-container="#lead-value-errors">
+                                                    <div id="lead-value-errors"></div>
+
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Pipeline</label>
@@ -80,7 +86,7 @@
                                             @endphp
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Stage</label>
-                                                <select class="form-control tagselect" name="stage" required>
+                                                <select class="form-control tagselect" name="stage" required data-parsley-errors-container="#stage-value-errors">
                                                     <option value="">Select a stage</option>
                                                     <?php foreach($stages as $stage){ ?>
                                                     <option value="{{ $stage->id }}"
@@ -89,11 +95,12 @@
                                                     </option>
                                                     <?php } ?>
                                                 </select>
-                                                @if ($errors->has('stage'))
+                                                <div id="stage-value-errors"></div>
+                                                {{-- @if ($errors->has('stage'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('stage') }}
                                                     </div>
-                                                @endif
+                                                @endif --}}
                                             </div>
 
                                             <div class="col-12 col-md-4">
@@ -133,7 +140,7 @@
                                                     name="sales_owner" required>
 
                                                     <?php foreach($owners as $owner){ ?>
-                                                    <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
+                                                        <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
                                                     <?php } ?>
                                                 </select>
                                                 @if ($errors->has('sales_owner'))
@@ -222,9 +229,9 @@
                                         <input type="text" class="form-control" id="field5" placeholder="Date Due">
                                     </div> --}}
                                             <!-- <div class="col-12 col-md-4">
-                                                                                                                                                                    <label for="field5" class="form-label">Reminders</label>
-                                                                                                                                                                    <input type="text" class="form-control" id="field5" placeholder="Reminders">
-                                                                                                                                                                </div> -->
+                                                                                                                                                                        <label for="field5" class="form-label">Reminders</label>
+                                                                                                                                                                        <input type="text" class="form-control" id="field5" placeholder="Reminders">
+                                                                                                                                                                    </div> -->
 
                                         </div>
 
@@ -241,17 +248,18 @@
                                                 <label for="field1"
                                                     class="form-label">{{ __('app.leads.name') }}</label>
                                                 <select class="form-control stagselect" id="person-select" name="person"
-                                                    required>
+                                                    required data-parsley-errors-container="#person-value-errors">
                                                     <option hidden selected></option>
                                                     <?php foreach($persons as $person){ ?>
                                                     <option value="{{ $person->id }}">{{ $person->name }}</option>
                                                     <?php } ?>
                                                 </select>
-                                                @if ($errors->has('person'))
+                                                <div id="person-value-errors"></div>
+                                                {{-- @if ($errors->has('person'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('person') }}
                                                     </div>
-                                                @endif
+                                                @endif --}}
                                             </div>
 
 
@@ -277,7 +285,7 @@
                                             <div class="col-12 col-md-4" id="email-fields">
                                                 <label for="field1"
                                                     class="form-label">{{ __('app.leads.emails') }}</label>
-                                                <input type="email" class="form-control" name="emails[]" required>
+                                                <input type="email" class="form-control" name="emails[]" required >
 
                                                 <div class="mt-4 mt-lg-0">
                                                     <div class="form-check form-check-inline">

@@ -61,6 +61,7 @@ Route::match(['get', 'post'],'export-leads/{format}', [LeadController::class, 'e
 Route::match(['post'],'import-leads', [LeadController::class, 'import_leads'])->middleware(['auth']);
 Route::match(['post'],'update-lead-priority', [LeadController::class, 'update_lead_priority'])->middleware(['auth']);
 Route::match(['get'],'get-stages-by-pipeline/{pipeline}', [LeadController::class, 'get_stages_by_pipeline'])->middleware(['auth']);
+Route::post ('/assigned-to-me', [LeadController::class, 'assigned_to_me'])->middleware(['auth']);
 
 //Quotes
 Route::match(['get', 'post'],'quotes', [QuoteController::class, 'quotes'])->middleware(['auth', 'permission:quotes']);

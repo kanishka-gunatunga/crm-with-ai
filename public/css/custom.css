@@ -380,10 +380,12 @@ select,
   outline-offset: 2px;
   border-radius: 2px;
 }
+
 .form-control[type=file]:not(:disabled):not([readonly]) {
-    cursor: pointer;
-    padding: 14px !important;
+  cursor: pointer;
+  padding: 14px !important;
 }
+
 .card-default {
   /* border: var(--primary-border-color); */
   border-radius: var(--primary-border-radius) !important;
@@ -398,7 +400,7 @@ select,
   white-space: nowrap;
 }
 
-.leads-container{
+.leads-container {
   overflow-x: scroll;
   scroll-behavior: smooth;
 }
@@ -1289,8 +1291,13 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
 }
 
 .active path {
-  fill: var(--primary-color) !important;
+  fill: var(--primary-color);
   /* stroke: var(--primary-color) !important; */
+}
+
+.stroke-nav-item .active path {
+  fill: inherit !important;
+  stroke: var(--primary-color) !important;
 }
 
 .section-title {
@@ -2075,7 +2082,7 @@ div.dataTables_wrapper div.dataTables_filter {
   box-shadow: 0 0 0 0.2rem rgba(74, 88, 236, 0.25) !important;
 }
 
-.description-text-area:focus-visible{
+.description-text-area:focus-visible {
   outline: none !important;
 }
 
@@ -2089,9 +2096,19 @@ div.dataTables_wrapper div.dataTables_filter {
 
 
 .favourited {
-    background-color: #FFD700; /* Gold background when favourited */
-    border-radius: 50%; /* Rounded button */
-    box-shadow: 0 0 5px rgba(255, 215, 0, 0.8); /* Optional: Glow effect */
+  background-color: #FFD700;
+  /* Gold background when favourited */
+  border-radius: 50%;
+  /* Rounded button */
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
+  /* Optional: Glow effect */
 }
 
 
+.select2-results__option--selectable {
+  font-family: var(--font-family) !important;
+}
+
+.select2-results__option--selectable:hover {
+  background-color: var(--blue-shading) !important;
+}
