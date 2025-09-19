@@ -231,7 +231,7 @@
                             $allLeadsFromAllStages = $allLeadsFromAllStages->merge($stageLeads);
                         }
                         $leads = $allLeadsFromAllStages->filter(function($lead) use ($currentUserId, $stage) {
-                            return (is_null($lead->sales_owner) || $lead->sales_owner == $currentUserId) && ($lead->stage == $stage->id) ;
+                            return (is_null($lead->sales_owner) || ($lead->sales_owner == 1) || $lead->sales_owner == $currentUserId) && ($lead->stage == $stage->id) ;
                         });
 
                         

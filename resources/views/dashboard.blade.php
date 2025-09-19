@@ -577,18 +577,21 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <select class="priority-select dashboard-priority"
-                                                            data-lead-id="{{ $my_lead->id }}">
-                                                            <option value="High"
-                                                                {{ $my_lead->priority == 'High' ? 'selected' : '' }}>High
-                                                            </option>
-                                                            <option value="Medium"
-                                                                {{ $my_lead->priority == 'Medium' ? 'selected' : '' }}>
-                                                                Medium</option>
-                                                            <option value="Low"
-                                                                {{ $my_lead->priority == 'Low' ? 'selected' : '' }}>Low
-                                                            </option>
-                                                        </select>
+                                                        @if (is_null($my_lead->priority) || $my_lead->priority === '')
+                                                            <select class="priority-select dashboard-priority" data-lead-id="{{ $my_lead->id }}">
+                                                                <option value="" selected disabled>Select Priority</option>
+                                                                <option value="High">High</option>
+                                                                <option value="Medium">Medium</option>
+                                                                <option value="Low">Low</option>
+                                                            </select>
+                                                        @else
+                                                            <select class="priority-select dashboard-priority" data-lead-id="{{ $my_lead->id }}">
+                                                                <option value="High" {{ $my_lead->priority == 'High' ? 'selected' : '' }}>High</option>
+                                                                <option value="Urgent" {{ $my_lead->priority == 'Urgent' ? 'selected' : '' }}>Urgent</option>
+                                                                <option value="Medium" {{ $my_lead->priority == 'Medium' ? 'selected' : '' }}>Medium</option>
+                                                                <option value="Low" {{ $my_lead->priority == 'Low' ? 'selected' : '' }}>Low</option>
+                                                            </select>
+                                                        @endif
 
                                                     </td>
                                                 </tr>

@@ -69,7 +69,7 @@
                                             <div class="col-12 col-md-4">
                                                 <label for="field1" class="form-label">Picture</label>
                                                 <input type="file" class="form-control" id="Picture" name="picture"
-                                                    value="{{ old('picture') }}" required>
+                                                    value="{{ old('picture') }}">
                                                 @if ($errors->has('picture'))
                                                     <div class="alert alert-danger mt-2">{{ $errors->first('picture') }}
                                                     </div>

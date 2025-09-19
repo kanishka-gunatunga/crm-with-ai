@@ -58,11 +58,11 @@
                                                     </div>
                                                 @endif --}}
 
-                                                
+
                                                 <input type="number" step="any" class="form-control" name="lead_value"
                                                     value="{{ old('lead_value') }}" required
                                                     data-parsley-errors-container="#lead-value-errors">
-                                                    <div id="lead-value-errors"></div>
+                                                <div id="lead-value-errors"></div>
 
                                             </div>
                                             <div class="col-12 col-md-4">
@@ -86,7 +86,8 @@
                                             @endphp
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Stage</label>
-                                                <select class="form-control tagselect" name="stage" required data-parsley-errors-container="#stage-value-errors">
+                                                <select class="form-control tagselect" name="stage" required
+                                                    data-parsley-errors-container="#stage-value-errors">
                                                     <option value="">Select a stage</option>
                                                     <?php foreach($stages as $stage){ ?>
                                                     <option value="{{ $stage->id }}"
@@ -135,34 +136,31 @@
 
 
                                             <div class="col-12 col-md-4">
-                                                <label for="field2" class="form-label">Sales Owner</label>
-                                                @if (auth()->user()->role == 2)
-                                                    <select class="form-control" data-choices id="choices-single-default"
-                                                        name="sales_owner" required>
-                                                        <?php foreach($owners as $owner){ ?>
-                                                            <option value="{{ $owner->user_id }}" {{ auth()->user()->id == $owner->user_id ? 'selected' : '' }}>
-                                                                {{ $owner->name }}
+                                                <label for="sales_owner" class="form-label">Sales Owner</label>
+                                                <select id="sales_owner" class="form-control" name="sales_owner"
+                                                    @if (auth()->user()->role == 3) disabled @endif>
+                                                    @if (auth()->user()->role == 3)
+                                                        <option value="{{ auth()->user()->id }}" selected>
+                                                            {{ auth()->user()->name }}
+                                                        </option>
+                                                    @else
+                                                        <option value="" disabled selected>Select Sales Owner</option>
+                                                        @foreach ($owners as $owner)
+                                                            <option value="{{ $owner->user_id }}">{{ $owner->name }}
                                                             </option>
-                                                        <?php } ?>
-                                                    </select>
-                                                @elseif (auth()->user()->role == 3)
-                                                    <select class="form-control" name="sales_owner" required disabled>
-                                                        <?php foreach($owners as $owner){ ?>
-                                                            <option value="{{ $owner->user_id }}" {{ auth()->user()->id == $owner->user_id ? 'selected' : '' }}>
-                                                                {{ $owner->name }}
-                                                            </option>
-                                                        <?php } ?>
-                                                    </select>
-                                                    <input type="hidden" name="sales_owner" value="{{ $owner->user_id }}">
-                                                @endif
-                                                @if ($errors->has('sales_owner'))
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $errors->first('sales_owner') }}
-                                                    </div>
+                                                        @endforeach
+                                                    @endif
+                                                </select>
+                                                @if (auth()->user()->role == 3)
+                                                    <input type="hidden" name="sales_owner"
+                                                        value="{{ auth()->user()->id }}">
                                                 @endif
                                             </div>
 
-                                           
+                                            
+
+
+
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Priority</label>
                                                 <select class="form-control" name="priority" required>
@@ -243,9 +241,9 @@
                                         <input type="text" class="form-control" id="field5" placeholder="Date Due">
                                     </div> --}}
                                             <!-- <div class="col-12 col-md-4">
-                                                                                                                                                                        <label for="field5" class="form-label">Reminders</label>
-                                                                                                                                                                        <input type="text" class="form-control" id="field5" placeholder="Reminders">
-                                                                                                                                                                    </div> -->
+                                                                                                                                                                                    <label for="field5" class="form-label">Reminders</label>
+                                                                                                                                                                                    <input type="text" class="form-control" id="field5" placeholder="Reminders">
+                                                                                                                                                                                </div> -->
 
                                         </div>
 
@@ -262,12 +260,12 @@
                                                 <label for="field1"
                                                     class="form-label">{{ __('app.leads.name') }}</label>
 
-                                                    
+
                                                 <select class="form-control stagselect" id="person-select" name="person"
                                                     required data-parsley-errors-container="#person-value-errors">
                                                     <option hidden selected></option>
                                                     <?php foreach($persons as $person){ ?>
-                                                        <option value="{{ $person->id }}">{{ $person->name }}</option>
+                                                    <option value="{{ $person->id }}">{{ $person->name }}</option>
                                                     <?php } ?>
                                                 </select>
                                                 <div id="person-value-errors"></div>
@@ -301,7 +299,7 @@
                                             <div class="col-12 col-md-4" id="email-fields">
                                                 <label for="field1"
                                                     class="form-label">{{ __('app.leads.emails') }}</label>
-                                                <input type="email" class="form-control" name="emails[]" required >
+                                                <input type="email" class="form-control" name="emails[]" required>
 
                                                 <div class="mt-4 mt-lg-0">
                                                     <div class="form-check form-check-inline">

@@ -160,6 +160,16 @@ class LeadController extends Controller
             ]);
         }
         if ($request->isMethod('post')) {
+
+
+        //     dd([
+                
+        //         request()->user()->id,
+        //         request()->user()->role,
+        //         request()->user()->name,
+        //         request()->sales_owner
+
+        // ]);
             $request->validate([
                 'title' => 'required|string',
                 'lead_value' => 'required',
@@ -985,36 +995,45 @@ class LeadController extends Controller
 
             $query = LeadActivity::query();
 
+            // Filter by user role
+            $authUser = Auth::user();
+            if ($authUser && $authUser->role == 3) {
+            // Only show activities for leads assigned to this user
+            $leadIds = Lead::where('sales_owner', $authUser->id)->pluck('id');
+            $query->whereIn('lead_id', $leadIds);
+            }
+            // If role == 2, show all (no extra filter)
+
             if ($request->has('title') && $request->title != '') {
-                $query->where('title', 'like', '%' . $request->title . '%');
+            $query->where('title', 'like', '%' . $request->title . '%');
             }
 
             if ($request->has('is_done') && $request->is_done !== '') {
-                $query->where('is_completed', $request->is_done);
+            $query->where('is_completed', $request->is_done);
             }
 
             if ($request->has('created_by') && $request->created_by != '') {
-                $query->where('created_by', $request->created_by);
+            $query->where('created_by', $request->created_by);
             }
 
             if ($request->has('lead') && $request->lead != '') {
-                $query->where('lead_id', $request->lead);
+            $query->where('lead_id', $request->lead);
             }
 
             if ($request->has('shedule_start_date') && $request->shedule_start_date != '') {
-                $query->where('from', '>=', $request->shedule_start_date);
+            $query->where('from', '>=', $request->shedule_start_date);
             }
 
             if ($request->has('shedule_end_date') && $request->shedule_end_date != '') {
-                $query->where('to', '<=', $request->shedule_end_date);
+            $query->where('to', '<=', $request->shedule_end_date);
             }
 
             if ($request->has('created_start_date') && $request->created_start_date != '') {
-                $query->where('created_at', '>=', $request->created_start_date);
+            $query->where('created_at', '>=', $request->created_start_date);
             }
 
             if ($request->has('created_end_date') && $request->created_end_date != '') {
-                $query->where('created_at', '<=', $request->created_end_date);
+            $query->where('created_at', '<=', $request->created_end_date);
             }
 
             $activities = $query->get();
@@ -1023,9 +1042,9 @@ class LeadController extends Controller
             $leads = Lead::get();
 
             return view('leads.activities.activities', [
-                'activities' => $activities,
-                'owners' => $owners,
-                'leads' => $leads
+            'activities' => $activities,
+            'owners' => $owners,
+            'leads' => $leads
             ]);
         }
     }
@@ -1389,31 +1408,34 @@ class LeadController extends Controller
     }
     function addEventToGoogleCalendar($lead_activity)
     {
-        $client = new Google_Client();
-        $client->setAuthConfig(storage_path('app/google-calendar/client-credentials.json'));
-        $client->addScope(Google_Service_Calendar::CALENDAR);
-        $client->useApplicationDefaultCredentials();
+        // $client = new Google_Client();
+        // $client->setAuthConfig(storage_path('app/google-calendar/client-credentials.json'));
+        // $client->addScope(Google_Service_Calendar::CALENDAR);
+        // $client->useApplicationDefaultCredentials();
 
-        $service = new Google_Service_Calendar($client);
+        // $service = new Google_Service_Calendar($client);
 
-        $event = new Google_Service_Calendar_Event([
-            'summary' => $lead_activity->title,
-            'location' => $lead_activity->location,
-            'description' => $lead_activity->description,
-            'start' => [
-                'dateTime' => \Carbon\Carbon::parse($lead_activity->from)->toRfc3339String(),
-                'timeZone' => 'Asia/Colombo',
-            ],
-            'end' => [
-                'dateTime' => \Carbon\Carbon::parse($lead_activity->to)->toRfc3339String(),
-                'timeZone' => 'Asia/Colombo',
-            ],
-        ]);
+        // $event = new Google_Service_Calendar_Event([
+        //     'summary' => $lead_activity->title,
+        //     'location' => $lead_activity->location,
+        //     'description' => $lead_activity->description,
+        //     'start' => [
+        //         'dateTime' => \Carbon\Carbon::parse($lead_activity->from)->toRfc3339String(),
+        //         'timeZone' => 'Asia/Colombo',
+        //     ],
+        //     'end' => [
+        //         'dateTime' => \Carbon\Carbon::parse($lead_activity->to)->toRfc3339String(),
+        //         'timeZone' => 'Asia/Colombo',
+        //     ],
+        // ]);
 
-        $calendarId = 'kodetechapi@gmail.com';
-        $event = $service->events->insert($calendarId, $event);
+        // $calendarId = 'kodetechapi@gmail.com';
+        // $event = $service->events->insert($calendarId, $event);
 
-        return $event->htmlLink;
+        // return $event->htmlLink;
+
+
+        return true;
     }
 
     public function update_lead_priority(Request $request)

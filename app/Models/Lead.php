@@ -51,4 +51,9 @@ class Lead extends Model
         return $this->belongsTo(UserDetails::class, 'sales_owner');
     }
 
+    public function quotes()
+    {
+        return $this->hasMany(Quote::class, 'lead_id');
+    }
+
 }

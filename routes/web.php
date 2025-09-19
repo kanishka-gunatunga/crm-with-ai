@@ -70,6 +70,8 @@ Route::get( '/delete-quote/{id}', [QuoteController::class, 'delete_quote'])->mid
 Route::match(['get', 'post'],'create-quote', [QuoteController::class, 'create_quote'])->middleware(['auth', 'permission:quote-create']);
 Route::match(['get', 'post'],'edit-quote/{id}', [QuoteController::class, 'edit_quote'])->middleware(['auth', 'permission:quote-edit']);
 Route::post('/delete-selected-quotes', [QuoteController::class, 'delete_selected_quotes'])->middleware(['auth', 'permission:quote-delete']);
+Route::get('/get-leads', [QuoteController::class, 'getLeads'])->name('get.leads');
+
 
 // Contact Persons
 Route::get( '/persons', [PersonsController::class, 'persons'])->middleware(['auth', 'permission:persons']);

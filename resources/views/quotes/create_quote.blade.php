@@ -42,28 +42,102 @@
                                     <div class="card-body">
                                         <form>
                                             <div class="row g-4">
+
+
+
+                                                @if (auth()->user()->role == 2)
+                                                    <!-- Role 2: Can choose any sales owner -->
+                                                    <div class="col-12 col-md-4">
+                                                        <label for="assign_user" class="form-label">Sales Owner</label>
+                                                        <select class="myDropdown form-control" name="owner"
+                                                            data-parsley-errors-container="#owner-errors" required>
+                                                            <option value="" selected disabled>Select Sales Owner
+                                                            </option>
+                                                            @foreach ($owners as $owner)
+                                                                <option value="{{ $owner->user_id }}">{{ $owner->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                        <div id="owner-errors"></div>
+                                                    </div>
+
+                                                    <div class="col-12 col-md-4">
+                                                        <label for="assign_user"
+                                                            class="form-label">{{ __('app.quotes.lead') }}</label>
+                                                        <select class="myDropdown form-control" name="lead"
+                                                            data-parsley-errors-container="#lead-errors" required>
+                                                            <option value="" selected disabled>Select Lead</option>
+                                                            {{-- Leads will be filled by AJAX after selecting owner --}}
+                                                        </select>
+                                                        <div id="lead-errors"></div>
+                                                    </div>
+                                                @elseif (auth()->user()->role == 3)
+                                                    <!-- Role 3: Fixed sales owner (logged in user) -->
+                                                    <div class="col-12 col-md-4">
+                                                        <label for="assign_user" class="form-label">Sales Owner</label>
+                                                        <select class="form-control" name="sales_owner" required disabled>
+                                                            <?php foreach($owners as $owner){ ?>
+                                                            <option value="{{ $owner->user_id }}"
+                                                                {{ auth()->user()->id == $owner->user_id ? 'selected' : '' }}>
+                                                                {{ $owner->name }}
+                                                            </option>
+                                                            <?php } ?>
+                                                        </select>
+                                                        <input type="hidden" name="sales_owner"
+                                                            value="{{ auth()->user()->id }}">
+                                                    </div>
+
+                                                    <div class="col-12 col-md-4">
+                                                        <label for="assign_user"
+                                                            class="form-label">{{ __('app.quotes.lead') }}</label>
+                                                        <select id="leadDropdown" class="myDropdown form-control"
+                                                            name="lead" data-parsley-errors-container="#lead-errors"
+                                                            required>
+                                                            <option value="" selected disabled>Select Lead</option>
+                                                            @foreach ($leads as $lead)
+                                                                    <option value="{{ $lead->id }}">
+                                                                        {{ $lead->title }}
+                                                                    </option>
+                                                            @endforeach
+                                                        </select>
+                                                        <div id="lead-errors"></div>
+                                                    </div>
+
+                                                    
+                                                @endif
+
+
+                                               
+
+
+
+                                                {{-- <div class="col-12 col-md-4">
+                                                    <label for="assign_user" class="form-label">Sales Owner</label>
+                                                    <select class="myDropdown form-control" name="owner"
+                                                        data-parsley-errors-container="#owner-errors" required>
+                                                        <option selected=""></option>
+                                                        <?php foreach($owners as $owner){ ?>
+                                                        <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
+                                                        <?php } ?>
+                                                    </select>
+                                                    <div id="owner-errors"></div>
+                                                </div>
+
                                                 <div class="col-12 col-md-4">
                                                     <label for="assign_user"
                                                         class="form-label">{{ __('app.quotes.lead') }}</label>
-                                                    <select class="myDropdown form-control " name="lead" data-parsley-errors-container="#lead-errors" required>
+                                                    <select class="myDropdown form-control " name="lead"
+                                                        data-parsley-errors-container="#lead-errors" required>
                                                         <option selected=""></option>
                                                         <?php foreach($leads as $lead){ ?>
                                                         <option value="{{ $lead->id }}">{{ $lead->title }}</option>
                                                         <?php } ?>
                                                     </select>
                                                     <div id="lead-errors"></div>
-                                                </div>
+                                                </div> --}}
 
-                                                <div class="col-12 col-md-4">
-                                                    <label for="assign_user" class="form-label">Sales Owner</label>
-                                                    <select class="myDropdown form-control" name="owner" data-parsley-errors-container="#owner-errors" required>
-                                                        <option selected=""></option>
-                                                        <?php foreach($owners as $owner){ ?>
-                                                            <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
-                                                        <?php } ?>
-                                                    </select>
-                                                    <div id="owner-errors"></div>
-                                                </div>
+
+
                                                 <div class="col-12 col-md-4">
                                                     <label for="assign_user" class="form-label">Subject</label>
                                                     <input type="text" class="form-control" name="subject"
@@ -80,14 +154,16 @@
                                                     <div class="input-group">
                                                         <input type="date" class="form-control" id="expired_at"
                                                             placeholder="Expired At" name="expired_at"
-                                                            value="{{ old('expired_at') }}" data-parsley-errors-container="#expired-at-errors" required>
+                                                            value="{{ old('expired_at') }}"
+                                                            data-parsley-errors-container="#expired-at-errors" required>
 
                                                     </div>
                                                     <div id="expired-at-errors"></div>
                                                 </div>
                                                 <div class="col-12 col-md-4 selection-div">
                                                     <label for="terms" class="form-label">Person</label>
-                                                    <select class="myDropdown form-control" name="person" data-parsley-errors-container="#person-errors" required>
+                                                    <select class="myDropdown form-control" name="person"
+                                                        data-parsley-errors-container="#person-errors" required>
                                                         <option selected=""></option>
                                                         <?php foreach($persons as $person){ ?>
                                                         <option value="{{ $person->id }}">{{ $person->name }}</option>
@@ -116,8 +192,8 @@
                                         <div class="row g-4">
                                             <div class="col-12 col-md-4">
                                                 <label for="No" class="form-label">Address</label>
-                                                <input type="text" class="form-control" id="No" placeholder="No"
-                                                    name="address" required>
+                                                <input type="text" class="form-control" id="No"
+                                                    placeholder="No" name="address" required>
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Province" class="form-label">Province</label>
@@ -126,7 +202,8 @@
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="assign_user" class="form-label">Country</label>
-                                                <select class="myDropdown form-control" name="country" data-parsley-errors-container="#country-errors" required>
+                                                <select class="myDropdown form-control" name="country"
+                                                    data-parsley-errors-container="#country-errors" required>
                                                     <option selected=""></option>
                                                     <option value="Sri Lanka">Sri Lanka</option>
                                                 </select>
@@ -165,7 +242,8 @@
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="assign_user" class="form-label">Country</label>
-                                                <select class="myDropdown form-control" name="shipping_country" data-parsley-errors-container="#shipping-country-errors" required>
+                                                <select class="myDropdown form-control" name="shipping_country"
+                                                    data-parsley-errors-container="#shipping-country-errors" required>
                                                     <option selected=""></option>
                                                     <option value="Sri Lanka">Sri Lanka</option>
                                                 </select>
@@ -411,4 +489,51 @@
             });
         });
     </script>
+
+
+<script>
+$(document).ready(function () {
+    let userRole = "{{ auth()->user()->role }}";
+    let userId   = "{{ auth()->user()->id }}";
+
+    function loadLeads(salesOwnerId) {
+        $.ajax({
+            url: "{{ route('get.leads') }}",
+            type: "GET",
+            data: {
+                sales_owner_id: salesOwnerId,
+                role: userRole,
+                user_id: userId
+            },
+            success: function (data) {
+                console.log("Leads loaded:", data);
+                // Corrected selector for the lead dropdown
+                let $leadDropdown = $('select[name="lead"]'); 
+                $leadDropdown.empty().append('<option value="" disabled selected>Select Lead</option>');
+
+                if (data.length > 0) {
+                    data.forEach(function (lead) {
+                        $leadDropdown.append('<option value="' + lead.id + '">' + lead.title + '</option>');
+                    });
+                }
+            },
+            error: function (xhr) {
+                console.error("Error loading leads:", xhr.responseText);
+            }
+        });
+    }
+
+    // If role = 3, load leads directly for the logged-in user
+    if (userRole == 3) {
+        loadLeads(userId);
+    }
+
+    // Corrected jQuery selector to target the dropdown with name="owner" for Role 2
+    $('select[name="owner"]').on('change', function () {
+        let selectedOwnerId = $(this).val();
+        loadLeads(selectedOwnerId);
+    });
+});
+</script>
+
 @endsection

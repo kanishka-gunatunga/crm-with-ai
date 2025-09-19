@@ -313,8 +313,12 @@
                                                                     href="{{ url('users?id=' . $activity->created_by) }}">{{ $owner_name }}</a>
                                                             </td>
                                                             <td class="">{{ $activity->description }}</td>
-                                                            <td class=""><a
-                                                                    href="{{ url('view-lead/' . $activity->lead_id) }}">{{ $lead->title }}</a>
+                                                            <td class="">
+                                                                @if($lead)
+                                                                    <a href="{{ url('view-lead/' . $activity->lead_id) }}">{{ $lead->title }}</a>
+                                                                @else
+                                                                    <span class="text-muted">Lead not found</span>
+                                                                @endif
                                                             </td>
                                                             <td class="">{{ $activity->type }}</td>
                                                             <td class="">{{ $activity->from }}</td>
@@ -407,8 +411,12 @@
                                                                     href="{{ url('users?id=' . $activity->created_by) }}">{{ $owner_name }}</a>
                                                             </td>
                                                             <td class="">{{ $activity->description }}</td>
-                                                            <td class=""><a
-                                                                    href="{{ url('view-lead/' . $activity->lead_id) }}">{{ $lead->title }}</a>
+                                                            <td class="">
+                                                                @if($lead)
+                                                                    <a href="{{ url('view-lead/' . $activity->lead_id) }}">{{ $lead->title }}</a>
+                                                                @else
+                                                                    <span class="text-muted">Lead not found</span>
+                                                                @endif
                                                             </td>
                                                             <td class="">{{ $activity->type }}</td>
                                                             <td class="">{{ $activity->from }}</td>
@@ -500,8 +508,12 @@
                                                                     href="{{ url('users?id=' . $activity->created_by) }}">{{ $owner_name }}</a>
                                                             </td>
                                                             <td class="">{{ $activity->description }}</td>
-                                                            <td class=""><a
-                                                                    href="{{ url('view-lead/' . $activity->lead_id) }}">{{ $lead->title }}</a>
+                                                            <td class="">
+                                                                @if($lead)
+                                                                    <a href="{{ url('view-lead/' . $activity->lead_id) }}">{{ $lead->title }}</a>
+                                                                @else
+                                                                    <span class="text-muted">Lead not found</span>
+                                                                @endif
                                                             </td>
                                                             <td class="">{{ $activity->type }}</td>
                                                             <td class="">{{ $activity->from }}</td>
@@ -594,8 +606,12 @@
                                                                     href="{{ url('users?id=' . $activity->created_by) }}">{{ $owner_name }}</a>
                                                             </td>
                                                             <td class="">{{ $activity->description }}</td>
-                                                            <td class=""><a
-                                                                    href="{{ url('view-lead/' . $activity->lead_id) }}">{{ $lead->title }}</a>
+                                                            <td class="">
+                                                                @if($lead)
+                                                                    <a href="{{ url('view-lead/' . $activity->lead_id) }}">{{ $lead->title }}</a>
+                                                                @else
+                                                                    <span class="text-muted">Lead not found</span>
+                                                                @endif
                                                             </td>
                                                             <td class="">{{ $activity->type }}</td>
                                                             <td class="">{{ $activity->from }}</td>

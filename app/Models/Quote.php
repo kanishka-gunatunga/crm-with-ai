@@ -35,6 +35,9 @@ class Quote extends Model
         'pdf'
     ];
 
-
+    public function lead()
+    {
+        return $this->belongsTo(Lead::class, 'lead');
+    }
 
 }
