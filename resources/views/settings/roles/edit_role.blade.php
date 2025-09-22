@@ -57,7 +57,7 @@
                                                     <option selected hidden value="{{ $role->permission_type }}">
                                                         {{ $role->permission_type }}</option>
                                                     <option value="all">All</option>
-                                                    <option value="custom">Custom</option>
+                                                    {{-- <option value="custom">Custom</option> --}}
                                                 </select>
                                             </div>
                                         </div>
@@ -74,7 +74,8 @@
 
                                             <div class="col-12 ">
                                                 <label for="date_start" class="form-label">Description</label>
-                                                <textarea class="form-control description-form-control" placeholder="Description" id="field5" rows="5" name="description" required>{{ $role->description }}</textarea>
+                                                <textarea class="form-control description-form-control" placeholder="Description" id="field5" rows="5"
+                                                    name="description" required>{{ $role->description }}</textarea>
                                             </div>
                                             <div class="col-md-12" style="display:none;" id="permissions-col">
                                                 <div class="row">
@@ -731,24 +732,24 @@
                                                         </div>
                                                         <div class="form-check mb-3 mx-3">
                                                             <input class="form-check-input" type="checkbox"
-                                                                id="MailsCreate" value="mail-create"
-                                                                name="permissions[]" data-parent="mails">
+                                                                id="MailsCreate" value="mail-create" name="permissions[]"
+                                                                data-parent="mails">
                                                             <label class="form-check-label" for="MailsCreate">
                                                                 Create
                                                             </label>
                                                         </div>
                                                         <div class="form-check mb-3 mx-3">
                                                             <input class="form-check-input" type="checkbox"
-                                                                id="MailsEdit" value="mail-edit"
-                                                                name="permissions[]" data-parent="mails">
+                                                                id="MailsEdit" value="mail-edit" name="permissions[]"
+                                                                data-parent="mails">
                                                             <label class="form-check-label" for="MailsEdit">
                                                                 Edit
                                                             </label>
                                                         </div>
                                                         <div class="form-check mb-3 mx-3">
                                                             <input class="form-check-input" type="checkbox"
-                                                                id="MailsDelete" value="mail-delete"
-                                                                name="permissions[]" data-parent="mails">
+                                                                id="MailsDelete" value="mail-delete" name="permissions[]"
+                                                                data-parent="mails">
                                                             <label class="form-check-label" for="MailsDelete">
                                                                 Delete
                                                             </label>
@@ -811,8 +812,27 @@
             @endif
 
 
+            // $('#pipeline-select').on('change', function() {
+            //     if ($(this).val() === 'custom') {
+            //         $('#permissions-col').show();
+            //     } else {
+            //         $('#permissions-col').hide();
+            //     }
+            // });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Initial check on page load
+            const initialPermissionType = $('#pipeline-select').val();
+            if (initialPermissionType !== 'all') {
+                $('#permissions-col').show();
+            }
+
+            // Handle change event
             $('#pipeline-select').on('change', function() {
-                if ($(this).val() === 'custom') {
+                if ($(this).val() !== 'all') {
                     $('#permissions-col').show();
                 } else {
                     $('#permissions-col').hide();
@@ -821,29 +841,73 @@
         });
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('[data-group]').forEach(function(parentCheckbox) {
-                parentCheckbox.addEventListener('change', function() {
-                    const group = parentCheckbox.getAttribute('data-group');
-                    const children = document.querySelectorAll('[data-parent="' + group + '"]');
-                    children.forEach(function(childCheckbox) {
-                        childCheckbox.checked = parentCheckbox.checked;
-                        childCheckbox.dispatchEvent(new Event('change'));
-                    });
-                });
+       // Function to update the checkboxes based on a given array of permissions
+function updatePermissionsCheckboxes(permissionsArray) {
+    // Uncheck all checkboxes first to handle roles that may lose permissions
+    document.querySelectorAll('input[type="checkbox"][name="permissions[]"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+
+    // Iterate through the new permissions array and check the corresponding boxes
+    permissionsArray.forEach(permission => {
+        const checkbox = document.querySelector(`input[type="checkbox"][value="${permission}"]`);
+        if (checkbox) {
+            checkbox.checked = true;
+            // The change event is dispatched to trigger the parent/child logic
+            checkbox.dispatchEvent(new Event('change'));
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Example: This array would be populated by your backend.
+    // Replace this with your actual data source (e.g., from a Laravel Blade variable).
+    const initialPermissions = @json($role->permissions); // Assuming a Laravel Blade syntax to pass data
+
+    // Initial check on page load to show/hide the permissions section
+    const initialPermissionType = $('#pipeline-select').val();
+    if (initialPermissionType !== 'all') {
+        $('#permissions-col').show();
+        // Call the function to check the permissions
+        updatePermissionsCheckboxes(initialPermissions);
+    }
+
+    // Dropdown change handler
+    $('#pipeline-select').on('change', function() {
+        if ($(this).val() !== 'all') {
+            $('#permissions-col').show();
+            // Call the function to check the permissions for the selected type
+            // You might need to make an AJAX call here to get new permissions if they vary
+            // For now, we'll assume the initialPermissions are what's loaded.
+            updatePermissionsCheckboxes(initialPermissions);
+        } else {
+            $('#permissions-col').hide();
+            // Optional: Uncheck all when 'all' is selected
+            updatePermissionsCheckboxes([]);
+        }
+    });
+
+    // Existing parent-child checkbox logic
+    document.querySelectorAll('[data-group]').forEach(function(parentCheckbox) {
+        parentCheckbox.addEventListener('change', function() {
+            const group = parentCheckbox.getAttribute('data-group');
+            const children = document.querySelectorAll('[data-parent="' + group + '"]');
+            children.forEach(function(childCheckbox) {
+                childCheckbox.checked = parentCheckbox.checked;
+                childCheckbox.dispatchEvent(new Event('change'));
             });
-
-            document.querySelectorAll('[data-parent]').forEach(function(childCheckbox) {
-                childCheckbox.addEventListener('change', function() {
-                    const group = childCheckbox.getAttribute('data-parent');
-                    const parent = document.querySelector('[data-group="' + group + '"]');
-                    const children = document.querySelectorAll('[data-parent="' + group + '"]');
-
-                    const anyChecked = Array.from(children).some(child => child.checked);
-                    parent.checked = anyChecked;
-                });
-            });
-
         });
+    });
+
+    document.querySelectorAll('[data-parent]').forEach(function(childCheckbox) {
+        childCheckbox.addEventListener('change', function() {
+            const group = childCheckbox.getAttribute('data-parent');
+            const parent = document.querySelector('[data-group="' + group + '"]');
+            const children = document.querySelectorAll('[data-parent="' + group + '"]');
+            const anyChecked = Array.from(children).some(child => child.checked);
+            parent.checked = anyChecked;
+        });
+    });
+});
     </script>
 @endsection

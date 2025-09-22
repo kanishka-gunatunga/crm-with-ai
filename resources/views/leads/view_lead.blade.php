@@ -820,24 +820,23 @@
                                     </div>
                                     {{-- notes --}}
                                     <div>
-
+                                        <div>
+                                            <h5 class="mb-3 card-title">Notes</h5>
+                                        </div>
 
                                         @foreach ($notes as $note)
-                                            <div>
-                                                <h5 class="mb-3 card-title">Notes</h5>
-                                            </div>
                                             <div class="d-flex">
 
                                                 <div class="col-5">
                                                     <div class="d-flex gap-3 align-items-center mb-3">
-                                                        <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
+                                                        <img src="{{ asset('images/avatar.png') }}"
                                                             class="rounded-circle object-fit-cover" alt="..."
                                                             width="30" height="30">
 
-                                                        <p class="person-name">
-                                                            Robert Smith
-                                                        </p>
 
+                                                        <p class="person-name">
+                                                            {{ \App\Models\UserDetails::where('id', $note->created_by)->value('name') ?? 'Unknown User' }}
+                                                        </p>
 
                                                     </div>
                                                 </div>
@@ -1237,20 +1236,20 @@
                                                         <tbody>
 
                                                             <?php foreach($quotes as $quote){
-                                        $owner_name = UserDetails::where('id', $quote->owner)->value('name');
-                                        $person_name = Person::where('id', $quote->person)->value('name');
-                                        $sub_total = 0;
-                                        $products = QuoteProduct::where('quote_id', $quote->id)->get();
-                                        foreach($products as $product){
-                                    
-                                            $amount = $product->price * $product->quantity;
-                                            $discount_amount = ($amount * $product->discount) / 100;
-                                            $tax_amount = ($amount - $discount_amount) * ($product->tax / 100);
-                                            $total = $amount - $discount_amount + $tax_amount;
-                                    
-                                            $sub_total += $amount;
-                                        }
-                                    ?>
+                                                                    $owner_name = UserDetails::where('id', $quote->owner)->value('name');
+                                                                    $person_name = Person::where('id', $quote->person)->value('name');
+                                                                    $sub_total = 0;
+                                                                    $products = QuoteProduct::where('quote_id', $quote->id)->get();
+                                                                    foreach($products as $product){
+                                                                
+                                                                        $amount = $product->price * $product->quantity;
+                                                                        $discount_amount = ($amount * $product->discount) / 100;
+                                                                        $tax_amount = ($amount - $discount_amount) * ($product->tax / 100);
+                                                                        $total = $amount - $discount_amount + $tax_amount;
+                                                                
+                                                                        $sub_total += $amount;
+                                                                }
+                                                            ?>
                                                             <tr class="odd gradeX">
                                                                 <td><input type="checkbox" name="selected_quotes[]"
                                                                         value="{{ $quote->id }}"></td>
@@ -1639,9 +1638,9 @@
                                         </div>
                                     @endif
                                 </div>
-                                <div class="tab-pane fade" id="events-file" role="tabpanel"
+                                <div class="tab-pane fade" id="events-files" role="tabpanel"
                                     aria-labelledby="file-tab-tab" tabindex="0">
-                                    <h3>Tab 4</h3>
+                                    {{-- <h3>Tab 4</h3>
                                     <section class="primary-info">
                                         <div class="title-section">
                                             <h3 class="field-label">Title</h3>
@@ -1667,11 +1666,80 @@
                                             <h3 class="field-label">Duration</h3>
                                             <p class="field-value">5 months</p>
                                         </div>
-                                    </section>
+                                    </section> --}}
+                                    @if ($files->isEmpty())
+                                        <p>No Files Found</p>
+                                    @else
+                                        <div>
+                                            <div>
+                                                <h5 class="mb-3 card-title">Files</h5>
+                                            </div>
+                                            <form id="bulk-delete-form" method="POST"
+                                                action="{{ url('delete-selected-quotes') }}">
+                                                @csrf
+                                                <div class="table-responsive">
+                                                    <table class="table new-table data-table-export"
+                                                        data-export-title="Quotes" data-export-filename="Quotes">
+
+                                                        <thead>
+
+                                                            <tr>
+                                                                <th class="corner-left"><input type="checkbox"
+                                                                        id="select-all">
+                                                                </th>
+                                                                <th>Name</th>
+                                                                <th>Description</th>
+                                                                <th>File</th>
+                                                                <th class="corner-right">Actions</th>
+                                                            </tr>
+
+
+                                                        </thead>
+                                                        <tbody>
+
+                                                            @foreach ($files as $file)
+                                                                <tr class="odd gradeX">
+                                                                    <td><input type="checkbox" name="selected_quotes[]"
+                                                                            value="{{ $file->id }}"></td>
+                                                                    <td class="">{{ $file->name }} </td>
+                                                                    <td class="">{{ $file->description }} </td>
+                                                                    <td class=""> <a
+                                                                            href="{{ asset('storage/' . $file->file) }}"
+                                                                            download="{{ $file->file }}">{{ $file->file }}
+                                                                        </a></td>
+                                                                    <td class="action-icons d-flex gx-3">
+                                                                        <a href="{{ url('delete-file/' . $file->id) }}"
+                                                                            onclick="return confirm('Are you sure you want to delete this record?')">
+                                                                            <div class="text-muted">
+                                                                                <svg width="20" height="20"
+                                                                                    viewBox="0 0 18 18" fill="none"
+                                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                                    <rect width="18" height="18"
+                                                                                        rx="2.90323" fill="#FFE9E5" />
+                                                                                    <path
+                                                                                        d="M6.9431 12.7013C6.71689 12.7013 6.52331 12.6208 6.36236 12.4599C6.20141 12.2989 6.12079 12.1052 6.12052 11.8787V6.53197H5.70923V5.70939H7.76568V5.2981H10.2334V5.70939H12.2899V6.53197H11.8786V11.8787C11.8786 12.105 11.7981 12.2987 11.6372 12.4599C11.4762 12.6211 11.2825 12.7016 11.056 12.7013H6.9431ZM11.056 6.53197H6.9431V11.8787H11.056V6.53197ZM7.76568 11.0562H8.58826V7.35455H7.76568V11.0562ZM9.41084 11.0562H10.2334V7.35455H9.41084V11.0562Z"
+                                                                                        fill="#ED2227" />
+                                                                                </svg>
+                                                                            </div>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <button type="submit" class="btn btn-danger btn-sm mb-2"
+                                                    onclick="return confirm('Are you sure you want to delete selected records?')">Delete
+                                                    Selected</button>
+                                            </form>
+
+
+                                        </div>
+                                    @endif
                                 </div>
-                                <div class="tab-pane fade" id="events-quote" role="tabpanel"
+                                <div class="tab-pane fade" id="events-quotes" role="tabpanel"
                                     aria-labelledby="quote-tab-tab" tabindex="0">
-                                    <h3>Tab 5</h3>
+                                    {{-- <h3>Tab 5</h3>
                                     <section class="primary-info">
                                         <div class="title-section">
                                             <h3 class="field-label">Title</h3>
@@ -1697,7 +1765,128 @@
                                             <h3 class="field-label">Duration</h3>
                                             <p class="field-value">5 months</p>
                                         </div>
-                                    </section>
+                                    </section> --}}
+
+                                    @if ($quotes->isEmpty())
+                                        <p>No Quotes Found</p>
+                                    @else
+                                        <div>
+                                            <div>
+                                                <h5 class="mb-3 card-title">Quotes</h5>
+                                            </div>
+                                            <form id="bulk-delete-form" method="POST"
+                                                action="{{ url('delete-selected-quotes') }}">
+                                                @csrf
+                                                <div class="table-responsive">
+                                                    <table class="table new-table data-table-export"
+                                                        data-export-title="Quotes" data-export-filename="Quotes">
+
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="corner-left"><input type="checkbox"
+                                                                        id="select-all">
+                                                                </th>
+                                                                <th>{{ __('app.datagrid.subject') }}</th>
+                                                                <th>{{ __('app.datagrid.sales-person') }}</th>
+                                                                <th>{{ __('app.datagrid.expired_quotes') }}</th>
+                                                                <th>{{ __('app.datagrid.person') }}</th>
+                                                                <th>{{ __('app.datagrid.sub-total') }}</th>
+                                                                <th>{{ __('app.datagrid.discount') }}</th>
+                                                                <th>{{ __('app.datagrid.tax') }}</th>
+                                                                <th>{{ __('app.datagrid.grand-total') }}</th>
+                                                                <th>{{ __('app.leads.expired-at') }}</th>
+                                                                <th>{{ __('app.datagrid.created_at') }}</th>
+                                                                <th>{{ __('app.leads.actions') }}</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            <?php foreach($quotes as $quote){
+                                                                    $owner_name = UserDetails::where('id', $quote->owner)->value('name');
+                                                                    $person_name = Person::where('id', $quote->person)->value('name');
+                                                                    $sub_total = 0;
+                                                                    $products = QuoteProduct::where('quote_id', $quote->id)->get();
+                                                                    foreach($products as $product){
+                                                                
+                                                                        $amount = $product->price * $product->quantity;
+                                                                        $discount_amount = ($amount * $product->discount) / 100;
+                                                                        $tax_amount = ($amount - $discount_amount) * ($product->tax / 100);
+                                                                        $total = $amount - $discount_amount + $tax_amount;
+                                                                
+                                                                        $sub_total += $amount;
+                                                                }
+                                                            ?>
+                                                            <tr class="odd gradeX">
+                                                                <td><input type="checkbox" name="selected_quotes[]"
+                                                                        value="{{ $quote->id }}"></td>
+                                                                <td class="">{{ $quote->subject }} </td>
+                                                                <td class=""><a
+                                                                        href="{{ url('users?id=' . $quote->owner) }}">{{ $owner_name }}</a>
+                                                                </td>
+                                                                <td class="">{{ $quote->expired_at }} </td>
+                                                                <td class=""><a
+                                                                        href="{{ url('persons?id=' . $quote->person) }}">{{ $person_name }}</a>
+                                                                </td>
+                                                                <td class="">${{ number_format($sub_total) }}</td>
+                                                                <td class="">
+                                                                    ${{ number_format($quote->discount_total_amount, 2) }}
+                                                                </td>
+                                                                <td class="">
+                                                                    ${{ number_format($quote->tax_total_amount, 2) }}</td>
+                                                                <td class="">
+                                                                    ${{ number_format($quote->order_total_input, 2) }}
+                                                                </td>
+                                                                <td class="">{{ $quote->expired_at }} </td>
+                                                                <td class="">{{ $quote->created_at }} </td>
+
+                                                                <td class="action-icons d-flex gx-3">
+                                                                    <a href="{{ url('delete-quote/' . $quote->id) }}"
+                                                                        onclick="return confirm('Are you sure you want to delete this record?')">
+                                                                        <div class="text-muted" type="button">
+                                                                            <svg width="20" height="20"
+                                                                                viewBox="0 0 18 18" fill="none"
+                                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                                <rect width="18" height="18"
+                                                                                    rx="2.90323" fill="#FFE9E5" />
+                                                                                <path
+                                                                                    d="M6.9431 12.7013C6.71689 12.7013 6.52331 12.6208 6.36236 12.4599C6.20141 12.2989 6.12079 12.1052 6.12052 11.8787V6.53197H5.70923V5.70939H7.76568V5.2981H10.2334V5.70939H12.2899V6.53197H11.8786V11.8787C11.8786 12.105 11.7981 12.2987 11.6372 12.4599C11.4762 12.6211 11.2825 12.7016 11.056 12.7013H6.9431ZM11.056 6.53197H6.9431V11.8787H11.056V6.53197ZM7.76568 11.0562H8.58826V7.35455H7.76568V11.0562ZM9.41084 11.0562H10.2334V7.35455H9.41084V11.0562Z"
+                                                                                    fill="#ED2227" />
+                                                                            </svg>
+                                                                        </div>
+                                                                    </a>
+                                                                    <a href="{{ url('edit-quote/' . $quote->id) }}">
+                                                                        <div class="text-muted" type="button">
+                                                                            <svg width="20" height="20"
+                                                                                viewBox="0 0 18 18" fill="none"
+                                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                                <rect width="18" height="18"
+                                                                                    rx="2.90323" fill="#E7E9FD" />
+                                                                                <path
+                                                                                    d="M6.1206 11.8786H6.70663L10.7266 7.85862L10.1406 7.27258L6.1206 11.2926V11.8786ZM5.70935 12.7011C5.59282 12.7011 5.49522 12.6616 5.41654 12.5826C5.33785 12.5037 5.29837 12.4061 5.2981 12.2898V11.2926C5.2981 11.1829 5.31866 11.0783 5.35978 10.9788C5.40091 10.8792 5.45917 10.7919 5.53456 10.7168L10.7266 5.53505C10.8088 5.45966 10.8997 5.4014 10.9993 5.36027C11.0988 5.31915 11.2032 5.29858 11.3126 5.29858C11.422 5.29858 11.5283 5.31915 11.6313 5.36027C11.7344 5.4014 11.8235 5.46308 11.8987 5.54533L12.4641 6.12108C12.5464 6.19648 12.6063 6.28558 12.6438 6.3884C12.6814 6.49121 12.7003 6.59402 12.7006 6.69683C12.7006 6.8065 12.6817 6.9111 12.6438 7.01062C12.606 7.11014 12.5461 7.20089 12.4641 7.28287L7.28238 12.4646C7.20698 12.54 7.11952 12.5983 7.02 12.6394C6.92048 12.6805 6.81602 12.7011 6.70663 12.7011H5.70935ZM10.4284 7.57074L10.1406 7.27258L10.7266 7.85862L10.4284 7.57074Z"
+                                                                                    fill="#4A58EC" />
+                                                                            </svg>
+                                                                        </div>
+                                                                    </a>
+                                                                    <a href="{{ asset('uploads/quotes/' . $quote->pdf . '') }}"
+                                                                        target="_blank">
+                                                                        <div class="text-muted" type="button">
+                                                                            <i class="fa-regular fa-file-pdf"></i>
+                                                                        </div>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                            <?php } ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <button type="submit" class="btn btn-danger btn-sm mb-2"
+                                                    onclick="return confirm('Are you sure you want to delete selected records?')">Delete
+                                                    Selected</button>
+                                            </form>
+
+
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -1707,7 +1896,8 @@
 
                         <div class="action-buttons position-absolute d-flex gap-2">
                             <button class="action-btn edit-btn" aria-label="Edit project" type="button"
-                                data-bs-toggle="collapse" data-bs-target="#collapseWidthExample2" aria-expanded="false"
+                                id="ActivityfilterButton" data-bs-toggle="collapse"
+                                data-bs-target="#collapseWidthExample2" aria-expanded="false"
                                 aria-controls="collapseWidthExample">
                                 <svg width="40" height="40" viewBox="0 0 26 26" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -1751,8 +1941,9 @@
                                             </li>
                                             <li class="nav-item w-100" role="presentation">
                                                 <button class="nav-link filter-button" id="events-note-tab"
-                                                    data-bs-toggle="pill" data-bs-target="#events-notes" type="button"
-                                                    role="tab" aria-controls="note2" aria-selected="true">
+                                                    data-bs-toggle="pill" data-bs-target="#events-notes"
+                                                    type="button" role="tab" aria-controls="note2"
+                                                    aria-selected="true">
                                                     <div class="menu-item activity-item">
                                                         <div class="item-content">
                                                             <svg width="20" height="20" viewBox="0 0 13 13"
@@ -1770,8 +1961,9 @@
                                             </li>
                                             <li class="nav-item w-100" role="presentation">
                                                 <button class="nav-link filter-button" id="events-calls-tab"
-                                                    data-bs-toggle="pill" data-bs-target="#events-calls" type="button"
-                                                    role="tab" aria-controls="calls" aria-selected="false">
+                                                    data-bs-toggle="pill" data-bs-target="#events-calls"
+                                                    type="button" role="tab" aria-controls="calls"
+                                                    aria-selected="false">
                                                     <div class="menu-item activity-item">
                                                         <div class="item-content">
                                                             <svg width="18" height="18" viewBox="0 0 13 13"
@@ -1827,13 +2019,13 @@
                                                     </div>
                                                 </button>
                                             </li>
-                                            <li class="nav-item w-100" role="presentation">
+                                            <li class="nav-item w-100 email-stroke-nav-item" role="presentation">
                                                 <button class="nav-link filter-button" id="events-email-tab"
                                                     data-bs-toggle="pill" data-bs-target="#events-email"
                                                     type="button" role="tab" aria-controls="email2"
                                                     aria-selected="false">
                                                     <div class="menu-item email-item">
-                                                        <div class="item-content">
+                                                        <div class="item-content ">
                                                             <svg width="20" height="20" viewBox="0 0 13 13"
                                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <path
@@ -1847,7 +2039,7 @@
                                                     </div>
                                                 </button>
                                             </li>
-                                            <li class="nav-item w-100" role="presentation">
+                                            <li class="nav-item w-100 email-stroke-nav-item" role="presentation">
                                                 <button class="nav-link filter-button" id="events-file-tab"
                                                     data-bs-toggle="pill" data-bs-target="#events-files"
                                                     type="button" role="tab" aria-controls="file2"
@@ -1868,7 +2060,7 @@
                                                     </div>
                                                 </button>
                                             </li>
-                                            <li class="nav-item w-100" role="presentation">
+                                            <li class="nav-item w-100 email-stroke-nav-item" role="presentation">
                                                 <button class="nav-link filter-button" id="events-quote-tab"
                                                     data-bs-toggle="pill" data-bs-target="#events-quotes"
                                                     type="button" role="tab" aria-controls="quote2"
@@ -1915,7 +2107,7 @@
 
             </div>
 
-            <div class="card card-default mb-4 ">
+            {{-- <div class="card card-default mb-4 ">
                 <div class="card-body col-12">
                     <div>
                         <h5 class="mb-3 card-title">Assigned User</h5>
@@ -1969,7 +2161,7 @@
 
 
                 </div>
-            </div>
+            </div> --}}
 
 
 
@@ -2314,7 +2506,29 @@
                 });
             });
         });
+
+
+
+
+        document.addEventListener('click', function(event) {
+            const collapseEl = document.getElementById('collapseWidthExample2');
+            const buttonEl = document.getElementById('ActivityfilterButton');
+
+            // check if collapse is open
+            const isExpanded = collapseEl.classList.contains('show');
+
+            if (isExpanded) {
+                // check if click is outside collapse and button
+                if (!collapseEl.contains(event.target) && !buttonEl.contains(event.target)) {
+                    const collapseInstance = bootstrap.Collapse.getInstance(collapseEl);
+                    collapseInstance.hide();
+                }
+            }
+        });
     </script>
+
+
+
 @endsection
 {{-- <!-- Won Modal -->
 <div class="modal fade" id="wonModal" tabindex="-1" aria-hidden="true">

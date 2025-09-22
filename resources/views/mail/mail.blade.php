@@ -45,7 +45,7 @@
                                                 fill="black" />
                                         </svg>
 
-                                        Inbox
+                                        Outbox
                                     </button>
 
                                     <button class="btn white-btn favourite" data-bs-toggle="tab"
@@ -59,7 +59,7 @@
                                         Favourite
                                     </button>
 
-                                    <button class="btn white-btn outbox" data-bs-toggle="tab"
+                                    {{-- <button class="btn white-btn outbox" data-bs-toggle="tab"
                                         data-bs-target="#outbox-tab-content">
                                         <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -69,7 +69,7 @@
                                         </svg>
 
                                         Sent
-                                    </button>
+                                    </button> --}}
                                 </div>
                             </div>
 
@@ -103,7 +103,7 @@
                                                                 <td>{{ \Carbon\Carbon::parse($sent_email->created_at)->format('M j, Y') }}
                                                                 </td>
                                                                 <td class="action-icons d-flex gx-3">
-                                                                    <a href="{{ url('delete-email/' . $sent_email->id) }}"
+                                                                    <a href="{{ url('delete-emails/' . $sent_email->id) }}"
                                                                         class="delete-link-confirm">
                                                                         <div class="text-muted" type="button">
                                                                             <svg width="20" height="20"
@@ -328,7 +328,7 @@
                                     <td>${email.body.substring(0, 150)}</td>
                                     <td>${new Date(email.created_at).toLocaleDateString()}</td>
                                     <td class="action-icons d-flex gx-3">
-                                        <a href="{{ url('delete-email/' . $sent_email->id) }}"
+                                        <a href="{{ url('delete-emails/' . $sent_email->id) }}"
                                             class="delete-link-confirm">
                                             <div class="text-muted" type="button">
                                                 <svg width="20" height="20"

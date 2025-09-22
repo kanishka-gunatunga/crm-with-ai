@@ -162,14 +162,14 @@ class LeadController extends Controller
         if ($request->isMethod('post')) {
 
 
-        //     dd([
-                
-        //         request()->user()->id,
-        //         request()->user()->role,
-        //         request()->user()->name,
-        //         request()->sales_owner
+            //     dd([
 
-        // ]);
+            //         request()->user()->id,
+            //         request()->user()->role,
+            //         request()->user()->name,
+            //         request()->sales_owner
+
+            // ]);
             $request->validate([
                 'title' => 'required|string',
                 'lead_value' => 'required',
@@ -463,7 +463,8 @@ class LeadController extends Controller
                 $allItems[] = [
                     'type' => 'note',
                     'created_at' => $note->created_at,
-                    'note' => $note
+                    'note' => $note,
+                    'created_by' => $note->created_by
                 ];
             }
 
@@ -585,6 +586,8 @@ class LeadController extends Controller
             $lead_note =  new LeadNote();
             $lead_note->lead_id = $id;
             $lead_note->note = $request->note;
+            $lead_note->created_by = Auth::user()->id;
+            // $lead_note->user->name;
             $lead_note->save();
 
             $activity_history = new ActivityHistory();
@@ -595,7 +598,7 @@ class LeadController extends Controller
             $activity_history->action = "A note (#{$lead_note->id}) has been added.";
             $activity_history->save();
 
-            return redirect()->back()->with('success', 'Note {$old_stage_name} created successfully!');
+            return redirect()->back()->with('success', "Note created successfully!");
         }
     }
     public function edit_note($id, Request $request)
@@ -998,42 +1001,42 @@ class LeadController extends Controller
             // Filter by user role
             $authUser = Auth::user();
             if ($authUser && $authUser->role == 3) {
-            // Only show activities for leads assigned to this user
-            $leadIds = Lead::where('sales_owner', $authUser->id)->pluck('id');
-            $query->whereIn('lead_id', $leadIds);
+                // Only show activities for leads assigned to this user
+                $leadIds = Lead::where('sales_owner', $authUser->id)->pluck('id');
+                $query->whereIn('lead_id', $leadIds);
             }
             // If role == 2, show all (no extra filter)
 
             if ($request->has('title') && $request->title != '') {
-            $query->where('title', 'like', '%' . $request->title . '%');
+                $query->where('title', 'like', '%' . $request->title . '%');
             }
 
             if ($request->has('is_done') && $request->is_done !== '') {
-            $query->where('is_completed', $request->is_done);
+                $query->where('is_completed', $request->is_done);
             }
 
             if ($request->has('created_by') && $request->created_by != '') {
-            $query->where('created_by', $request->created_by);
+                $query->where('created_by', $request->created_by);
             }
 
             if ($request->has('lead') && $request->lead != '') {
-            $query->where('lead_id', $request->lead);
+                $query->where('lead_id', $request->lead);
             }
 
             if ($request->has('shedule_start_date') && $request->shedule_start_date != '') {
-            $query->where('from', '>=', $request->shedule_start_date);
+                $query->where('from', '>=', $request->shedule_start_date);
             }
 
             if ($request->has('shedule_end_date') && $request->shedule_end_date != '') {
-            $query->where('to', '<=', $request->shedule_end_date);
+                $query->where('to', '<=', $request->shedule_end_date);
             }
 
             if ($request->has('created_start_date') && $request->created_start_date != '') {
-            $query->where('created_at', '>=', $request->created_start_date);
+                $query->where('created_at', '>=', $request->created_start_date);
             }
 
             if ($request->has('created_end_date') && $request->created_end_date != '') {
-            $query->where('created_at', '<=', $request->created_end_date);
+                $query->where('created_at', '<=', $request->created_end_date);
             }
 
             $activities = $query->get();
@@ -1042,9 +1045,9 @@ class LeadController extends Controller
             $leads = Lead::get();
 
             return view('leads.activities.activities', [
-            'activities' => $activities,
-            'owners' => $owners,
-            'leads' => $leads
+                'activities' => $activities,
+                'owners' => $owners,
+                'leads' => $leads
             ]);
         }
     }
@@ -1129,145 +1132,202 @@ class LeadController extends Controller
 
     public function import_leads(Request $request)
     {
-        if ($request->isMethod('post')) {
+        if (! $request->isMethod('post')) {
+            return back();
+        }
 
-            $request->validate([
-                'leads' => 'required|mimes:xls,xlsx,csv',
-            ]);
+        $request->validate([
+            'leads' => 'required|mimes:xls,xlsx,csv',
+        ]);
 
-            $authUser = Auth::user();
+        $authUser = Auth::user();
+        $salesOwnerId = null;
+        if ($authUser) {
+            if ((int)$authUser->role === 2) {
+                $salesOwnerId = null;
+            } elseif ((int)$authUser->role === 3) {
+                $salesOwnerId = $authUser->id;
+            }
+        }
 
+        // Try to read the uploaded file into arrays
+        try {
+            $sheets = Excel::toArray([], $request->file('leads'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Unable to read Excel file: ' . $e->getMessage());
+        }
 
-            // dd($authUser);
-            $salesOwnerId = null;
+        if (empty($sheets) || empty($sheets[0])) {
+            return back()->with('error', 'Uploaded sheet is empty');
+        }
 
-            
-            if ($authUser) {
-                
-                if ($authUser->role == 2) {
-                    // For users with role_id 2, the sales_owner should be null
-                    
-                    $salesOwnerId = null;
-                } else if ($authUser->role == 3) {
-                   
-                    // For users with role_id 3, the sales_owner should be the user's ID
-                    $salesOwnerId = $authUser->id;
+        $rows = $sheets[0];
+
+        // Take the first row as header and normalize it (trim and remove BOM)
+        $headerRow = array_shift($rows);
+        if (!is_array($headerRow)) {
+            return back()->with('error', 'Invalid header row in Excel');
+        }
+        $header = array_map(function ($h) {
+            $h = is_string($h) ? $h : (string)$h;
+            $h = str_replace("\xEF\xBB\xBF", '', $h); // remove BOM if present
+            return trim($h);
+        }, $headerRow);
+
+        $skipped = [];
+        $imported = 0;
+
+        foreach ($rows as $idx => $row) {
+            $excelRowNumber = $idx + 2; // header was row 1, data starts on row 2
+
+            // basic row checks
+            if (!is_array($row)) {
+                $skipped[] = ['row' => $excelRowNumber, 'reason' => 'invalid row format'];
+                continue;
+            }
+            if (count($row) !== count($header)) {
+                $skipped[] = ['row' => $excelRowNumber, 'reason' => 'column count mismatch'];
+                continue;
+            }
+
+            $record = array_combine($header, $row);
+            if ($record === false) {
+                $skipped[] = ['row' => $excelRowNumber, 'reason' => 'failed to combine header & row'];
+                continue;
+            }
+
+            // trim all values
+            foreach ($record as $k => $v) {
+                if (is_string($v)) $record[$k] = trim($v);
+            }
+
+            // skip fully empty rows
+            $nonEmpty = array_filter($record, function ($v) {
+                return $v !== null && $v !== '';
+            });
+            if (empty($nonEmpty)) {
+                $skipped[] = ['row' => $excelRowNumber, 'reason' => 'empty row'];
+                continue;
+            }
+
+            // required: Lead Title
+            $title = $record['Lead Title'] ?? null;
+            if (empty($title)) {
+                $skipped[] = ['row' => $excelRowNumber, 'reason' => 'missing Lead Title'];
+                continue;
+            }
+
+            $leadValue = $record['Lead Value'] ?? null;
+            // duplicate check
+            $duplicateQuery = Lead::where('title', $title);
+            if (!empty($leadValue)) $duplicateQuery->where('lead_value', $leadValue);
+            if ($duplicateQuery->exists()) {
+                $skipped[] = ['row' => $excelRowNumber, 'reason' => 'duplicate lead'];
+                continue;
+            }
+
+            // handle person: try find by email or number, otherwise create if name is present
+            $personId = null;
+            $personName = $record['Contact Person Name'] ?? null;
+            $personEmail = $record['Contact Person Email'] ?? null;
+            $personNumber = $record['Contact Person Number'] ?? null;
+
+            if ($personName || $personEmail || $personNumber) {
+                try {
+                    $personQuery = Person::where(function ($q) use ($personEmail, $personNumber) {
+                        if ($personEmail) $q->orWhereJsonContains('emails->value', $personEmail);
+                        if ($personNumber) $q->orWhereJsonContains('contact_numbers->value', $personNumber);
+                    });
+                    $person = $personQuery->first();
+                } catch (\Exception $e) {
+                    // If json-search fails on DB, fallback to simple LIKE search
+                    $person = null;
+                    if ($personEmail) {
+                        $person = Person::where('emails', 'like', "%{$personEmail}%")->first();
+                    }
+                    if (!$person && $personNumber) {
+                        $person = Person::where('contact_numbers', 'like', "%{$personNumber}%")->first();
+                    }
+                }
+
+                if (!$person && $personName) {
+                    $person = new Person();
+                    $person->name = $personName;
+                    $person->emails = $personEmail ? [['value' => $personEmail, 'label' => 'work']] : [];
+                    $person->contact_numbers = $personNumber ? [['value' => $personNumber, 'label' => 'work']] : [];
+                    try {
+                        $person->save();
+                    } catch (\Exception $e) {
+                        $skipped[] = ['row' => $excelRowNumber, 'reason' => 'failed to save person: ' . $e->getMessage()];
+                        continue;
+                    }
+                }
+
+                if (!empty($person)) $personId = $person->id;
+            }
+
+            // parse closing date safely
+            $closingDate = null;
+            $rawDate = $record['Expected Closing Date'] ?? null;
+            if (!empty($rawDate)) {
+                try {
+                    if (is_numeric($rawDate)) {
+                        // Excel numeric date -> convert
+                        $dt = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject((float)$rawDate);
+                        $closingDate = \Carbon\Carbon::instance($dt)->format('Y-m-d');
+                    } else {
+                        $closingDate = \Carbon\Carbon::parse($rawDate)->format('Y-m-d');
+                    }
+                } catch (\Exception $e) {
+                    $skipped[] = ['row' => $excelRowNumber, 'reason' => 'invalid date'];
+                    continue;
                 }
             }
 
-            
+            $pipelineId = session('pipeline_id');
+            if (empty($pipelineId)) {
+                $skipped[] = ['row' => $excelRowNumber, 'reason' => 'no pipeline in session'];
+                continue;
+            }
 
-            $data = Excel::toArray([], $request->file('leads'));
-            $rows = $data[0];
-            $header = array_shift($rows);
+            // find stage id correctly by using pipeline_id
+            $stageId = PipelineStage::where('pipeline_id', $pipelineId)
+                ->where('name', 'New')
+                ->value('id');
 
-            foreach ($rows as $row) {
-                $record = array_combine($header, $row);
-
-
-                if (empty(array_filter($record))) {
-                    continue;
-                }
-
-
-                if (empty($record['Lead Title'])) {
-                    continue;
-                }
-
-                // Check for duplicate leads (unchanged)
-                $leadExists = Lead::where('title', $record['Lead Title'] ?? null)
-                    ->where('lead_value', $record['Lead Value'] ?? null)
-                    ->exists();
-                if ($leadExists) {
-                    continue;
-                }
-
-
-                $personId = null; // Default to null
-
-                $personName = $record['Contact Person Name'] ?? null;
-                $personEmail = $record['Contact Person Email'] ?? null;
-                $personNumber = $record['Contact Person Number'] ?? null;
-
-                // Only proceed if there is at least some contact information
-                if ($personName || $personEmail || $personNumber) {
-                    $person = null;
-
-                    // Try to find an existing person by unique email or number
-                    if ($personEmail || $personNumber) {
-                        $person = Person::query()
-                            ->when($personEmail, function ($query, $personEmail) {
-                                $query->orWhereJsonContains('emails->value', $personEmail);
-                            })
-                            ->when($personNumber, function ($query, $personNumber) {
-                                $query->orWhereJsonContains('contact_numbers->value', $personNumber);
-                            })
-                            ->first();
-                    }
-
-                    // If no person was found, and we have a name, create a new one.
-                    if (!$person && $personName) {
-                        $person = new Person();
-                        $person->name = $personName;
-
-                        $emails = [];
-                        if ($personEmail) {
-                            $emails[] = ['value' => $personEmail, 'label' => 'work'];
-                        }
-                        $person->emails = $emails;
-
-                        $contactNumbers = [];
-                        if ($personNumber) {
-                            $contactNumbers[] = ['value' => $personNumber, 'label' => 'work'];
-                        }
-                        $person->contact_numbers = $contactNumbers;
-
-                        $person->save();
-                    }
-
-                    if ($person) {
-                        $personId = $person->id;
-                    }
-                }
-
-                $id = session('pipeline_id');
-
-                // Date parsing logic (unchanged)
-                $rawDate = $record['Expected Closing Date'] ?? null;
-                $closingDate = null;
-                if ($rawDate) {
-                    if (is_numeric($rawDate)) {
-                        $closingDate = Carbon::instance(ExcelDate::excelToDateTimeObject($rawDate))->format('Y-m-d');
-                    } else {
-                        $closingDate = Carbon::parse($rawDate)->format('Y-m-d');
-                    }
-                }
-
-                // Lead creation with fixes applied
+            // save lead
+            try {
                 $lead = new Lead();
-                $lead->title = $record['Lead Title'] ?? null;
-                $lead->lead_value = $record['Lead Value'] ?? null;
+                $lead->title = $title;
+                $lead->lead_value = $leadValue;
                 $lead->sales_owner = $salesOwnerId;
                 $lead->closing_date = $closingDate;
                 $lead->description = $record['Description'] ?? null;
                 $lead->status = 'active';
                 $lead->category = 'qualified';
-                $lead->pipeline = $id;
-                $lead->stage = PipelineStage::where('id', $id)->where('name', 'New')->value('id');
+                $lead->pipeline = $pipelineId;
+                $lead->stage = $stageId;
                 $lead->person = $personId;
                 $lead->save();
 
-                // Activity history logic (unchanged)
-                $activity_history = new ActivityHistory();
-                $activity_history->lead_id = $lead->id;
-                $activity_history->user_id = Auth::user()->id;
-                $activity_history->action = "Lead created";
-                $activity_history->save();
-            }
+                $activity = new ActivityHistory();
+                $activity->lead_id = $lead->id;
+                $activity->user_id = $authUser->id ?? null;
+                $activity->action = 'Lead created';
+                $activity->save();
 
-            return back()->with('success', 'Leads Successfully Imported');
-        }
+                $imported++;
+            } catch (\Exception $e) {
+                $skipped[] = ['row' => $excelRowNumber, 'reason' => 'lead save failed: ' . $e->getMessage()];
+                continue;
+            }
+        } // end foreach
+
+        $message = "Imported {$imported} rows, skipped " . count($skipped) . " rows. Validated all data before import.";
+        // return with summary and skipped rows info (you can show skipped_rows in the view for debugging)
+        return back()->with(['success' => $message, 'imported' => $imported, 'skipped_rows' => $skipped]);
     }
+
 
     // public function import_leads(Request $request)
     // {

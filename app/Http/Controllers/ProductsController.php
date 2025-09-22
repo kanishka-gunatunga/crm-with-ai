@@ -75,7 +75,7 @@ class ProductsController extends Controller
     }
     public function delete_product($id,Request $request)
     {
-        if($request->isMethod('put')){
+        if($request->isMethod('get')){
             Product::where('id',$id)->delete();
             return redirect()->back()->with('success', 'Product deleted successfully!');
         }

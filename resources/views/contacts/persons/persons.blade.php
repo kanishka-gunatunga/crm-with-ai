@@ -3,7 +3,7 @@
 @section('content')
 
     <style>
-         .select2-selection {
+        .select2-selection {
             display: flex !important;
             align-items: center !important;
         }
@@ -268,8 +268,9 @@
                                                                 {{-- <a href="{{ url('delete-person/' . $person->id) }}"
                                                                     class="delete-link-confirm"> --}}
                                                                 <div class="text-muted" type="button"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#assignPersonModal">
+                                                                    id="deletePersonBtnModal" data-bs-toggle="modal"
+                                                                    data-bs-target="#assignPersonModal"
+                                                                    data-person-id="{{ $person->id }}">
                                                                     <svg width="20" height="20"
                                                                         viewBox="0 0 18 18" fill="none"
                                                                         xmlns="http://www.w3.org/2000/svg">
@@ -312,7 +313,7 @@
 
 
 
-                                       
+
 
                                         <!-- Modal -->
                                         <div class="modal fade" id="assignPersonModal" tabindex="-1"
@@ -328,19 +329,14 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <div>
-
-
-
-
-                                                            <select class="form-control stagselect tagselectModal"
-                                                                id="person-select" name="person" required
-                                                                data-parsley-errors-container="#person-value-errors">
+                                                            <select class="form-control" id="person-select" required>
                                                                 <option selected hidden value="{{ $lead->person ?? '' }}">
-                                                                    {{ $person->name ?? '' }}</option>
-                                                                <?php foreach($persons as $person){ ?>
-                                                                <option value="{{ $person->id }}">
-                                                                    {{ $person->name }}</option>
-                                                                <?php } ?>
+                                                                    {{ $person->name ?? '' }}
+                                                                </option>
+                                                                @foreach ($persons as $person)
+                                                                    <option value="{{ $person->id }}">
+                                                                        {{ $person->name }}</option>
+                                                                @endforeach
                                                             </select>
                                                             <div id="person-value-errors"></div>
 
@@ -352,9 +348,13 @@
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary btn-sm"
                                                             data-bs-dismiss="modal">Close</button>
-                                                        <button type="button"
-                                                            class="btn btn-danger mb-2 btn-sm delete-form-confirm">Delete
-                                                            Person</button>
+                                                        <a id="deletePersonLink" href="#"
+                                                            class="delete-link-confirm">
+                                                            <button type="button"
+                                                                class="btn btn-danger btn-sm delete-form-confirm">
+                                                                Delete Person
+                                                            </button>
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -474,4 +474,39 @@
             });
         });
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('assignPersonModal');
+            const deletePersonLink = document.getElementById('deletePersonLink');
+            const personSelect = document.getElementById('person-select');
+
+            modal.addEventListener('show.bs.modal', function(event) {
+                // Get the button that triggered the modal
+                const button = event.relatedTarget;
+
+                // Extract the ID of the person to be deleted from the data-person-id attribute
+                const personToDeleteId = button.getAttribute('data-person-id');
+
+                // Set up an event listener for the delete button inside the modal
+                deletePersonLink.addEventListener('click', function(e) {
+                    // Prevent the default link behavior
+                    e.preventDefault();
+
+                    // Get the ID of the person selected in the dropdown
+                    const personToAssignId = personSelect.value;
+
+                    // Construct the new URL with both IDs
+                    // Example URL: /delete-person/5/assign-to/10
+                    const newUrl =
+                        `/delete-person/${personToDeleteId}/assign-to/${personToAssignId}`;
+
+                    // Redirect the user to the new URL
+                    window.location.href = newUrl;
+                });
+            });
+        });
+    </script>
+
+
 @endsection

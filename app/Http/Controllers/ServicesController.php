@@ -69,7 +69,7 @@ class ServicesController extends Controller
     }
     public function delete_service($id,Request $request)
     {
-        if($request('get')){
+        if($request->isMethod('get')){
             Service::where('id',$id)->delete();
             return redirect()->back()->with('success', 'Service deleted successfully!');
          }

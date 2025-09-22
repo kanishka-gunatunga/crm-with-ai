@@ -76,8 +76,10 @@ Route::get('/get-leads', [QuoteController::class, 'getLeads'])->name('get.leads'
 // Contact Persons
 Route::get( '/persons', [PersonsController::class, 'persons'])->middleware(['auth', 'permission:persons']);
 Route::match(['get', 'post'],'create-person', [PersonsController::class, 'create_person'])->middleware(['auth', 'permission:person-create']);
-Route::get( '/delete-person/{id}', [PersonsController::class, 'delete_person'])->middleware(['auth', 'permission:person-delete']);
-Route::match(['get', 'post'],'edit-person/{id}', [PersonsController::class, 'edit_person'])->middleware(['auth', 'permission:person-edit']);
+// Route::get( '/delete-person/{id}', [PersonsController::class, 'delete_person'])->middleware(['auth', 'permission:person-delete']);
+Route::get('/delete-person/{person_id}/{replacement_id}', [PersonsController::class, 'deletePerson'])
+    ->name('delete.person');
+Route::get('delete-person/{personToDeleteId}/assign-to/{personToAssignId}', [PersonsController::class, 'deleteAndAssign']);
 Route::post('/delete-selected-persons', [PersonsController::class, 'delete_selected_persons'])->middleware(['auth', 'permission:person-delete']);
 Route::match(['post'],'import-persons', [PersonsController::class, 'import_persons'])->middleware(['auth']);
 
@@ -144,7 +146,7 @@ Route::get( '/groups', [GroupsController::class, 'groups'])->middleware(['auth',
 Route::match(['get', 'post'],'create-group', [GroupsController::class, 'create_group'])->middleware(['auth', 'permission:group-create']);
 Route::get( '/delete-group/{id}', [GroupsController::class, 'delete_group'])->middleware(['auth', 'permission:group-delete']);
 Route::match(['get', 'post'],'edit-group/{id}', [GroupsController::class, 'edit_group'])->middleware(['auth', 'permission:group-edit']);
-Route::get( '/delete-selected-groups', [GroupsController::class, 'delete_selected_groups'])->middleware(['auth', 'permission:group-delete']);
+Route::post( '/delete-selected-groups', [GroupsController::class, 'delete_selected_groups'])->middleware(['auth', 'permission:group-delete']);
 
 //Roles
 Route::get( '/roles', [RolesController::class, 'roles'])->middleware(['auth', 'permission:roles']);
@@ -189,8 +191,8 @@ Route::get( '/emails', [EmailsController::class, 'emails'])->middleware(['auth']
 Route::match(['get', 'post'],'compose-email', [EmailsController::class, 'compose_email'])->middleware(['auth']);
 Route::match(['get', 'post'], 'view-email/{id}', [EmailsController::class, 'view_email'])->middleware(['auth']);
 Route::get( '/delete-selected-emails', [EmailsController::class, 'delete_selected_emails'])->middleware(['auth']);
-Route::post('/toggle-favourite/{id}', [EmailsController::class, 'toggleFavourite'])->middleware(['auth']);
-});
+Route::get( '/delete-emails/{id}', [EmailsController::class, 'delete_emails'])->middleware(['auth']);
+Route::post('/toggle-favourite/{id}', [EmailsController::class, 'toggleFavourite'])->middleware(['auth']);});
 Route::get('/favourite-emails', [EmailsController::class, 'fetch_favourite_emails'])->middleware(['auth']);
 Route::post('/emails/reply/{parentId}', [EmailsController::class, 'reply'])->name('emails.reply');
 

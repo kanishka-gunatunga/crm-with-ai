@@ -30,29 +30,29 @@ date_default_timezone_set('Asia/Colombo');
 class RolesController extends Controller
 {
     public function roles(Request $request)
-{
+    {
 
-    $query = Role::query();
+        $query = Role::query();
 
-    if ($request->filled('id')) {
-        $query->where('id', $request->id);
+        if ($request->filled('id')) {
+            $query->where('id', $request->id);
+        }
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('permission_type')) {
+            $query->where('permission_type', $request->permission_type);
+        }
+
+        $roles = $query->get();
+
+        return view('settings.roles.roles', [
+            'roles' => $roles,
+            'request' => $request->all()
+        ]);
     }
-
-    if ($request->filled('name')) {
-        $query->where('name', 'like', '%' . $request->name . '%');
-    }
-
-    if ($request->filled('permission_type')) {
-        $query->where('permission_type', $request->permission_type);
-    }
-
-    $roles = $query->get();
-
-    return view('settings.roles.roles', [
-        'roles' => $roles,
-        'request' => $request->all()
-    ]);
-}
 
 
     public function create_role(Request $request)
@@ -60,7 +60,7 @@ class RolesController extends Controller
         if ($request->isMethod('get')) {
             return view('settings.roles.create_role');
         }
-        if($request->isMethod('post')){
+        if ($request->isMethod('post')) {
 
             $request->validate([
                 'name' => 'required|string|max:255',
@@ -74,55 +74,50 @@ class RolesController extends Controller
             $role->permission_type = $request->permission_type;
             $role->permissions = $request->permissions;
             $role->save();
-    
+
             return redirect()->back()->with('success', 'Role created successfully!');
         }
     }
-    public function delete_role($id,Request $request)
+    public function delete_role($id, Request $request)
     {
-        if($request('get')){
-            Role::where('id',$id)->delete();
+        if ($request('get')) {
+            Role::where('id', $id)->delete();
             return redirect()->back()->with('success', 'Role deleted successfully!');
-         }
+        }
     }
     public function edit_role($id, Request $request)
-{
-    $role = Role::findOrFail($id);
+    {
+        $role = Role::findOrFail($id);
 
-    if ($request->isMethod('get')) {
-        return view('settings.roles.edit_role', ['role' => $role]);
-    }
-    if ($request->isMethod('post')) {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'emails.*' => 'required|email',
-            'email_types.*' => 'required|in:work,home',
-        ]);
+        if ($request->isMethod('get')) {
+            return view('settings.roles.edit_role', ['role' => $role]);
+        }
+        if ($request->isMethod('post')) {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'emails.*' => 'required|email',
+                'email_types.*' => 'required|in:work,home',
+            ]);
 
-        $product->name = $request->name;
-        $product->sku = $request->sku;
-        $product->quantity = $request->quantity;
-        $product->cost = $request->cost;
-        $product->description = $request->description;
+            $role->name = $request->name;
+            $role->description = $request->description;
+            $role->permission_type = $request->permission_type;
+            $role->permissions = $request->permissions;
+            $role->save();
 
-        $product->update();
-
-        return redirect()->back()->with('success', 'Product updated successfully!');
-    }
-}
-
-public function delete_selected_roles(Request $request)
-{
-    $roleIds = $request->input('selected_roles', []);
-    
-    if (!empty($roleIds)) {
-        Role::whereIn('id', $roleIds)->delete();
-        return back()->with('success', 'Selected roles deleted successfully.');
+            return redirect()->back()->with('success', 'Role updated successfully!');
+        }
     }
 
-    return back()->with('error', 'No attributes selected.');
+    public function delete_selected_roles(Request $request)
+    {
+        $roleIds = $request->input('selected_roles', []);
+
+        if (!empty($roleIds)) {
+            Role::whereIn('id', $roleIds)->delete();
+            return back()->with('success', 'Selected roles deleted successfully.');
+        }
+
+        return back()->with('error', 'No attributes selected.');
+    }
 }
-}
-
-
-

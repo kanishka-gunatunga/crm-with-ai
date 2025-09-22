@@ -148,6 +148,18 @@ class EmailsController extends Controller
         return back()->with('error', 'No attributes selected.');
     }
 
+
+    public function delete_emails(Request $request, $id)
+    {
+        
+        if($request->isMethod('get')){
+            SentEmails::where('id',$id)->delete();
+            return redirect()->back()->with('success', 'Email deleted successfully!');
+        }
+
+        return back()->with('error', 'No attributes selected.');
+    }
+
     public function toggleFavourite($id, Request $request)
     {
 
