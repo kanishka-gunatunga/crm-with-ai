@@ -400,14 +400,14 @@
                                                 <select class="form-control tagselect" multiple
                                                     id="choices-multiple-remove-button" name="participants[]">
                                                     <?php foreach($persons as $person){ ?>
-                                                    <option value="person||{{ $person->id }}">
-                                                        {{ $person->name }}
-                                                    </option>
+                                                        <option value="person||{{ $person->id }}">
+                                                            {{ $person->name }}
+                                                        </option>
                                                     <?php } ?>
                                                     <?php foreach($owners as $owner){ ?>
-                                                    <option value="owner||{{ $owner->user_id }}">
-                                                        {{ $owner->name }}
-                                                    </option>
+                                                        {{-- <option value="owner||{{ $owner->user_id }}">
+                                                            {{ $owner->name }}
+                                                        </option> --}}
                                                     <?php } ?>
                                                 </select>
                                             </div>
@@ -2171,7 +2171,7 @@
                         <h5 class="mb-3 card-title">Activities</h5>
                     </div>
                     <?php foreach($activity_logs as $activity_log){ 
-                        $user_name = UserDetails::where('id', $activity_log->user_id)->value('name');
+                        $user_name = UserDetails::where('user_id', $activity_log->user_id)->value('name');
                     ?>
 
                     <div class="d-flex">

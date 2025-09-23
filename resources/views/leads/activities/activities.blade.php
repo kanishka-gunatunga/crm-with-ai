@@ -20,31 +20,31 @@
 
 
 
-                                                <a href="../leads/create-lead.php">
-                                                    <button class="import-leads-button">
-                                                        <div class="icon-container">
-                                                            <svg
-                                                                width="15"
-                                                                height="16"
-                                                                viewBox="0 0 15 16"
-                                                                fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                class="import-icon">
-                                                                <path
-                                                                    d="M9.04372 7.04375C9.08664 6.9977 9.13839 6.96076 9.19589 6.93514C9.25339 6.90952 9.31546 6.89574 9.3784 6.89463C9.44134 6.89352 9.50386 6.9051 9.56222 6.92867C9.62059 6.95225 9.67361 6.98734 9.71812 7.03185C9.76263 7.07636 9.79773 7.12938 9.8213 7.18775C9.84488 7.24612 9.85645 7.30864 9.85534 7.37158C9.85423 7.43452 9.84046 7.49659 9.81484 7.55409C9.78922 7.61159 9.75228 7.66334 9.70622 7.70625L7.83122 9.58125C7.74333 9.66903 7.62419 9.71834 7.49997 9.71834C7.37576 9.71834 7.25662 9.66903 7.16872 9.58125L5.29372 7.70625C5.24767 7.66334 5.21073 7.61159 5.18511 7.55409C5.15949 7.49659 5.14571 7.43452 5.1446 7.37158C5.14349 7.30864 5.15507 7.24612 5.17865 7.18775C5.20222 7.12938 5.23731 7.07636 5.28183 7.03185C5.32634 6.98734 5.37936 6.95225 5.43773 6.92867C5.49609 6.9051 5.55861 6.89352 5.62155 6.89463C5.68449 6.89574 5.74656 6.90952 5.80406 6.93514C5.86156 6.96076 5.91331 6.9977 5.95622 7.04375L7.03122 8.11875V3C7.03122 2.87568 7.08061 2.75645 7.16852 2.66854C7.25643 2.58064 7.37565 2.53125 7.49997 2.53125C7.62429 2.53125 7.74352 2.58064 7.83143 2.66854C7.91934 2.75645 7.96872 2.87568 7.96872 3V8.11875L9.04372 7.04375Z"
-                                                                    fill="white"></path>
-                                                                <path
-                                                                    d="M12.9688 8C12.9688 7.87568 12.9194 7.75645 12.8315 7.66854C12.7435 7.58064 12.6243 7.53125 12.5 7.53125C12.3757 7.53125 12.2565 7.58064 12.1685 7.66854C12.0806 7.75645 12.0312 7.87568 12.0312 8C12.0312 8.59505 11.914 9.18428 11.6863 9.73403C11.4586 10.2838 11.1248 10.7833 10.7041 11.2041C10.2833 11.6248 9.78379 11.9586 9.23403 12.1863C8.68428 12.414 8.09505 12.5312 7.5 12.5312C6.90495 12.5312 6.31572 12.414 5.76597 12.1863C5.21621 11.9586 4.71669 11.6248 4.29592 11.2041C3.87516 10.7833 3.54139 10.2838 3.31367 9.73403C3.08595 9.18428 2.96875 8.59505 2.96875 8C2.96875 7.87568 2.91936 7.75645 2.83146 7.66854C2.74355 7.58064 2.62432 7.53125 2.5 7.53125C2.37568 7.53125 2.25645 7.58064 2.16854 7.66854C2.08064 7.75645 2.03125 7.87568 2.03125 8C2.03125 9.4504 2.60742 10.8414 3.63301 11.867C4.6586 12.8926 6.0496 13.4688 7.5 13.4688C8.9504 13.4688 10.3414 12.8926 11.367 11.867C12.3926 10.8414 12.9688 9.4504 12.9688 8Z"
-                                                                    fill="white"></path>
-                                                            </svg>
-                                                        </div>
+                                                                <a href="../leads/create-lead.php">
+                                                                    <button class="import-leads-button">
+                                                                        <div class="icon-container">
+                                                                            <svg
+                                                                                width="15"
+                                                                                height="16"
+                                                                                viewBox="0 0 15 16"
+                                                                                fill="none"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                class="import-icon">
+                                                                                <path
+                                                                                    d="M9.04372 7.04375C9.08664 6.9977 9.13839 6.96076 9.19589 6.93514C9.25339 6.90952 9.31546 6.89574 9.3784 6.89463C9.44134 6.89352 9.50386 6.9051 9.56222 6.92867C9.62059 6.95225 9.67361 6.98734 9.71812 7.03185C9.76263 7.07636 9.79773 7.12938 9.8213 7.18775C9.84488 7.24612 9.85645 7.30864 9.85534 7.37158C9.85423 7.43452 9.84046 7.49659 9.81484 7.55409C9.78922 7.61159 9.75228 7.66334 9.70622 7.70625L7.83122 9.58125C7.74333 9.66903 7.62419 9.71834 7.49997 9.71834C7.37576 9.71834 7.25662 9.66903 7.16872 9.58125L5.29372 7.70625C5.24767 7.66334 5.21073 7.61159 5.18511 7.55409C5.15949 7.49659 5.14571 7.43452 5.1446 7.37158C5.14349 7.30864 5.15507 7.24612 5.17865 7.18775C5.20222 7.12938 5.23731 7.07636 5.28183 7.03185C5.32634 6.98734 5.37936 6.95225 5.43773 6.92867C5.49609 6.9051 5.55861 6.89352 5.62155 6.89463C5.68449 6.89574 5.74656 6.90952 5.80406 6.93514C5.86156 6.96076 5.91331 6.9977 5.95622 7.04375L7.03122 8.11875V3C7.03122 2.87568 7.08061 2.75645 7.16852 2.66854C7.25643 2.58064 7.37565 2.53125 7.49997 2.53125C7.62429 2.53125 7.74352 2.58064 7.83143 2.66854C7.91934 2.75645 7.96872 2.87568 7.96872 3V8.11875L9.04372 7.04375Z"
+                                                                                    fill="white"></path>
+                                                                                <path
+                                                                                    d="M12.9688 8C12.9688 7.87568 12.9194 7.75645 12.8315 7.66854C12.7435 7.58064 12.6243 7.53125 12.5 7.53125C12.3757 7.53125 12.2565 7.58064 12.1685 7.66854C12.0806 7.75645 12.0312 7.87568 12.0312 8C12.0312 8.59505 11.914 9.18428 11.6863 9.73403C11.4586 10.2838 11.1248 10.7833 10.7041 11.2041C10.2833 11.6248 9.78379 11.9586 9.23403 12.1863C8.68428 12.414 8.09505 12.5312 7.5 12.5312C6.90495 12.5312 6.31572 12.414 5.76597 12.1863C5.21621 11.9586 4.71669 11.6248 4.29592 11.2041C3.87516 10.7833 3.54139 10.2838 3.31367 9.73403C3.08595 9.18428 2.96875 8.59505 2.96875 8C2.96875 7.87568 2.91936 7.75645 2.83146 7.66854C2.74355 7.58064 2.62432 7.53125 2.5 7.53125C2.37568 7.53125 2.25645 7.58064 2.16854 7.66854C2.08064 7.75645 2.03125 7.87568 2.03125 8C2.03125 9.4504 2.60742 10.8414 3.63301 11.867C4.6586 12.8926 6.0496 13.4688 7.5 13.4688C8.9504 13.4688 10.3414 12.8926 11.367 11.867C12.3926 10.8414 12.9688 9.4504 12.9688 8Z"
+                                                                                    fill="white"></path>
+                                                                            </svg>
+                                                                        </div>
 
-                                                        <span class="button-text">New Quote</span>
+                                                                        <span class="button-text">New Quote</span>
 
 
-                                                    </button>
-                                                </a>
-                                            </div> -->
+                                                                    </button>
+                                                                </a>
+                                                            </div> -->
 
 
                 </div>
@@ -54,23 +54,23 @@
             <div class="col-12 mt-4">
                 <div class="card-container">
                     <!-- <div class="card card-default mb-4">
-                                                <div class="card-body">
-                                                    <div class="row g-4">
-                                                        <div class="col-12 col-md-4">
-                                                            <label for="field1" class="form-label">Terms and Conditions</label>
-                                                            <input type="text" class="form-control" id="field1" placeholder="Change your T&C from here">
-                                                        </div>
-                                                        <div class="col-12 col-md-4">
-                                                            <label for="field2" class="form-label">Quote Logo</label>
-                                                            <input type="file" class="form-control" id="field2" placeholder="Pipeline">
-                                                        </div>
+                                                                <div class="card-body">
+                                                                    <div class="row g-4">
+                                                                        <div class="col-12 col-md-4">
+                                                                            <label for="field1" class="form-label">Terms and Conditions</label>
+                                                                            <input type="text" class="form-control" id="field1" placeholder="Change your T&C from here">
+                                                                        </div>
+                                                                        <div class="col-12 col-md-4">
+                                                                            <label for="field2" class="form-label">Quote Logo</label>
+                                                                            <input type="file" class="form-control" id="field2" placeholder="Pipeline">
+                                                                        </div>
 
-                                                        <div class="col-12 col-md-4">
-                                                            <img src="../images/d6af22486fc0ee1005bfcdbe7e596b125bc8e316.png" width="222px" height="118px" alt="" style="object-fit: cover;">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> -->
+                                                                        <div class="col-12 col-md-4">
+                                                                            <img src="../images/d6af22486fc0ee1005bfcdbe7e596b125bc8e316.png" width="222px" height="118px" alt="" style="object-fit: cover;">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div> -->
 
 
                     <div class="card card-default">
@@ -185,7 +185,7 @@
                                                         <div class="col-md-12 mb-3">
                                                             <label for="is_done" class="form-label">Is Done</label>
                                                             <select class="form-control" name="is_done">
-                                                                
+
                                                                 <option value="1"
                                                                     {{ request('is_done') == 1 ? 'selected' : '' }}>Yes
                                                                 </option>
@@ -274,7 +274,7 @@
                                             action="{{ url('delete-selected-activities') }}">
                                             @csrf
                                             <div class="table-responsive">
-                                                <table class="table new-table data-table-export"
+                                                <table class="table new-table data-table-export2"
                                                     data-export-title="Attributes" data-export-filename="Attributes">
 
                                                     <thead>
@@ -296,7 +296,7 @@
                                                     <tbody>
                                                         <?php foreach($activities as $activity){
                                                             $lead = Lead::where('id', $activity->lead_id)->first();
-                                                            $owner_name = UserDetails::where('id', $activity->created_by)->value('name');
+                                                            $owner_name = UserDetails::where('user_id', $activity->created_by)->value('name');
                                                             ?>
                                                         <tr class="odd gradeX">
                                                             <td><input type="checkbox" name="selected_activities[]"
@@ -314,8 +314,9 @@
                                                             </td>
                                                             <td class="">{{ $activity->description }}</td>
                                                             <td class="">
-                                                                @if($lead)
-                                                                    <a href="{{ url('view-lead/' . $activity->lead_id) }}">{{ $lead->title }}</a>
+                                                                @if ($lead)
+                                                                    <a
+                                                                        href="{{ url('view-lead/' . $activity->lead_id) }}">{{ $lead->title }}</a>
                                                                 @else
                                                                     <span class="text-muted">Lead not found</span>
                                                                 @endif
@@ -371,7 +372,7 @@
                                             action="{{ url('delete-selected-activities') }}">
                                             @csrf
                                             <div class="table-responsive">
-                                                <table class="table new-table data-table-export"
+                                                <table class="table new-table data-table-export2"
                                                     data-export-title="Attributes" data-export-filename="Attributes">
 
                                                     <thead>
@@ -394,7 +395,7 @@
                                                         <?php foreach($activities as $activity){
                                                             if($activity->type == 'Call'){
                                                             $lead = Lead::where('id', $activity->lead_id)->first();
-                                                            $owner_name = UserDetails::where('id', $activity->created_by)->value('name');
+                                                            $owner_name = UserDetails::where('user_id', $activity->created_by)->value('name');
                                                             ?>
                                                         <tr class="odd gradeX">
                                                             <td><input type="checkbox" name="selected_activities[]"
@@ -412,8 +413,9 @@
                                                             </td>
                                                             <td class="">{{ $activity->description }}</td>
                                                             <td class="">
-                                                                @if($lead)
-                                                                    <a href="{{ url('view-lead/' . $activity->lead_id) }}">{{ $lead->title }}</a>
+                                                                @if ($lead)
+                                                                    <a
+                                                                        href="{{ url('view-lead/' . $activity->lead_id) }}">{{ $lead->title }}</a>
                                                                 @else
                                                                     <span class="text-muted">Lead not found</span>
                                                                 @endif
@@ -468,7 +470,7 @@
                                             action="{{ url('delete-selected-activities') }}">
                                             @csrf
                                             <div class="table-responsive">
-                                                <table class="table new-table data-table-export"
+                                                <table class="table new-table data-table-export2"
                                                     data-export-title="Attributes" data-export-filename="Attributes">
 
                                                     <thead>
@@ -491,7 +493,7 @@
                                                         <?php foreach($activities as $activity){
                                                             if($activity->type == 'Meeting'){
                                                             $lead = Lead::where('id', $activity->lead_id)->first();
-                                                            $owner_name = UserDetails::where('id', $activity->created_by)->value('name');
+                                                            $owner_name = UserDetails::where('user_id', $activity->created_by)->value('name');
                                                             ?>
                                                         <tr class="odd gradeX">
                                                             <td><input type="checkbox" name="selected_activities[]"
@@ -509,8 +511,9 @@
                                                             </td>
                                                             <td class="">{{ $activity->description }}</td>
                                                             <td class="">
-                                                                @if($lead)
-                                                                    <a href="{{ url('view-lead/' . $activity->lead_id) }}">{{ $lead->title }}</a>
+                                                                @if ($lead)
+                                                                    <a
+                                                                        href="{{ url('view-lead/' . $activity->lead_id) }}">{{ $lead->title }}</a>
                                                                 @else
                                                                     <span class="text-muted">Lead not found</span>
                                                                 @endif
@@ -566,7 +569,7 @@
                                             action="{{ url('delete-selected-activities') }}">
                                             @csrf
                                             <div class="table-responsive">
-                                                <table class="table new-table data-table-export"
+                                                <table class="table new-table data-table-export2"
                                                     data-export-title="Attributes" data-export-filename="Attributes">
 
                                                     <thead>
@@ -589,7 +592,7 @@
                                                         <?php foreach($activities as $activity){
                                                             if($activity->type == 'Lunch'){
                                                             $lead = Lead::where('id', $activity->lead_id)->first();
-                                                            $owner_name = UserDetails::where('id', $activity->created_by)->value('name');
+                                                            $owner_name = UserDetails::where('user_id', $activity->created_by)->value('name');
                                                             ?>
                                                         <tr class="odd gradeX">
                                                             <td><input type="checkbox" name="selected_activities[]"
@@ -607,8 +610,9 @@
                                                             </td>
                                                             <td class="">{{ $activity->description }}</td>
                                                             <td class="">
-                                                                @if($lead)
-                                                                    <a href="{{ url('view-lead/' . $activity->lead_id) }}">{{ $lead->title }}</a>
+                                                                @if ($lead)
+                                                                    <a
+                                                                        href="{{ url('view-lead/' . $activity->lead_id) }}">{{ $lead->title }}</a>
                                                                 @else
                                                                     <span class="text-muted">Lead not found</span>
                                                                 @endif
@@ -673,18 +677,18 @@
 
     <!-- Bottom Action Buttons -->
     <!--   <div class="col-12 action-bar">
-                                        <div class="d-flex gap-2 justify-content-between">
-                                            <div>
-                                                <button type="submit" class="btn clear-all-btn">Clear All</button>
-                                            </div>
-                                            <div>
-                                                <button type="submit" class="btn save-btn">Save</button>
-                                               <button type="button" class="btn cancel-btn">Cancel</button>
-                                            </div>
+                                                        <div class="d-flex gap-2 justify-content-between">
+                                                            <div>
+                                                                <button type="submit" class="btn clear-all-btn">Clear All</button>
+                                                            </div>
+                                                            <div>
+                                                                <button type="submit" class="btn save-btn">Save</button>
+                                                               <button type="button" class="btn cancel-btn">Cancel</button>
+                                                            </div>
 
-                                        </div>
+                                                        </div>
 
-                                    </div> -->
+                                                    </div> -->
 
 
     <script>
@@ -741,6 +745,81 @@
                     }
                 });
             });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Function to initialize DataTable
+            function initializeDataTable(table) {
+                if (!$.fn.dataTable.isDataTable(table)) {
+                    const exportTitle = $(table).attr('data-export-title') || 'Exported Table';
+                    const exportFilename = $(table).attr('data-export-filename') || 'exported_table';
+
+                    $(table).DataTable({
+                        dom: 'Bfrtip',
+                        buttons: [{
+                                extend: 'csv',
+                                title: exportTitle,
+                                filename: exportFilename
+                            },
+                            {
+                                extend: 'excel',
+                                title: exportTitle,
+                                filename: exportFilename
+                            }
+                        ]
+                    });
+
+                    // Hide the buttons immediately after creation
+                    $(table).closest('.tab-pane').find('.dt-buttons').hide();
+                }
+            }
+
+            // Initialize active tab table immediately (tab1)
+            const activeTab = $('.tab-pane.active');
+            const activeTables = activeTab.find('.data-table-export2');
+            activeTables.each(function() {
+                initializeDataTable(this);
+            });
+
+            // Listen for tab clicks to initialize tables when tabs become active
+            $('[data-bs-toggle="tab"]').on('shown.bs.tab', function(e) {
+                const tabId = $(e.target).attr('data-bs-target');
+                const tables = $(tabId + ' .data-table-export2');
+
+                // Hide export buttons in all tabs first
+                $('.dt-buttons').hide();
+
+                // Initialize tables in the new active tab
+                tables.each(function() {
+                    initializeDataTable(this);
+                });
+            });
+
+            // Export toggle button click handler
+            $(document).on('click', '.export-toggle', function(e) {
+                e.stopPropagation(); // Prevent document click from hiding immediately
+                const currentTab = $('.tab-pane.active');
+                const buttons = currentTab.find('.dt-buttons');
+                buttons.toggle();
+            });
+
+            // Hide buttons when clicking on export buttons (to prevent hiding when using them)
+            $(document).on('click', '.dt-buttons', function(e) {
+                e.stopPropagation();
+            });
+
+            // Hide export buttons when clicking anywhere else in the document
+            $(document).on('click', function(e) {
+                // Check if the clicked element is not the export toggle or within export buttons
+                if (!$(e.target).closest('.export-toggle').length && !$(e.target).closest('.dt-buttons')
+                    .length) {
+                    $('.dt-buttons').hide();
+                }
+            });
+
         });
     </script>
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offFilter" aria-labelledby="offFiltertLabel">

@@ -9,7 +9,8 @@ use App\Models\UserDetails;
 use App\Models\Organization;
 use App\Models\Product;
 use App\Models\Service;
-$owner_name = UserDetails::where('id', $lead->sales_owner)->value('name');
+$owner_name = UserDetails::where('user_id', $lead->sales_owner)->value('name');
+
 $person = Person::where('id', $lead->person)->first();
 $organization = Organization::where('id', $person->organization)->first();
 ?>

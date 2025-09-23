@@ -1,6 +1,8 @@
 @extends('master')
 
 @section('content')
+
+
     <form action="" method="post" enctype="multipart/form-data" data-parsley-validate>
         @csrf
 
@@ -33,7 +35,7 @@
                             </div>
 
                         </div>
-
+                       
                         <div class="col-12">
                             <div class="card-container">
                                 <!-- Basic Details Card -->
@@ -54,8 +56,7 @@
                                                             <option value="" selected disabled>Select Sales Owner
                                                             </option>
                                                             @foreach ($owners as $owner)
-                                                                <option value="{{ $owner->user_id }}">{{ $owner->name }}
-                                                                </option>
+                                                                <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
                                                             @endforeach
                                                         </select>
                                                         <div id="owner-errors"></div>
@@ -72,19 +73,24 @@
                                                         <div id="lead-errors"></div>
                                                     </div>
                                                 @elseif (auth()->user()->role == 3)
-                                                    <!-- Role 3: Fixed sales owner (logged in user) -->
+                                                    
                                                     <div class="col-12 col-md-4">
                                                         <label for="assign_user" class="form-label">Sales Owner</label>
                                                         <select class="form-control" name="sales_owner" required disabled>
                                                             <?php foreach($owners as $owner){ ?>
-                                                            <option value="{{ $owner->user_id }}"
-                                                                {{ auth()->user()->id == $owner->user_id ? 'selected' : '' }}>
-                                                                {{ $owner->name }}
-                                                            </option>
+                                                                <option value="{{ $owner->user_id }}"
+                                                                    {{ auth()->user()->id == $owner->user_id ? 'selected' : '' }}>
+                                                                    {{ $owner->name }}
+
+                                                                </option>
                                                             <?php } ?>
+
+                                                            
                                                         </select>
+                                                        
                                                         <input type="hidden" name="sales_owner"
-                                                            value="{{ auth()->user()->id }}">
+                                                            value="{{$owner->id}}">
+                                                       
                                                     </div>
 
                                                     <div class="col-12 col-md-4">

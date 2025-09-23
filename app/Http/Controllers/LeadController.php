@@ -318,13 +318,15 @@ class LeadController extends Controller
             ]);
         }
         if ($request->isMethod('post')) {
-            $request->validate([
-                'title' => 'required|string',
-                'lead_value' => 'required',
-                'source' => 'required',
-                'pipeline' => 'required',
-                'stage' => 'required',
-            ]);
+
+            // dd($request->all());
+            // $request->validate([
+            //     'title' => 'required|string',
+            //     'lead_value' => 'required',
+            //     'source' => 'required',
+            //     'pipeline' => 'required',
+            //     'stage' => 'required',
+            // ]);
 
             if (Person::where("id", $request->person)->exists()) {
                 // $person = Person::findOrFail($id);
@@ -442,7 +444,7 @@ class LeadController extends Controller
         if ($request->isMethod('get')) {
             $sources = Source::get();
             $types = Type::get();
-            $owners = UserDetails::get();
+            $owners = [UserDetails::get(), User::get()];
             $persons = Person::get();
             $organizations = Organization::get();
             $products = Product::get();

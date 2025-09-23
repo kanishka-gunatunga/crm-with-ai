@@ -121,6 +121,8 @@ class QuoteController extends Controller
             return view('quotes.create_lead_quote', ['lead' => $lead, 'products' => $products, 'services' => $services, 'lead_products' => $lead_products]);
         }
         if ($request->isMethod('post')) {
+
+            // dd($request->all());
             $request->validate([
                 'lead' => 'required|string',
                 'owner' => 'required',
@@ -212,9 +214,11 @@ class QuoteController extends Controller
             return view('quotes.create_quote', ['owners' => $owners, 'persons' => $persons, 'products' => $products, 'leads' => $leads, 'services' => $services]);
         }
         if ($request->isMethod('post')) {
+
+            // dd($request->all());
             $request->validate([
-                'lead' => 'required|string',
-                'owner' => 'required',
+                'lead' => 'required',
+                // 'owner' => 'required',
                 'subject' => 'required',
                 'expired_at' => 'required',
                 'person' => 'required',
@@ -228,7 +232,7 @@ class QuoteController extends Controller
 
             $quote =  new Quote();
             $quote->lead = $request->lead;
-            $quote->owner = $request->owner;
+            $quote->owner = $request->sales_owner;
             $quote->subject = $request->subject;
             $quote->expired_at = $request->expired_at;
             $quote->person = $request->person;

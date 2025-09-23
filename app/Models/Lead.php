@@ -62,4 +62,9 @@ class Lead extends Model
         return $this->hasMany(LeadNote::class, 'lead_id');
     }
 
+    public function emails()
+    {
+        return $this->hasMany(SentEmails::class, 'lead_id');
+    }
+
 }

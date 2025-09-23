@@ -33,17 +33,47 @@ date_default_timezone_set('Asia/Colombo');
 
 class EmailsController extends Controller
 {
+    // public function emails(Request $request)
+    // {
+    //     if ($request->isMethod('get')) {
+
+    //         $sent_emails = SentEmails::get();
+    //         if( Auth::user()->id()-)
+    //         return view('mail.mail', [
+    //             'sent_emails' => $sent_emails,
+
+    //         ]);
+    //     }
+    // }
+
+
     public function emails(Request $request)
     {
         if ($request->isMethod('get')) {
+            $loggedUser = Auth::user();
+            // Get the logged user's name from the users table
+            $loggedUserName = $loggedUser->name;
+            // dd($loggedUserName);
+            $loggedUserRole = $loggedUser->role;
 
-            $sent_emails = SentEmails::get();
+            if ($loggedUserRole == 2) {
+                // Role 2 → show all
+                $sent_emails = SentEmails::with(['lead', 'user.userDetails'])->get();
+            } else {
+                // Role 3 or others → only show emails where sent_by = logged user id
+                $sent_emails = SentEmails::with(['lead', 'user.userDetails'])
+                    ->where('sent_by', $loggedUser->id)
+                    ->get();
+            }
+
             return view('mail.mail', [
                 'sent_emails' => $sent_emails,
-
             ]);
         }
     }
+
+
+
 
 
     public function fetch_favourite_emails(Request $request)
@@ -69,6 +99,7 @@ class EmailsController extends Controller
             $sent_email->bcc = $request->bcc;
             $sent_email->subject = $request->subject;
             $sent_email->body = $request->body;
+            $sent_email->sent_by = Auth::user()->id;
 
             $attachments = [];
             if ($request->hasFile('attchments')) {
@@ -108,6 +139,7 @@ class EmailsController extends Controller
             $sent_email->bcc = $request->bcc;
             $sent_email->subject = $request->subject;
             $sent_email->body = $request->body;
+            $sent_email->sent_by = Auth::user()->id;
 
             $attachments = [];
             if ($request->hasFile('attchments')) {
@@ -128,7 +160,7 @@ class EmailsController extends Controller
 
             return back()->with('success', 'Email sent successfully.');
         } else {
-            $sent_email = SentEmails::find($uid);  
+            $sent_email = SentEmails::find($uid);
             if (!$sent_email) {
                 return redirect()->back()->with('error', 'Email not found.');
             }
@@ -151,9 +183,9 @@ class EmailsController extends Controller
 
     public function delete_emails(Request $request, $id)
     {
-        
-        if($request->isMethod('get')){
-            SentEmails::where('id',$id)->delete();
+
+        if ($request->isMethod('get')) {
+            SentEmails::where('id', $id)->delete();
             return redirect()->back()->with('success', 'Email deleted successfully!');
         }
 

@@ -77,11 +77,12 @@ Route::get('/get-leads', [QuoteController::class, 'getLeads'])->name('get.leads'
 Route::get( '/persons', [PersonsController::class, 'persons'])->middleware(['auth', 'permission:persons']);
 Route::match(['get', 'post'],'create-person', [PersonsController::class, 'create_person'])->middleware(['auth', 'permission:person-create']);
 // Route::get( '/delete-person/{id}', [PersonsController::class, 'delete_person'])->middleware(['auth', 'permission:person-delete']);
-Route::get('/delete-person/{person_id}/{replacement_id}', [PersonsController::class, 'deletePerson'])
-    ->name('delete.person');
+Route::get('/delete-person/{person_id}/{replacement_id}', [PersonsController::class, 'deletePerson'])->name('delete.person');
 Route::get('delete-person/{personToDeleteId}/assign-to/{personToAssignId}', [PersonsController::class, 'deleteAndAssign']);
 Route::post('/delete-selected-persons', [PersonsController::class, 'delete_selected_persons'])->middleware(['auth', 'permission:person-delete']);
 Route::match(['post'],'import-persons', [PersonsController::class, 'import_persons'])->middleware(['auth']);
+Route::match(['get', 'post'],'edit-person/{id}', [OrganizationsController::class, 'edit_organization'])->middleware(['auth', 'permission:organization-edit']);
+Route::match(['get', 'post'],'edit-person/{id}', [PersonsController::class, 'edit_person'])->middleware(['auth', 'permission:person-edit']);
 
 // Contact Organizations
 Route::get( '/organizations', [OrganizationsController::class, 'organizations'])->middleware(['auth', 'permission:organizations']);

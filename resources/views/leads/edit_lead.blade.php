@@ -14,7 +14,7 @@
     
     $source_name = Source::where('id', $lead->source)->value('name');
     $type_name = Type::where('id', $lead->type)->value('name');
-    $owner_name = UserDetails::where('id', $lead->sales_owner)->first();
+    $owner_name = UserDetails::where('user_id', $lead->sales_owner)->first();
     // var_dump($owner_name);
     $person = Person::where('id', $lead->person)->first();
     $organization = null;
@@ -23,9 +23,9 @@
     }
     
     $userRoleId = auth()->user()->role;
-    $currentUserId = auth()->user()->id ?? auth()->id();
+    $currentUserId = auth()->user()->id;
     
-    // var_dump($currentUserId);
+ 
     
     ?>
     <!-- Scrollable Content -->
@@ -165,8 +165,8 @@
                                                     <select class="form-control" data-choices id="choices-single-default"
                                                         name="sales_owner">
                                                         <!-- Show current owner as hidden selected option -->
-                                                        <option selected hidden value="{{ $lead->sales_owner }}">
-                                                            {{ $owners->firstWhere('id', $lead->sales_owner)?->name ?? '' }}
+                                                        <option selected value="{{ $lead->sales_owner }}">
+                                                            {{ $owners->firstWhere('user_id', $lead->sales_owner)?->name ?? '' }}
                                                         </option>
 
                                                         <!-- List all owners -->
@@ -180,7 +180,7 @@
                                                 @elseif ($userRoleId == 3)
                                                     <select class="form-control" name="sales_owner">
                                                         <option value="{{ $currentUserId }}" selected>
-                                                            {{ $owners->firstWhere('id', $currentUserId)?->name ?? '' }}
+                                                            {{ $owners->firstWhere('user_id', $currentUserId)?->name ?? '' }}
                                                         </option>
                                                     </select>
                                                     <input type="hidden" name="sales_owner" value="{{ $currentUserId }}">
