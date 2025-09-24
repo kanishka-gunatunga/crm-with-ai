@@ -59,15 +59,19 @@ class EmailsController extends Controller
             if ($loggedUserRole == 2) {
                 // Role 2 → show all
                 $sent_emails = SentEmails::with(['lead', 'user.userDetails'])->get();
-            } else {
+            } elseif ($loggedUserRole == 3) {
                 // Role 3 or others → only show emails where sent_by = logged user id
                 $sent_emails = SentEmails::with(['lead', 'user.userDetails'])
                     ->where('sent_by', $loggedUser->id)
                     ->get();
+            }else{
+                // Default to showing no emails if role is unrecognized
+                $sent_emails = collect(); // empty collection
             }
 
             return view('mail.mail', [
                 'sent_emails' => $sent_emails,
+                
             ]);
         }
     }

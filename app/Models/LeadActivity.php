@@ -29,4 +29,6 @@ class LeadActivity extends Model
         'participants' => 'array',   
     ];
 
+    
+
 }

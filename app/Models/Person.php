@@ -34,4 +34,6 @@ class Person extends Model
     {
         return $this->belongsTo(Organization::class, 'organization');
     }
+
+     
 }

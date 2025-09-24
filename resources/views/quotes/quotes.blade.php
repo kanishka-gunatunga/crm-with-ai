@@ -249,7 +249,7 @@
                                             </thead>
                                             <tbody>
 
-                                                <?php
+                                                {{-- php
                                                     
                                                     $user = Auth::user();
                                                     if ($user->role == 2) {
@@ -261,7 +261,7 @@
                                                     }
 
                                                     foreach($filteredQuotes as $quote){
-                                                        $owner_name = UserDetails::where('id', $quote->owner)->value('name');
+                                                        $owner_name = UserDetails::where('user_id', $quote->owner)->value('name');
                                                         $person_name = Person::where('id', $quote->person)->value('name');
                                                         $sub_total = 0;
                                                         $products = QuoteProduct::where('quote_id', $quote->id)->get();
@@ -272,27 +272,70 @@
                                                             $total = $amount - $discount_amount + $tax_amount;
                                                             $sub_total += $amount;
                                                         }
-                                                ?>
-                                                <tr class="odd gradeX">
-                                                    <td><input type="checkbox" name="selected_quotes[]"
-                                                            value="{{ $quote->id }}"></td>
-                                                    <td class="">{{ $quote->subject }} </td>
-                                                    <td class=""><a
-                                                            href="{{ url('users?id=' . $quote->owner) }}">{{ $owner_name }}</a>
+
+                                                         --}}
+                                                @forelse($quotes as $quote)
+                                                    <td>
+                                                        <input type="checkbox" name="selected_quotes[]"
+                                                            value="{{ $quote->id }}">
                                                     </td>
-                                                    <td class="">{{ $quote->expired_at }} </td>
-                                                    <td class=""><a
-                                                            href="{{ url('persons?id=' . $quote->person) }}">{{ $person_name }}</a>
+
+                                                    <!-- Subject -->
+                                                    <td>{{ $quote->subject }}</td>
+
+                                                    <!-- Sales Person -->
+                                                    <td>
+                                                        <a href="{{ url('users?id=' . $quote->owner) }}">
+                                                            {{ optional($owners->find($quote->owner))->name ?? 'N/A' }}
+                                                        </a>
                                                     </td>
-                                                    <td class="">${{ number_format($sub_total) }}</td>
-                                                    <td class="">
-                                                        ${{ number_format($quote->discount_total_amount, 2) }}</td>
-                                                    <td class="">${{ number_format($quote->tax_total_amount, 2) }}
+
+                                                    <!-- Expired Quotes -->
+                                                    <td>
+                                                        {{ \Carbon\Carbon::now()->gt($quote->expired_at) ? 'Yes' : 'No' }}
                                                     </td>
-                                                    <td class="">${{ number_format($quote->order_total_input, 2) }}
+
+                                                    <!-- Person -->
+                                                    <td>
+                                                        <a href="{{ url('persons?id=' . $quote->person) }}">
+                                                            {{ optional($persons->find($quote->person))->name ?? 'N/A' }}
+                                                        </a>
                                                     </td>
-                                                    <td class="">{{ $quote->expired_at }} </td>
-                                                    <td class="">{{ $quote->created_at }} </td>
+
+                                                    <!-- Sub Total -->
+                                                    <td>${{ number_format($quote->sub_total, 2) }}</td>
+
+                                                    <!-- Discount -->
+                                                    <td>${{ number_format($quote->discount_total_amount, 2) }}</td>
+
+                                                    <!-- Tax -->
+                                                    <td>${{ number_format($quote->tax_total_amount, 2) }}</td>
+
+                                                    <!-- Grand Total -->
+                                                    <td>${{ number_format($quote->order_total_input, 2) }}</td>
+
+                                                    <!-- Expired At -->
+                                                    <td>{{ $quote->expired_at }}</td>
+
+                                                    <!-- Created At -->
+                                                    <td>{{ $quote->created_at }}</td>
+
+
+
+
+                                                    {{-- <td><input type="checkbox" value="{{ $quote->id }}"></td>
+                                                        <td>{{ $quote->subject }}</td>
+                                                        <td>{{ optional($owners->find($quote->owner))->name ?? 'N/A' }}
+                                                        </td>
+                                                        <td>{{ $quote->is_expired ? 'Yes' : 'No' }}</td>
+                                                        <td>{{ optional($persons->find($quote->person))->name ?? 'N/A' }}
+                                                        </td>
+                                                        <td>{{ $quote->sub_total }}</td>
+                                                        <td>{{ $quote->discount }}</td>
+                                                        <td>{{ $quote->tax }}</td>
+                                                        <td>{{ $quote->grand_total }}</td>
+                                                        <td>{{ $quote->expired_at }}</td>
+                                                        <td>{{ $quote->created_at }}</td> --}}
 
                                                     <td class="action-icons d-flex gx-3">
                                                         <a href="{{ url('delete-quote/' . $quote->id) }}"
@@ -334,8 +377,17 @@
                                                             </div>
                                                         </a>
                                                     </td>
-                                                </tr>
-                                                <?php } ?>
+
+
+                                                    </tr>
+
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="12" class="text-center">No quotes found</td>
+                                                    </tr>
+                                                @endforelse
+
+                                                {{-- php } --}}
                                             </tbody>
                                         </table>
                                     </div>

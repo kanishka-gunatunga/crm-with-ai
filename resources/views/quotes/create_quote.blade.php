@@ -1,3 +1,8 @@
+<?php
+use App\Models\UserDetails;
+
+?>
+
 @extends('master')
 
 @section('content')
@@ -51,15 +56,18 @@
                                                     <!-- Role 2: Can choose any sales owner -->
                                                     <div class="col-12 col-md-4">
                                                         <label for="assign_user" class="form-label">Sales Owner</label>
-                                                        <select class="myDropdown form-control" name="owner"
+                                                        <select class="myDropdown form-control" name="sales_owner"
                                                             data-parsley-errors-container="#owner-errors" required>
-                                                            <option value="" selected disabled>Select Sales Owner
-                                                            </option>
+                                                            {{-- <option value="" selected disabled>Select Sales Owner
+                                                            </option> --}}
                                                             @foreach ($owners as $owner)
                                                                 <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
                                                             @endforeach
                                                         </select>
                                                         <div id="owner-errors"></div>
+                                                      
+                                                        {{-- <input type="hidden" name="sales_owner"
+                                                            value=" {{$owner->id}}"> --}}
                                                     </div>
 
                                                     <div class="col-12 col-md-4">
@@ -76,21 +84,27 @@
                                                     
                                                     <div class="col-12 col-md-4">
                                                         <label for="assign_user" class="form-label">Sales Owner</label>
-                                                        <select class="form-control" name="sales_owner" required disabled>
-                                                            <?php foreach($owners as $owner){ ?>
-                                                                <option value="{{ $owner->user_id }}"
-                                                                    {{ auth()->user()->id == $owner->user_id ? 'selected' : '' }}>
-                                                                    {{ $owner->name }}
-
-                                                                </option>
-                                                            <?php } ?>
-
-                                                            
+                                                        <select class="form-control" name="sales_owner" required selected>
+                                                            <option value="{{ $authenticatedUser->id }}" selected>
+                                                                {{ $authenticatedUser->name }}
+                                                            </option>
                                                         </select>
                                                         
-                                                        <input type="hidden" name="sales_owner"
-                                                            value="{{$owner->id}}">
-                                                       
+                                                                {{-- <option value="{{ $authenticatedUser->id }}"
+                                                                    {{ auth()->user()->id == $authenticatedUser->id ? 'selected' : '' }}>
+                                                                    {{ $authenticatedUser->name }}
+
+                                                                </option> --}}
+                                                            
+
+                                                            
+                                                        {{-- </select> --}}
+                                                        
+                                                        {{-- <input type="hidden" name="sales_owner"
+                                                            value=" {{$owner->id}}"> --}}
+
+                                                            
+                                                            
                                                     </div>
 
                                                     <div class="col-12 col-md-4">
@@ -992,7 +1006,7 @@
             }
 
             // Corrected jQuery selector to target the dropdown with name="owner" for Role 2
-            $('select[name="owner"]').on('change', function() {
+            $('select[name="sales_owner"]').on('change', function() {
                 let selectedOwnerId = $(this).val();
                 loadLeads(selectedOwnerId);
             });

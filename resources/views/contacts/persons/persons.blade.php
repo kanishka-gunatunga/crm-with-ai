@@ -10,7 +10,7 @@
     </style>
 
     <?php
-    use App\Models\Organization;
+        use App\Models\Organization;
     ?>
     <!-- Scrollable Content -->
     <!-- Scrollable Content -->
@@ -24,9 +24,6 @@
                                 {{ __('app.contacts.persons.title') }}
                             </h3>
                             <div class="d-flex gap-3">
-
-
-
                                 <button class="import-leads-button" data-bs-toggle="modal" data-bs-target=".importPersons">
                                     <div class="icon-container">
                                         <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
@@ -38,13 +35,8 @@
                                                 d="M12.9688 8C12.9688 7.87568 12.9194 7.75645 12.8315 7.66854C12.7435 7.58064 12.6243 7.53125 12.5 7.53125C12.3757 7.53125 12.2565 7.58064 12.1685 7.66854C12.0806 7.75645 12.0312 7.87568 12.0312 8C12.0312 8.59505 11.914 9.18428 11.6863 9.73403C11.4586 10.2838 11.1248 10.7833 10.7041 11.2041C10.2833 11.6248 9.78379 11.9586 9.23403 12.1863C8.68428 12.414 8.09505 12.5312 7.5 12.5312C6.90495 12.5312 6.31572 12.414 5.76597 12.1863C5.21621 11.9586 4.71669 11.6248 4.29592 11.2041C3.87516 10.7833 3.54139 10.2838 3.31367 9.73403C3.08595 9.18428 2.96875 8.59505 2.96875 8C2.96875 7.87568 2.91936 7.75645 2.83146 7.66854C2.74355 7.58064 2.62432 7.53125 2.5 7.53125C2.37568 7.53125 2.25645 7.58064 2.16854 7.66854C2.08064 7.75645 2.03125 7.87568 2.03125 8C2.03125 9.4504 2.60742 10.8414 3.63301 11.867C4.6586 12.8926 6.0496 13.4688 7.5 13.4688C8.9504 13.4688 10.3414 12.8926 11.367 11.867C12.3926 10.8414 12.9688 9.4504 12.9688 8Z"
                                                 fill="#556476" />
                                         </svg>
-
-
                                     </div>
-
                                     <span class="button-text white-btn-text">Import Persons</span>
-
-
                                 </button>
 
 
@@ -64,13 +56,9 @@
                                         </div>
 
                                         <span class="button-text">{{ __('app.contacts.persons.create-title') }}</span>
-
-
                                     </button>
                                 </a>
                             </div>
-
-
                         </div>
 
                     </div>
@@ -339,11 +327,7 @@
                                                                 @endforeach
                                                             </select>
                                                             <div id="person-value-errors"></div>
-
-
-
                                                         </div>
-
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary btn-sm"
@@ -359,16 +343,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
-
-
-
-
-
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
@@ -477,35 +452,50 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('assignPersonModal');
-            const deletePersonLink = document.getElementById('deletePersonLink');
-            const personSelect = document.getElementById('person-select');
+    const modal = document.getElementById('assignPersonModal');
+    const deletePersonLink = document.getElementById('deletePersonLink');
+    const personSelect = document.getElementById('person-select');
 
-            modal.addEventListener('show.bs.modal', function(event) {
-                // Get the button that triggered the modal
-                const button = event.relatedTarget;
+    modal.addEventListener('show.bs.modal', function(event) {
+        // Get the button that triggered the modal
+        const button = event.relatedTarget;
 
-                // Extract the ID of the person to be deleted from the data-person-id attribute
-                const personToDeleteId = button.getAttribute('data-person-id');
+        // Person to delete (from button data attribute)
+        const personToDeleteId = button.getAttribute('data-person-id');
 
-                // Set up an event listener for the delete button inside the modal
-                deletePersonLink.addEventListener('click', function(e) {
-                    // Prevent the default link behavior
-                    e.preventDefault();
+        // Current person already assigned (from the hidden selected option)
+        const currentPersonId = personSelect.options[0].value;
 
-                    // Get the ID of the person selected in the dropdown
-                    const personToAssignId = personSelect.value;
+        // Disable delete button initially
+        deletePersonLink.querySelector('button').disabled = true;
 
-                    // Construct the new URL with both IDs
-                    // Example URL: /delete-person/5/assign-to/10
-                    const newUrl =
-                        `/delete-person/${personToDeleteId}/assign-to/${personToAssignId}`;
+        // Watch for changes in dropdown
+        personSelect.addEventListener('change', function() {
+            const selectedPersonId = personSelect.value;
 
-                    // Redirect the user to the new URL
-                    window.location.href = newUrl;
-                });
-            });
+            if (selectedPersonId && selectedPersonId !== currentPersonId) {
+                deletePersonLink.querySelector('button').disabled = false;
+            } else {
+                deletePersonLink.querySelector('button').disabled = true;
+            }
         });
+
+        // Click event for delete
+        deletePersonLink.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const personToAssignId = personSelect.value;
+
+            if (!personToAssignId || personToAssignId === currentPersonId) {
+                return; // Stop if not valid
+            }
+
+            const newUrl = `/delete-person/${personToDeleteId}/assign-to/${personToAssignId}`;
+            window.location.href = newUrl;
+        });
+    });
+});
+
     </script>
 
 

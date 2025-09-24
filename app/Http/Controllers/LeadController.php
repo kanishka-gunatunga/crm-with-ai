@@ -37,6 +37,7 @@ use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 use App\Mail\LeadSendEmail;
 use Carbon\Carbon;
 use File;
+use Illuminate\Support\Arr;
 use PDF;
 use Mail;
 use League\Csv\Writer;
@@ -444,7 +445,7 @@ class LeadController extends Controller
         if ($request->isMethod('get')) {
             $sources = Source::get();
             $types = Type::get();
-            $owners = [UserDetails::get(), User::get()];
+            $owners = UserDetails::get();
             $persons = Person::get();
             $organizations = Organization::get();
             $products = Product::get();
@@ -460,6 +461,7 @@ class LeadController extends Controller
             $activity_logs = ActivityHistory::orderBy('id', 'DESC')->where('lead_id', $id)->get();
 
             $allItems = [];
+            $personNames = [];
 
             foreach ($notes as $note) {
                 $allItems[] = [
@@ -469,6 +471,8 @@ class LeadController extends Controller
                     'created_by' => $note->created_by
                 ];
             }
+
+            
 
             foreach ($actvities as $actvity) {
                 $allItems[] = [
@@ -507,7 +511,8 @@ class LeadController extends Controller
                 'files' => $files,
                 'quotes' => $quotes,
                 'allItems' => $allItems,
-                'activity_logs' => $activity_logs
+                'activity_logs' => $activity_logs,
+                'personNames' => $personNames
             ]);
         }
 

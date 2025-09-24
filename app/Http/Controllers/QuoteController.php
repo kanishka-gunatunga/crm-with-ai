@@ -96,8 +96,11 @@ class QuoteController extends Controller
                 $quotesQuery->where('created_at', '<=', $request->created_end_date);
             }
 
+            $user = Auth::user();
+            if ($user->role == 3) {
+                $quotesQuery->where('owner', $user->userDetails->id);
+            }
             $quotes = $quotesQuery->get();
-
             $owners = UserDetails::get();
             $persons = Person::get();
 
@@ -107,6 +110,20 @@ class QuoteController extends Controller
                 'persons' => $persons,
                 'request' => $request
             ]);
+
+
+
+            // return response()->json([
+            //     'auth_user' => $user,
+            //     'quotes' => $quotes->toArray(),
+            //     'owners' => $owners->toArray(),
+            //     'persons' => $persons->toArray(),
+            //     'filters' => $request->only([
+            //         'subject', 'owner', 'person', 
+            //         'expire_start_date', 'expire_end_date', 
+            //         'created_start_date', 'created_end_date'
+            //     ])
+            // ], 200, [], JSON_PRETTY_PRINT);
         }
     }
 
@@ -118,7 +135,8 @@ class QuoteController extends Controller
             $lead_products = LeadProduct::where('lead_id', $id)->get();
             $products = Product::get();
             $services = Service::get();
-            return view('quotes.create_lead_quote', ['lead' => $lead, 'products' => $products, 'services' => $services, 'lead_products' => $lead_products]);
+            $authenticatedUser = Auth::user()->userDetails;
+            return view('quotes.create_lead_quote', ['lead' => $lead, 'products' => $products, 'authenticatedUser' => $authenticatedUser, 'services' => $services, 'lead_products' => $lead_products]);
         }
         if ($request->isMethod('post')) {
 
@@ -207,18 +225,20 @@ class QuoteController extends Controller
 
         if ($request->isMethod('get')) {
             $owners = UserDetails::get();
+            $owners2 = User::get();
             $persons = Person::get();
             $products = Product::get();
             $leads = Lead::get();
             $services = Service::get();
-            return view('quotes.create_quote', ['owners' => $owners, 'persons' => $persons, 'products' => $products, 'leads' => $leads, 'services' => $services]);
+            $authenticatedUser = Auth::user()->userDetails;
+            return view('quotes.create_quote', ['owners' => $owners, 'owners2' => $owners2, 'authenticatedUser' => $authenticatedUser, 'persons' => $persons, 'products' => $products, 'leads' => $leads, 'services' => $services]);
         }
         if ($request->isMethod('post')) {
 
             // dd($request->all());
             $request->validate([
                 'lead' => 'required',
-                // 'owner' => 'required',
+                'sales_owner' => 'required',
                 'subject' => 'required',
                 'expired_at' => 'required',
                 'person' => 'required',
@@ -389,22 +409,21 @@ class QuoteController extends Controller
 
 
     public function getLeads(Request $request)
-{
-    $role   = $request->input('role');
-    $userId = $request->input('user_id');
-    $salesOwnerId = $request->input('sales_owner_id');
+    {
+        $role   = $request->input('role');
+        $userId = $request->input('user_id');
+        $salesOwnerId = $request->input('sales_owner_id');
 
-    if ($role == 3) {
-        // Role 3: show only logged user's leads
-        $leads = Lead::where('sales_owner', $userId)->get(['id', 'title']);
-    } elseif ($role == 2) {
-        // Role 2: show leads based on selected sales_owner
-        $leads = Lead::where('sales_owner', $salesOwnerId)->get(['id', 'title']);
-    } else {
-        $leads = collect(); // return empty if role not matched
+        if ($role == 3) {
+            // Role 3: show only logged user's leads
+            $leads = Lead::where('sales_owner', $userId)->get(['id', 'title']);
+        } elseif ($role == 2) {
+            // Role 2: show leads based on selected sales_owner
+            $leads = Lead::where('sales_owner', $salesOwnerId)->get(['id', 'title']);
+        } else {
+            $leads = collect(); // return empty if role not matched
+        }
+
+        return response()->json($leads);
     }
-
-    return response()->json($leads);
-}
-
 }

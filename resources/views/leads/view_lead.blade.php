@@ -39,11 +39,11 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="#">
-                                        {{ \App\Models\Organization::where(
+                                    <a href="{{ url('leads') }}">Leads</a>
+                                        {{-- {{ \App\Models\Organization::where(
                                             'id',
                                             \App\Models\Person::where('id', $lead->person)->value('organization'),
-                                        )->value('name') ?? 'N/A' }}
+                                        )->value('name') ?? 'N/A' }} --}}
 
                                     </a>
                                 </li>
@@ -400,14 +400,14 @@
                                                 <select class="form-control tagselect" multiple
                                                     id="choices-multiple-remove-button" name="participants[]">
                                                     <?php foreach($persons as $person){ ?>
-                                                        <option value="person||{{ $person->id }}">
-                                                            {{ $person->name }}
-                                                        </option>
+                                                    <option value="person||{{ $person->id }}">
+                                                        {{ $person->name }}
+                                                    </option>
                                                     <?php } ?>
                                                     <?php foreach($owners as $owner){ ?>
-                                                        {{-- <option value="owner||{{ $owner->user_id }}">
+                                                    <option value="owner||{{ $owner->user_id }}">
                                                             {{ $owner->name }}
-                                                        </option> --}}
+                                                        </option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
@@ -887,11 +887,23 @@
                                                                     <h3 class="field-label">Participants</h3>
                                                                     @if (is_array($activity->participants) && count($activity->participants))
                                                                         @foreach ($activity->participants as $participant)
-                                                                            <p>Type: {{ $participant['type'] }}, ID:
-                                                                                {{ $participant['id'] }}</p>
+                                                                            <p>
+                                                                                Type: {{ $participant['type'] }},
+
+                                                                                {{-- Find the person's name from the $persons collection --}}
+                                                                                @php
+                                                                                    $person = $persons->firstWhere(
+                                                                                        'id',
+                                                                                        $participant['id'],
+                                                                                    );
+                                                                                @endphp
+
+                                                                                Name:
+                                                                                {{ $person->name ?? 'Name Not Found' }}
+                                                                            </p>
                                                                         @endforeach
                                                                     @else
-                                                                        <p>No participants found.</p>
+                                                                        <p>No participants found for this activity.</p>
                                                                     @endif
                                                                 </div>
                                                             </section>
@@ -1336,14 +1348,14 @@
                                                 <div class="d-flex">
                                                     <div class="col-5">
                                                         <div class="d-flex gap-3 align-items-center mb-3">
-                                                            <img src="../images/59e667844c3a56e1c4259df1377aa6569decc3a1.png"
+                                                            <img src="{{ asset('images/avatar.png') }}"
                                                                 class="rounded-circle object-fit-cover" alt="..."
                                                                 width="30" height="30">
 
-                                                            <p class="person-name">
-                                                                {{ $note->person->name ?? 'Unknown Person' }}
-                                                            </p>
 
+                                                            <p class="person-name">
+                                                                {{ \App\Models\UserDetails::where('id', $note->created_by)->value('name') ?? 'Unknown User' }}
+                                                            </p>
 
                                                         </div>
                                                     </div>
