@@ -2137,7 +2137,7 @@ div.dataTables_wrapper div.dataTables_filter {
 }
 
 
-@media screen and (max-width: 1300px) {
+/* @media screen and (max-width: 1300px) {
 
   .select2-container--default {
     width: inherit !important;
@@ -2162,4 +2162,9 @@ div.dataTables_wrapper div.dataTables_filter {
     max-width: 320px !important;
     min-width: 280px;
   }
+} */
+
+
+.participant-select-container .select2-selection{
+  overflow-y: scroll !important;
 }

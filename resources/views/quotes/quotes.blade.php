@@ -248,33 +248,13 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-
-                                                {{-- php
-                                                    
-                                                    $user = Auth::user();
-                                                    if ($user->role == 2) {
-                                                        $filteredQuotes = $quotes;
-                                                    } elseif ($user->role == 3) {
-                                                        $filteredQuotes = $quotes->where('owner', $user->id);
-                                                    } else {
-                                                        $filteredQuotes = collect();
-                                                    }
-
-                                                    foreach($filteredQuotes as $quote){
-                                                        $owner_name = UserDetails::where('user_id', $quote->owner)->value('name');
-                                                        $person_name = Person::where('id', $quote->person)->value('name');
-                                                        $sub_total = 0;
-                                                        $products = QuoteProduct::where('quote_id', $quote->id)->get();
-                                                        foreach($products as $product){
-                                                            $amount = $product->price * $product->quantity;
-                                                            $discount_amount = ($amount * $product->discount) / 100;
-                                                            $tax_amount = ($amount - $discount_amount) * ($product->tax / 100);
-                                                            $total = $amount - $discount_amount + $tax_amount;
-                                                            $sub_total += $amount;
-                                                        }
-
-                                                         --}}
-                                                @forelse($quotes as $quote)
+                                                <?php
+                                                $userRole = Auth::user()->role;
+                                                
+                                                if ($userRole == 2) {
+                                                    foreach ($quotes as $quote) {
+                                                ?>
+                                                <tr>
                                                     <td>
                                                         <input type="checkbox" name="selected_quotes[]"
                                                             value="{{ $quote->id }}">
@@ -286,7 +266,7 @@
                                                     <!-- Sales Person -->
                                                     <td>
                                                         <a href="{{ url('users?id=' . $quote->owner) }}">
-                                                            {{ optional($owners->find($quote->owner))->name ?? 'N/A' }}
+                                                            {{ optional($owners->where('user_id', $quote->owner)->first())->name ?? 'N/A' }}
                                                         </a>
                                                     </td>
 
@@ -319,23 +299,6 @@
 
                                                     <!-- Created At -->
                                                     <td>{{ $quote->created_at }}</td>
-
-
-
-
-                                                    {{-- <td><input type="checkbox" value="{{ $quote->id }}"></td>
-                                                        <td>{{ $quote->subject }}</td>
-                                                        <td>{{ optional($owners->find($quote->owner))->name ?? 'N/A' }}
-                                                        </td>
-                                                        <td>{{ $quote->is_expired ? 'Yes' : 'No' }}</td>
-                                                        <td>{{ optional($persons->find($quote->person))->name ?? 'N/A' }}
-                                                        </td>
-                                                        <td>{{ $quote->sub_total }}</td>
-                                                        <td>{{ $quote->discount }}</td>
-                                                        <td>{{ $quote->tax }}</td>
-                                                        <td>{{ $quote->grand_total }}</td>
-                                                        <td>{{ $quote->expired_at }}</td>
-                                                        <td>{{ $quote->created_at }}</td> --}}
 
                                                     <td class="action-icons d-flex gx-3">
                                                         <a href="{{ url('delete-quote/' . $quote->id) }}"
@@ -377,17 +340,110 @@
                                                             </div>
                                                         </a>
                                                     </td>
+                                                </tr>
+                                                <?php
+        }
+                                                } elseif ($userRole == 3) {
+                                                    foreach ($quotes as $quote) {
+                                                ?>
+                                                <tr>
+                                                    <td>
+                                                        <input type="checkbox" name="selected_quotes[]"
+                                                            value="{{ $quote->id }}">
+                                                    </td>
 
+                                                    <!-- Subject -->
+                                                    <td>{{ $quote->subject }}</td>
 
-                                                    </tr>
+                                                    <!-- Sales Person -->
+                                                    <td>
+                                                        <a href="{{ url('users?id=' . $quote->owner) }}">
+                                                            {{-- {{$quote->owner}} --}}
+                                                            {{ optional($owners->where('user_id', $quote->owner)->first())->name ?? 'N/A' }}
+                                                        </a>
+                                                    </td>
 
-                                                @empty
-                                                    <tr>
-                                                        <td colspan="12" class="text-center">No quotes found</td>
-                                                    </tr>
-                                                @endforelse
+                                                    <!-- Expired Quotes -->
+                                                    <td>
+                                                        {{ \Carbon\Carbon::now()->gt($quote->expired_at) ? 'Yes' : 'No' }}
+                                                    </td>
 
-                                                {{-- php } --}}
+                                                    <!-- Person -->
+                                                    <td>
+                                                        <a href="{{ url('persons?id=' . $quote->person) }}">
+                                                            {{ optional($persons->find($quote->person))->name ?? 'N/A' }}
+                                                        </a>
+                                                    </td>
+
+                                                    <!-- Sub Total -->
+                                                    <td>${{ number_format($quote->sub_total, 2) }}</td>
+
+                                                    <!-- Discount -->
+                                                    <td>${{ number_format($quote->discount_total_amount, 2) }}</td>
+
+                                                    <!-- Tax -->
+                                                    <td>${{ number_format($quote->tax_total_amount, 2) }}</td>
+
+                                                    <!-- Grand Total -->
+                                                    <td>${{ number_format($quote->order_total_input, 2) }}</td>
+
+                                                    <!-- Expired At -->
+                                                    <td>{{ $quote->expired_at }}</td>
+
+                                                    <!-- Created At -->
+                                                    <td>{{ $quote->created_at }}</td>
+
+                                                    <td class="action-icons d-flex gx-3">
+                                                        <a href="{{ url('delete-quote/' . $quote->id) }}"
+                                                            class="delete-link-confirm">
+                                                            <div class="text-muted" type="button">
+                                                                <svg width="20" height="20" viewBox="0 0 18 18"
+                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <rect width="18" height="18" rx="2.90323"
+                                                                        fill="#FFE9E5" />
+                                                                    <path
+                                                                        d="M6.9431 12.7013C6.71689 12.7013 6.52331 12.6208 6.36236 12.4599C6.20141 12.2989 6.12079 12.1052 6.12052 11.8787V6.53197H5.70923V5.70939H7.76568V5.2981H10.2334V5.70939H12.2899V6.53197H11.8786V11.8787C11.8786 12.105 11.7981 12.2987 11.6372 12.4599C11.4762 12.6211 11.2825 12.7016 11.056 12.7013H6.9431ZM11.056 6.53197H6.9431V11.8787H11.056V6.53197ZM7.76568 11.0562H8.58826V7.35455H7.76568V11.0562ZM9.41084 11.0562H10.2334V7.35455H9.41084V11.0562Z"
+                                                                        fill="#ED2227" />
+                                                                </svg>
+                                                            </div>
+                                                        </a>
+                                                        <a href="{{ url('edit-quote/' . $quote->id) }}">
+                                                            <div class="text-muted" type="button">
+                                                                <svg width="20" height="20" viewBox="0 0 18 18"
+                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <rect width="18" height="18" rx="2.90323"
+                                                                        fill="#E7E9FD" />
+                                                                    <path
+                                                                        d="M6.1206 11.8786H6.70663L10.7266 7.85862L10.1406 7.27258L6.1206 11.2926V11.8786ZM5.70935 12.7011C5.59282 12.7011 5.49522 12.6616 5.41654 12.5826C5.33785 12.5037 5.29837 12.4061 5.2981 12.2898V11.2926C5.2981 11.1829 5.31866 11.0783 5.35978 10.9788C5.40091 10.8792 5.45917 10.7919 5.53456 10.7168L10.7266 5.53505C10.8088 5.45966 10.8997 5.4014 10.9993 5.36027C11.0988 5.31915 11.2032 5.29858 11.3126 5.29858C11.422 5.29858 11.5283 5.31915 11.6313 5.36027C11.7344 5.4014 11.8235 5.46308 11.8987 5.54533L12.4641 6.12108C12.5464 6.19648 12.6063 6.28558 12.6438 6.3884C12.6814 6.49121 12.7003 6.59402 12.7006 6.69683C12.7006 6.8065 12.6817 6.9111 12.6438 7.01062C12.606 7.11014 12.5461 7.20089 12.4641 7.28287L7.28238 12.4646C7.20698 12.54 7.11952 12.5983 7.02 12.6394C6.92048 12.6805 6.81602 12.7011 6.70663 12.7011H5.70935ZM10.4284 7.57074L10.1406 7.27258L10.7266 7.85862L10.4284 7.57074Z"
+                                                                        fill="#4A58EC" />
+                                                                </svg>
+                                                            </div>
+                                                        </a>
+                                                        <a href="{{ asset('uploads/quotes/' . $quote->pdf . '') }}"
+                                                            target="_blank">
+                                                            <div class="text-muted" type="button">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="18"
+                                                                    height="18" viewBox="0 0 18 18" fill="none">
+                                                                    <rect width="18" height="18" rx="2.90323"
+                                                                        fill="#EDEDED" />
+                                                                    <path
+                                                                        d="M7.76572 9.4112H10.2332C10.3497 9.4112 10.4475 9.37172 10.5264 9.29276C10.6054 9.2138 10.6447 9.1162 10.6445 8.99995C10.6442 8.8837 10.6047 8.7861 10.526 8.70714C10.4473 8.62818 10.3497 8.5887 10.2332 8.5887H7.76572C7.6492 8.5887 7.5516 8.62818 7.47291 8.70714C7.39423 8.7861 7.35475 8.8837 7.35447 8.99995C7.3542 9.1162 7.39368 9.21394 7.47291 9.29317C7.55215 9.37241 7.64975 9.41175 7.76572 9.4112ZM7.76572 10.645H10.2332C10.3497 10.645 10.4475 10.6055 10.5264 10.5265C10.6054 10.4476 10.6447 10.3499 10.6445 10.2337C10.6442 10.1175 10.6047 10.0199 10.526 9.94089C10.4473 9.86193 10.3497 9.82245 10.2332 9.82245H7.76572C7.6492 9.82245 7.5516 9.86193 7.47291 9.94089C7.39423 10.0199 7.35475 10.1175 7.35447 10.2337C7.3542 10.3499 7.39368 10.4477 7.47291 10.5269C7.55215 10.6062 7.64975 10.6455 7.76572 10.645ZM7.76572 11.8787H8.99947C9.11599 11.8787 9.21373 11.8392 9.29269 11.7603C9.37165 11.6813 9.411 11.5837 9.41072 11.4675C9.41045 11.3512 9.37097 11.2536 9.29228 11.1746C9.2136 11.0957 9.11599 11.0562 8.99947 11.0562H7.76572C7.6492 11.0562 7.5516 11.0957 7.47291 11.1746C7.39423 11.2536 7.35475 11.3512 7.35447 11.4675C7.3542 11.5837 7.39368 11.6814 7.47291 11.7607C7.55215 11.8399 7.64975 11.8792 7.76572 11.8787ZM6.53197 13.1125C6.30579 13.1125 6.11222 13.032 5.95129 12.871C5.79035 12.7101 5.70975 12.5164 5.70947 12.29V5.70995C5.70947 5.48376 5.79008 5.2902 5.95129 5.12927C6.1125 4.96833 6.30606 4.88773 6.53197 4.88745H9.48269C9.59236 4.88745 9.69695 4.90801 9.79647 4.94914C9.896 4.99026 9.98332 5.04852 10.0584 5.12392L12.053 7.11848C12.1284 7.19388 12.1867 7.28134 12.2278 7.38086C12.2689 7.48038 12.2895 7.58484 12.2895 7.69423V12.29C12.2895 12.5161 12.209 12.7098 12.0481 12.871C11.8871 13.0323 11.6934 13.1127 11.467 13.1125H6.53197ZM11.467 7.7662H10.0276C9.85624 7.7662 9.71066 7.7063 9.59085 7.58648C9.47104 7.46667 9.411 7.32095 9.41072 7.14933V5.70995H6.53197V12.29H11.467V7.7662Z"
+                                                                        fill="#575757" />
+                                                                </svg>
+                                                            </div>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                <?php
+        }
+    } else {
+    ?>
+                                                <tr>
+                                                    <td colspan="12" class="text-center">No access</td>
+                                                </tr>
+                                                <?php
+    }
+    ?>
                                             </tbody>
                                         </table>
                                     </div>

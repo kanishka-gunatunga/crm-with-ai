@@ -393,12 +393,12 @@
                                                 <input type="text" class="form-control" name="location"
                                                     value="{{ old('location') }}">
                                             </div>
-                                            <div class="col-md-5 mb-3">
+                                            <div class="col-md-5 mb-3 participant-select-container">
                                                 <label for="firstNameinput"
                                                     class="form-label">{{ __('app.leads.participants') }}</label>
 
                                                 <select class="form-control tagselect" multiple
-                                                    id="choices-multiple-remove-button" name="participants[]">
+                                                    id="choices-multiple-remove-button" name="participants[]" >
                                                     <?php foreach($persons as $person){ ?>
                                                     <option value="person||{{ $person->id }}">
                                                         {{ $person->name }}
@@ -719,7 +719,7 @@
                                                     </button>
                                                 </li>
 
-                                                <li class="nav-item w-100" role="presentation">
+                                                <li class="nav-item stroke-nav-item w-100" role="presentation">
                                                     <button class="nav-link filter-button" id="email-tab-tab"
                                                         data-bs-toggle="pill" data-bs-target="#email-tab" type="button"
                                                         role="tab" aria-controls="email-tab" aria-selected="false">
@@ -739,7 +739,7 @@
                                                     </button>
                                                 </li>
 
-                                                <li class="nav-item w-100" role="presentation">
+                                                <li class="nav-item stroke-nav-item w-100" role="presentation">
                                                     <button class="nav-link filter-button" id="file-tab-tab"
                                                         data-bs-toggle="pill" data-bs-target="#file-tab" type="button"
                                                         role="tab" aria-controls="file-tab" aria-selected="false">
@@ -758,7 +758,7 @@
                                                     </button>
                                                 </li>
 
-                                                <li class="nav-item w-100" role="presentation">
+                                                <li class="nav-item stroke-nav-item w-100" role="presentation">
                                                     <button class="nav-link filter-button" id="quote-tab-tab"
                                                         data-bs-toggle="pill" data-bs-target="#quote-tab" type="button"
                                                         role="tab" aria-controls="quote-tab" aria-selected="false">
@@ -820,6 +820,8 @@
                                     </div>
                                     {{-- notes --}}
                                     <div>
+                                         @if ($notes->isEmpty())
+                                        @else
                                         <div>
                                             <h5 class="mb-3 card-title">Notes</h5>
                                         </div>
@@ -847,6 +849,7 @@
                                                 </div>
                                             </div>
                                         @endforeach
+                                        @endif
                                     </div>
 
 
@@ -1248,7 +1251,7 @@
                                                         <tbody>
 
                                                             <?php foreach($quotes as $quote){
-                                                                    $owner_name = UserDetails::where('id', $quote->owner)->value('name');
+                                                                    $owner_name = UserDetails::where('user_id', $quote->owner)->value('name');
                                                                     $person_name = Person::where('id', $quote->person)->value('name');
                                                                     $sub_total = 0;
                                                                     $products = QuoteProduct::where('quote_id', $quote->id)->get();

@@ -98,11 +98,13 @@ class QuoteController extends Controller
 
             $user = Auth::user();
             if ($user->role == 3) {
-                $quotesQuery->where('owner', $user->userDetails->id);
+                $quotesQuery->where('owner', $user->userDetails->user_id);
             }
             $quotes = $quotesQuery->get();
             $owners = UserDetails::get();
             $persons = Person::get();
+
+            // return response()->json([$quotes]);
 
             return view('quotes.quotes', [
                 'quotes' => $quotes,
@@ -136,7 +138,8 @@ class QuoteController extends Controller
             $products = Product::get();
             $services = Service::get();
             $authenticatedUser = Auth::user()->userDetails;
-            return view('quotes.create_lead_quote', ['lead' => $lead, 'products' => $products, 'authenticatedUser' => $authenticatedUser, 'services' => $services, 'lead_products' => $lead_products]);
+            $persons = Person::where('id', $lead->person)->first() ?? [];
+            return view('quotes.create_lead_quote', ['lead' => $lead, 'products' => $products, 'authenticatedUser' => $authenticatedUser, 'services' => $services, 'lead_products' => $lead_products, 'persons' => $persons]);
         }
         if ($request->isMethod('post')) {
 
@@ -146,7 +149,7 @@ class QuoteController extends Controller
                 'owner' => 'required',
                 'subject' => 'required',
                 'expired_at' => 'required',
-                'person' => 'required',
+                // 'person' => 'required',
                 'address' => 'required',
                 'country' => 'required',
                 'state' => 'required',
@@ -224,14 +227,14 @@ class QuoteController extends Controller
     {
 
         if ($request->isMethod('get')) {
-            $owners = UserDetails::get();
-            $owners2 = User::get();
+            $owners = UserDetails::with('user')->get();
+            // $owners2 = User::get();
             $persons = Person::get();
             $products = Product::get();
             $leads = Lead::get();
             $services = Service::get();
             $authenticatedUser = Auth::user()->userDetails;
-            return view('quotes.create_quote', ['owners' => $owners, 'owners2' => $owners2, 'authenticatedUser' => $authenticatedUser, 'persons' => $persons, 'products' => $products, 'leads' => $leads, 'services' => $services]);
+            return view('quotes.create_quote', ['owners' => $owners, 'authenticatedUser' => $authenticatedUser, 'persons' => $persons, 'products' => $products, 'leads' => $leads, 'services' => $services]);
         }
         if ($request->isMethod('post')) {
 

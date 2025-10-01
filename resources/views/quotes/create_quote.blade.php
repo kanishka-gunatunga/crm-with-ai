@@ -53,6 +53,9 @@ use App\Models\UserDetails;
 
 
                                                 @if (auth()->user()->role == 2)
+
+
+                                                
                                                     <!-- Role 2: Can choose any sales owner -->
                                                     <div class="col-12 col-md-4">
                                                         <label for="assign_user" class="form-label">Sales Owner</label>
@@ -64,10 +67,12 @@ use App\Models\UserDetails;
                                                                 <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
                                                             @endforeach
                                                         </select>
+                                                        
                                                         <div id="owner-errors"></div>
                                                       
                                                         {{-- <input type="hidden" name="sales_owner"
                                                             value=" {{$owner->id}}"> --}}
+                                                           
                                                     </div>
 
                                                     <div class="col-12 col-md-4">
@@ -85,11 +90,11 @@ use App\Models\UserDetails;
                                                     <div class="col-12 col-md-4">
                                                         <label for="assign_user" class="form-label">Sales Owner</label>
                                                         <select class="form-control" name="sales_owner" required selected>
-                                                            <option value="{{ $authenticatedUser->id }}" selected>
+                                                            <option value="{{ $authenticatedUser->user_id }}" selected>
                                                                 {{ $authenticatedUser->name }}
                                                             </option>
                                                         </select>
-                                                        
+                                                       {{-- {{ $authenticatedUser->user_id }} --}}
                                                                 {{-- <option value="{{ $authenticatedUser->id }}"
                                                                     {{ auth()->user()->id == $authenticatedUser->id ? 'selected' : '' }}>
                                                                     {{ $authenticatedUser->name }}
@@ -970,6 +975,9 @@ use App\Models\UserDetails;
         $(document).ready(function() {
             let userRole = "{{ auth()->user()->role }}";
             let userId = "{{ auth()->user()->id }}";
+
+            console.log("User Role:", userRole);
+            console.log("User ID:", userId);
 
             function loadLeads(salesOwnerId) {
                 $.ajax({
