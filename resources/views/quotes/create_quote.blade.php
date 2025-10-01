@@ -837,6 +837,7 @@ use App\Models\UserDetails;
 
         function initializeSelect2() {
             $(".product-select").select2({
+                allowClear: true,
                 placeholder: "Select a product",
                 allowClear: true
             }).on('change', function() {

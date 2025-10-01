@@ -287,6 +287,7 @@
 
     <script>
         $('.tagselectemail').select2({
+                allowClear: true,
             tags: true,
             tokenSeparators: [',', ' '],
             createTag: function(params) {

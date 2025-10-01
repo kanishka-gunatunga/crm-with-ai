@@ -596,6 +596,7 @@
             productFieldsContainer.append(productField);
 
             $(`.product-select`).select2({
+                allowClear: true,
                 width: '100%',
                 placeholder: 'Select a product',
                 allowClear: true
@@ -611,6 +612,7 @@
         $(document).ready(function() {
             // Initialize the select2 with tags functionality
             $('#person-select').select2({
+                allowClear: true,
                 tags: true,
                 tokenSeparators: [','],
                 placeholder: "Select or type to add",
@@ -629,7 +631,8 @@
             });
 
             // Initialize the second select2 (organization)
-            $('#organization-select').select2({});
+            $('#organization-select').select2({
+                allowClear: true,});
 
             // Function to clear email and contact number fields
             function clearFields() {

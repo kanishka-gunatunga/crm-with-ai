@@ -443,6 +443,8 @@
     <script>
         $(document).ready(function() {
             $('.stagselect').select2({
+                allowClear: true,
+               
                 dropdownParent: $('#assignPersonModal'),
                 width: '100%',
                 theme: 'bootstrap-5'

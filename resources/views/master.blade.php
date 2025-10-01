@@ -135,15 +135,18 @@
 
         // Initialize Select2 for .myDropdown
         $('.myDropdown').select2({
-            allowClear: true
+            allowClear: true,
+
         }).on('select2:open', function() {
             console.log('Select2 dropdown opened');
             moveParsleyError
-        (); // Move the parsley error message after select2 container after initialization
+                (); // Move the parsley error message after select2 container after initialization
         });
 
         // Initialize Select2 for .tagselect with tags enabled
         $('.tagselect').select2({
+
+            allowClear: true,
             tags: true,
         });
 
@@ -152,9 +155,9 @@
             console.log('Moving parsley error message');
             $('.parsley-errors-list').each(function() {
                 var parentDiv = $(this).closest(
-                '.col-12'); // Get the closest container of the error message
+                    '.col-12'); // Get the closest container of the error message
                 $(this).appendTo(
-                parentDiv); // Move the error message to the last position of the parent div
+                    parentDiv); // Move the error message to the last position of the parent div
             });
         }
 
@@ -165,6 +168,7 @@
 
     // $(document).ready(function() {
     //     $('.myDropdown').select2({
+    // allowClear: true,
     //         // placeholder: "Assign User",
     //         allowClear: true
     //     });
@@ -234,12 +238,15 @@
 </script>
 {{-- <script>
     $('.tagselect').select2({
+                allowClear: true,
         tags: true,
     });
 </script> --}}
 
 
 <script>
+    
+
     // 1. Only Date Picker
     flatpickr(".datePicker", {
         dateFormat: "Y-m-d",
