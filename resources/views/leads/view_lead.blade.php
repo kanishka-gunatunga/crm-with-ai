@@ -14,7 +14,7 @@
     
     $source_name = Source::where('id', $lead->source)->value('name');
     $type_name = Type::where('id', $lead->type)->value('name');
-    $owner_name = UserDetails::where('id', $lead->sales_owner)->value('name');
+    $owner_name = UserDetails::where('user_id', $lead->sales_owner)->value('name');
     $person = Person::where('id', $lead->person)->first();
     $organization = Organization::where('id', $lead->organization)->first();
     
@@ -40,7 +40,7 @@
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
                                     <a href="{{ url('leads') }}">Leads</a>
-                                        {{-- {{ \App\Models\Organization::where(
+                                    {{-- {{ \App\Models\Organization::where(
                                             'id',
                                             \App\Models\Person::where('id', $lead->person)->value('organization'),
                                         )->value('name') ?? 'N/A' }} --}}
@@ -271,7 +271,7 @@
                                                 @if (auth()->user()->role == '2')
                                                     <div class="terms-section">
                                                         <h3 class="field-label">Sales Owner</h3>
-                                                        <p class="field-value">{{ $owner_name }}</p>
+                                                        <p class="field-value">{{  $owner_name}}</p>
                                                     </div>
                                                 @endif
 
@@ -398,7 +398,7 @@
                                                     class="form-label">{{ __('app.leads.participants') }}</label>
 
                                                 <select class="form-control tagselect" multiple
-                                                    id="choices-multiple-remove-button" name="participants[]" >
+                                                    id="choices-multiple-remove-button" name="participants[]">
                                                     <?php foreach($persons as $person){ ?>
                                                     <option value="person||{{ $person->id }}">
                                                         {{ $person->name }}
@@ -406,8 +406,8 @@
                                                     <?php } ?>
                                                     <?php foreach($owners as $owner){ ?>
                                                     <option value="owner||{{ $owner->user_id }}">
-                                                            {{ $owner->name }}
-                                                        </option>
+                                                        {{ $owner->name }}
+                                                    </option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
@@ -820,35 +820,35 @@
                                     </div>
                                     {{-- notes --}}
                                     <div>
-                                         @if ($notes->isEmpty())
+                                        @if ($notes->isEmpty())
                                         @else
-                                        <div>
-                                            <h5 class="mb-3 card-title">Notes</h5>
-                                        </div>
+                                            <div>
+                                                <h5 class="mb-3 card-title">Notes</h5>
+                                            </div>
 
-                                        @foreach ($notes as $note)
-                                            <div class="d-flex">
+                                            @foreach ($notes as $note)
+                                                <div class="d-flex">
 
-                                                <div class="col-5">
-                                                    <div class="d-flex gap-3 align-items-center mb-3">
-                                                        <img src="{{ asset('images/avatar.png') }}"
-                                                            class="rounded-circle object-fit-cover" alt="..."
-                                                            width="30" height="30">
+                                                    <div class="col-5">
+                                                        <div class="d-flex gap-3 align-items-center mb-3">
+                                                            <img src="{{ asset('images/avatar.png') }}"
+                                                                class="rounded-circle object-fit-cover" alt="..."
+                                                                width="30" height="30">
 
 
-                                                        <p class="person-name">
-                                                            {{ \App\Models\UserDetails::where('id', $note->created_by)->value('name') ?? 'Unknown User' }}
-                                                        </p>
+                                                            <p class="person-name">
+                                                                {{ \App\Models\UserDetails::where('user_id', $note->created_by)->value('name') ?? 'Unknown User' }}
+                                                            </p>
 
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4 event-timestamp mb-3">
+                                                        <span>{{ $note->created_at }}</span>
+                                                        <span>></span>
+                                                        <span>{{ $note->note }}</span>
                                                     </div>
                                                 </div>
-                                                <div class="col-4 event-timestamp mb-3">
-                                                    <span>{{ $note->created_at }}</span>
-                                                    <span>></span>
-                                                    <span>{{ $note->note }}</span>
-                                                </div>
-                                            </div>
-                                        @endforeach
+                                            @endforeach
                                         @endif
                                     </div>
 
@@ -893,12 +893,24 @@
                                                                             <p>
                                                                                 Type: {{ $participant['type'] }},
 
-                                                                                {{-- Find the person's name from the $persons collection --}}
                                                                                 @php
-                                                                                    $person = $persons->firstWhere(
-                                                                                        'id',
-                                                                                        $participant['id'],
-                                                                                    );
+                                                                                    $person = null;
+                                                                                    if (
+                                                                                        $participant['type'] ===
+                                                                                        'person'
+                                                                                    ) {
+                                                                                        $person = $persons->firstWhere(
+                                                                                            'id',
+                                                                                            $participant['id'],
+                                                                                        );
+                                                                                    } elseif (
+                                                                                        $participant['type'] === 'owner'
+                                                                                    ) {
+                                                                                        $person = $owners->firstWhere(
+                                                                                            'user_id',
+                                                                                            $participant['id'],
+                                                                                        );
+                                                                                    }
                                                                                 @endphp
 
                                                                                 Name:
@@ -909,6 +921,7 @@
                                                                         <p>No participants found for this activity.</p>
                                                                     @endif
                                                                 </div>
+
                                                             </section>
                                                         </div>
 
@@ -972,8 +985,32 @@
                                                                     <h3 class="field-label">Participants</h3>
                                                                     @if (is_array($activity->participants) && count($activity->participants))
                                                                         @foreach ($activity->participants as $participant)
-                                                                            <p>Type: {{ $participant['type'] }}, ID:
-                                                                                {{ $participant['id'] }}</p>
+                                                                            <p>
+                                                                                Type: {{ $participant['type'] }},
+
+                                                                                @php
+                                                                                    $person = null;
+                                                                                    if (
+                                                                                        $participant['type'] ===
+                                                                                        'person'
+                                                                                    ) {
+                                                                                        $person = $persons->firstWhere(
+                                                                                            'id',
+                                                                                            $participant['id'],
+                                                                                        );
+                                                                                    } elseif (
+                                                                                        $participant['type'] === 'owner'
+                                                                                    ) {
+                                                                                        $person = $owners->firstWhere(
+                                                                                            'user_id',
+                                                                                            $participant['id'],
+                                                                                        );
+                                                                                    }
+                                                                                @endphp
+
+                                                                                Name:
+                                                                                {{ $person->name ?? 'Name Not Found' }}
+                                                                            </p>
                                                                         @endforeach
                                                                     @else
                                                                         <p>No participants found.</p>
@@ -1040,8 +1077,32 @@
                                                                     <h3 class="field-label">Participants</h3>
                                                                     @if (is_array($activity->participants) && count($activity->participants))
                                                                         @foreach ($activity->participants as $participant)
-                                                                            <p>Type: {{ $participant['type'] }}, ID:
-                                                                                {{ $participant['id'] }}</p>
+                                                                            <p>
+                                                                                Type: {{ $participant['type'] }},
+
+                                                                                @php
+                                                                                    $person = null;
+                                                                                    if (
+                                                                                        $participant['type'] ===
+                                                                                        'person'
+                                                                                    ) {
+                                                                                        $person = $persons->firstWhere(
+                                                                                            'id',
+                                                                                            $participant['id'],
+                                                                                        );
+                                                                                    } elseif (
+                                                                                        $participant['type'] === 'owner'
+                                                                                    ) {
+                                                                                        $person = $owners->firstWhere(
+                                                                                            'user_id',
+                                                                                            $participant['id'],
+                                                                                        );
+                                                                                    }
+                                                                                @endphp
+
+                                                                                Name:
+                                                                                {{ $person->name ?? 'Name Not Found' }}
+                                                                            </p>
                                                                         @endforeach
                                                                     @else
                                                                         <p>No participants found.</p>
@@ -1096,10 +1157,10 @@
                                                                 <th class="corner-left"><input type="checkbox"
                                                                         id="select-all">
                                                                 </th>
-                                                                <th>{{ __('app.datagrid.subject') }}</th>
-                                                                <th>{{ __('app.datagrid.content') }}</th>
-                                                                <th>{{ __('app.datagrid.date') }}</th>
-                                                                <th class="corner-right">{{ __('app.datagrid.actions') }}
+                                                                <th>Subject</th>
+                                                                <th>Content</th>
+                                                                <th>Date</th>
+                                                                <th class="corner-right">Actions
                                                                 </th>
                                                             </tr>
 

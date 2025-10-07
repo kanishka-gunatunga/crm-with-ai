@@ -761,7 +761,7 @@
             @endif
         });
     </script>
-
+   
 
     <script>
         $(document).ready(function() {
@@ -799,4 +799,9 @@
             });
         });
     </script>
+
+     @php
+        // clear the success message
+        session()->forget('success');
+    @endphp
 @endsection

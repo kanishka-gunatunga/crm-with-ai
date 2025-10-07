@@ -225,14 +225,19 @@
                     // Sales
                     if ($stage->name == 'New') {
                         
-                        // Merge all leads and then keep only unassigned OR owned by current user
+                       
                         $allLeadsFromAllStages = collect();
+                        
                         foreach ($leadsGroupedByStage as $stageId => $stageLeads) {
                             $allLeadsFromAllStages = $allLeadsFromAllStages->merge($stageLeads);
                         }
                         $leads = $allLeadsFromAllStages->filter(function($lead) use ($currentUserId, $stage) {
+                            
                             return (is_null($lead->sales_owner) || ($lead->sales_owner == 1) || $lead->sales_owner == $currentUserId) && ($lead->stage == $stage->id) ;
+                        
                         });
+
+                       
 
                         
                     } else {
@@ -247,7 +252,7 @@
                     $leads = collect();
                 }
 
-                $stage_value = $leads->sum('lead_value');
+                    $stage_value = $leads->sum('lead_value');
 
 
                             ?>
@@ -298,13 +303,13 @@
 
                                                 <div class="priority-section d-flex align-items-center gap-2">
                                                     @if (auth()->user()->role == 2)
+                                                   
                                                         @if ($lead->salesOwner)
+                                                           
                                                             <div class="assigned-wrapper"
                                                                 data-sales-owner="{{ $lead->salesOwner->name }}">
                                                                 <img src="{{ asset('images/assigned.svg') }}"
                                                                     alt="assigned" class="assigned-icon" tabindex="0">
-
-                                                                    
                                                             </div>
                                                         @endif
                                                     @elseif ($stage->name == 'New' && $lead->sales_owner == auth()->user()->id)

@@ -77,7 +77,7 @@
                                 <div class="tab-pane fade show active" id="inbox-tab-content">
                                     <div class="row g-4">
                                         <!-- Inbox content goes here -->
-                                        <form id="bulk-delete-form" method="POST"
+                                        <form id="bulk-delete-form" method="get"
                                             action="{{ url('delete-selected-emails') }}">
                                             @csrf
                                             <div class="table-responsive">
@@ -160,7 +160,7 @@
                                 </div>
                                 <div class="tab-pane fade" id="outbox-tab-content">
                                     <div class="text-center py-5 text-muted"> outbox emails to show.</div>
-                                    <form id="bulk-delete-form" method="POST" action="{{ url('delete-selected-emails') }}">
+                                    <form id="bulk-delete-form" method="get" action="{{ url('delete-selected-emails') }}">
                                         @csrf
                                         <div class="table-responsive">
 
@@ -173,7 +173,7 @@
                                 </div>
                                 <div class="tab-pane fade" id="favourite-tab-content" role="tabpanel"
                                     aria-labelledby="favourite-tab-button">
-                                    <form id="bulk-delete-form" method="POST"
+                                    <form id="bulk-delete-form" method="get"
                                         action="{{ url('delete-selected-emails') }}">
                                         @csrf
                                         <div class="table-responsive">

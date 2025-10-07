@@ -25,8 +25,6 @@
     $userRoleId = auth()->user()->role;
     $currentUserId = auth()->user()->id;
     
- 
-    
     ?>
     <!-- Scrollable Content -->
     <!-- Scrollable Content -->
@@ -282,9 +280,9 @@
                                         <input type="text" class="form-control" id="field5" placeholder="Date Due">
                                     </div> --}}
                                             <!-- <div class="col-12 col-md-4">
-                                                                                                                                                                    <label for="field5" class="form-label">Reminders</label>
-                                                                                                                                                                    <input type="text" class="form-control" id="field5" placeholder="Reminders">
-                                                                                                                                                                </div> -->
+                                                                                                                                                                        <label for="field5" class="form-label">Reminders</label>
+                                                                                                                                                                        <input type="text" class="form-control" id="field5" placeholder="Reminders">
+                                                                                                                                                                    </div> -->
 
                                         </div>
 
@@ -302,10 +300,12 @@
                                                     class="form-label">{{ __('app.leads.name') }}</label>
                                                 <select class="form-control stagselect" id="person-select" name="person"
                                                     data-parsley-errors-container="#person-value-errors">
-                                                    <option selected hidden value="{{ $lead->person ?? '' }}">
-                                                        {{ $person->name ?? '' }}</option>
-                                                    <?php foreach($persons as $person){ ?>
-                                                    <option value="{{ $person->id }}">{{ $person->name }}</option>
+                                                    <option hidden value="">Select Person</option>
+                                                    <?php foreach($persons as $personItem){ ?>
+                                                    <option value="{{ $personItem->id }}"
+                                                        {{ ($lead->person ?? '') == $personItem->id ? 'selected' : '' }}>
+                                                        {{ $personItem->name }}
+                                                    </option>
                                                     <?php } ?>
                                                 </select>
                                                 <div id="person-value-errors"></div>
@@ -322,8 +322,8 @@
                                                     class="form-label">{{ __('app.leads.organization') }}</label>
                                                 <select class="form-control stagselect" id="organization-select"
                                                     name="organization">
-                                                    <option selected hidden value="{{ $person->organization ?? '' }}">
-                                                        {{ $organization->name ?? '' }}</option>
+                                                    {{-- <option selected hidden value="{{ $person->organization ?? '' }}">
+                                                        {{ $organization->name ?? '' }}</option> --}}
                                                     <?php foreach($organizations as $organization){ ?>
                                                     <option value="{{ $organization->id }}">{{ $organization->name }}
                                                     </option>
@@ -675,7 +675,8 @@
 
             // Initialize the second select2 (organization-select)
             $('#organization-select').select2({
-                allowClear: true,});
+                allowClear: true,
+            });
 
             // Function to clear email and contact number fields
             function clearFields() {

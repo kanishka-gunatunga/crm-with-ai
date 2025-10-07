@@ -156,7 +156,7 @@
 
                             </div>
                             <div class="row g-4">
-                                <form id="bulk-delete-form" method="POST" action="{{ url('delete-selected-users') }}">
+                                <form id="bulk-delete-form" method="get" action="{{ url('delete-selected-users') }}">
                                     @csrf
                                     <div class="table-responsive">
                                         <table class="table new-table data-table-export" data-export-title="Users"

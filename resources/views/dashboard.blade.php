@@ -440,7 +440,8 @@
                                                     class="d-flex justify-content-between align-items-center mb-3 card-header">
                                                     <span></span>
                                                     <button type="button" class="btn-close" data-bs-toggle="collapse"
-                                                        data-bs-target="#collapseFilter-myLeads" aria-label="Close"></button>
+                                                        data-bs-target="#collapseFilter-myLeads"
+                                                        aria-label="Close"></button>
                                                 </div>
                                                 <div class="card-body">
                                                     <div>
@@ -489,8 +490,7 @@
                                                                         Start</label>
                                                                     <input type="date" class="form-control"
                                                                         name="expire_start_date"
-                                                                        value="{{ request('expire_start_date') }}"
-                                                                        >
+                                                                        value="{{ request('expire_start_date') }}">
                                                                 </div>
 
                                                                 <div class="col-md-6 mb-3">
@@ -550,13 +550,15 @@
                                             </thead>
                                             <tbody>
                                                 <?php
-                                            $my_leads = $all_leads->take(10);
-                                            foreach ($my_leads as $my_lead) {
-                                                $person_name = Person::where('id', $my_lead->person)->value('name');
+                                                    
+                                                    $my_leads = $all_leads->take(10);
+                                                    foreach ($my_leads as $my_lead) {
+                                                        $person_name = Person::where('id', $my_lead->person)->value('name');
+                                                        $closing_date = $my_lead->closing_date ? Carbon::parse($my_lead->closing_date) : null;
+                                                        $is_within_week = $closing_date && $closing_date->isBetween(Carbon::now(), Carbon::now()->addWeek());
+                                                ?>
 
-                                                $closing_date = $my_lead->closing_date ? Carbon::parse($my_lead->closing_date) : null;
-                                                $is_within_week = $closing_date && $closing_date->isBetween(Carbon::now(), Carbon::now()->addWeek());
-                                            ?>
+
                                                 <tr>
                                                     <td>{{ $my_lead->id }}</td>
                                                     <td><a
@@ -578,18 +580,29 @@
                                                     </td>
                                                     <td>
                                                         @if (is_null($my_lead->priority) || $my_lead->priority === '')
-                                                            <select class="priority-select dashboard-priority" data-lead-id="{{ $my_lead->id }}">
-                                                                <option value="" selected disabled>Select Priority</option>
+                                                            <select class="priority-select dashboard-priority"
+                                                                data-lead-id="{{ $my_lead->id }}">
+                                                                <option value="" selected disabled>Select Priority
+                                                                </option>
                                                                 <option value="High">High</option>
                                                                 <option value="Medium">Medium</option>
                                                                 <option value="Low">Low</option>
                                                             </select>
                                                         @else
-                                                            <select class="priority-select dashboard-priority" data-lead-id="{{ $my_lead->id }}">
-                                                                <option value="High" {{ $my_lead->priority == 'High' ? 'selected' : '' }}>High</option>
-                                                                <option value="Urgent" {{ $my_lead->priority == 'Urgent' ? 'selected' : '' }}>Urgent</option>
-                                                                <option value="Medium" {{ $my_lead->priority == 'Medium' ? 'selected' : '' }}>Medium</option>
-                                                                <option value="Low" {{ $my_lead->priority == 'Low' ? 'selected' : '' }}>Low</option>
+                                                            <select class="priority-select dashboard-priority"
+                                                                data-lead-id="{{ $my_lead->id }}">
+                                                                <option value="High"
+                                                                    {{ $my_lead->priority == 'High' ? 'selected' : '' }}>
+                                                                    High</option>
+                                                                <option value="Urgent"
+                                                                    {{ $my_lead->priority == 'Urgent' ? 'selected' : '' }}>
+                                                                    Urgent</option>
+                                                                <option value="Medium"
+                                                                    {{ $my_lead->priority == 'Medium' ? 'selected' : '' }}>
+                                                                    Medium</option>
+                                                                <option value="Low"
+                                                                    {{ $my_lead->priority == 'Low' ? 'selected' : '' }}>Low
+                                                                </option>
                                                             </select>
                                                         @endif
 
@@ -895,7 +908,7 @@
 
                                             </button>
                                         </div>
-                                        
+
 
                                     </div>
 
@@ -1077,7 +1090,7 @@
     <style>
         .leadsOverview {
             /* width: 100%;
-                            max-width: 900px; */
+                                max-width: 900px; */
             /* margin: auto; */
             background: white;
             padding: 30px;
@@ -1749,4 +1762,6 @@
             });
         });
     </script>
+
+   
 @endsection

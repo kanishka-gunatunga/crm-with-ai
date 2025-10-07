@@ -18,7 +18,6 @@
     }
     // $organization = Organization::all();
     // var_dump($organization);
-    
     ?>
     <!-- Scrollable Content -->
     <div class="main-scrollable">
@@ -86,7 +85,9 @@
                                         </div>
                                         <div class="col-12 col-md-4">
                                             <label for="terms" class="form-label">Person</label>
-                                            <input type="text" class="form-control" name="person" value="{{ $person->name ?? '' }}" readonly >
+                                            <input type="text" class="form-control" name="person"
+                                                value="{{ $persons->name ?? 'Not Found' }}" readonly>
+
                                         </div>
 
                                         <div class="col-12 col-md-4">
@@ -109,23 +110,29 @@
                                 <div class="row g-4">
                                     <div class="col-12 col-md-4">
                                         <label for="No" class="form-label">Address</label>
-                                        <input type="text" class="form-control" id="No" placeholder="No" name="address" required value="{{$organization->address  ?? ''}}">
+                                        <input type="text" class="form-control" id="No" placeholder="No"
+                                            name="address" required value="{{ $organization->address ?? '' }}">
                                     </div>
                                     <div class="col-12 col-md-4">
                                         <label for="Province" class="form-label">Province</label>
-                                        <input type="text" class="form-control" id="Province" placeholder="Province" name="state" required value="{{$organization->state  ?? ''}}">
+                                        <input type="text" class="form-control" id="Province" placeholder="Province"
+                                            name="state" required value="{{ $organization->state ?? '' }}">
                                     </div>
                                     <div class="col-12 col-md-4">
                                         <label for="Country" class="form-label">Country</label>
-                                        <input type="text" class="form-control" id="Country" placeholder="Country" name="country" required value="{{$organization->country  ?? ''}}">
+                                        <input type="text" class="form-control" id="Country" placeholder="Country"
+                                            name="country" required value="{{ $organization->country ?? '' }}">
                                     </div>
                                     <div class="col-12 col-md-4">
                                         <label for="City" class="form-label">City</label>
-                                        <input type="text" class="form-control" id="City" name="city" placeholder="City" required value="{{$organization->city  ?? ''}}">
+                                        <input type="text" class="form-control" id="City" name="city"
+                                            placeholder="City" required value="{{ $organization->city ?? '' }}">
                                     </div>
                                     <div class="col-12 col-md-4">
                                         <label for="Postal Code" class="form-label">Postal Code</label>
-                                        <input type="text" class="form-control" id="Postal Code"  name="post_code" placeholder="Post Code"  required value="{{$organization->post_code  ?? ''}}">
+                                        <input type="text" class="form-control" id="Postal Code" name="post_code"
+                                            placeholder="Post Code" required
+                                            value="{{ $organization->post_code ?? '' }}">
                                     </div>
 
                                 </div>
@@ -140,23 +147,29 @@
                                 <div class="row g-4">
                                     <div class="col-12 col-md-4">
                                         <label for="No" class="form-label">Address</label>
-                                        <input type="text" class="form-control" id="No" placeholder="No" name="shipping_address" required value="{{$organization->address  ?? ''}}">
+                                        <input type="text" class="form-control" id="No" placeholder="No"
+                                            name="shipping_address" required value="{{ $organization->address ?? '' }}">
                                     </div>
                                     <div class="col-12 col-md-4">
                                         <label for="Province" class="form-label">Province</label>
-                                        <input type="text" class="form-control" id="Province" placeholder="Province" name="shipping_state" required value="{{$organization->state  ?? ''}}">
+                                        <input type="text" class="form-control" id="Province" placeholder="Province"
+                                            name="shipping_state" required value="{{ $organization->state ?? '' }}">
                                     </div>
                                     <div class="col-12 col-md-4">
                                         <label for="Country" class="form-label">Country</label>
-                                        <input type="text" class="form-control" id="Country" placeholder="Country" name="shipping_country" required value="{{$organization->country  ?? ''}}">
+                                        <input type="text" class="form-control" id="Country" placeholder="Country"
+                                            name="shipping_country" required value="{{ $organization->country ?? '' }}">
                                     </div>
                                     <div class="col-12 col-md-4">
                                         <label for="City" class="form-label">City</label>
-                                        <input type="text" class="form-control" id="City" name="shipping_city" placeholder="City" required value="{{$organization->city  ?? ''}}">
+                                        <input type="text" class="form-control" id="City" name="shipping_city"
+                                            placeholder="City" required value="{{ $organization->city ?? '' }}">
                                     </div>
                                     <div class="col-12 col-md-4">
                                         <label for="Postal Code" class="form-label">Postal Code</label>
-                                        <input type="text" class="form-control" id="Postal Code" name="shipping_post_code" placeholder="Post Code"  required value="{{$organization->post_code ?? ''}}">
+                                        <input type="text" class="form-control" id="Postal Code"
+                                            name="shipping_post_code" placeholder="Post Code" required
+                                            value="{{ $organization->post_code ?? '' }}">
                                     </div>
 
                                 </div>
@@ -338,7 +351,7 @@
                                 <a href=""><button type="button" class="btn clear-all-btn">Clear All</button></a>
                             </div>
                             <div>
-                                <button type="submit" class="btn save-btn">Save</button>
+                                <button type="submit" class="btn save-btn" id="saveBtn">Save</button>
                                 <a href="{{ url('quotes') }}"><button type="button"
                                         class="btn cancel-btn">Cancel</button></a>
                             </div>
@@ -378,9 +391,23 @@
     <script>
         $(document).ready(function() {
 
+            let productStock = {};
+            const productData = <?php echo json_encode($products); ?>;
+            const serviceData = <?php echo json_encode($services); ?>;
+
+
+            productData.forEach(product => {
+                productStock['product||' + product.id] = product.quantity;
+            });
+
+            // Add services to the stock object (assuming services have a quantity)
+            serviceData.forEach(service => {
+                productStock['service||' + service.id] = service.quantity;
+            });
+
             function initializeSelect2() {
                 $(".product-select").select2({
-                allowClear: true,
+                    allowClear: true,
                     placeholder: "Select a product",
                     allowClear: true
                 }).on('change', function() {
@@ -408,6 +435,7 @@
                 row.find('input[name="total[]"]').val(total.toFixed(2));
 
                 updateTotals();
+                validateQuantities(); // Call validation after each row calculation
             }
 
             function updateTotals() {
@@ -437,6 +465,34 @@
                 $('#order_total_input').val(grandTotal.toFixed(2));
             }
 
+
+            function validateQuantities() {
+                let isValid = true;
+                $('#products-tbody tr').each(function() {
+                    console.log('Validating row');
+                    const row = $(this);
+                    const productId = row.find('.product-select').val();
+                    const quantityInput = row.find('input[name="quantity[]"]');
+                    const requestedQuantity = parseFloat(quantityInput.val());
+                    const availableStock = productStock[productId];
+
+                    // Only validate if a product is selected and quantity is a number
+                    if (productId && !isNaN(requestedQuantity)) {
+                        if (requestedQuantity > availableStock) {
+                            
+                            isValid = false;
+                            quantityInput.addClass('is-invalid'); // Add error styling
+                            // You might want to add a tooltip or a message here
+                        } else {
+                            quantityInput.removeClass('is-invalid'); // Remove error styling
+                        }
+                    }
+                });
+
+                // Enable/disable the save button based on validation result
+                $('#saveBtn').prop('disabled', !isValid);
+            }
+
             $('#products-tbody').on('input',
                 'input[name="quantity[]"], input[name="price[]"], input[name="discount[]"], input[name="tax[]"]',
                 function() {
@@ -446,35 +502,39 @@
             $('#products-tbody').on('click', '.remove-product', function() {
                 $(this).closest('tr').remove();
                 updateTotals();
+                validateQuantities(); // Re-validate after a row is removed
             });
 
             $('#add-product').on('click', function() {
                 let newRow = `
-            <tr>
-                <td>
-                    <select class="form-control product-select" name="products[]" required>
-                        <option hidden selected></option>
-                        <?php foreach($products as $product){ ?> 
-                        <option value="product||{{ $product->id }}" data-price="{{ $product->cost }}">{{ $product->name }}</option>
-                        <?php } ?>
-                        <?php foreach($services as $service){ ?> 
-                        <option value="service||{{ $service->id }}" data-price="{{ $service->cost }}">{{ $service->name }}</option>
-                        <?php } ?>
-                    </select>
-                    <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]" placeholder="Notes"></textarea>
-                </td>
-                <td><input type="number" step="any" class="form-control" name="quantity[]" required></td>
-                <td><input type="number" step="any" class="form-control" name="price[]" required></td>
-                <td><input type="number" step="any" class="form-control" name="amount[]" readonly required></td>
-                <td><input type="number" step="any" class="form-control" name="discount[]"></td>
-                <td><input type="number" step="any" class="form-control" name="tax[]"></td>
-                <td><input type="number" step="any" class="form-control" name="total[]" readonly></td>
-                <td><i class="fa-solid fa-trash remove-product remove-append-item mx-2"></i></td>
-            </tr>
-        `;
+                <tr>
+                    <td>
+                        <select class="form-control product-select" name="products[]" required>
+                            <option hidden selected></option>
+                            <?php foreach($products as $product){ ?>
+                            <option value="product||{{ $product->id }}" data-price="{{ $product->cost }}">{{ $product->name }}</option>
+                            <?php } ?>
+                            <?php foreach($services as $service){ ?>
+                            <option value="service||{{ $service->id }}" data-price="{{ $service->cost }}">{{ $service->name }}</option>
+                            <?php } ?>
+                        </select>
+                        <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]" placeholder="Notes"></textarea>
+                    </td>
+                    <td><input type="number" step="any" class="form-control" name="quantity[]" required></td>
+                    <td><input type="number" step="any" class="form-control" name="price[]" required></td>
+                    <td><input type="number" step="any" class="form-control" name="amount[]" readonly required></td>
+                    <td><input type="number" step="any" class="form-control" name="discount[]"></td>
+                    <td><input type="number" step="any" class="form-control" name="tax[]"></td>
+                    <td><input type="number" step="any" class="form-control" name="total[]" readonly></td>
+                    <td><i class="fa-solid fa-trash remove-product remove-append-item mx-2"></i></td>
+                </tr>
+            `;
                 $('#products-tbody').append(newRow);
                 initializeSelect2();
             });
+
+            // Initial validation on page load
+            validateQuantities();
         });
     </script>
 @endsection
