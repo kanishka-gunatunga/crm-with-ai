@@ -281,7 +281,7 @@
                                     <div id="stage-{{ $stage->id }}" data-status="{{ $stage->id }}"
                                         class="task-list connectedSortable">
                                         <?php foreach ($leads as $lead) {
-                                        $person_name = Person::where('id', $lead->person)->value('name');
+                                            $person_name = Person::where('id', $lead->person)->value('name');
                                     ?>
                                         <article class="task-card" data-lead-id="{{ $lead->id }}"
                                             data-value="{{ $lead->lead_value }}">

@@ -452,6 +452,7 @@ class LeadController extends Controller
             $lead = Lead::where('id', $id)->first();
             $lead_products = LeadProduct::where('lead_id', $id)->get();
             $pipeline = Pipeline::where('id', $lead->pipeline)->first();
+            $pipelineName = Pipeline::where('id', $lead->pipeline)->value('name');
             $stages = PipelineStage::where('pipeline_id', $pipeline->id)->get();
             $notes = LeadNote::where('lead_id', $id)->get();
             $actvities = LeadActivity::where('lead_id', $id)->get();
@@ -512,7 +513,9 @@ class LeadController extends Controller
                 'quotes' => $quotes,
                 'allItems' => $allItems,
                 'activity_logs' => $activity_logs,
-                'personNames' => $personNames
+                'personNames' => $personNames,
+                'pipeline' => $pipeline,
+                'pipelineName' => $pipelineName
             ]);
         }
 

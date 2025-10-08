@@ -48,7 +48,7 @@ class Lead extends Model
 
     public function salesOwner()
     {
-        return $this->belongsTo(UserDetails::class, 'sales_owner');
+        return $this->belongsTo(UserDetails::class, 'sales_owner','user_id');
     }
 
     public function quotes()
@@ -65,6 +65,12 @@ class Lead extends Model
     public function emails()
     {
         return $this->hasMany(SentEmails::class, 'lead_id');
+    }
+
+
+    public function pipeline()
+    {
+        return $this->belongsTo(Pipeline::class, 'pipeline');
     }
 
 }

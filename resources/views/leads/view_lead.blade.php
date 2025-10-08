@@ -252,7 +252,7 @@
 
                                                 <div class="terms-section">
                                                     <h3 class="field-label">Pipeline</h3>
-                                                    <p class="field-value">{{ $pipeline }}</p>
+                                                    <p class="field-value">{{ $pipelineName }}</p>
                                                 </div>
 
 
@@ -1242,7 +1242,7 @@
                                                                     <td class="">{{ $file->name }} </td>
                                                                     <td class="">{{ $file->description }} </td>
                                                                     <td class=""> <a
-                                                                            href="{{ asset('storage/' . $file->file) }}"
+                                                                            href="{{ asset('uploads/leads/files/' . $file->file) }}"
                                                                             download="{{ $file->file }}">{{ $file->file }}
                                                                         </a></td>
                                                                     <td class="action-icons d-flex gx-3">
