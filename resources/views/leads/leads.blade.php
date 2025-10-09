@@ -457,6 +457,58 @@
             </form>
         </div><!-- /.modal-dialog -->
     </div>
+
+
+
+
+
+<!-- Won Modal -->
+<div class="modal fade" id="wonModal" tabindex="-1" aria-labelledby="wonModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="wonModalLabel">Mark Lead as Won</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        Do you want to mark this lead as Won?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button id="confirmWon" type="button" class="btn btn-success">Yes, Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lost Modal -->
+<div class="modal fade" id="lostModal" tabindex="-1" aria-labelledby="lostModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="lostModalLabel">Mark Lead as Lost</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        Do you want to mark this lead as Lost?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button id="confirmLost" type="button" class="btn btn-danger">Yes, Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
     <script>
         $(document).ready(function() {
 
@@ -495,7 +547,7 @@
                 const stageCard = stage.closest('.lead-card');
                 const stageNameElement = stageCard.querySelector('.notification-label');
                 const stageName = stageNameElement ? stageNameElement.textContent.trim() : '';
-                const isNewStage = stageName === 'New';
+                const isNewStage = stageName === 'New' || stageName === 'Lost' || stageName === 'Won';
 
                 new Sortable(stage, {
                     group: 'leads', // This allows dragging between lists
@@ -550,10 +602,10 @@
         });
 
         function updateLeadStage(leadId, newStage, leadValue, oldStage) {
-            console.log("leadId:", leadId);
-            console.log("newStage:", newStage);
-            console.log("leadValue:", leadValue);
-            console.log("oldStage:", oldStage);
+            // console.log("leadId:", leadId);
+            // console.log("newStage:", newStage);
+            // console.log("leadValue:", leadValue);
+            // console.log("oldStage:", oldStage);
             var csrfToken = "{{ csrf_token() }}";
 
             $.ajax({

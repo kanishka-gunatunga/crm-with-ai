@@ -2442,7 +2442,9 @@
 
             $('#submitWonReason').click(function() {
                 const won_value = $('#won_value').val();
-                const closed_date = $('#closed_date').val();
+                const closed_date = $('#closing_date').val();
+                console.log("Won Value:", won_value);
+                console.log("Closed Date:", closed_date);
                 if (!won_value || !closed_date) {
                     alert('Please provide all required fields for won stage.');
                     return;
