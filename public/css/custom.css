@@ -1380,14 +1380,14 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
 }
 
 .form-check-input {
-  height: 12px !important;
-  width: 12px !important;
+  height: 14px !important;
+  width: 14px !important;
 }
 
 .form-check-label {
   font-family: var(--font-family) !important;
   font-weight: 500 !important;
-  font-size: 10px !important;
+  font-size: 12px !important;
   color: var(--primary-text-color) !important;
   margin-top: 5px !important;
 }

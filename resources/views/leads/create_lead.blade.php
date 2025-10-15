@@ -157,7 +157,7 @@
                                                 @endif
                                             </div>
 
-                                            
+
 
 
 
@@ -194,56 +194,6 @@
                                                     </div>
                                                 @endif
                                             </div>
-
-
-
-
-                                            {{-- <div class="col-12 col-md-4">
-                                                <label for="field5" class="form-label">Priority</label>
-                                                <input type="text" class="form-control" id="field5"
-                                                    placeholder="Priority">
-                                            </div> --}}
-                                            {{-- <div class="col-12 col-md-4">
-                                        <label for="field3" class="form-label">Assign User</label>
-
-                                        <select class="myDropdown form-control  ">
-                                            <option value="1">Option 1</option>
-                                            <option value="2">Option 2</option>
-                                            <option value="3">Option 3</option>
-                                        </select>
-                                    </div> --}}
-                                            <!-- Select2 CSS -->
-
-
-                                            {{-- <div class="col-12 col-md-4">
-                                        <label for="field4" class="form-label">Status</label>
-                                        <input type="text" class="form-control" id="field4" placeholder="Status">
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="field5" class="form-label">Priority</label>
-                                        <input type="text" class="form-control" id="field5" placeholder="Priority">
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="field3" class="form-label">Terms</label>
-
-                                        <select class="myDropdown2 form-control  ">
-                                            <option value="1">Option 1</option>
-                                            <option value="2">Option 2</option>
-                                            <option value="3">Option 3</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="field5" class="form-label">Date start</label>
-                                        <input type="text" class="form-control" id="field5" placeholder="Date start">
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="field5" class="form-label">Date Due</label>
-                                        <input type="text" class="form-control" id="field5" placeholder="Date Due">
-                                    </div> --}}
-                                            <!-- <div class="col-12 col-md-4">
-                                                                                                                                                                                    <label for="field5" class="form-label">Reminders</label>
-                                                                                                                                                                                    <input type="text" class="form-control" id="field5" placeholder="Reminders">
-                                                                                                                                                                                </div> -->
 
                                         </div>
 
@@ -284,8 +234,7 @@
                                                     name="organization">
                                                     <option hidden selected></option>
                                                     <?php foreach($organizations as $organization){ ?>
-                                                    <option value="{{ $organization->id }}">{{ $organization->name }}
-                                                    </option>
+                                                        <option value="{{ $organization->id }}">{{ $organization->name }}</option>
                                                     <?php } ?>
                                                 </select>
                                                 @if ($errors->has('organization'))
@@ -294,8 +243,9 @@
                                                     </div>
                                                 @endif
                                             </div>
+                                        </div>
 
-
+                                        <div class="row g-4 mt-1 input-fields-container" id="input-fields-container">
                                             <div class="col-12 col-md-4" id="email-fields">
                                                 <label for="field1"
                                                     class="form-label">{{ __('app.leads.emails') }}</label>
@@ -316,8 +266,8 @@
                                                             for="email-home-0">{{ __('app.common.home') }}</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <button class="btn add-more-button p-0" id="add-emails"
-                                                            onclick="addEmailField()">
+                                                        <button type="button" class="btn add-more-button p-0"
+                                                            id="add-emails" onclick="addEmailField()">
                                                             <svg width="14" height="14" viewBox="0 0 14 14"
                                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -336,7 +286,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-12 col-md-4 mt-1" id="number-fields">
+                                            <div class="col-12 col-md-4" id="number-fields">
                                                 <label for="field1"
                                                     class="form-label">{{ __('app.leads.contact-numbers') }}</label>
                                                 <input type="text" class="form-control" name="contact_numbers[]">
@@ -356,8 +306,10 @@
                                                             for="number-home-0">{{ __('app.common.home') }}</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <button class="btn add-more-button p-0" id="add-emails"
-                                                            onclick="addNumberField()">
+
+
+                                                        <button type="button" class="btn add-more-button p-0"
+                                                            id="add-emails" onclick="addNumberField()">
                                                             <svg width="14" height="14" viewBox="0 0 14 14"
                                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -375,10 +327,7 @@
 
                                                 </div>
                                             </div>
-
                                         </div>
-
-
 
 
                                     </div>
@@ -397,39 +346,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-
-                                {{-- <div class="col-md-12 p-4">
-                                    <div class="d-flex gap-3 mb-3 align-items-center">
-                                        <div>
-                                            <p class="m-0">Attachments </p>
-                                        </div>
-
-                                        <div type="button" class="btn muted p-0">
-                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M11.6667 0C12.7718 0 13.8316 0.438987 14.613 1.22039C15.3944 2.00179 15.8334 3.0616 15.8334 4.16667V14.1667C15.8334 14.9327 15.6825 15.6913 15.3894 16.399C15.0962 17.1067 14.6665 17.7498 14.1249 18.2915C13.5832 18.8331 12.9401 19.2628 12.2324 19.556C11.5247 19.8491 10.7661 20 10.0001 20C9.23404 20 8.47549 19.8491 7.76776 19.556C7.06003 19.2628 6.41697 18.8331 5.87529 18.2915C5.33362 17.7498 4.90394 17.1067 4.61078 16.399C4.31763 15.6913 4.16675 14.9327 4.16675 14.1667V7.5H5.83341V14.1667C5.83341 15.2717 6.2724 16.3315 7.0538 17.1129C7.8352 17.8943 8.89501 18.3333 10.0001 18.3333C11.1052 18.3333 12.165 17.8943 12.9464 17.1129C13.7278 16.3315 14.1667 15.2717 14.1667 14.1667V4.16667C14.1667 3.83836 14.1021 3.51327 13.9764 3.20996C13.8508 2.90664 13.6667 2.63105 13.4345 2.3989C13.2024 2.16675 12.9268 1.9826 12.6235 1.85697C12.3201 1.73133 11.9951 1.66667 11.6667 1.66667C11.3384 1.66667 11.0134 1.73133 10.71 1.85697C10.4067 1.9826 10.1311 2.16675 9.89898 2.3989C9.66683 2.63105 9.48269 2.90664 9.35705 3.20996C9.23141 3.51327 9.16675 3.83836 9.16675 4.16667V14.1667C9.16675 14.3877 9.25455 14.5996 9.41083 14.7559C9.56711 14.9122 9.77907 15 10.0001 15C10.2211 15 10.4331 14.9122 10.5893 14.7559C10.7456 14.5996 10.8334 14.3877 10.8334 14.1667V5H12.5001V14.1667C12.5001 14.8297 12.2367 15.4656 11.7678 15.9344C11.299 16.4033 10.6631 16.6667 10.0001 16.6667C9.33704 16.6667 8.70116 16.4033 8.23231 15.9344C7.76347 15.4656 7.50008 14.8297 7.50008 14.1667V4.16667C7.50008 3.0616 7.93907 2.00179 8.72047 1.22039C9.50187 0.438987 10.5617 0 11.6667 0Z"
-                                                    fill="#172635" />
-                                            </svg>
-
-                                        </div>
-
-                                        <div type="button" class="btn muted p-0">
-                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M10.8333 4.99998L12.4999 3.33331C13.3333 2.49998 14.9999 2.49998 15.8333 3.33331L16.6666 4.16665C17.4999 4.99998 17.4999 6.66665 16.6666 7.49998L12.4999 11.6666C11.6666 12.5 9.99992 12.5 9.16659 11.6666M9.16659 15L7.49992 16.6666C6.66659 17.5 4.99992 17.5 4.16659 16.6666L3.33325 15.8333C2.49992 15 2.49992 13.3333 3.33325 12.5L7.49992 8.33331C8.33325 7.49998 9.99992 7.49998 10.8333 8.33331"
-                                                    stroke="#172635" stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </svg>
-
-                                        </div>
-
-                                    </div>
-                                </div> --}}
-
 
                             </div>
                         </div>
@@ -460,163 +376,17 @@
 
 
     <script>
-        let emailCounter = 1;
-        let numberCounter = 1;
-
-        function addEmailField(email = '', type = 'work', index = emailCounter) {
-            const inputFieldContainer = $('#input-fields-container');
-            const emailField = `
-                        <div class="col-12 col-md-4 email-field-${index} mt-1">
-                            <label for="field1" class="form-label">{{ __('app.leads.emails') }}</label>
-                            <input type="email" class="form-control" name="emails[]" value="${email}" required>
-                            
-                            <div class="mt-4 mt-lg-0">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="email_types[${index}]"
-                                        id="email-work-${index}" ${type === 'work' ? 'checked' : ''} value="work">
-                                    <label class="form-check-label" for="email-work-${index}">{{ __('app.common.work') }}</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="email_types[${index}]"
-                                        id="email-home-${index}" ${type === 'home' ? 'checked' : ''} value="home">
-                                    <label class="form-check-label" for="email-home-${index}">{{ __('app.common.home') }}</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <button class="btn trash-icon-btn " onclick="removeEmailField(this)">
-                                                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M4.44137 13.0221C4.1026 13.0221 3.81269 12.9016 3.57164 12.6606C3.3306 12.4195 3.20987 12.1294 3.20946 11.7902V3.78281H2.59351V2.55089H5.67329V1.93494H9.36902V2.55089H12.4488V3.78281H11.8328V11.7902C11.8328 12.129 11.7123 12.4191 11.4713 12.6606C11.2302 12.902 10.9401 13.0226 10.6009 13.0221H4.44137ZM10.6009 3.78281H4.44137V11.7902H10.6009V3.78281ZM5.67329 10.5583H6.9052V5.01472H5.67329V10.5583ZM8.13711 10.5583H9.36902V5.01472H8.13711V10.5583Z"
-                                                                fill="#ED2227" />
-                                                        </svg>
-
-                                                    </button>
-                                </div>
-                            </div>
-                        </div>`;
-
-            inputFieldContainer.append(emailField);
-            emailCounter++;
-        }
-
-        function addNumberField(number = '', type = 'work', index = numberCounter) {
-            const inputFieldContainer = $('#input-fields-container');
-            const numberField = `
-                            <div class="col-12 col-md-4 number-field-${index} mt-1">
-                                <label for="field1" class="form-label">{{ __('app.leads.contact-numbers') }}</label>
-                                <input type="text" class="form-control" name="contact_numbers[]" value="${number}">
-                                
-                                <div class="mt-4 mt-lg-0">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="number_types[${index}]"
-                                            id="number-work-${index}" ${type === 'work' ? 'checked' : ''} value="work">
-                                        <label class="form-check-label" for="number-work-${index}">{{ __('app.common.work') }}</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="number_types[${index}]"
-                                            id="number-home-${index}" ${type === 'home' ? 'checked' : ''} value="home">
-                                        <label class="form-check-label" for="number-home-${index}">{{ __('app.common.home') }}</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                    <button class="btn trash-icon-btn " onclick="removeNumberField(this)">
-                                                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M4.44137 13.0221C4.1026 13.0221 3.81269 12.9016 3.57164 12.6606C3.3306 12.4195 3.20987 12.1294 3.20946 11.7902V3.78281H2.59351V2.55089H5.67329V1.93494H9.36902V2.55089H12.4488V3.78281H11.8328V11.7902C11.8328 12.129 11.7123 12.4191 11.4713 12.6606C11.2302 12.902 10.9401 13.0226 10.6009 13.0221H4.44137ZM10.6009 3.78281H4.44137V11.7902H10.6009V3.78281ZM5.67329 10.5583H6.9052V5.01472H5.67329V10.5583ZM8.13711 10.5583H9.36902V5.01472H8.13711V10.5583Z"
-                                                                    fill="#ED2227" />
-                                                            </svg>
-
-                                                        </button>
-                                    </div>
-                                </div>
-                            </div>`;
-
-            inputFieldContainer.append(numberField);
-            numberCounter++;
-        }
-
-        function removeEmailField(element) {
-            $(element).closest('[class*="email-field-"]').remove();
-        }
-
-        function removeNumberField(element) {
-            $(element).closest('[class*="number-field-"]').remove();
-        }
-
-        function addProductField() {
-            const productFieldsContainer = $('#product-fields');
-            const productField = `
-                                    <div class="row align-items-center product-field">
-                                    <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <label for="firstNameinput" class="form-label">{{ __('app.leads.products') }}</label>
-                                                <select class="form-control product-select" name="products[]" required onchange="updatePrice(this)">
-                                                    <option hidden selected></option>
-                                                    <?php foreach($products as $product){ ?> 
-                                                    <option value="product||{{ $product->id }}" data-price="{{ $product->cost }}">{{ $product->name }}</option>
-                                                    <?php } ?>
-                                                    <?php foreach($services as $service){ ?> 
-                                                        <option value="service||{{ $service->id }}" data-price="{{ $service->cost }}">{{ $service->name }}</option>
-                                                    <?php } ?>
-                                                </select>
-                                            </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="mb-3">
-                                            <label for="firstNameinput" class="form-label">{{ __('app.leads.price') }}</label>
-                                            <input type="number" step="any" class="form-control price-input" name="prices[]"  required oninput="calculateAmount(this)">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="mb-3">
-                                            <label for="firstNameinput" class="form-label">{{ __('app.leads.quantity') }}</label>
-                                            <input type="number" step="any" class="form-control quantity-input" name="quantities[]"  required oninput="calculateAmount(this)">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="mb-3">
-                                            <label for="firstNameinput" class="form-label">{{ __('app.leads.amount') }}</label>
-                                            <input type="number" step="any" class="form-control amount-input" name="amounts[]" readonly  required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <div class="mb-3">
-                                        <button class="btn trash-icon-btn " onclick="removeProductField(this)">
-                                                                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
-                                                                        xmlns="http://www.w3.org/2000/svg">
-                                                                        <path
-                                                                            d="M4.44137 13.0221C4.1026 13.0221 3.81269 12.9016 3.57164 12.6606C3.3306 12.4195 3.20987 12.1294 3.20946 11.7902V3.78281H2.59351V2.55089H5.67329V1.93494H9.36902V2.55089H12.4488V3.78281H11.8328V11.7902C11.8328 12.129 11.7123 12.4191 11.4713 12.6606C11.2302 12.902 10.9401 13.0226 10.6009 13.0221H4.44137ZM10.6009 3.78281H4.44137V11.7902H10.6009V3.78281ZM5.67329 10.5583H6.9052V5.01472H5.67329V10.5583ZM8.13711 10.5583H9.36902V5.01472H8.13711V10.5583Z"
-                                                                            fill="#ED2227" />
-                                                                    </svg>
-
-                                                                </button>
-                                        </div>
-                                    </div>
-                                    </div>`;
-            productFieldsContainer.append(productField);
-
-            $(`.product-select`).select2({
-                allowClear: true,
-                width: '100%',
-                placeholder: 'Select a product',
-                allowClear: true
-            });
-        }
-
-        function removeProductField(element) {
-            const productField = element.closest('.product-field');
-            productField.remove();
-        }
-    </script>
-    <script>
         $(document).ready(function() {
+            let emailCounter = 0;
+            let numberCounter = 0;
+            let isExistingPerson = false;
+
             // Initialize the select2 with tags functionality
             $('#person-select').select2({
                 allowClear: true,
                 tags: true,
                 tokenSeparators: [','],
                 placeholder: "Select or type to add",
-                allowClear: true,
                 createTag: function(params) {
                     var term = $.trim(params.term);
                     if (term === '') {
@@ -632,123 +402,293 @@
 
             // Initialize the second select2 (organization)
             $('#organization-select').select2({
-                allowClear: true,});
+                allowClear: true,
+            });
 
             // Function to clear email and contact number fields
             function clearFields() {
-                $('#email-fields').html('');
-                $('#number-fields').html('');
+                // Remove all dynamically added fields
+                $('#email-fields .email-field-dynamic').remove();
+                $('#number-fields .number-field-dynamic').remove();
+
+                // Reset the first email and number fields
+                $('#email-fields input[type="email"]').val('').prop('disabled', false);
+                $('#number-fields input[type="text"]').val('').prop('disabled', false);
+
+                // Reset radio buttons to work
+                $('#email-fields input[type="radio"][value="work"]').prop('checked', true);
+                $('#number-fields input[type="radio"][value="work"]').prop('checked', true);
+
+                // Reset counters
+                emailCounter = 0;
+                numberCounter = 0;
             }
 
-            // Function to add email input fields dynamically
-            function addEmailField(emailValue = '', emailLabel = '', index = 0) {
+            // Function to show/hide add more buttons
+            function toggleAddMoreButtons(show) {
+                if (show) {
+                    $('#email-fields .add-more-button').show();
+                    $('#number-fields .add-more-button').show();
+                } else {
+                    $('#email-fields .add-more-button').hide();
+                    $('#number-fields .add-more-button').hide();
+                }
+            }
+
+            // Function to add email field dynamically (below existing ones)
+            window.addEmailField = function() {
+                emailCounter++;
                 let emailHtml = `
+            <div class="email-field-dynamic mt-3">
+                <label for="email-${emailCounter}" class="form-label">{{ __('app.leads.emails') }}</label>
+                <input type="email" class="form-control" name="emails[]" id="email-${emailCounter}">
 
-            <div class="email-field">
-                <label for="firstNameinput" class="form-label">Email</label>
-                <input type="email" name="emails[${index}]" value="${emailValue}" placeholder="Email ${emailLabel}" class="form-control">
-            </div>`;
+                <div class="mt-2">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="email_types[${emailCounter}]" 
+                               id="email-work-${emailCounter}" value="work" checked>
+                        <label class="form-check-label" for="email-work-${emailCounter}">{{ __('app.common.work') }}</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="email_types[${emailCounter}]" 
+                               id="email-home-${emailCounter}" value="home">
+                        <label class="form-check-label" for="email-home-${emailCounter}">{{ __('app.common.home') }}</label>
+                    </div>
+
+                   
+                    <div class="form-check form-check-inline">
+                        <button type="button" class="btn trash-icon-btn mt-0 remove-email-field">
+                                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M4.44137 13.0221C4.1026 13.0221 3.81269 12.9016 3.57164 12.6606C3.3306 12.4195 3.20987 12.1294 3.20946 11.7902V3.78281H2.59351V2.55089H5.67329V1.93494H9.36902V2.55089H12.4488V3.78281H11.8328V11.7902C11.8328 12.129 11.7123 12.4191 11.4713 12.6606C11.2302 12.902 10.9401 13.0226 10.6009 13.0221H4.44137ZM10.6009 3.78281H4.44137V11.7902H10.6009V3.78281ZM5.67329 10.5583H6.9052V5.01472H5.67329V10.5583ZM8.13711 10.5583H9.36902V5.01472H8.13711V10.5583Z"
+                                            fill="#ED2227" />
+                                    </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+                // Insert before the add more button container
                 $('#email-fields').append(emailHtml);
+            };
+
+            // Function to add contact number field dynamically (below existing ones)
+            window.addNumberField = function() {
+                numberCounter++;
+                let numberHtml = `
+            <div class="number-field-dynamic mt-3">
+                <label for="number-${numberCounter}" class="form-label">{{ __('app.leads.contact-numbers') }}</label>
+                <input type="text" class="form-control" name="contact_numbers[]" id="number-${numberCounter}">
+
+                <div class="mt-2">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="number_types[${numberCounter}]" 
+                               id="number-work-${numberCounter}" value="work" checked>
+                        <label class="form-check-label" for="number-work-${numberCounter}">{{ __('app.common.work') }}</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="number_types[${numberCounter}]" 
+                               id="number-home-${numberCounter}" value="home">
+                        <label class="form-check-label" for="number-home-${numberCounter}">{{ __('app.common.home') }}</label>
+                    </div>
+                    <div class="form-check form-check-inline ">
+                       <button type="button" class="btn trash-icon-btn mt-0 remove-number-field">
+                                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M4.44137 13.0221C4.1026 13.0221 3.81269 12.9016 3.57164 12.6606C3.3306 12.4195 3.20987 12.1294 3.20946 11.7902V3.78281H2.59351V2.55089H5.67329V1.93494H9.36902V2.55089H12.4488V3.78281H11.8328V11.7902C11.8328 12.129 11.7123 12.4191 11.4713 12.6606C11.2302 12.902 10.9401 13.0226 10.6009 13.0221H4.44137ZM10.6009 3.78281H4.44137V11.7902H10.6009V3.78281ZM5.67329 10.5583H6.9052V5.01472H5.67329V10.5583ZM8.13711 10.5583H9.36902V5.01472H8.13711V10.5583Z"
+                                            fill="#ED2227" />
+                                    </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+                // Insert before the add more button container
+                $('#number-fields').append(numberHtml);
+            };
+
+            // Function to populate email fields from database
+            function populateEmailFields(emails) {
+                if (emails.length > 0) {
+                    // Set first email field (the static one)
+                    let firstEmail = emails[0];
+                    $('#email-fields input[type="email"]').first().val(firstEmail.value).prop('disabled', true);
+                    $(`#email-fields input[type="radio"][name="email_types[0]"][value="${firstEmail.label || 'work'}"]`)
+                        .prop('checked', true);
+                    $('#email-fields input[type="radio"][name="email_types[0]"]').prop('disabled', true);
+
+                    // Add additional emails as disabled fields
+                    for (let i = 1; i < emails.length; i++) {
+                        emailCounter++;
+                        let email = emails[i];
+                        let emailHtml = `
+                    <div class="email-field-dynamic mt-3">
+                        <label for="email-${emailCounter}" class="form-label">{{ __('app.leads.emails') }}</label>
+                        <input type="email" class="form-control" name="emails[]" id="email-${emailCounter}" 
+                               value="${email.value}" disabled>
+
+                        <div class="mt-2">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="email_types[${emailCounter}]" 
+                                       id="email-work-${emailCounter}" value="work" ${email.label === 'work' ? 'checked' : ''} disabled>
+                                <label class="form-check-label" for="email-work-${emailCounter}">{{ __('app.common.work') }}</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="email_types[${emailCounter}]" 
+                                       id="email-home-${emailCounter}" value="home" ${email.label === 'home' ? 'checked' : ''} disabled>
+                                <label class="form-check-label" for="email-home-${emailCounter}">{{ __('app.common.home') }}</label>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                        $('#email-fields').append(emailHtml);
+                    }
+                }
             }
 
-            // Function to add contact number input fields dynamically
-            function addNumberField(numberValue = '', numberLabel = '', index = 0) {
-                let numberHtml = `
-            <div class="number-field">
-                <label for="firstNameinput" class="form-label">Contact Number</label>
-                <input type="text" name="contact_numbers[${index}]" value="${numberValue}" placeholder="Contact Number ${numberLabel}" class="form-control">
-            
-            </div>`;
-                $('#number-fields').append(numberHtml);
+            // Function to populate number fields from database
+            function populateNumberFields(numbers) {
+                if (numbers.length > 0) {
+                    // Set first number field (the static one)
+                    let firstNumber = numbers[0];
+                    $('#number-fields input[type="text"]').first().val(firstNumber.value).prop('disabled', true);
+                    $(`#number-fields input[type="radio"][name="number_types[0]"][value="${firstNumber.label || 'work'}"]`)
+                        .prop('checked', true);
+                    $('#number-fields input[type="radio"][name="number_types[0]"]').prop('disabled', true);
+
+                    // Add additional numbers as disabled fields
+                    for (let i = 1; i < numbers.length; i++) {
+                        numberCounter++;
+                        let number = numbers[i];
+                        let numberHtml = `
+                    <div class="number-field-dynamic mt-3">
+                        <label for="number-${numberCounter}" class="form-label">{{ __('app.leads.contact-numbers') }}</label>
+                        <input type="text" class="form-control" name="contact_numbers[]" id="number-${numberCounter}" 
+                               value="${number.value}" disabled>
+
+                        <div class="mt-2">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="number_types[${numberCounter}]" 
+                                       id="number-work-${numberCounter}" value="work" ${number.label === 'work' ? 'checked' : ''} disabled>
+                                <label class="form-check-label" for="number-work-${numberCounter}">{{ __('app.common.work') }}</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="number_types[${numberCounter}]" 
+                                       id="number-home-${numberCounter}" value="home" ${number.label === 'home' ? 'checked' : ''} disabled>
+                                <label class="form-check-label" for="number-home-${numberCounter}">{{ __('app.common.home') }}</label>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                        $('#number-fields').append(numberHtml);
+                    }
+                }
             }
 
             // Event handler for the person select dropdown change
             $('#person-select').on('change', function() {
+                let selectedData = $(this).select2('data')[0];
                 let personId = $(this).val();
 
                 // Clear the fields when a new person is selected
                 clearFields();
 
                 if (personId) {
-                    $.ajax({
-                        url: '{{ url('get-contact-person-details') }}/' + personId,
-                        type: 'GET',
-                        success: function(response) {
-                            console.log(response);
+                    // Check if this is a new tag (not from database)
+                    if (selectedData && selectedData.newTag) {
+                        // This is a new person being added
+                        isExistingPerson = false;
+                        toggleAddMoreButtons(true); // Show add more buttons
 
-                            let organizationSelect = $('#organization-select');
+                        // Enable all fields
+                        $('#email-fields input').prop('disabled', false);
+                        $('#number-fields input').prop('disabled', false);
+                    } else {
+                        // This is an existing person from database
+                        isExistingPerson = true;
+                        toggleAddMoreButtons(false); // Hide add more buttons
 
-                            // Handling organization selection
-                            if (response.organization) {
-                                organizationSelect.empty().trigger("change");
-                                let newOption = new Option(response.organization_name, response
-                                    .organization, true, true);
-                                organizationSelect.append(newOption).trigger("change");
-                            } else {
-                                organizationSelect.val(null).trigger("change");
+                        // Fetch person details from database
+                        $.ajax({
+                            url: '{{ url('get-contact-person-details') }}/' + personId,
+                            type: 'GET',
+                            success: function(response) {
+                                console.log(response);
+
+                                let organizationSelect = $('#organization-select');
+
+                                // Handling organization selection
+                                if (response.organization) {
+                                    organizationSelect.empty().trigger("change");
+                                    let newOption = new Option(response.organization_name,
+                                        response.organization, true, true);
+                                    organizationSelect.append(newOption).trigger("change");
+                                } else {
+                                    organizationSelect.val(null).trigger("change");
+                                }
+
+                                // Populate emails
+                                if (response.emails && response.emails.length > 0) {
+                                    populateEmailFields(response.emails);
+                                } else {
+                                    // No emails, keep field enabled and show add more
+                                    $('#email-fields input[type="email"]').first().prop(
+                                        'disabled', false);
+                                    $('#email-fields input[type="radio"]').prop('disabled',
+                                        false);
+                                    toggleAddMoreButtons(true);
+                                }
+
+                                // Populate contact numbers
+                                if (response.contact_numbers && response.contact_numbers
+                                    .length > 0) {
+                                    populateNumberFields(response.contact_numbers);
+                                } else {
+                                    // No numbers, keep field enabled and show add more
+                                    $('#number-fields input[type="text"]').first().prop(
+                                        'disabled', false);
+                                    $('#number-fields input[type="radio"]').prop('disabled',
+                                        false);
+                                    toggleAddMoreButtons(true);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error fetching person details:', error);
+                                // On error, enable fields and show add more buttons
+                                $('#email-fields input').prop('disabled', false);
+                                $('#number-fields input').prop('disabled', false);
+                                toggleAddMoreButtons(true);
                             }
-
-                            // Adding the emails
-                            if (response.emails.length > 0) {
-                                response.emails.forEach((email, index) => {
-                                    addEmailField(email.value, email.label, index);
-                                });
-                            } else {
-                                addEmailField();
-                            }
-
-                            // Adding the contact numbers
-                            if (response.contact_numbers.length > 0) {
-                                response.contact_numbers.forEach((number, index) => {
-                                    addNumberField(number.value, number.label, index);
-                                });
-                            } else {
-                                addNumberField();
-                            }
-                        }
-                    });
+                        });
+                    }
                 }
             });
 
-            // Handle the close button click event (if any)
+            // Handle the clear button click event
             $('#person-select').on('select2:clear', function() {
-                clearFields(); // Clear the email and number fields when the selection is cleared
+                clearFields();
+                isExistingPerson = false;
+                toggleAddMoreButtons(true); // Show add more buttons
+                $('#organization-select').val(null).trigger('change');
             });
 
-            // Optional: Add remove button functionality for email and number fields
-            $(document).on('click', '.remove-email', function() {
-                $(this).parent().remove(); // Remove the email field
+            // Remove dynamically added email field
+            $(document).on('click', '.remove-email-field', function() {
+                $(this).closest('.email-field-dynamic').remove();
             });
 
-            $(document).on('click', '.remove-number', function() {
-                $(this).parent().remove(); // Remove the number field
+            // Remove dynamically added number field
+            $(document).on('click', '.remove-number-field', function() {
+                $(this).closest('.number-field-dynamic').remove();
             });
+
+            // Initial state - show add more buttons on page load
+            toggleAddMoreButtons(true);
         });
-
-
-        function removeProductField(element) {
-            const productField = element.closest('.product-field');
-            productField.remove();
-        }
-
-        function updatePrice(selectElement) {
-            const selectedOption = $(selectElement).find('option:selected');
-            const price = selectedOption.data('price');
-            const priceInput = $(selectElement).closest('.product-field').find('.price-input');
-
-            priceInput.val(price);
-
-            calculateAmount(priceInput[0]);
-        }
-
-        function calculateAmount(inputElement) {
-            const productField = $(inputElement).closest('.product-field');
-            const price = parseFloat(productField.find('.price-input').val()) || 0;
-            const quantity = parseInt(productField.find('.quantity-input').val()) || 0;
-            const amount = price * quantity;
-
-            productField.find('.amount-input').val(amount.toFixed(2));
-        }
     </script>
     <script>
         $(document).ready(function() {
@@ -761,7 +701,7 @@
             @endif
         });
     </script>
-   
+
 
     <script>
         $(document).ready(function() {
@@ -800,7 +740,7 @@
         });
     </script>
 
-     @php
+    @php
         // clear the success message
         session()->forget('success');
     @endphp

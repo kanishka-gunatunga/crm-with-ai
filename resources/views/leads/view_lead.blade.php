@@ -271,7 +271,7 @@
                                                 @if (auth()->user()->role == '2')
                                                     <div class="terms-section">
                                                         <h3 class="field-label">Sales Owner</h3>
-                                                        <p class="field-value">{{  $owner_name}}</p>
+                                                        <p class="field-value">{{ $owner_name }}</p>
                                                     </div>
                                                 @endif
 
@@ -1173,20 +1173,18 @@
                                                                     <td><input type="checkbox" name="selected_quotes[]"
                                                                             value="{{ $lead_email->id }}"></td>
                                                                     <td class="">{{ $lead_email->subject }} </td>
-                                                                    <td class="">{{ $lead_email->content }} </td>
+                                                                    <td class=""><?php echo \Illuminate\Support\Str::limit(strip_tags($lead_email->body), 150); ?></td>
                                                                     <td class="">{{ $lead_email->created_at }} </td>
                                                                     <td class="action-icons d-flex gx-3">
                                                                         <a href="{{ url('delete-email/' . $lead_email->id) }}"
                                                                             onclick="return confirm('Are you sure you want to delete this record?')">
                                                                             <div class="text-muted">
-                                                                                <svg width="20" height="20"
-                                                                                    viewBox="0 0 24 24" fill="none"
-                                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    x="0px" y="0px" width="16"
+                                                                                    height="16" viewBox="0 0 16 16">
                                                                                     <path
-                                                                                        d="M3 6H5H21M19 6V19C19 20.1046 18.1046 21 17 21H7C5.89543 21 5 20.1046 5 19V6M19 6L17.5 4.5M19 6L16.5 4.5M17.5 4.5H16.5C15.6716 4.5 15.0122 4.94732 14.5858 5.58579L14.5858 5.58579C14.1594 6.22426 14.1594 7.17574 14.5858 7.81421L14.5858 7.81421C15.0122 8.45268 15.6716 8.9 16.5 8.9H17M7 6V19M7 6L8.5 4.5M7 6L9.5 4.5M8.5 4.5H9.5C10.3284 4.5 10.9878 4.94732 11.4142 5.58579L11.4142 5.58579C11.8406 6.22426 11.8406 7.17574 11.4142 7.81421L11.4142 7.81421C10.9878 8.45268 10.3284 8.9 9.5 8.9H9"
-                                                                                        stroke="#556476" stroke-width="1"
-                                                                                        stroke-linecap="round"
-                                                                                        stroke-linejoin="round" />
+                                                                                        d="M 6.496094 1 C 5.675781 1 5 1.675781 5 2.496094 L 5 3 L 2 3 L 2 4 L 3 4 L 3 12.5 C 3 13.324219 3.675781 14 4.5 14 L 10.5 14 C 11.324219 14 12 13.324219 12 12.5 L 12 4 L 13 4 L 13 3 L 10 3 L 10 2.496094 C 10 1.675781 9.324219 1 8.503906 1 Z M 6.496094 2 L 8.503906 2 C 8.785156 2 9 2.214844 9 2.496094 L 9 3 L 6 3 L 6 2.496094 C 6 2.214844 6.214844 2 6.496094 2 Z M 4 4 L 11 4 L 11 12.5 C 11 12.78125 10.78125 13 10.5 13 L 4.5 13 C 4.21875 13 4 12.78125 4 12.5 Z M 5 5 L 5 12 L 6 12 L 6 5 Z M 7 5 L 7 12 L 8 12 L 8 5 Z M 9 5 L 9 12 L 10 12 L 10 5 Z">
+                                                                                    </path>
                                                                                 </svg>
                                                                             </div>
                                                                         </a>

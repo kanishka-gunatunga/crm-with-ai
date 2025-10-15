@@ -229,62 +229,6 @@
                                                 @endif
                                             </div>
 
-
-
-
-                                            {{-- <div class="col-12 col-md-4">
-                                                <label for="field2" class="form-label">Expected Closing
-                                                    Date</label>
-                                                <input type="date" class="form-control" name="closing_date"
-                                                    value="{{ $lead->closing_date }}" required>
-                                                @if ($errors->has('closing_date'))
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $errors->first('closing_date') }}
-                                                    </div>
-                                                @endif
-                                            </div> --}}
-                                            {{-- <div class="col-12 col-md-4">
-                                        <label for="field3" class="form-label">Assign User</label>
-
-                                        <select class="myDropdown form-control  ">
-                                            <option value="1">Option 1</option>
-                                            <option value="2">Option 2</option>
-                                            <option value="3">Option 3</option>
-                                        </select>
-                                    </div> --}}
-                                            <!-- Select2 CSS -->
-
-
-                                            {{-- <div class="col-12 col-md-4">
-                                        <label for="field4" class="form-label">Status</label>
-                                        <input type="text" class="form-control" id="field4" placeholder="Status">
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="field5" class="form-label">Priority</label>
-                                        <input type="text" class="form-control" id="field5" placeholder="Priority">
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="field3" class="form-label">Terms</label>
-
-                                        <select class="myDropdown2 form-control  ">
-                                            <option value="1">Option 1</option>
-                                            <option value="2">Option 2</option>
-                                            <option value="3">Option 3</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="field5" class="form-label">Date start</label>
-                                        <input type="text" class="form-control" id="field5" placeholder="Date start">
-                                    </div>
-                                    <div class="col-12 col-md-4">
-                                        <label for="field5" class="form-label">Date Due</label>
-                                        <input type="text" class="form-control" id="field5" placeholder="Date Due">
-                                    </div> --}}
-                                            <!-- <div class="col-12 col-md-4">
-                                                                                                                                                                                                <label for="field5" class="form-label">Reminders</label>
-                                                                                                                                                                                                <input type="text" class="form-control" id="field5" placeholder="Reminders">
-                                                                                                                                                                                            </div> -->
-
                                         </div>
 
 
@@ -310,152 +254,56 @@
                                                     <?php } ?>
                                                 </select>
                                                 <div id="person-value-errors"></div>
-                                                {{-- @if ($errors->has('person'))
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $errors->first('person') }}
-                                                    </div>
-                                                @endif --}}
                                             </div>
-
 
                                             <div class="col-12 col-md-4">
                                                 <label for="field1"
                                                     class="form-label">{{ __('app.leads.organization') }}</label>
-                                                <select class="form-control stagselect" id="organization-select"
-                                                    name="organization" disabled>
-                                                    <option selected hidden value="{{ $person->organization ?? '' }}">
-                                                        {{ $organization->name ?? '' }}</option>
-                                                    <?php foreach($organizations as $organization){ ?>
-                                                    <option value="{{ $organization->id }}">{{ $organization->name }}
-                                                    </option>
-                                                    <?php } ?>
-                                                </select>
+                                                <input type="text" class="form-control mb-2" id="organization-display"
+                                                    value="{{ $organization->name ?? '' }}" readonly>
                                                 @if ($errors->has('organization'))
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $errors->first('organization') }}
                                                     </div>
                                                 @endif
                                             </div>
-
-                                            @foreach ($person->emails as $email)
-                                                <div class="col-12 col-md-4" id="email-fields">
-
-                                                    <label for="field1"
-                                                        class="form-label">{{ __('app.leads.emails') }}</label>
-                                                    {{-- <input type="email" class="form-control" name="emails[]" > --}}
-
-                                                    <input type="email" class="form-control mb-2" name="emails[]"
-                                                        value="{{ $email['value'] }}">
-
-
-                                                    <div class="mt-4 mt-lg-0">
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="email_types[0]" id="email-work-0" checked
-                                                                value="work">
-                                                            <label class="form-check-label"
-                                                                for="email-work-0">{{ __('app.common.work') }}</label>
-                                                        </div>
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="email_types[0]" id="email-home-0" value="home">
-                                                            <label class="form-check-label"
-                                                                for="email-home-0">{{ __('app.common.home') }}</label>
-                                                        </div>
-                                                        <div class="form-check form-check-inline">
-                                                            <button type="button" class="btn add-more-button p-0"
-                                                                id="add-emails" onclick="addEmailField()">
-                                                                <svg width="14" height="14" viewBox="0 0 14 14"
-                                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                                                        d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z"
-                                                                        fill="#4A58EC" />
-                                                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                                                        d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z"
-                                                                        fill="#4A58EC" />
-                                                                </svg>
-
-                                                                <span
-                                                                    class="">{{ __('app.common.add_more') }}</span>
-                                                            </button>
-                                                        </div>
-
-
-                                                    </div>
-                                            @endforeach
                                         </div>
 
-                                       
-                                        @foreach ($person->contact_numbers as $number)
-                                            <div class="col-12 col-md-4 mt-1" id="number-fields">
-                                                <label for="field1"
-                                                    class="form-label">{{ __('app.leads.contact-numbers') }}</label>
-                                                <input type="text" class="form-control" name="contact_numbers[]" value="{{ $number['value'] }}">
-
-                                                <div class="mt-4 mt-lg-0">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio"
-                                                            name="number_types[0]" id="number-work-0" checked
-                                                            value="work">
-                                                        <label class="form-check-label"
-                                                            for="number-work-0">{{ __('app.common.work') }}</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio"
-                                                            name="number_types[0]" id="number-home-0" value="home">
-                                                        <label class="form-check-label"
-                                                            for="number-home-0">{{ __('app.common.home') }}</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <button type="button" class="btn add-more-button p-0"
-                                                            id="add-emails" onclick="addNumberField()">
-                                                            <svg width="14" height="14" viewBox="0 0 14 14"
-                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                                    d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z"
-                                                                    fill="#4A58EC" />
-                                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                                    d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z"
-                                                                    fill="#4A58EC" />
-                                                            </svg>
-
-                                                            <span class="">{{ __('app.common.add_more') }}</span>
-                                                        </button>
-                                                    </div>
-
-
-                                                </div>
+                                        <div class="row g-4 mt-1">
+                                            <div class="col-12 col-md-4" id="email-fields">
+                                                <!-- Email fields will be populated here by JavaScript -->
                                             </div>
-                                        @endforeach
+
+                                            <div class="col-12 col-md-4" id="number-fields">
+                                                <!-- Contact number fields will be populated here by JavaScript -->
+                                            </div>
+                                        </div>
                                     </div>
-
-
-
-
                                 </div>
-                            </div>
 
+                                <div class="card card-default mt-3">
+                                    <div class="card-body">
+                                        <div class="col-12">
+                                            <label for="field5" class="form-label">Description</label>
+                                            <textarea class="form-control w-100" id="exampleFormControlTextarea5" rows="5" name="description">{{ $lead->description }}</textarea>
+                                            @if ($errors->has('description'))
+                                                <div class="alert alert-danger mt-2">
+                                                    {{ $errors->first('description') }}</li>
+                                                </div>
+                                            @endif
 
-
-                            <div class="card card-default mt-3">
-                                <div class="card-body">
-                                    <div class="col-12">
-                                        <label for="field5" class="form-label">Description</label>
-                                        <textarea class="form-control w-100" id="exampleFormControlTextarea5" rows="5" name="description">{{ $lead->description }}</textarea>
-                                        @if ($errors->has('description'))
-                                            <div class="alert alert-danger mt-2">
-                                                {{ $errors->first('description') }}</li>
-                                            </div>
-                                        @endif
-
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
+
+
+
+
 
             <!-- Bottom Action Buttons -->
             <div class="col-12 action-bar">
@@ -470,12 +318,11 @@
                 </div>
             </div>
         </div>
-        </div>
     </form>
 
 
 
-    <script>
+    {{-- <script>
         let emailCounter = 1;
         let numberCounter = 1;
 
@@ -557,213 +404,392 @@
 
         function removeNumberField(element) {
             $(element).closest('[class*="number-field-"]').remove();
-        }
+        }        
+    </script> --}}
 
-        function addProductField() {
-            const productFieldsContainer = $('#product-fields');
-            const productField = `
-                                    <div class="row align-items-center product-field">
-                                    <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <label for="firstNameinput" class="form-label">{{ __('app.leads.products') }}</label>
-                                                <select class="form-control product-select" name="products[]" onchange="updatePrice(this)">
-                                                    <option hidden selected></option>
-                                                    <?php foreach($products as $product){ ?> 
-                                                    <option value="product||{{ $product->id }}" data-price="{{ $product->cost }}">{{ $product->name }}</option>
-                                                    <?php } ?>
-                                                    <?php foreach($services as $service){ ?> 
-                                                        <option value="service||{{ $service->id }}" data-price="{{ $service->cost }}">{{ $service->name }}</option>
-                                                    <?php } ?>
-                                                </select>
-                                            </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="mb-3">
-                                            <label for="firstNameinput" class="form-label">{{ __('app.leads.price') }}</label>
-                                            <input type="number" step="any" class="form-control price-input" name="prices[]"  oninput="calculateAmount(this)">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="mb-3">
-                                            <label for="firstNameinput" class="form-label">{{ __('app.leads.quantity') }}</label>
-                                            <input type="number" step="any" class="form-control quantity-input" name="quantities[]"   oninput="calculateAmount(this)">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="mb-3">
-                                            <label for="firstNameinput" class="form-label">{{ __('app.leads.amount') }}</label>
-                                            <input type="number" step="any" class="form-control amount-input" name="amounts[]" readonly  >
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <div class="mb-3">
-                                        <button class="btn trash-icon-btn " onclick="removeProductField(this)">
-                                                                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
-                                                                        xmlns="http://www.w3.org/2000/svg">
-                                                                        <path
-                                                                            d="M4.44137 13.0221C4.1026 13.0221 3.81269 12.9016 3.57164 12.6606C3.3306 12.4195 3.20987 12.1294 3.20946 11.7902V3.78281H2.59351V2.55089H5.67329V1.93494H9.36902V2.55089H12.4488V3.78281H11.8328V11.7902C11.8328 12.129 11.7123 12.4191 11.4713 12.6606C11.2302 12.902 10.9401 13.0226 10.6009 13.0221H4.44137ZM10.6009 3.78281H4.44137V11.7902H10.6009V3.78281ZM5.67329 10.5583H6.9052V5.01472H5.67329V10.5583ZM8.13711 10.5583H9.36902V5.01472H8.13711V10.5583Z"
-                                                                            fill="#ED2227" />
-                                                                    </svg>
 
-                                                                </button>
-                                        </div>
-                                    </div>
-                                    </div>`;
-            productFieldsContainer.append(productField);
 
-            $(`.product-select`).select2({
-                allowClear: true,
-                width: '100%',
-                placeholder: 'Select a product',
-                allowClear: true
-            });
-        }
 
-        function removeProductField(element) {
-            const productField = element.closest('.product-field');
-            productField.remove();
-        }
-    </script>
+    {{--  --}}
+
     <script>
-        $(document).ready(function() {
-            // Initialize select2 with tags functionality for person-select
-            $('#person-select').select2({
-                allowClear: true,
-                tags: true,
-                tokenSeparators: [','],
-                placeholder: "Select or type to add",
-                allowClear: true,
-                createTag: function(params) {
-                    var term = $.trim(params.term);
-                    if (term === '') {
-                        return null;
-                    }
-                    return {
-                        id: term,
-                        text: term,
-                        newTag: true
-                    };
-                }
-            });
+$(document).ready(function() {
+    let emailCounter = 0;
+    let numberCounter = 0;
+    let isExistingPerson = false;
+    let isEditMode = {{ isset($lead->person) && $lead->person ? 'true' : 'false' }};
+    let existingPersonId = {{ $lead->person ?? 'null' }};
+    
+    // Store initial data for edit mode
+    let initialEmails = @json($person->emails ?? []);
+    let initialNumbers = @json($person->contact_numbers ?? []);
 
-            // Initialize the second select2 (organization-select)
-            $('#organization-select').select2({
-                allowClear: true,
-            });
-
-            // Function to clear email and contact number fields
-            function clearFields() {
-                $('#email-fields').html('');
-                $('#number-fields').html('');
+    // Initialize the select2 with tags functionality
+    $('#person-select').select2({
+        allowClear: true,
+        tags: true,
+        tokenSeparators: [','],
+        placeholder: "Select or type to add",
+        createTag: function(params) {
+            var term = $.trim(params.term);
+            if (term === '') {
+                return null;
             }
+            return {
+                id: term,
+                text: term,
+                newTag: true
+            };
+        }
+    });
 
-            // Function to add email input fields dynamically
-            function addEmailField(emailValue = '', emailLabel = '', index = 0) {
+    // Function to clear email and contact number fields
+    function clearFields() {
+        // Remove all fields (both static and dynamic)
+        $('#email-fields').empty();
+        $('#number-fields').empty();
+        
+        // Reset counters
+        emailCounter = 0;
+        numberCounter = 0;
+    }
+
+    // Function to show/hide add more buttons
+    function toggleAddMoreButtons(show) {
+        if (show) {
+            $('#email-fields .add-more-button').show();
+            $('#number-fields .add-more-button').show();
+        } else {
+            $('#email-fields .add-more-button').hide();
+            $('#number-fields .add-more-button').hide();
+        }
+    }
+
+    // Function to create initial empty fields
+    function createEmptyFields() {
+        let emailHtml = `
+            <div class="email-field-static">
+                <label for="email-0" class="form-label">{{ __('app.leads.emails') }}</label>
+                <input type="email" class="form-control mb-2" name="emails[]" id="email-0" required>
+
+                <div class="mt-4 mt-lg-0">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="email_types[0]" 
+                               id="email-work-0" value="work" checked>
+                        <label class="form-check-label" for="email-work-0">{{ __('app.common.work') }}</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="email_types[0]" 
+                               id="email-home-0" value="home">
+                        <label class="form-check-label" for="email-home-0">{{ __('app.common.home') }}</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <button type="button" class="btn add-more-button p-0" onclick="addEmailField()">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z" fill="#4A58EC" />
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z" fill="#4A58EC" />
+                            </svg>
+                            <span class="">{{ __('app.common.add_more') }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        let numberHtml = `
+            <div class="number-field-static">
+                <label for="number-0" class="form-label">{{ __('app.leads.contact-numbers') }}</label>
+                <input type="text" class="form-control" name="contact_numbers[]" id="number-0">
+
+                <div class="mt-4 mt-lg-0">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="number_types[0]" 
+                               id="number-work-0" value="work" checked>
+                        <label class="form-check-label" for="number-work-0">{{ __('app.common.work') }}</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="number_types[0]" 
+                               id="number-home-0" value="home">
+                        <label class="form-check-label" for="number-home-0">{{ __('app.common.home') }}</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <button type="button" class="btn add-more-button p-0" onclick="addNumberField()">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z" fill="#4A58EC" />
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z" fill="#4A58EC" />
+                            </svg>
+                            <span class="">{{ __('app.common.add_more') }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        $('#email-fields').html(emailHtml);
+        $('#number-fields').html(numberHtml);
+    }
+
+    // Function to add email field dynamically (below existing ones)
+    window.addEmailField = function() {
+        emailCounter++;
+        let emailHtml = `
+            <div class="email-field-dynamic mt-3">
+                <label for="email-${emailCounter}" class="form-label">{{ __('app.leads.emails') }}</label>
+                <input type="email" class="form-control" name="emails[]" id="email-${emailCounter}">
+
+                <div class="mt-2">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="email_types[${emailCounter}]" 
+                               id="email-work-${emailCounter}" value="work" checked>
+                        <label class="form-check-label" for="email-work-${emailCounter}">{{ __('app.common.work') }}</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="email_types[${emailCounter}]" 
+                               id="email-home-${emailCounter}" value="home">
+                        <label class="form-check-label" for="email-home-${emailCounter}">{{ __('app.common.home') }}</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <button type="button" class="btn trash-icon-btn mt-0 remove-email-field">
+                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.44137 13.0221C4.1026 13.0221 3.81269 12.9016 3.57164 12.6606C3.3306 12.4195 3.20987 12.1294 3.20946 11.7902V3.78281H2.59351V2.55089H5.67329V1.93494H9.36902V2.55089H12.4488V3.78281H11.8328V11.7902C11.8328 12.129 11.7123 12.4191 11.4713 12.6606C11.2302 12.902 10.9401 13.0226 10.6009 13.0221H4.44137ZM10.6009 3.78281H4.44137V11.7902H10.6009V3.78281ZM5.67329 10.5583H6.9052V5.01472H5.67329V10.5583ZM8.13711 10.5583H9.36902V5.01472H8.13711V10.5583Z" fill="#ED2227" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        $('#email-fields').append(emailHtml);
+    };
+
+    // Function to add contact number field dynamically (below existing ones)
+    window.addNumberField = function() {
+        numberCounter++;
+        let numberHtml = `
+            <div class="number-field-dynamic mt-3">
+                <label for="number-${numberCounter}" class="form-label">{{ __('app.leads.contact-numbers') }}</label>
+                <input type="text" class="form-control" name="contact_numbers[]" id="number-${numberCounter}">
+
+                <div class="mt-2">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="number_types[${numberCounter}]" 
+                               id="number-work-${numberCounter}" value="work" checked>
+                        <label class="form-check-label" for="number-work-${numberCounter}">{{ __('app.common.work') }}</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="number_types[${numberCounter}]" 
+                               id="number-home-${numberCounter}" value="home">
+                        <label class="form-check-label" for="number-home-${numberCounter}">{{ __('app.common.home') }}</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <button type="button" class="btn trash-icon-btn mt-0 remove-number-field">
+                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.44137 13.0221C4.1026 13.0221 3.81269 12.9016 3.57164 12.6606C3.3306 12.4195 3.20987 12.1294 3.20946 11.7902V3.78281H2.59351V2.55089H5.67329V1.93494H9.36902V2.55089H12.4488V3.78281H11.8328V11.7902C11.8328 12.129 11.7123 12.4191 11.4713 12.6606C11.2302 12.902 10.9401 13.0226 10.6009 13.0221H4.44137ZM10.6009 3.78281H4.44137V11.7902H10.6009V3.78281ZM5.67329 10.5583H6.9052V5.01472H5.67329V10.5583ZM8.13711 10.5583H9.36902V5.01472H8.13711V10.5583Z" fill="#ED2227" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        $('#number-fields').append(numberHtml);
+    };
+
+    // Function to populate email fields from database
+    function populateEmailFields(emails) {
+        $('#email-fields').empty();
+        
+        if (emails.length > 0) {
+            emails.forEach((email, index) => {
+                let isFirst = index === 0;
                 let emailHtml = `
-                <div class="email-field">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" name="emails[${index}]" value="${emailValue}" placeholder="Email ${emailLabel}" class="form-control">
-                </div>`;
+                    <div class="${isFirst ? 'email-field-static' : 'email-field-dynamic'} ${!isFirst ? 'mt-3' : ''}">
+                        <label for="email-${index}" class="form-label">{{ __('app.leads.emails') }}</label>
+                        <input type="email" class="form-control ${isFirst ? 'mb-2' : ''}" name="emails[]" id="email-${index}" 
+                               value="${email.value}" disabled>
+
+                        <div class="${isFirst ? 'mt-4 mt-lg-0' : 'mt-2'}">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="email_types[${index}]" 
+                                       id="email-work-${index}" value="work" ${(email.label || 'work') === 'work' ? 'checked' : ''} disabled>
+                                <label class="form-check-label" for="email-work-${index}">{{ __('app.common.work') }}</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="email_types[${index}]" 
+                                       id="email-home-${index}" value="home" ${(email.label || 'work') === 'home' ? 'checked' : ''} disabled>
+                                <label class="form-check-label" for="email-home-${index}">{{ __('app.common.home') }}</label>
+                            </div>
+                            ${isFirst ? `
+                            <div class="form-check form-check-inline" style="display: none;">
+                                <button type="button" class="btn add-more-button p-0" onclick="addEmailField()">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z" fill="#4A58EC" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z" fill="#4A58EC" />
+                                    </svg>
+                                    <span class="">{{ __('app.common.add_more') }}</span>
+                                </button>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
                 $('#email-fields').append(emailHtml);
-            }
+                emailCounter = index;
+            });
+        }
+    }
 
-            // Function to add contact number input fields dynamically
-            function addNumberField(numberValue = '', numberLabel = '', index = 0) {
+    // Function to populate number fields from database
+    function populateNumberFields(numbers) {
+        $('#number-fields').empty();
+        
+        if (numbers.length > 0) {
+            numbers.forEach((number, index) => {
+                let isFirst = index === 0;
                 let numberHtml = `
-                <div class="number-field">
-                    <label for="contact" class="form-label">Contact Number</label>
-                    <input type="text" name="contact_numbers[${index}]" value="${numberValue}" placeholder="Contact Number ${numberLabel}" class="form-control">
-                </div>`;
+                    <div class="${isFirst ? 'number-field-static' : 'number-field-dynamic'} ${!isFirst ? 'mt-3' : ''}">
+                        <label for="number-${index}" class="form-label">{{ __('app.leads.contact-numbers') }}</label>
+                        <input type="text" class="form-control" name="contact_numbers[]" id="number-${index}" 
+                               value="${number.value}" disabled>
+
+                        <div class="${isFirst ? 'mt-4 mt-lg-0' : 'mt-2'}">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="number_types[${index}]" 
+                                       id="number-work-${index}" value="work" ${(number.label || 'work') === 'work' ? 'checked' : ''} disabled>
+                                <label class="form-check-label" for="number-work-${index}">{{ __('app.common.work') }}</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="number_types[${index}]" 
+                                       id="number-home-${index}" value="home" ${(number.label || 'work') === 'home' ? 'checked' : ''} disabled>
+                                <label class="form-check-label" for="number-home-${index}">{{ __('app.common.home') }}</label>
+                            </div>
+                            ${isFirst ? `
+                            <div class="form-check form-check-inline" style="display: none;">
+                                <button type="button" class="btn add-more-button p-0" onclick="addNumberField()">
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z" fill="#4A58EC" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5C 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z" fill="#4A58EC" />
+                                    </svg>
+                                    <span class="">{{ __('app.common.add_more') }}</span>
+                                </button>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
                 $('#number-fields').append(numberHtml);
-            }
+                numberCounter = index;
+            });
+        }
+    }
 
-            // Event handler for person select dropdown change
-            $('#person-select').on('change', function() {
-                let personId = $(this).val();
+    // Event handler for the person select dropdown change
+    $('#person-select').on('change', function() {
+        let selectedData = $(this).select2('data')[0];
+        let personId = $(this).val();
 
-                // Clear the fields when a new person is selected
-                clearFields();
+        // Clear the fields when a new person is selected
+        clearFields();
 
-                if (personId) {
-                    $.ajax({
-                        url: '{{ url('get-contact-person-details') }}/' + personId,
-                        type: 'GET',
-                        success: function(response) {
-                            console.log(response);
+        if (personId) {
+            // Check if this is a new tag (not from database)
+            if (selectedData && selectedData.newTag) {
+                // This is a new person being added
+                isExistingPerson = false;
+                createEmptyFields();
+                toggleAddMoreButtons(true);
+            } else {
+                // This is an existing person from database
+                isExistingPerson = true;
 
-                            let organizationSelect = $('#organization-select');
+                // Fetch person details from database
+                $.ajax({
+                    url: '{{ url('get-contact-person-details') }}/' + personId,
+                    type: 'GET',
+                    success: function(response) {
+                        console.log(response);
 
-                            // Handling organization selection
-                            if (response.organization) {
-                                organizationSelect.empty().trigger("change");
-                                let newOption = new Option(response.organization_name, response
-                                    .organization, true, true);
-                                organizationSelect.append(newOption).trigger("change");
-                            } else {
-                                organizationSelect.val(null).trigger("change");
-                            }
-
-                            // Adding the emails
-                            if (response.emails.length > 0) {
-                                response.emails.forEach((email, index) => {
-                                    addEmailField(email.value, email.label, index);
-                                });
-                            } else {
-                                addEmailField();
-                            }
-
-                            // Adding the contact numbers
-                            if (response.contact_numbers.length > 0) {
-                                response.contact_numbers.forEach((number, index) => {
-                                    addNumberField(number.value, number.label, index);
-                                });
-                            } else {
-                                addNumberField();
-                            }
+                        // Update organization display
+                        if (response.organization_name) {
+                            $('#organization-display').val(response.organization_name);
+                        } else {
+                            $('#organization-display').val('');
                         }
-                    });
-                }
-            });
 
-            // Handle the close button click event (if any)
-            $('#person-select').on('select2:clear', function() {
-                clearFields(); // Clear the email and number fields when the selection is cleared
-            });
+                        // Populate emails
+                        if (response.emails && response.emails.length > 0) {
+                            populateEmailFields(response.emails);
+                        } else {
+                            createEmptyFields();
+                            toggleAddMoreButtons(true);
+                        }
 
-            // Optional: Add remove button functionality for email and number fields
-            $(document).on('click', '.remove-email', function() {
-                $(this).parent().remove(); // Remove the email field
-            });
+                        // Populate contact numbers
+                        if (response.contact_numbers && response.contact_numbers.length > 0) {
+                            populateNumberFields(response.contact_numbers);
+                        } else {
+                            if (!response.emails || response.emails.length === 0) {
+                                createEmptyFields();
+                            }
+                            toggleAddMoreButtons(true);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching person details:', error);
+                        createEmptyFields();
+                        toggleAddMoreButtons(true);
+                    }
+                });
+            }
+        } else {
+            createEmptyFields();
+            toggleAddMoreButtons(true);
+        }
+    });
 
-            $(document).on('click', '.remove-number', function() {
-                $(this).parent().remove(); // Remove the number field
-            });
-        });
+    // Handle the clear button click event
+    $('#person-select').on('select2:clear', function() {
+        clearFields();
+        createEmptyFields();
+        isExistingPerson = false;
+        toggleAddMoreButtons(true);
+        $('#organization-display').val('');
+    });
 
-        function removeProductField(element) {
-            const productField = element.closest('.product-field');
-            productField.remove();
+    // Remove dynamically added email field
+    $(document).on('click', '.remove-email-field', function() {
+        $(this).closest('.email-field-dynamic').remove();
+    });
+
+    // Remove dynamically added number field
+    $(document).on('click', '.remove-number-field', function() {
+        $(this).closest('.number-field-dynamic').remove();
+    });
+
+    // Initialize on page load
+    if (isEditMode && existingPersonId) {
+        // Load existing data
+        if (initialEmails.length > 0) {
+            populateEmailFields(initialEmails);
+        } else {
+            createEmptyFields();
         }
 
-        function updatePrice(selectElement) {
-            const selectedOption = $(selectElement).find('option:selected');
-            const price = selectedOption.data('price');
-            const priceInput = $(selectElement).closest('.product-field').find('.price-input');
-
-            priceInput.val(price);
-
-            calculateAmount(priceInput[0]);
+        if (initialNumbers.length > 0) {
+            populateNumberFields(initialNumbers);
+        } else {
+            if (initialEmails.length === 0) {
+                createEmptyFields();
+            }
         }
+        
+        toggleAddMoreButtons(false);
+    } else {
+        // Create empty fields for new entry
+        createEmptyFields();
+        toggleAddMoreButtons(true);
+    }
+});
+</script>
 
-        function calculateAmount(inputElement) {
-            const productField = $(inputElement).closest('.product-field');
-            const price = parseFloat(productField.find('.price-input').val()) || 0;
-            const quantity = parseInt(productField.find('.quantity-input').val()) || 0;
-            const amount = price * quantity;
-
-            productField.find('.amount-input').val(amount.toFixed(2));
-        }
-    </script>
     <script>
         $(document).ready(function() {
             @if (Session::has('success'))

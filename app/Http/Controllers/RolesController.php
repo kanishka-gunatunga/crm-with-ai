@@ -62,6 +62,8 @@ class RolesController extends Controller
         }
         if ($request->isMethod('post')) {
 
+            dd($request);
+
             $request->validate([
                 'name' => 'required|string|max:255',
                 'description' => 'required',

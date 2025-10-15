@@ -181,7 +181,7 @@
 
 
                             <!-- automation -->
-                            {{-- <div class="col-12 mt-4">
+                             <div class="col-12 mt-4">
                                 <div class="card-container">
                                     <div class="settings card card-default ">
                                         <div class="card-body">
@@ -245,7 +245,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
 
 
 
