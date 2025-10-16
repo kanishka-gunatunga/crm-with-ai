@@ -867,13 +867,13 @@
 
     <script>
         /*
-            Permission data structure:
-            - label: shown text
-            - value: id/value
-            - type: 'checkbox' or 'radio'
-            - group: radio group name (optional, required for radios so they are exclusive)
-            - children: nested items
-        */
+                    Permission data structure:
+                    - label: shown text
+                    - value: id/value
+                    - type: 'checkbox' or 'radio'
+                    - group: radio group name (optional, required for radios so they are exclusive)
+                    - children: nested items
+                */
         const permissions = [{
 
                 // Leads
@@ -1289,7 +1289,7 @@
 
             // Groups
 
-             {
+            {
                 label: "Groups",
                 value: "groups",
                 type: "checkbox",
@@ -1315,7 +1315,7 @@
                         type: "checkbox",
                     },
 
-                    
+
 
                 ]
             },
@@ -1358,6 +1358,274 @@
                 ]
             },
 
+
+
+
+
+            // users
+
+            {
+                label: "Users",
+                value: "users",
+                type: "checkbox",
+                children: [{
+                        label: "Show Users",
+                        value: "show-users",
+                        type: "checkbox",
+
+                    },
+                    {
+                        label: "Edit Users",
+                        value: "edit-users",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Create Users",
+                        value: "create-users",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Delete Users",
+                        value: "delete-users",
+                        type: "checkbox",
+                    },
+
+                    {
+                        label: "Export Users",
+                        value: "export-users",
+                        type: "checkbox",
+                    },
+
+                ]
+            },
+
+
+
+            // pipelines
+            {
+                label: "Pipelines",
+                value: "pipelines",
+                type: "checkbox",
+                children: [{
+                        label: "Show Pipelines",
+                        value: "show-pipelines",
+                        type: "checkbox",
+
+                    },
+                    {
+                        label: "Edit Pipelines",
+                        value: "edit-pipelines",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Create Pipelines",
+                        value: "create-pipelines",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Delete Pipelines",
+                        value: "delete-pipelines",
+                        type: "checkbox",
+                    },
+
+                    {
+                        label: "Export Pipelines",
+                        value: "export-pipelines",
+                        type: "checkbox",
+                    },
+
+                ]
+            },
+
+
+            // sources
+            {
+                label: "Sources",
+                value: "sources",
+                type: "checkbox",
+                children: [{
+                        label: "Show Sources",
+                        value: "show-sources",
+                        type: "checkbox",
+
+                    },
+                    {
+                        label: "Edit Sources",
+                        value: "edit-sources",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Create Sources",
+                        value: "create-sources",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Delete Sources",
+                        value: "delete-sources",
+                        type: "checkbox",
+                    },
+
+                    {
+                        label: "Export Sources",
+                        value: "export-sources",
+                        type: "checkbox",
+                    },
+
+                ]
+            },
+
+
+            // types
+            {
+                label: "Types",
+                value: "types",
+                type: "checkbox",
+                children: [{
+                        label: "Show Types",
+                        value: "show-types",
+                        type: "checkbox",
+
+                    },
+                    {
+                        label: "Edit Types",
+                        value: "edit-types",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Create Types",
+                        value: "create-types",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Delete Types",
+                        value: "delete-types",
+                        type: "checkbox",
+                    },
+
+                    {
+                        label: "Export Types",
+                        value: "export-types",
+                        type: "checkbox",
+                    },
+
+                ]
+            },
+
+
+
+            // attributes
+            {
+                label: "Attributes",
+                value: "attributes",
+                type: "checkbox",
+                children: [{
+                        label: "Show Attributes",
+                        value: "show-attributes",
+                        type: "checkbox",
+                        children: [{
+                                label: "All",
+                                value: "show-attributes-all",
+                                type: "checkbox",
+                            },
+
+                            {
+                                label: "Leads",
+                                value: "show-attributes-leads",
+                                type: "checkbox",
+                            },
+                            {
+                                label: "Persons",
+                                value: "show-attributes-persons",
+                                type: "checkbox",
+                            },
+
+                            {
+                                label: "Organizations",
+                                value: "show-attributes-organizations",
+                                type: "checkbox",
+                            },
+                            {
+                                label: "Quotes",
+                                value: "show-attributes-quotes",
+                                type: "checkbox",
+                            },
+                            {
+                                label: "Products",
+                                value: "show-attributes-products",
+                                type: "checkbox",
+                            },
+                        ]
+                    },
+                    {
+                        label: "Edit Attributes",
+                        value: "edit-attributes",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Create Attributes",
+                        value: "create-attributes",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Delete Attributes",
+                        value: "delete-attributes",
+                        type: "checkbox",
+                    },
+
+                    {
+                        label: "Export Attributes",
+                        value: "export-attributes",
+                        type: "checkbox",
+                    },
+
+                ]
+            },
+
+
+
+            // Web forms
+            {
+                label: "Web forms",
+                value: "web-forms",
+                type: "checkbox",
+                children: [
+                    {
+                        label: "Show Web forms",
+                        value: "show-web-forms",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "View Web forms",
+                        value: "view-web-forms",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Edit Web forms",
+                        value: "edit-web-forms",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Create Web forms",
+                        value: "create-web-forms",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Delete Web forms",
+                        value: "delete-web-forms",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Show Embeded Details",
+                        value: "show-embeded-details",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Preview Web Forms",
+                        value: "preview-web-forms",
+                        type: "checkbox",
+                    },
+                ]
+            },
 
         ];
 
