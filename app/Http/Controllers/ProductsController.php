@@ -29,98 +29,129 @@ date_default_timezone_set('Asia/Colombo');
 class ProductsController extends Controller
 {
     public function products(Request $request)
-{
-    $query = Product::query();
+    {
+        $permissions = session('user_permissions', []);
 
-        if ($request->has('sku') && $request->sku) {
-            $query->where('sku', $request->sku);
+        if (in_array(strtolower('show-products'), array_map('strtolower', $permissions))) {
+            $query = Product::query();
+
+            if ($request->has('sku') && $request->sku) {
+                $query->where('sku', $request->sku);
+            }
+
+            if ($request->has('name') && $request->name) {
+                $query->where('name', 'like', '%' . $request->name . '%');
+            }
+
+            $products = $query->get();
+
+            return view('products.products', [
+                'products' => $products,
+                'request' => $request->all()
+            ]);
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
-
-        if ($request->has('name') && $request->name) {
-            $query->where('name', 'like', '%' . $request->name . '%');
-        }
-
-        $products = $query->get();
-
-        return view('products.products', [
-            'products' => $products,
-            'request' => $request->all()
-        ]);
-}
+    }
 
     public function create_product(Request $request)
     {
-        if ($request->isMethod('get')) {
-            return view('products.create_product');
-        }
-        if($request->isMethod('post')){
+        $permissions = session('user_permissions', []);
 
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'sku' => 'required|string',
-                'quantity' => 'required',
-                'cost' => 'required',
-            ]);
+        if (in_array(strtolower('create-products'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+                return view('products.create_product');
+            }
+            if ($request->isMethod('post')) {
 
-            $product = new Product();
-            $product->name = $request->name;
-            $product->sku = $request->sku;
-            $product->quantity = $request->quantity;
-            $product->cost = $request->cost;
-            $product->description = $request->description;
-            $product->save();
-    
-            return redirect()->back()->with('success', 'Product created successfully!');
+                $request->validate([
+                    'name' => 'required|string|max:255',
+                    'sku' => 'required|string',
+                    'quantity' => 'required',
+                    'cost' => 'required',
+                ]);
+
+                $product = new Product();
+                $product->name = $request->name;
+                $product->sku = $request->sku;
+                $product->quantity = $request->quantity;
+                $product->cost = $request->cost;
+                $product->description = $request->description;
+                $product->save();
+
+                return redirect()->back()->with('success', 'Product created successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
     }
-    public function delete_product($id,Request $request)
+    public function delete_product($id, Request $request)
     {
-        if($request->isMethod('get')){
-            Product::where('id',$id)->delete();
-            return redirect()->back()->with('success', 'Product deleted successfully!');
-        }
+        $permissions = session('user_permissions', []);
 
-        return redirect()->back();
+        if (in_array(strtolower('delete-products'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+                Product::where('id', $id)->delete();
+                return redirect()->back()->with('success', 'Product deleted successfully!');
+            }
+
+            return redirect()->back();
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
     }
     public function edit_product($id, Request $request)
-{
-    $product = Product::findOrFail($id);
+    {
+        $permissions = session('user_permissions', []);
 
-    if ($request->isMethod('get')) {
-        return view('products.edit_product', ['product' => $product]);
-    }
-    if ($request->isMethod('post')) {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'emails.*' => 'required|email',
-            'email_types.*' => 'required|in:work,home',
-        ]);
+        if (in_array(strtolower('edit-products'), array_map('strtolower', $permissions))) {
+            $product = Product::findOrFail($id);
 
-        $product->name = $request->name;
-        $product->sku = $request->sku;
-        $product->quantity = $request->quantity;
-        $product->cost = $request->cost;
-        $product->description = $request->description;
+            if ($request->isMethod('get')) {
+                return view('products.edit_product', ['product' => $product]);
+            }
+            if ($request->isMethod('post')) {
+                $request->validate([
+                    'name' => 'required|string|max:255',
+                    'emails.*' => 'required|email',
+                    'email_types.*' => 'required|in:work,home',
+                ]);
 
-        $product->update();
+                $product->name = $request->name;
+                $product->sku = $request->sku;
+                $product->quantity = $request->quantity;
+                $product->cost = $request->cost;
+                $product->description = $request->description;
 
-        return redirect()->back()->with('success', 'Product updated successfully!');
-    }
-}
+                $product->update();
 
-public function delete_selected_products(Request $request)
-{
-    $productIds = $request->input('selected_products', []);
-    
-    if (!empty($productIds)) {
-        Product::whereIn('id', $productIds)->delete();
-        return back()->with('success', 'Selected products deleted successfully.');
+                return redirect()->back()->with('success', 'Product updated successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
     }
 
-    return back()->with('error', 'No products selected.');
-    
+    public function delete_selected_products(Request $request)
+    {
+        $permissions = session('user_permissions', []);
+
+        if (in_array(strtolower('delete-products'), array_map('strtolower', $permissions))) {
+            $productIds = $request->input('selected_products', []);
+
+            if (!empty($productIds)) {
+                Product::whereIn('id', $productIds)->delete();
+                return back()->with('success', 'Selected products deleted successfully.');
+            }
+
+            return back()->with('error', 'No products selected.');
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
+    }
 }
-}
-
-
-
