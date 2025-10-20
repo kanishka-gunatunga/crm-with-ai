@@ -28,7 +28,7 @@ use League\Csv\Writer;
 date_default_timezone_set('Asia/Colombo');
 
 class RolesController extends Controller
-{
+{   
     public function roles(Request $request)
     {
 
@@ -62,7 +62,7 @@ class RolesController extends Controller
         }
         if ($request->isMethod('post')) {
 
-            dd($request);
+            
 
             $request->validate([
                 'name' => 'required|string|max:255',

@@ -19,6 +19,7 @@ use App\Models\Lead;
 use App\Models\LeadActivity;
 use App\Models\Person;
 use App\Models\Product;
+use App\Models\Role;
 use App\Models\Service;
 use App\Models\Source;
 use App\Models\UserDetails;
@@ -50,6 +51,18 @@ class MainController extends Controller
                 'password' => $request->get('password')
             );
             if (Auth::attempt($user_data)) {
+                $user = Auth::user();
+                $role = Role::find($user->role); // role table
+                $permissions = $role->permissions ?? [];
+
+
+                session([
+                    'user_role' => $role->id,
+                    'user_permissions' => $permissions
+                ]);
+
+                
+                
                 return redirect('dashboard');
             } else {
                 return back()->with('fail', 'Wrong Login Details');

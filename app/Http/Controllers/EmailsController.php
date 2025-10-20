@@ -28,11 +28,16 @@ use PDF;
 use League\Csv\Writer;
 use App\Mail\LeadSendEmail;
 use App\Models\MailReplies;
+use App\Models\Role;
 
 date_default_timezone_set('Asia/Colombo');
 
 class EmailsController extends Controller
 {
+
+    
+
+    
     // public function emails(Request $request)
     // {
     //     if ($request->isMethod('get')) {
@@ -58,20 +63,21 @@ class EmailsController extends Controller
 
             if ($loggedUserRole == 2) {
                 // Role 2 → show all
+                
                 $sent_emails = SentEmails::with(['lead', 'user.userDetails'])->get();
             } elseif ($loggedUserRole == 3) {
                 // Role 3 or others → only show emails where sent_by = logged user id
                 $sent_emails = SentEmails::with(['lead', 'user.userDetails'])
                     ->where('sent_by', $loggedUser->id)
                     ->get();
-            }else{
-                // Default to showing no emails if role is unrecognized
-                $sent_emails = collect(); // empty collection
+            } else {
+               
+                $sent_emails = collect(); 
             }
 
             return view('mail.mail', [
                 'sent_emails' => $sent_emails,
-                
+
             ]);
         }
     }

@@ -779,8 +779,10 @@
             <div class="col-12 action-bar">
                 <div class="d-flex gap-2 justify-content-between">
                     <div>
-                        <a href=""><button type="button" class="btn clear-all-btn">Clear
-                                All</button></a>
+                        <a href="">
+                            <button type="button" class="btn clear-all-btn">Clear
+                                All</button>
+                        </a>
                     </div>
                     <div>
                         <button type="submit" class="btn save-btn">Save</button>
@@ -863,17 +865,10 @@
 
 
 
-
+    
 
     <script>
-        /*
-                    Permission data structure:
-                    - label: shown text
-                    - value: id/value
-                    - type: 'checkbox' or 'radio'
-                    - group: radio group name (optional, required for radios so they are exclusive)
-                    - children: nested items
-                */
+       
         const permissions = [{
 
                 // Leads
@@ -890,17 +885,18 @@
                         value: "lead-view",
                         type: "checkbox",
                         children: [{
-                                label: "View Own Leads",
-                                value: "lead-view-own",
-                                type: "radio",
-                                group: "lead-view-type"
-                            },
-                            {
                                 label: "View All Leads",
                                 value: "lead-view-all",
                                 type: "radio",
                                 group: "lead-view-type"
+                            },
+                            {
+                                label: "View Own Leads",
+                                value: "lead-view-own",
+                                type: "radio",
+                                group: "lead-view-type"
                             }
+
                         ]
                     },
 
@@ -967,7 +963,7 @@
                                 value: "add-lead-quote",
                                 type: "checkbox",
 
-                            },
+                            }
                         ]
                     },
                     {
@@ -1027,17 +1023,19 @@
                         value: "contact-quotes",
                         type: "checkbox",
                         children: [{
+                                label: "View All Quotes",
+                                value: "quotes-view-all",
+                                type: "radio",
+                                group: "quotes-view-type"
+                            },
+
+                            {
                                 label: "View Own Quotes",
                                 value: "quotes-view-own",
                                 type: "radio",
                                 group: "quotes-view-type"
                             },
-                            {
-                                label: "View All Quotes",
-                                value: "quotes-view-all",
-                                type: "radio",
-                                group: "quotes-view-type"
-                            }
+
                         ]
                     },
                 ]
@@ -1055,6 +1053,13 @@
                         value: "show-activities",
                         type: "checkbox",
                         children: [{
+                                label: "Show All Activities",
+                                value: "show-all-activities",
+                                type: "radio",
+                                group: "show-activities"
+
+                            },
+                            {
                                 label: "Show Own Activities",
                                 value: "show-own-activities",
                                 type: "radio",
@@ -1062,13 +1067,7 @@
 
                             },
 
-                            {
-                                label: "Show All Activities",
-                                value: "show-all-activities",
-                                type: "radio",
-                                group: "show-activities"
 
-                            },
                         ]
                     },
                     {
@@ -1256,13 +1255,7 @@
                         label: "Show Mails",
                         value: "show-mails",
                         type: "checkbox",
-                        children: [{
-                                label: "Show Own Mails",
-                                value: "show-own-mails",
-                                type: "radio",
-                                group: 'show-mails-by-type'
-                            },
-
+                        children: [
 
                             {
                                 label: "Show All Mails",
@@ -1270,6 +1263,15 @@
                                 type: "radio",
                                 group: 'show-mails-by-type'
                             },
+                            {
+                                label: "Show Own Mails",
+                                value: "show-own-mails",
+                                type: "radio",
+                                group: 'show-mails-by-type'
+                            },
+
+
+
                         ]
 
                     },
@@ -1588,8 +1590,7 @@
                 label: "Web forms",
                 value: "web-forms",
                 type: "checkbox",
-                children: [
-                    {
+                children: [{
                         label: "Show Web forms",
                         value: "show-web-forms",
                         type: "checkbox",
@@ -1629,239 +1630,355 @@
 
         ];
 
-        // generate DOM elements recursively
-        function createPermissionElement(item, level = 0, parentValue = null) {
-            const wrapper = document.createElement('div');
-            wrapper.className = level === 0 ? 'mb-2' : `mb-2 ms-4`;
+        // Check if item has radio children
+        function hasRadioChildren(item) {
+            return item.children && item.children.some(child => child.type === 'radio');
+        }
 
-            // container for single input+label (Bootstrap form-check)
-            const formCheck = document.createElement('div');
-            formCheck.className = 'form-check';
+        // Generate unique ID from value
+        function generateId(value) {
+            return value.replace(/[^a-zA-Z0-9]/g, '_');
+        }
 
-            const input = document.createElement('input');
-            input.className = 'form-check-input';
-            input.type = item.type;
-            input.id = item.value;
-            input.value = item.value;
+        // Render permission item recursively
+        function renderPermission(item, level = 0, parentValue = null) {
+            const indentClass = level === 1 ? 'mx-3' : level === 2 ? 'mx-5' : level === 3 ? 'mx-5' : '';
+            const isRadio = item.type === 'radio';
+            const inputType = isRadio ? 'radio' : 'checkbox';
+            const name = isRadio ? item.group : 'permissions[]';
+            const id = generateId(item.value);
 
-            // radio group name or permissions[] for checkboxes
-            if (item.type === 'radio') {
-                input.name = item.group || (item.value + '-group');
-            } else {
-                input.name = 'permissions[]';
-            }
+            let html = `
+                <div class="col-md-3">
+                    <div class="form-check mb-3 ${indentClass}">
+                        <input class="form-check-input" 
+                            type="${inputType}" 
+                            id="${id}" 
+                            value="${item.value}" 
+                            name="${name}"
+                            data-value="${item.value}"
+                            ${item.type === 'checkbox' && item.children ? `data-group="${item.value}"` : ''}
+                            ${parentValue ? `data-parent="${parentValue}"` : ''}
+                            ${hasRadioChildren(item) ? 'data-has-radio-children="true"' : ''}>
+                        <label class="form-check-label" for="${id}">
+                            ${item.label}
+                        </label>
+                    </div>
+                </div>`;
 
-            // data-parent for child -> its parent value
-            if (parentValue) input.setAttribute('data-parent', parentValue);
-
-            // if item has children make it a data-group (so it acts as parent)
-            if (Array.isArray(item.children) && item.children.length > 0) {
-                input.setAttribute('data-group', item.value);
-            }
-
-            const label = document.createElement('label');
-            label.className = 'form-check-label';
-            label.setAttribute('for', item.value);
-            label.textContent = item.label;
-            if (level === 0) label.classList.add('fw-bold');
-
-            formCheck.appendChild(input);
-            formCheck.appendChild(label);
-            wrapper.appendChild(formCheck);
-
-            // add children recursively
-            if (item.children && item.children.length) {
-                const childBox = document.createElement('div');
-                childBox.className = `mt-2`;
+            if (item.children && item.children.length > 0) {
                 item.children.forEach(child => {
-                    childBox.appendChild(createPermissionElement(child, level + 1, item.value));
+                    html += renderPermission(child, level + 1, item.value);
                 });
-                wrapper.appendChild(childBox);
             }
 
-            return wrapper;
+            return html;
         }
 
-        // mount to DOM
-        const root = document.getElementById('permission-container');
-        permissions.forEach(p => root.appendChild(createPermissionElement(p)));
+        // Render all permissions
+        function renderAllPermissions() {
+            const container = document.getElementById('permission-container');
+            if (!container) {
+                console.error('Permission container not found');
+                return;
+            }
 
+            let html = '';
+            permissions.forEach(permission => {
+                html += renderPermission(permission);
+            });
+            container.innerHTML = html;
+            attachEventListeners();
 
-        // Utility functions for behavior
-
-        // get children of a parent (data-parent === parentValue)
-        function getChildrenOf(parentValue) {
-            return Array.from(document.querySelectorAll('[data-parent="' + parentValue + '"]'));
+            // Initialize dropdown after rendering
+            initPermissionTypeDropdown();
         }
 
-        // get parent input element (data-group === parentValue)
-        function getParentOf(childInput) {
+        // Get all child inputs for a parent
+        function getChildInputs(parentValue) {
+            return document.querySelectorAll(`[data-parent="${parentValue}"]`);
+        }
+
+        // Get parent input for a child
+        function getParentInput(childInput) {
             const parentValue = childInput.getAttribute('data-parent');
             if (!parentValue) return null;
-            return document.querySelector('[data-group="' + parentValue + '"]') || document.querySelector('#' +
-                parentValue);
+            return document.querySelector(`[data-value="${parentValue}"]`);
         }
 
-        // recursively update upward parents (when child changes)
-        function updateParentsRecursively(childInput) {
-            const parent = getParentOf(childInput);
-            if (!parent) return;
+        // Handle checkbox change
+        function handleCheckboxChange(checkbox) {
+            // Don't process if disabled (in "all" mode)
+            if (checkbox.disabled) return;
 
-            // find all children of this parent
-            const children = getChildrenOf(parent.id || parent.value || parent.getAttribute('data-group') || parent.name);
-            // determine if any child is "selected"
-            let anySelected = false;
-            for (const c of children) {
-                if (c.type === 'checkbox' && c.checked) {
-                    anySelected = true;
-                    break;
+            if (checkbox.checked) {
+                // Check all children
+                const children = getChildInputs(checkbox.dataset.value);
+                children.forEach(child => {
+                    if (child.type === 'checkbox') {
+                        child.checked = true;
+                        handleCheckboxChange(child);
+                    } else if (child.type === 'radio') {
+                        child.disabled = false;
+                    }
+                });
+
+                // Select first radio if this has radio children
+                if (checkbox.dataset.hasRadioChildren) {
+                    const radios = Array.from(children).filter(c => c.type === 'radio');
+                    if (radios.length > 0 && !radios.some(r => r.checked)) {
+                        radios[0].checked = true;
+                    }
                 }
-                if (c.type === 'radio') {
-                    // radios: consider selected if any radio with same name is checked
-                    const radios = document.getElementsByName(c.name);
-                    if (Array.from(radios).some(r => r.checked)) {
-                        anySelected = true;
-                        break;
+
+                // Check parent
+                const parent = getParentInput(checkbox);
+                if (parent && parent.type === 'checkbox' && !parent.checked && !parent.disabled) {
+                    parent.checked = true;
+                    handleCheckboxChange(parent);
+                }
+            } else {
+                // Uncheck and disable all children
+                const children = getChildInputs(checkbox.dataset.value);
+                children.forEach(child => {
+                    if (child.type === 'checkbox') {
+                        child.checked = false;
+                        handleCheckboxChange(child);
+                    } else if (child.type === 'radio') {
+                        child.checked = false;
+                        child.disabled = true;
+                    }
+                });
+
+                // Check if parent should be unchecked
+                const parent = getParentInput(checkbox);
+                if (parent && parent.type === 'checkbox' && !parent.disabled) {
+                    const siblings = getChildInputs(parent.dataset.value);
+                    const anyChecked = Array.from(siblings).some(s =>
+                        s.type === 'checkbox' && s.checked
+                    );
+                    if (!anyChecked) {
+                        parent.checked = false;
+                        handleCheckboxChange(parent);
                     }
                 }
             }
-
-            parent.checked = anySelected;
-            // continue upwards
-            updateParentsRecursively(parent);
         }
 
-        // when a parent checkbox changes, set children accordingly
-        function updateChildrenOnParentChange(parentInput) {
-            const parentValue = parentInput.id || parentInput.value;
-            const children = getChildrenOf(parentValue);
+        // Handle radio change
+        function handleRadioChange(radio) {
+            const parent = getParentInput(radio);
+            if (parent && parent.type === 'checkbox' && !parent.checked) {
+                parent.checked = true;
+                handleCheckboxChange(parent);
+            }
+        }
 
-            children.forEach(child => {
-                if (child.type === 'checkbox') {
-                    child.checked = parentInput.checked;
-                    child.disabled =
-                        false; // always enabled if parent is checked; we'll set disabled below if parent unchecked
-                    // if child has its own children, handle enabling/disabling recursively
-                    if (child.hasAttribute('data-group')) {
-                        updateChildrenOnParentChange(child);
+        // Attach event listeners
+        function attachEventListeners() {
+            document.querySelectorAll('#permission-container input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    handleCheckboxChange(this);
+                });
+            });
+
+            document.querySelectorAll('#permission-container input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    handleRadioChange(this);
+                });
+                // Initially disable all radios
+                radio.disabled = true;
+            });
+        }
+
+        // Handle permission type dropdown change
+        function handlePermissionTypeChange(value) {
+            const allCheckboxes = document.querySelectorAll('#permission-container input[type="checkbox"]');
+            const allRadios = document.querySelectorAll('#permission-container input[type="radio"]');
+
+            console.log('Handling permission type:', value);
+            console.log('Found checkboxes:', allCheckboxes.length);
+            console.log('Found radios:', allRadios.length);
+
+            if (value === 'all') {
+                // Check and disable all checkboxes
+                allCheckboxes.forEach(checkbox => {
+                    checkbox.checked = true;
+                    checkbox.disabled = true;
+                });
+
+                // Enable and select first radio in each group
+                const radioGroups = {};
+                allRadios.forEach(radio => {
+                    const group = radio.name;
+                    if (!radioGroups[group]) {
+                        radioGroups[group] = [];
                     }
-                }
-                if (child.type === 'radio') {
-                    // For radios: when parent is checked -> enable radios; when unchecked -> disable and uncheck
-                    child.disabled = !parentInput.checked;
-                    if (!parentInput.checked) {
-                        child.checked = false;
+                    radioGroups[group].push(radio);
+                });
+
+                Object.values(radioGroups).forEach(radios => {
+                    radios.forEach((radio, index) => {
+                        radio.disabled = true;
+                        radio.checked = index === 0; // Select first radio in each group
+                    });
+                });
+
+                console.log('All permissions enabled and disabled');
+            } else {
+                // Custom mode - enable all and uncheck all
+                allCheckboxes.forEach(checkbox => {
+                    checkbox.disabled = false;
+                    checkbox.checked = false;
+                });
+
+                allRadios.forEach(radio => {
+                    radio.disabled = true;
+                    radio.checked = false;
+                });
+
+                console.log('Custom mode - all permissions cleared and enabled');
+            }
+        }
+
+        // Initialize permission type dropdown listener
+        // Initialize permission type dropdown listener
+        function initPermissionTypeDropdown() {
+            const dropdown = document.getElementById('pipeline-select');
+            if (!dropdown) {
+                console.error('Permission type dropdown not found');
+                return;
+            }
+
+            // Listen for Select2 changes
+            $('#pipeline-select').on('select2:select', function(e) {
+                console.log('Select2 dropdown changed to:', this.value);
+                handlePermissionTypeChange(this.value);
+            });
+
+            // Also listen for regular change event as fallback
+            $('#pipeline-select').on('change', function() {
+                console.log('Dropdown changed to:', this.value);
+                handlePermissionTypeChange(this.value);
+            });
+
+            // Set initial state based on current dropdown value
+            handlePermissionTypeChange(dropdown.value);
+        }
+
+        // Collect selected permissions
+        function collectPermissions() {
+            const result = [];
+
+            // Check if we're in "all" mode - if so, collect everything
+            const permissionType = document.getElementById('pipeline-select');
+            const isAllPermissions = permissionType && permissionType.value === 'all';
+
+            if (isAllPermissions) {
+                // Collect all checkboxes except those with radio children
+                const allCheckboxes = document.querySelectorAll('#permission-container input[type="checkbox"]');
+                allCheckboxes.forEach(checkbox => {
+                    if (!checkbox.dataset.hasRadioChildren) {
+                        result.push(checkbox.value);
                     }
+                });
+
+                // Collect all checked radios (first in each group)
+                const allRadios = document.querySelectorAll('#permission-container input[type="radio"]:checked');
+                allRadios.forEach(radio => {
+                    result.push(radio.value);
+                });
+
+                return result;
+            }
+
+            // Custom mode - only collect checked items
+            const checkboxes = document.querySelectorAll('#permission-container input[type="checkbox"]:checked');
+
+            // Get all parent values of selected radios
+            const radioParentValues = new Set();
+            const radios = document.querySelectorAll('#permission-container input[type="radio"]:checked');
+            radios.forEach(radio => {
+                const parentValue = radio.getAttribute('data-parent');
+                if (parentValue) {
+                    radioParentValues.add(parentValue);
                 }
             });
 
-            // If child radios exist and parent is checked, ensure one radio is checked by default
-            // find unique radio groups among children
-            const radioGroups = [...new Set(children.filter(c => c.type === 'radio').map(r => r.name))];
-            radioGroups.forEach(groupName => {
-                const radios = Array.from(document.getElementsByName(groupName));
-                if (parentInput.checked) {
-                    // enable all radios in this group that are direct children (some radios could belong purposefully)
-                    radios.forEach(r => r.disabled = false);
-                    // if none selected, check first enabled one
-                    if (!radios.some(r => r.checked)) {
-                        const firstEnabled = radios.find(r => !r.disabled);
-                        if (firstEnabled) firstEnabled.checked = true;
-                    }
-                } else {
-                    radios.forEach(r => {
-                        r.disabled = true;
-                        r.checked = false;
+            checkboxes.forEach(checkbox => {
+                // Skip if this checkbox has radio children
+                if (checkbox.dataset.hasRadioChildren) {
+                    return;
+                }
+                // Skip if this checkbox value is a parent of a selected radio
+                if (radioParentValues.has(checkbox.value)) {
+                    return;
+                }
+                result.push(checkbox.value);
+            });
+
+            // Add selected radio values
+            radios.forEach(radio => {
+                result.push(radio.value);
+            });
+
+            return result;
+        }
+
+
+
+        // Update hidden inputs before form submission
+        function updatePermissionsBeforeSubmit(form) {
+            // Remove all existing hidden permission inputs
+            form.querySelectorAll('input[name="permissions[]"][type="hidden"]').forEach(input => {
+                input.remove();
+            });
+
+            // Get the permission type
+            const permissionType = document.getElementById('pipeline-select');
+            const isAllPermissions = permissionType && permissionType.value === 'all';
+
+            if (!isAllPermissions) {
+                // Disable all visible permission inputs so they don't submit (custom mode only)
+                form.querySelectorAll('#permission-container input[name="permissions[]"]').forEach(input => {
+                    input.disabled = true;
+                });
+                form.querySelectorAll('#permission-container input[type="radio"]').forEach(input => {
+                    input.disabled = true;
+                });
+            }
+
+            // Get collected permissions
+            const selectedPermissions = collectPermissions();
+
+            // Create hidden inputs for each permission
+            selectedPermissions.forEach(permission => {
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'permissions[]';
+                hiddenInput.value = permission;
+                form.appendChild(hiddenInput);
+            });
+        }
+
+        // Attach to form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            renderAllPermissions();
+
+            // Find the form containing the permission container
+            const permissionContainer = document.getElementById('permission-container');
+            if (permissionContainer) {
+                const form = permissionContainer.closest('form');
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        updatePermissionsBeforeSubmit(this);
+                        // Form will now submit with clean permissions[] array
                     });
                 }
-            });
-        }
+            }
+        });
 
-
-        // Add event listeners to all inputs (delegation-like via loop)
-        function addListeners() {
-            const allInputs = Array.from(document.querySelectorAll('input.form-check-input'));
-
-            allInputs.forEach(input => {
-                // on change
-                input.addEventListener('change', function(e) {
-                    // if this input is a parent (has data-group), update its children
-                    if (input.hasAttribute('data-group')) {
-                        // Only check/uncheck children if this is a checkbox parent. If a parent is radio (rare), treat similarly.
-                        if (input.type === 'checkbox') {
-                            updateChildrenOnParentChange(input);
-                        }
-                    }
-
-                    // if this input is a child, update its immediate parent and propagate upwards
-                    if (input.hasAttribute('data-parent')) {
-                        // If this child is a checkbox and it has its own children, and it was unchecked,
-                        // ensure its children get disabled/unchecked
-                        if (input.type === 'checkbox' && input.hasAttribute('data-group')) {
-                            updateChildrenOnParentChange(input);
-                        }
-
-                        // if child is a radio, checking it should set its parent checked
-                        // same logic for checkbox child
-                        updateParentsRecursively(input);
-                    }
-
-                    // Edge case: if we toggled a radio, we also want to ensure its radio-group children behavior
-                    if (input.type === 'radio') {
-                        // find parent of this radio (data-parent)
-                        const parent = getParentOf(input);
-                        if (parent) {
-                            parent.checked = true;
-                            updateParentsRecursively(parent);
-                        }
-                    }
-                });
-
-                // when page loads, set initial disabled states for radios if parent missing/unchecked
-                if (input.type === 'radio') {
-                    const parent = getParentOf(input);
-                    if (!parent || !parent.checked) {
-                        input.disabled = true;
-                        input.checked = false;
-                    }
-                }
-            });
-        }
-
-        // initial setup after DOM built
-        function initializeStates() {
-            // For any parent with children, if it is checked ensure children get set properly
-            const parents = Array.from(document.querySelectorAll('[data-group]'));
-            parents.forEach(p => {
-                if (p.type === 'checkbox') {
-                    updateChildrenOnParentChange(p);
-                }
-            });
-
-            // For radios under unchecked parents, ensure they are disabled; for checked parents make sure one radio is selected
-            parents.forEach(p => {
-                const children = getChildrenOf(p.id || p.value);
-                const radioGroups = [...new Set(children.filter(c => c.type === 'radio').map(r => r.name))];
-                radioGroups.forEach(groupName => {
-                    const radios = Array.from(document.getElementsByName(groupName));
-                    if (p.checked) {
-                        radios.forEach(r => r.disabled = false);
-                        if (!radios.some(r => r.checked)) {
-                            const first = radios.find(r => !r.disabled);
-                            if (first) first.checked = true;
-                        }
-                    } else {
-                        radios.forEach(r => {
-                            r.disabled = true;
-                            r.checked = false;
-                        });
-                    }
-                });
-            });
-        }
-
-        // run listeners and init
-        addListeners();
-        initializeStates();
+        // Export for manual use if needed
+        window.getPermissions = collectPermissions;
     </script>
 @endsection
