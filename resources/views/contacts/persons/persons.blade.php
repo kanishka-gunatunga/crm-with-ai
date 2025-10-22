@@ -1,5 +1,7 @@
 @extends('master')
-
+<?php
+$permissions = session('user_permissions');
+?>
 @section('content')
 
     <style>
@@ -24,6 +26,9 @@
                                 {{ __('app.contacts.persons.title') }}
                             </h3>
                             <div class="d-flex gap-3">
+                                
+
+                                @if (in_array(strtolower('import-persons'), array_map('strtolower', $permissions))) 
                                 <button class="import-leads-button" data-bs-toggle="modal" data-bs-target=".importPersons">
                                     <div class="icon-container">
                                         <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
@@ -38,6 +43,7 @@
                                     </div>
                                     <span class="button-text white-btn-text">Import Persons</span>
                                 </button>
+                                @endif
 
 
 
@@ -75,6 +81,9 @@
                                             <h3 class="card-title">Persons</h3>
                                         </div>
                                         <div>
+                                            
+
+                                            @if (in_array(strtolower('export-persons'), array_map('strtolower', $permissions))) 
                                             <button class="btn white-btn export-toggle">
                                                 <svg width="18" height="18" viewBox="0 0 14 15" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
@@ -90,6 +99,7 @@
 
 
                                             </button>
+                                            @endif
 
                                             <button class="btn white-btn" data-bs-toggle="collapse" href="#collapseFilter">
                                                 {{-- <button class="btn white-btn" data-bs-toggle="offcanvas" data-bs-target="#offFilter"

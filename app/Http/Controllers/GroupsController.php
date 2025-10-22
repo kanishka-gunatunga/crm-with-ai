@@ -28,85 +28,111 @@ class GroupsController extends Controller
 {
     public function groups(Request $request)
     {
-        if($request->isMethod('get')){
 
-            $query = Group::query();
+        $permissions = session('user_permissions', []);
 
-            if ($request->filled('id')) {
-                $query->where('id', $request->id);
+        if (in_array(strtolower('show-groups'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+
+                $query = Group::query();
+
+                if ($request->filled('id')) {
+                    $query->where('id', $request->id);
+                }
+
+                if ($request->filled('name')) {
+                    $query->where('name', 'like', '%' . $request->name . '%');
+                }
+
+                $groups = $query->get();
+
+                return view('settings.groups.groups', [
+                    'groups' => $groups,
+                    'request' => $request->all()
+                ]);
             }
-
-            if ($request->filled('name')) {
-                $query->where('name', 'like', '%' . $request->name . '%');
-            }
-
-            $groups = $query->get();
-
-            return view('settings.groups.groups', [
-                'groups' => $groups,
-                'request' => $request->all()
-            ]);
-         }
-        
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
     }
     public function create_group(Request $request)
     {
+        $permissions = session('user_permissions', []);
+        if (in_array(strtolower('create-groups'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('post')) {
+                $request->validate([
+                    'name' => 'required|string',
+                ]);
 
-        if($request->isMethod('post')){
-            $request->validate([
-                'name' => 'required|string',
-            ]);
-    
-            $group =  new Group();
-            $group->name = $request->name;
-            $group->description = $request->description;
-            $group->save();
-    
-            return redirect()->back()->with('success', 'Group created successfully!');
-        }else{
-            return view('settings.groups.create_group');
+                $group =  new Group();
+                $group->name = $request->name;
+                $group->description = $request->description;
+                $group->save();
+
+                return redirect()->back()->with('success', 'Group created successfully!');
+            } else {
+                return view('settings.groups.create_group');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
     }
-    public function delete_group($id,Request $request)
+    public function delete_group($id, Request $request)
     {
-        if($request->isMethod('get')){
-            Group::where('id',$id)->delete();
-            return redirect()->back()->with('success', 'Group deleted successfully!');
-         }
+        $permissions = session('user_permissions', []);
+        if (in_array(strtolower('delete-groups'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+                Group::where('id', $id)->delete();
+                return redirect()->back()->with('success', 'Group deleted successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
     }
     public function edit_group($id, Request $request)
-{
-    if ($request->isMethod('get')) {
-        $group = Group::where('id', $id)->first();
-        return view('settings.groups.edit_group', ['group' => $group]);
+    {
+        $permissions = session('user_permissions', []);
+        if (in_array(strtolower('edit-groups'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+                $group = Group::where('id', $id)->first();
+                return view('settings.groups.edit_group', ['group' => $group]);
+            }
+
+            if ($request->isMethod('post')) {
+                $request->validate([
+                    'name' => 'required|string',
+                ]);
+
+                $group =  Group::where('id', $id)->first();;
+                $group->name = $request->name;
+                $group->description = $request->description;
+                $group->update();
+
+                return redirect()->back()->with('success', 'Group updated successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
     }
+    public function delete_selected_groups(Request $request)
+    {
+        $permissions = session('user_permissions', []);
+        if (in_array(strtolower('delete-groups'), array_map('strtolower', $permissions))) {
+            $gropIds = $request->input('selected_groups', []);
 
-    if ($request->isMethod('post')) {
-        $request->validate([
-            'name' => 'required|string',
-        ]);
+            if (!empty($gropIds)) {
+                Group::whereIn('id', $gropIds)->delete();
+                return back()->with('success', 'Selected groups deleted successfully.');
+            }
 
-        $group =  Group::where('id', $id)->first();;
-        $group->name = $request->name;
-        $group->description = $request->description;
-        $group->update();
-
-       return redirect()->back()->with('success', 'Group updated successfully!');
-
+            return back()->with('error', 'No attributes selected.');
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
     }
 }
-public function delete_selected_groups(Request $request)
-{
-    $gropIds = $request->input('selected_groups', []);
-    
-    if (!empty($gropIds)) {
-        Group::whereIn('id', $gropIds)->delete();
-        return back()->with('success', 'Selected groups deleted successfully.');
-    }
-
-    return back()->with('error', 'No attributes selected.');
-}
-}
-
-
-

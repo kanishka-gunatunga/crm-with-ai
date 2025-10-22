@@ -8,6 +8,9 @@
     use App\Models\Configuration;
     
     $config = Configuration::first();
+    
+    $permissions = session('user_permissions');
+    
     ?>
     <!-- Scrollable Content -->
     <div class="main-scrollable">
@@ -49,48 +52,52 @@
 
             <div class="col-12 mt-4">
                 <div class="card-container">
-                    <div class="card card-default mb-4">
-                        <div class="card-body">
-                            <form action="" method="post" enctype='multipart/form-data'>
-                                @csrf
-                                <div class="d-md-flex justify-content-between mb-4">
-                                    <div class="col-md-11 col-12">
-                                        <div class="row g-4">
-                                            <div class="col-12 col-md-4">
-                                                <label for="field1" class="form-label">Terms and Conditions</label>
-                                                <input type="text" class="form-control" id="field1"
-                                                    placeholder="Change your T&C from here"
-                                                    value="{{ $config->terms ?? '' }}" name="terms">
-                                            </div>
-                                            <div class="col-12 col-md-4">
-                                                <label for="field2" class="form-label">Quote Logo</label>
-                                                <input type="file" class="form-control" id="field2"
-                                                    placeholder="Pipeline" name="quote_logo">
-                                            </div>
 
-                                            <div class="col-12 col-md-3">
-                                                <?php if($config && $config->quote_logo != null){ ?>
-                                                <img src="{{ asset('uploads/' . $config->quote_logo) }}" width="222px"
-                                                    height="118px" alt="" style="object-fit: cover;">
-                                                <?php } ?>
 
+                    @if (in_array(strtolower('terms-logo-add'), array_map('strtolower', $permissions)))
+                        <div class="card card-default mb-4">
+                            <div class="card-body">
+                                <form action="" method="post" enctype='multipart/form-data'>
+                                    @csrf
+                                    <div class="d-md-flex justify-content-between mb-4">
+                                        <div class="col-md-11 col-12">
+                                            <div class="row g-4">
+                                                <div class="col-12 col-md-4">
+                                                    <label for="field1" class="form-label">Terms and Conditions</label>
+                                                    <input type="text" class="form-control" id="field1"
+                                                        placeholder="Change your T&C from here"
+                                                        value="{{ $config->terms ?? '' }}" name="terms">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label for="field2" class="form-label">Quote Logo</label>
+                                                    <input type="file" class="form-control" id="field2"
+                                                        placeholder="Pipeline" name="quote_logo">
+                                                </div>
+
+                                                <div class="col-12 col-md-3">
+                                                    <?php if($config && $config->quote_logo != null){ ?>
+                                                    <img src="{{ asset('uploads/' . $config->quote_logo) }}" width="222px"
+                                                        height="118px" alt="" style="object-fit: cover;">
+                                                    <?php } ?>
+
+                                                </div>
                                             </div>
                                         </div>
+
+                                        <div class="col-md-1 col-12 d-flex justify-content-end gap-2 align-items-start">
+                                            <a href="{{ url('quotes') }}"><button type="button"
+                                                    class="btn cancel-btn">Cancel</button></a>
+                                            <button type="submit" class="btn save-btn">Save</button>
+                                        </div>
+
+
                                     </div>
 
-                                    <div class="col-md-1 col-12 d-flex justify-content-end gap-2 align-items-start">
-                                        <a href="{{ url('quotes') }}"><button type="button"
-                                                class="btn cancel-btn">Cancel</button></a>
-                                        <button type="submit" class="btn save-btn">Save</button>
-                                    </div>
 
-
-                                </div>
-
-
-                            </form>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    @endif
 
 
                     <div class="card card-default">

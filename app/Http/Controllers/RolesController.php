@@ -28,98 +28,137 @@ use League\Csv\Writer;
 date_default_timezone_set('Asia/Colombo');
 
 class RolesController extends Controller
-{   
+{
     public function roles(Request $request)
     {
+        $permissions = session('user_permissions', []);
 
-        $query = Role::query();
+        if (in_array(strtolower('show-roles'), array_map('strtolower', $permissions))) {
 
-        if ($request->filled('id')) {
-            $query->where('id', $request->id);
+            $query = Role::query();
+
+            if ($request->filled('id')) {
+                $query->where('id', $request->id);
+            }
+
+            if ($request->filled('name')) {
+                $query->where('name', 'like', '%' . $request->name . '%');
+            }
+
+            if ($request->filled('permission_type')) {
+                $query->where('permission_type', $request->permission_type);
+            }
+
+            $roles = $query->get();
+
+            return view('settings.roles.roles', [
+                'roles' => $roles,
+                'request' => $request->all()
+            ]);
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
-
-        if ($request->filled('name')) {
-            $query->where('name', 'like', '%' . $request->name . '%');
-        }
-
-        if ($request->filled('permission_type')) {
-            $query->where('permission_type', $request->permission_type);
-        }
-
-        $roles = $query->get();
-
-        return view('settings.roles.roles', [
-            'roles' => $roles,
-            'request' => $request->all()
-        ]);
     }
 
 
     public function create_role(Request $request)
     {
-        if ($request->isMethod('get')) {
-            return view('settings.roles.create_role');
-        }
-        if ($request->isMethod('post')) {
 
-            
+        $permissions = session('user_permissions', []);
 
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'description' => 'required',
-                'permission_type' => 'required',
-            ]);
+        if (in_array(strtolower('create-roles'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+                return view('settings.roles.create_role');
+            }
+            if ($request->isMethod('post')) {
 
-            $role = new Role();
-            $role->name = $request->name;
-            $role->description = $request->description;
-            $role->permission_type = $request->permission_type;
-            $role->permissions = $request->permissions;
-            $role->save();
 
-            return redirect()->back()->with('success', 'Role created successfully!');
+
+                $request->validate([
+                    'name' => 'required|string|max:255',
+                    'description' => 'required',
+                    'permission_type' => 'required',
+                ]);
+
+                $role = new Role();
+                $role->name = $request->name;
+                $role->description = $request->description;
+                $role->permission_type = $request->permission_type;
+                $role->permissions = $request->permissions;
+                $role->save();
+
+                return redirect()->back()->with('success', 'Role created successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
     }
     public function delete_role($id, Request $request)
     {
-        if ($request('get')) {
-            Role::where('id', $id)->delete();
-            return redirect()->back()->with('success', 'Role deleted successfully!');
+
+        $permissions = session('user_permissions', []);
+
+        if (in_array(strtolower('delete-roles'), array_map('strtolower', $permissions))) {
+            if ($request('get')) {
+                Role::where('id', $id)->delete();
+                return redirect()->back()->with('success', 'Role deleted successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
     }
     public function edit_role($id, Request $request)
     {
-        $role = Role::findOrFail($id);
 
-        if ($request->isMethod('get')) {
-            return view('settings.roles.edit_role', ['role' => $role]);
-        }
-        if ($request->isMethod('post')) {
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'emails.*' => 'required|email',
-                'email_types.*' => 'required|in:work,home',
-            ]);
+        $permissions = session('user_permissions', []);
 
-            $role->name = $request->name;
-            $role->description = $request->description;
-            $role->permission_type = $request->permission_type;
-            $role->permissions = $request->permissions;
-            $role->save();
+        if (in_array(strtolower('edit-roles'), array_map('strtolower', $permissions))) {
+            $role = Role::findOrFail($id);
 
-            return redirect()->back()->with('success', 'Role updated successfully!');
+            if ($request->isMethod('get')) {
+                return view('settings.roles.edit_role', ['role' => $role]);
+            }
+            if ($request->isMethod('post')) {
+                $request->validate([
+                    'name' => 'required|string|max:255',
+                    'emails.*' => 'required|email',
+                    'email_types.*' => 'required|in:work,home',
+                ]);
+
+                $role->name = $request->name;
+                $role->description = $request->description;
+                $role->permission_type = $request->permission_type;
+                $role->permissions = $request->permissions;
+                $role->save();
+
+                return redirect()->back()->with('success', 'Role updated successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
     }
 
     public function delete_selected_roles(Request $request)
     {
-        $roleIds = $request->input('selected_roles', []);
 
-        if (!empty($roleIds)) {
-            Role::whereIn('id', $roleIds)->delete();
-            return back()->with('success', 'Selected roles deleted successfully.');
+        $permissions = session('delete-roles', []);
+
+        if (in_array(strtolower('show-services'), array_map('strtolower', $permissions))) {
+            $roleIds = $request->input('selected_roles', []);
+
+            if (!empty($roleIds)) {
+                Role::whereIn('id', $roleIds)->delete();
+                return back()->with('success', 'Selected roles deleted successfully.');
+            }
+
+            return back()->with('error', 'No attributes selected.');
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
-
-        return back()->with('error', 'No attributes selected.');
     }
 }

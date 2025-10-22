@@ -1,5 +1,8 @@
 @extends('master')
-
+<?php
+    $permissions = session('user_permissions');
+    
+?>
 @section('content')
     <?php
     use App\Models\Lead;
@@ -73,7 +76,9 @@
 
                             </button>
 
+                            
 
+                            @if (in_array(strtolower('lead-import'), array_map('strtolower', $permissions))) 
                             {{-- import lead button --}}
                             <button class="import-leads-button" data-bs-toggle="modal" data-bs-target=".importLeads">
                                 <div class="icon-container">
@@ -91,6 +96,7 @@
                                 </div>
                                 <span class="button-text white-btn-text">Import leads</span>
                             </button>
+                            @endif
 
                             {{-- export lead button --}}
                             {{-- <button class="import-leads-button" data-bs-toggle="modal" data-bs-target=".exportTypes"> --}}
@@ -98,7 +104,9 @@
 
 
                             <div class="position-relative">
+                                
 
+                                @if (in_array(strtolower('lead-export'), array_map('strtolower', $permissions)))
                                 <button class="import-leads-button" data-bs-toggle="collapse"
                                     data-bs-target="#exportCollapse" aria-expanded="false" aria-controls="exportCollapse">
                                     <div class="icon-container">
@@ -117,6 +125,7 @@
                                     <span class="button-text white-btn-text">{{ __('app.leads.export-leads') }}</span>
 
                                 </button>
+                                @endif
                                 <div class="collapse exportCollapseDiv position-absolute" id="exportCollapse">
                                     <div class="col-md-12 text-end">
                                         <div class="mb-3 card card-default export-card">
@@ -218,10 +227,14 @@
                 foreach ($orderedStages as $stage) {
                 $stage_value = 0;
 
-                if ($userRoleId == 2) {
+                 $permissions = session('user_permissions', []);
+
+         
+
+                if (in_array(strtolower('lead-view-all'), array_map('strtolower', $permissions))) {
                     // Admin - show all leads for the stage
                     $leads = $leadsGroupedByStage->get($stage->id, collect());
-                } elseif ($userRoleId == 3) {
+                } elseif (in_array(strtolower('lead-view-own'), array_map('strtolower', $permissions))) {
                     // Sales
                     if ($stage->name == 'New') {
                         

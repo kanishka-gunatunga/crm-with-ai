@@ -35,9 +35,9 @@ date_default_timezone_set('Asia/Colombo');
 class EmailsController extends Controller
 {
 
-    
 
-    
+
+
     // public function emails(Request $request)
     // {
     //     if ($request->isMethod('get')) {
@@ -54,6 +54,10 @@ class EmailsController extends Controller
 
     public function emails(Request $request)
     {
+        $permissions = session('user_permissions', []);
+
+
+
         if ($request->isMethod('get')) {
             $loggedUser = Auth::user();
             // Get the logged user's name from the users table
@@ -61,18 +65,18 @@ class EmailsController extends Controller
             // dd($loggedUserName);
             $loggedUserRole = $loggedUser->role;
 
-            if ($loggedUserRole == 2) {
+            if (in_array(strtolower('show-all-mails'), array_map('strtolower', $permissions))) {
                 // Role 2 → show all
-                
+
                 $sent_emails = SentEmails::with(['lead', 'user.userDetails'])->get();
-            } elseif ($loggedUserRole == 3) {
+            } elseif (in_array(strtolower('show-own-mails'), array_map('strtolower', $permissions))) {
                 // Role 3 or others → only show emails where sent_by = logged user id
                 $sent_emails = SentEmails::with(['lead', 'user.userDetails'])
                     ->where('sent_by', $loggedUser->id)
                     ->get();
             } else {
-               
-                $sent_emails = collect(); 
+
+                $sent_emails = collect();
             }
 
             return view('mail.mail', [
@@ -96,41 +100,48 @@ class EmailsController extends Controller
 
     public function compose_email(Request $request)
     {
-        if ($request->isMethod('post')) {
-            $request->validate([
-                'to' => 'required',
-                'subject' => 'required|string|max:255',
-                'body' => 'required|string',
-            ]);
+        $permissions = session('user_permissions', []);
 
-            $sent_email =  new SentEmails();
-            $sent_email->to = $request->to;
-            $sent_email->cc = $request->cc;
-            $sent_email->bcc = $request->bcc;
-            $sent_email->subject = $request->subject;
-            $sent_email->body = $request->body;
-            $sent_email->sent_by = Auth::user()->id;
+        if (in_array(strtolower('compose-mails'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('post')) {
+                $request->validate([
+                    'to' => 'required',
+                    'subject' => 'required|string|max:255',
+                    'body' => 'required|string',
+                ]);
 
-            $attachments = [];
-            if ($request->hasFile('attchments')) {
-                foreach ($request->file('attchments') as $file) {
-                    $filename = time() . '_' . uniqid() . '_.' . $file->extension();
-                    $file->move(public_path('uploads/leads/email_attachments'), $filename);
-                    $attachments[] = $filename;
+                $sent_email =  new SentEmails();
+                $sent_email->to = $request->to;
+                $sent_email->cc = $request->cc;
+                $sent_email->bcc = $request->bcc;
+                $sent_email->subject = $request->subject;
+                $sent_email->body = $request->body;
+                $sent_email->sent_by = Auth::user()->id;
+
+                $attachments = [];
+                if ($request->hasFile('attchments')) {
+                    foreach ($request->file('attchments') as $file) {
+                        $filename = time() . '_' . uniqid() . '_.' . $file->extension();
+                        $file->move(public_path('uploads/leads/email_attachments'), $filename);
+                        $attachments[] = $filename;
+                    }
                 }
+
+                $sent_email->attachments = $attachments;
+                $sent_email->save();
+
+                Mail::to($request->to)
+                    ->cc($request->cc ?? [])
+                    ->bcc($request->bcc ?? [])
+                    ->send(new LeadSendEmail($sent_email));
+
+                return back()->with('success', 'Email sent successfully.');
+            } else {
+                return view('mail.compose-mail');
             }
-
-            $sent_email->attachments = $attachments;
-            $sent_email->save();
-
-            Mail::to($request->to)
-                ->cc($request->cc ?? [])
-                ->bcc($request->bcc ?? [])
-                ->send(new LeadSendEmail($sent_email));
-
-            return back()->with('success', 'Email sent successfully.');
         } else {
-            return view('mail.compose-mail');
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
     }
 
@@ -180,26 +191,38 @@ class EmailsController extends Controller
     }
     public function delete_selected_emails(Request $request)
     {
-        $emailIds = $request->input('selected_emails', []);
+        $permissions = session('user_permissions', []);
 
-        if (!empty($emailIds)) {
-            SentEmails::whereIn('id', $emailIds)->delete();
-            return back()->with('success', 'Selected emails deleted successfully.');
+        if (in_array(strtolower('delete-mails'), array_map('strtolower', $permissions))) {
+            $emailIds = $request->input('selected_emails', []);
+
+            if (!empty($emailIds)) {
+                SentEmails::whereIn('id', $emailIds)->delete();
+                return back()->with('success', 'Selected emails deleted successfully.');
+            }
+
+            return back()->with('error', 'No attributes selected.');
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
-
-        return back()->with('error', 'No attributes selected.');
     }
 
 
     public function delete_emails(Request $request, $id)
     {
+        $permissions = session('user_permissions', []);
+        if (in_array(strtolower('delete-mails'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+                SentEmails::where('id', $id)->delete();
+                return redirect()->back()->with('success', 'Email deleted successfully!');
+            }
 
-        if ($request->isMethod('get')) {
-            SentEmails::where('id', $id)->delete();
-            return redirect()->back()->with('success', 'Email deleted successfully!');
+            return back()->with('error', 'No attributes selected.');
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
-
-        return back()->with('error', 'No attributes selected.');
     }
 
     public function toggleFavourite($id, Request $request)

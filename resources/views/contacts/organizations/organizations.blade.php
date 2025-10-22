@@ -1,5 +1,7 @@
 @extends('master')
-
+<?php
+$permissions = session('user_permissions');
+?>
 @section('content')
     <?php
     use App\Models\Person;
@@ -17,8 +19,9 @@
 
 
 
-                        <button class="import-leads-button" data-bs-toggle="modal" data-bs-target=".importOrganizations">
-                            <div class="icon-container">
+                        @if (in_array(strtolower('import-organizations'), array_map('strtolower', $permissions)))
+                            <button class="import-leads-button" data-bs-toggle="modal" data-bs-target=".importOrganizations">
+                                <div class="icon-container">
                                     <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -32,11 +35,11 @@
 
                                 </div>
 
-                            <span class="button-text white-btn-text">Import Organizations</span>
+                                <span class="button-text white-btn-text">Import Organizations</span>
 
 
-                        </button>
-
+                            </button>
+                        @endif
 
 
                         <a href="{{ url('create-organization') }}">
@@ -68,23 +71,23 @@
             <div class="col-12 mt-4">
                 <div class="card-container">
                     <!-- <div class="card card-default mb-4">
-                                        <div class="card-body">
-                                            <div class="row g-4">
-                                                <div class="col-12 col-md-4">
-                                                    <label for="field1" class="form-label">Terms and Conditions</label>
-                                                    <input type="text" class="form-control" id="field1" placeholder="Change your T&C from here">
-                                                </div>
-                                                <div class="col-12 col-md-4">
-                                                    <label for="field2" class="form-label">Quote Logo</label>
-                                                    <input type="file" class="form-control" id="field2" placeholder="Pipeline">
-                                                </div>
+                                            <div class="card-body">
+                                                <div class="row g-4">
+                                                    <div class="col-12 col-md-4">
+                                                        <label for="field1" class="form-label">Terms and Conditions</label>
+                                                        <input type="text" class="form-control" id="field1" placeholder="Change your T&C from here">
+                                                    </div>
+                                                    <div class="col-12 col-md-4">
+                                                        <label for="field2" class="form-label">Quote Logo</label>
+                                                        <input type="file" class="form-control" id="field2" placeholder="Pipeline">
+                                                    </div>
 
-                                                <div class="col-12 col-md-4">
-                                                    <img src="../images/d6af22486fc0ee1005bfcdbe7e596b125bc8e316.png" width="222px" height="118px" alt="" style="object-fit: cover;">
+                                                    <div class="col-12 col-md-4">
+                                                        <img src="../images/d6af22486fc0ee1005bfcdbe7e596b125bc8e316.png" width="222px" height="118px" alt="" style="object-fit: cover;">
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div> -->
+                                        </div> -->
 
 
                     <div class="card card-default">
@@ -94,6 +97,9 @@
                                     <h3 class="card-title">{{ __('app.contacts.organizations.title') }}</h3>
                                 </div>
                                 <div>
+                                   
+
+                                    @if (in_array(strtolower('export-organizations'), array_map('strtolower', $permissions)))
                                     <button class="btn white-btn export-toggle">
                                         <svg width="18" height="18" viewBox="0 0 14 15" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -109,6 +115,7 @@
 
 
                                     </button>
+                                    @endif
 
                                     <button class="btn white-btn" data-bs-toggle="collapse" href="#collapseFilter">
                                         {{-- <button class="btn white-btn" data-bs-toggle="offcanvas" data-bs-target="#offFilter"
@@ -168,13 +175,14 @@
 
                                                     </div>
 
-                                                   
 
 
-                                                <div class="d-flex justify-content-center gap-3 align-items-center">
-                                                    <button type="submit" class="btn save-btn">Apply Filter</button>
-                                                    <a href="{{ url('organizations') }}" class="btn clear-all-btn">Clear</a>
-                                                </div>
+
+                                                    <div class="d-flex justify-content-center gap-3 align-items-center">
+                                                        <button type="submit" class="btn save-btn">Apply Filter</button>
+                                                        <a href="{{ url('organizations') }}"
+                                                            class="btn clear-all-btn">Clear</a>
+                                                    </div>
 
 
                                                 </form>
@@ -264,18 +272,18 @@
     </div>
     <!-- Bottom Action Buttons -->
     <!--   <div class="col-12 action-bar">
-                                <div class="d-flex gap-2 justify-content-between">
-                                    <div>
-                                        <button type="submit" class="btn clear-all-btn">Clear All</button>
-                                    </div>
-                                    <div>
-                                        <button type="submit" class="btn save-btn">Save</button>
-                                       <button type="button" class="btn cancel-btn">Cancel</button>
+                                    <div class="d-flex gap-2 justify-content-between">
+                                        <div>
+                                            <button type="submit" class="btn clear-all-btn">Clear All</button>
+                                        </div>
+                                        <div>
+                                            <button type="submit" class="btn save-btn">Save</button>
+                                           <button type="button" class="btn cancel-btn">Cancel</button>
+                                        </div>
+
                                     </div>
 
-                                </div>
-
-                            </div> -->
+                                </div> -->
 
     <script>
         $(document).ready(function() {

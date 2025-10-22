@@ -68,6 +68,7 @@ class QuoteController extends Controller
         if ($request->isMethod('get')) {
             $quotesQuery = Quote::query();
 
+
             if ($request->has('subject') && !empty($request->subject)) {
                 $quotesQuery->where('subject', 'like', '%' . $request->subject . '%');
             }
@@ -97,7 +98,9 @@ class QuoteController extends Controller
             }
 
             $user = Auth::user();
-            if ($user->role == 3) {
+
+            $permissions = session('user_permissions');
+            if (in_array(strtolower('quotes-view-own'), array_map('strtolower', $permissions))) {
                 $quotesQuery->where('owner', $user->userDetails->user_id);
             }
             $quotes = $quotesQuery->get();
@@ -131,283 +134,319 @@ class QuoteController extends Controller
 
     public function create_lead_quote($id, Request $request)
     {
-        $lead = Lead::where('id', $id)->first();
+        $permissions = session('user_permissions', []);
 
-        if ($request->isMethod('get')) {
-            $lead_products = LeadProduct::where('lead_id', $id)->get();
-            $products = Product::get();
-            $services = Service::get();
-            $authenticatedUser = Auth::user()->userDetails;
-            $persons = Person::where('id', $lead->person)->first() ?? [];
-            return view('quotes.create_lead_quote', ['lead' => $lead, 'products' => $products, 'authenticatedUser' => $authenticatedUser, 'services' => $services, 'lead_products' => $lead_products, 'persons' => $persons]);
-        }
-        if ($request->isMethod('post')) {
+        if (in_array(strtolower('add-lead-quote'), array_map('strtolower', $permissions))) {
+            $lead = Lead::where('id', $id)->first();
 
-            // dd($request->all());
-            $request->validate([
-                'lead' => 'required|string',
-                'owner' => 'required',
-                'subject' => 'required',
-                'expired_at' => 'required',
-                // 'person' => 'required',
-                'address' => 'required',
-                'country' => 'required',
-                'state' => 'required',
-                'city' => 'required',
-                'post_code' => 'required',
-            ]);
-
-
-            $quote =  new Quote();
-            $quote->lead = $lead->id;
-            $quote->owner = $lead->sales_owner;
-            $quote->subject = $request->subject;
-            $quote->expired_at = $request->expired_at;
-            $quote->person = $lead->person;
-            $quote->description = $request->description;
-            $quote->address = $request->address;
-            $quote->country =  $request->country;
-            $quote->state =  $request->state;
-            $quote->city =  $request->city;
-            $quote->post_code =  $request->post_code;
-            $quote->shipping_address = $request->shipping_address;
-            $quote->shipping_country =  $request->shipping_country;
-            $quote->shipping_state =  $request->shipping_state;
-            $quote->shipping_city =  $request->shipping_city;
-            $quote->shipping_post_code =  $request->shipping_post_code;
-            $quote->discount_total_amount =  $request->discount_total_amount;
-            $quote->tax_total_amount =  $request->tax_total_amount;
-            $quote->order_total_input =  $request->order_total_input;
-            $quote->save();
-
-            if ($request->has('products')) {
-                foreach ($request->products as $index => $product_id) {
-
-                    $values = explode('||', $product_id);
-                    $type = $values[0];
-                    $product = $values[1];
-
-                    QuoteProduct::create([
-                        'quote_id' => $quote->id,
-                        'type' => $type,
-                        'product_id' => $product,
-                        'note' =>  $request->note[$index],
-                        'quantity' => $request->quantity[$index],
-                        'price' => $request->price[$index],
-                        'amount' => $request->amount[$index],
-                        'discount' => $request->discount[$index],
-                        'tax' => $request->tax[$index],
-                        'total' => $request->total[$index],
-                    ]);
-                }
+            if ($request->isMethod('get')) {
+                $lead_products = LeadProduct::where('lead_id', $id)->get();
+                $products = Product::get();
+                $services = Service::get();
+                $authenticatedUser = Auth::user()->userDetails;
+                $persons = Person::where('id', $lead->person)->first() ?? [];
+                return view('quotes.create_lead_quote', ['lead' => $lead, 'products' => $products, 'authenticatedUser' => $authenticatedUser, 'services' => $services, 'lead_products' => $lead_products, 'persons' => $persons]);
             }
+            if ($request->isMethod('post')) {
 
-            $pdf_name = 'quote-' . $quote->id . '-' . time() . '.pdf';
-            $pdf = PDF::loadView('pdf.quote', ['quote' => $quote]);
-            $pdf->setPaper('a4', 'portrait')->save(public_path('uploads/quotes/') . $pdf_name);
+                // dd($request->all());
+                $request->validate([
+                    'lead' => 'required|string',
+                    'owner' => 'required',
+                    'subject' => 'required',
+                    'expired_at' => 'required',
+                    // 'person' => 'required',
+                    'address' => 'required',
+                    'country' => 'required',
+                    'state' => 'required',
+                    'city' => 'required',
+                    'post_code' => 'required',
+                ]);
 
-            $quote_update = Quote::where('id', $quote->id)->first();
-            $quote_update->pdf =   $pdf_name;
-            $quote_update->update();
 
-            return redirect()->back()->with('success', 'Quote created successfully!');
+                $quote =  new Quote();
+                $quote->lead = $lead->id;
+                $quote->owner = $lead->sales_owner;
+                $quote->subject = $request->subject;
+                $quote->expired_at = $request->expired_at;
+                $quote->person = $lead->person;
+                $quote->description = $request->description;
+                $quote->address = $request->address;
+                $quote->country =  $request->country;
+                $quote->state =  $request->state;
+                $quote->city =  $request->city;
+                $quote->post_code =  $request->post_code;
+                $quote->shipping_address = $request->shipping_address;
+                $quote->shipping_country =  $request->shipping_country;
+                $quote->shipping_state =  $request->shipping_state;
+                $quote->shipping_city =  $request->shipping_city;
+                $quote->shipping_post_code =  $request->shipping_post_code;
+                $quote->discount_total_amount =  $request->discount_total_amount;
+                $quote->tax_total_amount =  $request->tax_total_amount;
+                $quote->order_total_input =  $request->order_total_input;
+                $quote->save();
+
+                if ($request->has('products')) {
+                    foreach ($request->products as $index => $product_id) {
+
+                        $values = explode('||', $product_id);
+                        $type = $values[0];
+                        $product = $values[1];
+
+                        QuoteProduct::create([
+                            'quote_id' => $quote->id,
+                            'type' => $type,
+                            'product_id' => $product,
+                            'note' =>  $request->note[$index],
+                            'quantity' => $request->quantity[$index],
+                            'price' => $request->price[$index],
+                            'amount' => $request->amount[$index],
+                            'discount' => $request->discount[$index],
+                            'tax' => $request->tax[$index],
+                            'total' => $request->total[$index],
+                        ]);
+                    }
+                }
+
+                $pdf_name = 'quote-' . $quote->id . '-' . time() . '.pdf';
+                $pdf = PDF::loadView('pdf.quote', ['quote' => $quote]);
+                $pdf->setPaper('a4', 'portrait')->save(public_path('uploads/quotes/') . $pdf_name);
+
+                $quote_update = Quote::where('id', $quote->id)->first();
+                $quote_update->pdf =   $pdf_name;
+                $quote_update->update();
+
+                return redirect()->back()->with('success', 'Quote created successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
     }
     public function delete_quote($id, Request $request)
     {
-        if ($request->isMethod('get')) {
+        $permissions = session('user_permissions', []);
 
-            Quote::where('id', $id)->delete();
-            QuoteProduct::where('quote_id', $id)->delete();
-            return redirect()->back()->with('success', 'Quote deleted successfully!');
+        if (in_array(strtolower('delete-quotes'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+
+                Quote::where('id', $id)->delete();
+                QuoteProduct::where('quote_id', $id)->delete();
+                return redirect()->back()->with('success', 'Quote deleted successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
     }
 
     public function create_quote(Request $request)
     {
+        $permissions = session('user_permissions', []);
 
-        if ($request->isMethod('get')) {
-            $owners = UserDetails::with('user')->get();
-            // $owners2 = User::get();
-            $persons = Person::get();
-            $products = Product::get();
-            $leads = Lead::get();
-            $services = Service::get();
-            $authenticatedUser = Auth::user()->userDetails;
-            return view('quotes.create_quote', ['owners' => $owners, 'authenticatedUser' => $authenticatedUser, 'persons' => $persons, 'products' => $products, 'leads' => $leads, 'services' => $services]);
-        }
-        if ($request->isMethod('post')) {
+        if (in_array(strtolower('create-quotes'), array_map('strtolower', $permissions))) {
 
-            // dd($request->all());
-            $request->validate([
-                'lead' => 'required',
-                'sales_owner' => 'required',
-                'subject' => 'required',
-                'expired_at' => 'required',
-                'person' => 'required',
-                'address' => 'required',
-                'country' => 'required',
-                'state' => 'required',
-                'city' => 'required',
-                'post_code' => 'required',
-            ]);
-
-
-            $quote =  new Quote();
-            $quote->lead = $request->lead;
-            $quote->owner = $request->sales_owner;
-            $quote->subject = $request->subject;
-            $quote->expired_at = $request->expired_at;
-            $quote->person = $request->person;
-            $quote->description = $request->description;
-            $quote->address = $request->address;
-            $quote->country =  $request->country;
-            $quote->state =  $request->state;
-            $quote->city =  $request->city;
-            $quote->post_code =  $request->post_code;
-            $quote->shipping_address = $request->shipping_address;
-            $quote->shipping_country =  $request->shipping_country;
-            $quote->shipping_state =  $request->shipping_state;
-            $quote->shipping_city =  $request->shipping_city;
-            $quote->shipping_post_code =  $request->shipping_post_code;
-            $quote->discount_total_amount =  $request->discount_total_amount;
-            $quote->tax_total_amount =  $request->tax_total_amount;
-            $quote->order_total_input =  $request->order_total_input;
-            $quote->save();
-
-            if ($request->has('products')) {
-                foreach ($request->products as $index => $product_id) {
-                    $values = explode('||', $product_id);
-                    $type = $values[0];
-                    $product = $values[1];
-
-                    QuoteProduct::create([
-                        'quote_id' => $quote->id,
-                        'type' => $type,
-                        'product_id' => $product,
-                        'note' =>  $request->note[$index],
-                        'quantity' => $request->quantity[$index],
-                        'price' => $request->price[$index],
-                        'amount' => $request->amount[$index],
-                        'discount' => $request->discount[$index],
-                        'tax' => $request->tax[$index],
-                        'total' => $request->total[$index],
-                    ]);
-                }
+            if ($request->isMethod('get')) {
+                $owners = UserDetails::with('user')->get();
+                // $owners2 = User::get();
+                $persons = Person::get();
+                $products = Product::get();
+                $leads = Lead::get();
+                $services = Service::get();
+                $authenticatedUser = Auth::user()->userDetails;
+                return view('quotes.create_quote', ['owners' => $owners, 'authenticatedUser' => $authenticatedUser, 'persons' => $persons, 'products' => $products, 'leads' => $leads, 'services' => $services]);
             }
+            if ($request->isMethod('post')) {
 
-            $pdf_name = 'quote-' . $quote->id . '-' . time() . '.pdf';
-            $pdf = PDF::loadView('pdf.quote', ['quote' => $quote]);
-            $pdf->setPaper('a4', 'portrait')->save(public_path('uploads/quotes/') . $pdf_name);
+                // dd($request->all());
+                $request->validate([
+                    'lead' => 'required',
+                    'sales_owner' => 'required',
+                    'subject' => 'required',
+                    'expired_at' => 'required',
+                    'person' => 'required',
+                    'address' => 'required',
+                    'country' => 'required',
+                    'state' => 'required',
+                    'city' => 'required',
+                    'post_code' => 'required',
+                ]);
 
-            $quote_update = Quote::where('id', $quote->id)->first();
-            $quote_update->pdf =   $pdf_name;
-            $quote_update->update();
 
-            return redirect()->back()->with('success', 'Quote created successfully!');
+                $quote =  new Quote();
+                $quote->lead = $request->lead;
+                $quote->owner = $request->sales_owner;
+                $quote->subject = $request->subject;
+                $quote->expired_at = $request->expired_at;
+                $quote->person = $request->person;
+                $quote->description = $request->description;
+                $quote->address = $request->address;
+                $quote->country =  $request->country;
+                $quote->state =  $request->state;
+                $quote->city =  $request->city;
+                $quote->post_code =  $request->post_code;
+                $quote->shipping_address = $request->shipping_address;
+                $quote->shipping_country =  $request->shipping_country;
+                $quote->shipping_state =  $request->shipping_state;
+                $quote->shipping_city =  $request->shipping_city;
+                $quote->shipping_post_code =  $request->shipping_post_code;
+                $quote->discount_total_amount =  $request->discount_total_amount;
+                $quote->tax_total_amount =  $request->tax_total_amount;
+                $quote->order_total_input =  $request->order_total_input;
+                $quote->save();
+
+                if ($request->has('products')) {
+                    foreach ($request->products as $index => $product_id) {
+                        $values = explode('||', $product_id);
+                        $type = $values[0];
+                        $product = $values[1];
+
+                        QuoteProduct::create([
+                            'quote_id' => $quote->id,
+                            'type' => $type,
+                            'product_id' => $product,
+                            'note' =>  $request->note[$index],
+                            'quantity' => $request->quantity[$index],
+                            'price' => $request->price[$index],
+                            'amount' => $request->amount[$index],
+                            'discount' => $request->discount[$index],
+                            'tax' => $request->tax[$index],
+                            'total' => $request->total[$index],
+                        ]);
+                    }
+                }
+
+                $pdf_name = 'quote-' . $quote->id . '-' . time() . '.pdf';
+                $pdf = PDF::loadView('pdf.quote', ['quote' => $quote]);
+                $pdf->setPaper('a4', 'portrait')->save(public_path('uploads/quotes/') . $pdf_name);
+
+                $quote_update = Quote::where('id', $quote->id)->first();
+                $quote_update->pdf =   $pdf_name;
+                $quote_update->update();
+
+                return redirect()->back()->with('success', 'Quote created successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
     }
 
     public function edit_quote($id, Request $request)
     {
-        $quote = Quote::where('id', $id)->first();
+        $permissions = session('user_permissions', []);
 
-        if ($request->isMethod('get')) {
-            $owners = UserDetails::get();
-            $persons = Person::get();
-            $products = Product::get();
-            $leads = Lead::get();
-            $quote_products = QuoteProduct::where('quote_id', $id)->get();
-            $services = Service::get();
-            return view('quotes.edit_quote', [
-                'owners' => $owners,
-                'persons' => $persons,
-                'products' => $products,
-                'leads' => $leads,
-                'quote_products' => $quote_products,
-                'quote' => $quote,
-                'services' => $services
-            ]);
-        }
-        if ($request->isMethod('post')) {
-            $request->validate([
-                'lead' => 'required|string',
-                'owner' => 'required',
-                'subject' => 'required',
-                'expired_at' => 'required',
-                'person' => 'required',
-                'address' => 'required',
-                'country' => 'required',
-                'state' => 'required',
-                'city' => 'required',
-                'post_code' => 'required',
-            ]);
+        if (in_array(strtolower('edit-quotes'), array_map('strtolower', $permissions))) {
+            $quote = Quote::where('id', $id)->first();
 
-            $quote->lead = $request->lead;
-            $quote->owner = $request->owner;
-            $quote->subject = $request->subject;
-            $quote->expired_at = $request->expired_at;
-            $quote->person = $request->person;
-            $quote->description = $request->description;
-            $quote->address = $request->address;
-            $quote->country =  $request->country;
-            $quote->state =  $request->state;
-            $quote->city =  $request->city;
-            $quote->post_code =  $request->post_code;
-            $quote->shipping_address = $request->shipping_address;
-            $quote->shipping_country =  $request->shipping_country;
-            $quote->shipping_state =  $request->shipping_state;
-            $quote->shipping_city =  $request->shipping_city;
-            $quote->shipping_post_code =  $request->shipping_post_code;
-            $quote->discount_total_amount =  $request->discount_total_amount;
-            $quote->tax_total_amount =  $request->tax_total_amount;
-            $quote->order_total_input =  $request->order_total_input;
-            $quote->update();
-
-            QuoteProduct::where('quote_id', $id)->delete();
-            if ($request->has('products')) {
-                foreach ($request->products as $index => $product_id) {
-                    $values = explode('||', $product_id);
-                    $type = $values[0];
-                    $product = $values[1];
-
-                    QuoteProduct::create([
-                        'quote_id' => $id,
-                        'type' => $type,
-                        'product_id' => $product,
-                        'note' =>  $request->note[$index],
-                        'quantity' => $request->quantity[$index],
-                        'price' => $request->price[$index],
-                        'amount' => $request->amount[$index],
-                        'discount' => $request->discount[$index],
-                        'tax' => $request->tax[$index],
-                        'total' => $request->total[$index],
-                    ]);
-                }
+            if ($request->isMethod('get')) {
+                $owners = UserDetails::get();
+                $persons = Person::get();
+                $products = Product::get();
+                $leads = Lead::get();
+                $quote_products = QuoteProduct::where('quote_id', $id)->get();
+                $services = Service::get();
+                return view('quotes.edit_quote', [
+                    'owners' => $owners,
+                    'persons' => $persons,
+                    'products' => $products,
+                    'leads' => $leads,
+                    'quote_products' => $quote_products,
+                    'quote' => $quote,
+                    'services' => $services
+                ]);
             }
+            if ($request->isMethod('post')) {
+                $request->validate([
+                    'lead' => 'required|string',
+                    'owner' => 'required',
+                    'subject' => 'required',
+                    'expired_at' => 'required',
+                    'person' => 'required',
+                    'address' => 'required',
+                    'country' => 'required',
+                    'state' => 'required',
+                    'city' => 'required',
+                    'post_code' => 'required',
+                ]);
 
-            $pdf_name = 'quote-' . $quote->id . '-' . time() . '.pdf';
-            $pdf = PDF::loadView('pdf.quote', ['quote' => $quote]);
-            $pdf->setPaper('a4', 'portrait')->save(public_path('uploads/quotes/') . $pdf_name);
+                $quote->lead = $request->lead;
+                $quote->owner = $request->owner;
+                $quote->subject = $request->subject;
+                $quote->expired_at = $request->expired_at;
+                $quote->person = $request->person;
+                $quote->description = $request->description;
+                $quote->address = $request->address;
+                $quote->country =  $request->country;
+                $quote->state =  $request->state;
+                $quote->city =  $request->city;
+                $quote->post_code =  $request->post_code;
+                $quote->shipping_address = $request->shipping_address;
+                $quote->shipping_country =  $request->shipping_country;
+                $quote->shipping_state =  $request->shipping_state;
+                $quote->shipping_city =  $request->shipping_city;
+                $quote->shipping_post_code =  $request->shipping_post_code;
+                $quote->discount_total_amount =  $request->discount_total_amount;
+                $quote->tax_total_amount =  $request->tax_total_amount;
+                $quote->order_total_input =  $request->order_total_input;
+                $quote->update();
 
-            $quote_update = Quote::where('id', $quote->id)->first();
-            $quote_update->pdf =   $pdf_name;
-            $quote_update->update();
+                QuoteProduct::where('quote_id', $id)->delete();
+                if ($request->has('products')) {
+                    foreach ($request->products as $index => $product_id) {
+                        $values = explode('||', $product_id);
+                        $type = $values[0];
+                        $product = $values[1];
 
-            return redirect()->back()->with('success', 'Quote updated successfully!');
+                        QuoteProduct::create([
+                            'quote_id' => $id,
+                            'type' => $type,
+                            'product_id' => $product,
+                            'note' =>  $request->note[$index],
+                            'quantity' => $request->quantity[$index],
+                            'price' => $request->price[$index],
+                            'amount' => $request->amount[$index],
+                            'discount' => $request->discount[$index],
+                            'tax' => $request->tax[$index],
+                            'total' => $request->total[$index],
+                        ]);
+                    }
+                }
+
+                $pdf_name = 'quote-' . $quote->id . '-' . time() . '.pdf';
+                $pdf = PDF::loadView('pdf.quote', ['quote' => $quote]);
+                $pdf->setPaper('a4', 'portrait')->save(public_path('uploads/quotes/') . $pdf_name);
+
+                $quote_update = Quote::where('id', $quote->id)->first();
+                $quote_update->pdf =   $pdf_name;
+                $quote_update->update();
+
+                return redirect()->back()->with('success', 'Quote updated successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
     }
     public function delete_selected_quotes(Request $request)
     {
-        $quoteIds = $request->input('selected_quotes', []);
 
-        if (!empty($quoteIds)) {
-            Quote::whereIn('id', $quoteIds)->delete();
-            QuoteProduct::whereIn('quote_id', $quoteIds)->delete();
-            return back()->with('success', 'Selected quotes deleted successfully.');
+        $permissions = session('user_permissions', []);
+
+        if (in_array(strtolower('delete-quotes'), array_map('strtolower', $permissions))) {
+            $quoteIds = $request->input('selected_quotes', []);
+
+            if (!empty($quoteIds)) {
+                Quote::whereIn('id', $quoteIds)->delete();
+                QuoteProduct::whereIn('quote_id', $quoteIds)->delete();
+                return back()->with('success', 'Selected quotes deleted successfully.');
+            }
+
+            return back()->with('error', 'No quotes selected.');
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
-
-        return back()->with('error', 'No quotes selected.');
     }
 
 
