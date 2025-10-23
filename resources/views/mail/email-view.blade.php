@@ -272,7 +272,7 @@
                                 @endif
 
                             </div>
-                            <div class="mt-3" id="reply-card"></div>
+                            {{-- <div class="mt-3" id="reply-card"></div> --}}
                         </div>
 
                     </div>
@@ -339,7 +339,7 @@
     </script>
 
 
-    <script>
+    {{-- <script>
         $(document).on('click', '.reply-button', function() {
             let parent_id = document.getElementById('parent_id').value;
             let container = $("#reply-card");
@@ -408,5 +408,5 @@
                 }
             });
         });
-    </script>
+    </script> --}}
 @endsection

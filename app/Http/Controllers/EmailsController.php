@@ -94,7 +94,9 @@ class EmailsController extends Controller
     {
         if ($request->isMethod('get')) {
             $favourite_emails = SentEmails::where('is_favourite', 1)->get();
+            // dd($favourite_emails);
             return response()->json($favourite_emails);
+            // return ('hi');
         }
     }
 

@@ -235,9 +235,9 @@ class PersonsController extends Controller
     public function delete_selected_persons(Request $request)
     {
 
-        $permissions = session('delete-persons', []);
+        $permissions = session('user_permissions', []);
 
-        if (in_array(strtolower('view-web-forms'), array_map('strtolower', $permissions))) {
+        if (in_array(strtolower('delete-persons'), array_map('strtolower', $permissions))) {
             $personIds = $request->input('selected_persons', []);
 
             if (!empty($personIds)) {
@@ -253,9 +253,9 @@ class PersonsController extends Controller
     }
     public function import_persons(Request $request)
     {
-        $permissions = session('import-persons', []);
+        $permissions = session('user_permissions', []);
 
-        if (in_array(strtolower('view-web-forms'), array_map('strtolower', $permissions))) {
+        if (in_array(strtolower('import-persons'), array_map('strtolower', $permissions))) {
             $request->validate([
                 'persons' => 'required|mimes:xls,xlsx,csv',
             ]);

@@ -1,5 +1,8 @@
 @extends('master')
+<?php
+$permissions = session('user_permissions');
 
+?>
 @section('content')
     <!-- Scrollable Content -->
     <!-- Scrollable Content -->
@@ -138,20 +141,23 @@
                                             <div class="col-12 col-md-4">
                                                 <label for="sales_owner" class="form-label">Sales Owner</label>
                                                 <select id="sales_owner" class="form-control" name="sales_owner"
-                                                    @if (auth()->user()->role == 3) disabled @endif>
-                                                    @if (auth()->user()->role == 3)
+                                                    @if (in_array(strtolower('create-own-leads'), array_map('strtolower', $permissions))) disabled @endif>
+                                                    @if (in_array(strtolower('create-own-leads'), array_map('strtolower', $permissions)))
                                                         <option value="{{ auth()->user()->id }}" selected>
-                                                            {{ auth()->user()->name }}
+                                                            {{-- {{ auth()->user()->name }} --}}
+                                                            permissoion selected to create own leads
                                                         </option>
-                                                    @else
+                                                    @elseif (in_array(strtolower('create-any-leads'), array_map('strtolower', $permissions))) 
                                                         <option value="" disabled selected>Select Sales Owner</option>
                                                         @foreach ($owners as $owner)
                                                             <option value="{{ $owner->user_id }}">{{ $owner->name }}
                                                             </option>
                                                         @endforeach
+                                                    @else
+                                                     <option value="" disabled selected>You don't have permission to select a sales owner</option>
                                                     @endif
                                                 </select>
-                                                @if (auth()->user()->role == 3)
+                                                @if (in_array(strtolower('create-own-leads'), array_map('strtolower', $permissions)))
                                                     <input type="hidden" name="sales_owner"
                                                         value="{{ auth()->user()->id }}">
                                                 @endif
@@ -234,7 +240,8 @@
                                                     name="organization">
                                                     <option hidden selected></option>
                                                     <?php foreach($organizations as $organization){ ?>
-                                                        <option value="{{ $organization->id }}">{{ $organization->name }}</option>
+                                                    <option value="{{ $organization->id }}">{{ $organization->name }}
+                                                    </option>
                                                     <?php } ?>
                                                 </select>
                                                 @if ($errors->has('organization'))

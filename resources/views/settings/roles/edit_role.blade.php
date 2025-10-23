@@ -178,7 +178,21 @@
                 children: [{
                         label: "Create Lead",
                         value: "lead-create",
-                        type: "checkbox"
+                        type: "checkbox",
+                        children: [
+                            {
+                                label: "Create Any Leads",
+                                value: "create-any-leads",
+                                type: "radio",
+                                group: "create-leads",
+                            },
+                            {
+                                label: "Create Own Leads",
+                                value: "create-own-leads",
+                                type: "radio",
+                                group: "create-leads"
+                            }
+                        ]
                     },
                     {
                         label: "View Lead",
@@ -203,6 +217,12 @@
                     {
                         label: "Import Lead",
                         value: "lead-import",
+                        type: "checkbox"
+                    },
+
+                    {
+                        label: "Edit Lead",
+                        value: "edit-lead",
                         type: "checkbox"
                     },
 
@@ -305,6 +325,39 @@
                         ]
                     },
 
+                    {
+                        label: "Delete Events",
+                        value: "lead-events-delete",
+                        type: "checkbox",
+                        children: [{
+                                label: "Note",
+                                value: "delete-lead-note",
+                                type: "checkbox",
+
+                            },
+
+                            {
+                                label: "Activity",
+                                value: "delete-lead-activity",
+                                type: "checkbox",
+
+                            },
+
+                            {
+                                label: "Email",
+                                value: "delete-lead-email",
+                                type: "checkbox",
+
+                            },
+                            {
+                                label: "File",
+                                value: "delete-lead-file",
+                                type: "checkbox",
+
+                            },
+                        ]
+                    },
+
                 ]
             },
 
@@ -338,6 +391,25 @@
 
                         ]
                     },
+
+                    {
+                        label: "Create Quotes",
+                        value: "create-quotes",
+                        type: "checkbox"
+                    },
+
+                    {
+                        label: "Edit Quotes",
+                        value: "edit-quotes",
+                        type: "checkbox"
+                    },
+
+                    {
+                        label: "Delete Quotes",
+                        value: "delete-quotes",
+                        type: "checkbox"
+                    },
+
                 ]
             },
 
@@ -378,6 +450,11 @@
                     {
                         label: "Edit activities",
                         value: "edit-activities",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Export activities",
+                        value: "export-activities",
                         type: "checkbox",
                     },
                 ]
@@ -544,6 +621,39 @@
             },
 
 
+            // Email templates
+            {
+                label: "Email Templates",
+                value: "email-templates",
+                type: "checkbox",
+                children: [{
+                        label: "Show Email Templates",
+                        value: "show-email-templates",
+                        type: "checkbox",
+
+                    },
+                    {
+                        label: "Edit Email Templates",
+                        value: "edit-email-templates",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Create Email Templates",
+                        value: "create-email-templates",
+                        type: "checkbox",
+                    },
+                    {
+                        label: "Delete Email Templates",
+                        value: "delete-email-templates",
+                        type: "checkbox",
+                    },
+
+
+
+                ]
+            },
+
+
 
             // mail
 
@@ -575,14 +685,16 @@
                         ]
 
                     },
-                    {
-                        label: "Edit Mails",
-                        value: "edit-mails",
-                        type: "checkbox",
-                    },
+
                     {
                         label: "Compose Mails",
                         value: "compose-mails",
+                        type: "checkbox",
+                    },
+
+                    {
+                        label: "Delete Mails",
+                        value: "delete-mails",
                         type: "checkbox",
                     },
                 ]

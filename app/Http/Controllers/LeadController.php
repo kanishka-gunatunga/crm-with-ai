@@ -116,160 +116,160 @@ class LeadController extends Controller
 
 
         $id = session('pipeline_id');
-        $permissions = session('user_permissions', []);
+        // $permissions = session('user_permissions', []);
 
-        if (in_array(strtolower('lead-create'), array_map('strtolower', $permissions))) {
-            if ($request->isMethod('get')) {
-                $sources = Source::get();
-                $types = Type::get();
-                $owners = UserDetails::get();
-                $persons = Person::get();
-                $organizations = Organization::get();
-                $products = Product::get();
-                $services = Service::get();
-                $pipelines = Pipeline::get();
-                $stages = PipelineStage::where('pipeline_id', $id)->get();
-                return view('leads.create_lead', [
-                    'sources' => $sources,
-                    'types' => $types,
-                    'owners' => $owners,
-                    'persons' => $persons,
-                    'organizations' => $organizations,
-                    'products' => $products,
-                    'services' => $services,
-                    'pipelines' => $pipelines,
-                    'stages' => $stages
-                ]);
-            }
-            if ($request->isMethod('post')) {
-
-
-                //     dd([
-
-                //         request()->user()->id,
-                //         request()->user()->role,
-                //         request()->user()->name,
-                //         request()->sales_owner
-
-                // ]);
-                $request->validate([
-                    'title' => 'required|string',
-                    'lead_value' => 'required',
-                    'source' => 'required',
-                    'pipeline' => 'required',
-                    'stage' => 'required',
-                    'person' => 'required', // Good practice to validate the person field
-                ]);
-
-                $person = null; // Initialize person variable
-
-                // Check if the person exists by ID and update them
-                if (Person::where("id", $request->person)->exists()) {
-                    // BUG FIX: Use $request->person instead of the undefined $id
-                    $person = Person::findOrFail($request->person);
-                    $person->organization = $request->organization;
-
-                    //  update logic for emails/contacts is fine
-                    if ($request->has('emails')) {
-                        $emails = [];
-                        foreach ($request->input('emails') as $key => $email) {
-                            $emails[] = [
-                                'value' => $email,
-                                'label' => $request->input("email_types.{$key}")
-                            ];
-                        }
-                        $person->emails = $emails;
-                    }
-
-                    if ($request->has('contact_numbers')) {
-                        $contactNumbers = [];
-                        foreach ($request->input('contact_numbers') as $key => $contactNumber) {
-                            $contactNumbers[] = [
-                                'value' => $contactNumber,
-                                'label' => $request->input("number_types.{$key}")
-                            ];
-                        }
-                        $person->contact_numbers = $contactNumbers;
-                    }
-                    $person->update();
-                } else { // Or create a new person if they don't exist
-                    $person = new Person();
-                    $person->name = $request->person; // Assuming person name is sent if ID doesn't exist
-                    $person->organization = $request->organization;
-
-
-                    if ($request->has('emails')) {
-                        $emails = [];
-                        foreach ($request->input('emails') as $key => $email) {
-                            $emails[] = [
-                                'value' => $email,
-                                'label' => $request->input("email_types.{$key}")
-                            ];
-                        }
-                        $person->emails = $emails;
-                    }
-                    if ($request->has('contact_numbers')) {
-                        $contactNumbers = [];
-                        foreach ($request->input('contact_numbers') as $key => $contactNumber) {
-                            $contactNumbers[] = [
-                                'value' => $contactNumber,
-                                'label' => $request->input("number_types.{$key}")
-                            ];
-                        }
-                        $person->contact_numbers = $contactNumbers;
-                    }
-                    $person->save();
-                }
-
-                // Lead creation logic
-                $lead = new Lead();
-                $lead->title = $request->title;
-                $lead->lead_value = $request->lead_value;
-                $lead->source = $request->source;
-                $lead->type = $request->type;
-                $lead->sales_owner = $request->sales_owner;
-                $lead->start_date = $request->start_date;
-                $lead->closing_date = $request->closing_date;
-                $lead->description = $request->description;
-                $lead->priority = $request->priority;
-                $lead->status = 'active';
-                $lead->category = 'qualified';
-                $lead->pipeline = $request->pipeline;
-                $lead->stage = $request->stage;
-                $lead->person = $person->id;
-                $lead->save();
-
-                // Product logic (unchanged)
-                if ($request->has('products')) {
-                    foreach ($request->products as $index => $product_id) {
-                        $values = explode('||', $product_id);
-                        $type = $values[0];
-                        $product = $values[1];
-
-                        LeadProduct::create([
-                            'lead_id' => $lead->id,
-                            'type' => $type,
-                            'product_id' => $product,
-                            'price' => $request->prices[$index],
-                            'quantity' => $request->quantities[$index],
-                            'amount' => $request->amounts[$index],
-                        ]);
-                    }
-                }
-
-                // Activity history logic (unchanged)
-                $activity_history = new ActivityHistory();
-                $activity_history->lead_id = $lead->id;
-                $activity_history->user_id = Auth::user()->id;
-                $activity_history->action = "Lead created";
-                $activity_history->save();
-
-                return redirect()->back()->with('success', 'Lead created successfully!');
-            }
-        } else {
-            // Option A: Hard stop
-            abort(403, 'Unauthorized');
+        // if (in_array(strtolower('lead-create'), array_map('strtolower', $permissions))) {
+        if ($request->isMethod('get')) {
+            $sources = Source::get();
+            $types = Type::get();
+            $owners = UserDetails::get();
+            $persons = Person::get();
+            $organizations = Organization::get();
+            $products = Product::get();
+            $services = Service::get();
+            $pipelines = Pipeline::get();
+            $stages = PipelineStage::where('pipeline_id', $id)->get();
+            return view('leads.create_lead', [
+                'sources' => $sources,
+                'types' => $types,
+                'owners' => $owners,
+                'persons' => $persons,
+                'organizations' => $organizations,
+                'products' => $products,
+                'services' => $services,
+                'pipelines' => $pipelines,
+                'stages' => $stages
+            ]);
         }
+        if ($request->isMethod('post')) {
+
+
+            //     dd([
+
+            //         request()->user()->id,
+            //         request()->user()->role,
+            //         request()->user()->name,
+            //         request()->sales_owner
+
+            // ]);
+            $request->validate([
+                'title' => 'required|string',
+                'lead_value' => 'required',
+                'source' => 'required',
+                'pipeline' => 'required',
+                'stage' => 'required',
+                'person' => 'required', // Good practice to validate the person field
+            ]);
+
+            $person = null; // Initialize person variable
+
+            // Check if the person exists by ID and update them
+            if (Person::where("id", $request->person)->exists()) {
+                // BUG FIX: Use $request->person instead of the undefined $id
+                $person = Person::findOrFail($request->person);
+                $person->organization = $request->organization;
+
+                //  update logic for emails/contacts is fine
+                if ($request->has('emails')) {
+                    $emails = [];
+                    foreach ($request->input('emails') as $key => $email) {
+                        $emails[] = [
+                            'value' => $email,
+                            'label' => $request->input("email_types.{$key}")
+                        ];
+                    }
+                    $person->emails = $emails;
+                }
+
+                if ($request->has('contact_numbers')) {
+                    $contactNumbers = [];
+                    foreach ($request->input('contact_numbers') as $key => $contactNumber) {
+                        $contactNumbers[] = [
+                            'value' => $contactNumber,
+                            'label' => $request->input("number_types.{$key}")
+                        ];
+                    }
+                    $person->contact_numbers = $contactNumbers;
+                }
+                $person->update();
+            } else { // Or create a new person if they don't exist
+                $person = new Person();
+                $person->name = $request->person; // Assuming person name is sent if ID doesn't exist
+                $person->organization = $request->organization;
+
+
+                if ($request->has('emails')) {
+                    $emails = [];
+                    foreach ($request->input('emails') as $key => $email) {
+                        $emails[] = [
+                            'value' => $email,
+                            'label' => $request->input("email_types.{$key}")
+                        ];
+                    }
+                    $person->emails = $emails;
+                }
+                if ($request->has('contact_numbers')) {
+                    $contactNumbers = [];
+                    foreach ($request->input('contact_numbers') as $key => $contactNumber) {
+                        $contactNumbers[] = [
+                            'value' => $contactNumber,
+                            'label' => $request->input("number_types.{$key}")
+                        ];
+                    }
+                    $person->contact_numbers = $contactNumbers;
+                }
+                $person->save();
+            }
+
+            // Lead creation logic
+            $lead = new Lead();
+            $lead->title = $request->title;
+            $lead->lead_value = $request->lead_value;
+            $lead->source = $request->source;
+            $lead->type = $request->type;
+            $lead->sales_owner = $request->sales_owner;
+            $lead->start_date = $request->start_date;
+            $lead->closing_date = $request->closing_date;
+            $lead->description = $request->description;
+            $lead->priority = $request->priority;
+            $lead->status = 'active';
+            $lead->category = 'qualified';
+            $lead->pipeline = $request->pipeline;
+            $lead->stage = $request->stage;
+            $lead->person = $person->id;
+            $lead->save();
+
+            // Product logic (unchanged)
+            if ($request->has('products')) {
+                foreach ($request->products as $index => $product_id) {
+                    $values = explode('||', $product_id);
+                    $type = $values[0];
+                    $product = $values[1];
+
+                    LeadProduct::create([
+                        'lead_id' => $lead->id,
+                        'type' => $type,
+                        'product_id' => $product,
+                        'price' => $request->prices[$index],
+                        'quantity' => $request->quantities[$index],
+                        'amount' => $request->amounts[$index],
+                    ]);
+                }
+            }
+
+            // Activity history logic (unchanged)
+            $activity_history = new ActivityHistory();
+            $activity_history->lead_id = $lead->id;
+            $activity_history->user_id = Auth::user()->id;
+            $activity_history->action = "Lead created";
+            $activity_history->save();
+
+            return redirect()->back()->with('success', 'Lead created successfully!');
+        }
+        // } else {
+        //     // Option A: Hard stop
+        //     abort(403, 'Unauthorized');
+        // }
     }
 
 
@@ -645,27 +645,35 @@ class LeadController extends Controller
     }
     public function delete_note($id, Request $request)
     {
-        if ($request->isMethod('get')) {
 
-            $note = LeadNote::find($id);
+        $permissions = session('user_permissions', []);
 
-            if ($note) {
-                $lead_id = $note->lead_id;
+        if (in_array(strtolower('delete-lead-note'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
 
-                $note->delete();
+                $note = LeadNote::find($id);
 
-                $activity_history = new ActivityHistory();
-                $activity_history->lead_id = $lead_id;
-                $activity_history->source = 'note';
-                $activity_history->source_id = $id;
-                $activity_history->user_id = Auth::id();
-                $activity_history->action = "Note (#{$id}) has been deleted.";
-                $activity_history->save();
+                if ($note) {
+                    $lead_id = $note->lead_id;
 
-                return redirect()->back()->with('success', 'Note deleted successfully!');
+                    $note->delete();
+
+                    $activity_history = new ActivityHistory();
+                    $activity_history->lead_id = $lead_id;
+                    $activity_history->source = 'note';
+                    $activity_history->source_id = $id;
+                    $activity_history->user_id = Auth::id();
+                    $activity_history->action = "Note (#{$id}) has been deleted.";
+                    $activity_history->save();
+
+                    return redirect()->back()->with('success', 'Note deleted successfully!');
+                }
+
+                return redirect()->back()->with('error', 'Note not found.');
             }
-
-            return redirect()->back()->with('error', 'Note not found.');
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
     }
 
@@ -924,27 +932,34 @@ class LeadController extends Controller
 
     public function delete_email($id, Request $request)
     {
-        if ($request->isMethod('get')) {
+        $permissions = session('user_permissions', []);
 
-            $email = SentEmails::find($id);
+        if (in_array(strtolower('delete-lead-email'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
 
-            if ($email) {
-                $lead_id = $email->lead_id;
+                $email = SentEmails::find($id);
 
-                $email->delete();
+                if ($email) {
+                    $lead_id = $email->lead_id;
 
-                $activity_history = new ActivityHistory();
-                $activity_history->lead_id = $lead_id;
-                $activity_history->source = 'email';
-                $activity_history->source_id = $id;
-                $activity_history->user_id = Auth::id();
-                $activity_history->action = "Email (#{$id}) has been deleted.";
-                $activity_history->save();
+                    $email->delete();
 
-                return redirect()->back()->with('success', 'Email deleted successfully!');
+                    $activity_history = new ActivityHistory();
+                    $activity_history->lead_id = $lead_id;
+                    $activity_history->source = 'email';
+                    $activity_history->source_id = $id;
+                    $activity_history->user_id = Auth::id();
+                    $activity_history->action = "Email (#{$id}) has been deleted.";
+                    $activity_history->save();
+
+                    return redirect()->back()->with('success', 'Email deleted successfully!');
+                }
+
+                return redirect()->back()->with('error', 'Note not found.');
             }
-
-            return redirect()->back()->with('error', 'Note not found.');
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
     }
     public function add_lead_file($id, Request $request)
@@ -1022,10 +1037,17 @@ class LeadController extends Controller
     }
     public function delete_file($id, Request $request)
     {
-        if ($request->isMethod('get')) {
+        $permissions = session('user_permissions', []);
 
-            LeadFile::where('id', $id)->delete();
-            return redirect()->back()->with('success', 'File deleted successfully!');
+        if (in_array(strtolower('delete-lead-file'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+
+                LeadFile::where('id', $id)->delete();
+                return redirect()->back()->with('success', 'File deleted successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
     }
 

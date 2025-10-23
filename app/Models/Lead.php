@@ -53,7 +53,7 @@ class Lead extends Model
 
     public function quotes()
     {
-        return $this->hasMany(Quote::class, 'lead_id');
+        return $this->hasMany(Quote::class, 'lead');
     }
 
 

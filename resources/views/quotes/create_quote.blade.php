@@ -823,7 +823,7 @@ use App\Models\UserDetails;
         // server-side rendering to get this data.
         // Example with dummy data:
         const productData = <?php echo json_encode($products); ?>;
-        const serviceData = <?php echo json_encode($services); ?>;
+        // const serviceData = <?php echo json_encode($services); ?>;
         
         productData.forEach(product => {
             productStock['product||' + product.id] = product.quantity;

@@ -877,7 +877,21 @@
                 children: [{
                         label: "Create Lead",
                         value: "lead-create",
-                        type: "checkbox"
+                        type: "checkbox",
+                        children: [
+                            {
+                                label: "Create Any Leads",
+                                value: "create-any-leads",
+                                type: "radio",
+                                group: "create-leads",
+                            },
+                            {
+                                label: "Create Own Leads",
+                                value: "create-own-leads",
+                                type: "radio",
+                                group: "create-leads"
+                            }
+                        ]
                     },
                     {
                         label: "View Lead",
@@ -1004,6 +1018,39 @@
                             {
                                 label: "Quote",
                                 value: "show-lead-quote",
+                                type: "checkbox",
+
+                            },
+                        ]
+                    },
+
+                    {
+                        label: "Delete Events",
+                        value: "lead-events-delete",
+                        type: "checkbox",
+                        children: [{
+                                label: "Note",
+                                value: "delete-lead-note",
+                                type: "checkbox",
+
+                            },
+
+                            {
+                                label: "Activity",
+                                value: "delete-lead-activity",
+                                type: "checkbox",
+
+                            },
+
+                            {
+                                label: "Email",
+                                value: "delete-lead-email",
+                                type: "checkbox",
+
+                            },
+                            {
+                                label: "File",
+                                value: "delete-lead-file",
                                 type: "checkbox",
 
                             },

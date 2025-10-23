@@ -264,13 +264,14 @@
                     success: function(data) {
                         let tbody = $('#favourite-table-body');
                         tbody.empty(); // Clear existing rows
-                        console.log(data); // Log the fetched data for debugging
+                        console.log('data',data); // Log the fetched data for debugging
 
-                        const deleteUrl = `{{ url('delete-emails') }}/${email.id}`;
-                        const viewUrl = `{{ url('view-email') }}/${email.id}`;
+                        
 
 
                         data.forEach(email => {
+                            const deleteUrl = `{{ url('delete-emails') }}/${email.id}`;
+                        const viewUrl = `{{ url('view-email') }}/${email.id}`;
                             tbody.append(`
                                 <tr>
                                     <td><input type="checkbox" name="selected_emails[]" value="${email.id}"></td>

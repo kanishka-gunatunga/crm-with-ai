@@ -107,9 +107,10 @@
                                                 <label for="password-input"
                                                     class="form-label">{{ __('app.settings.users.password') }}</label>
                                                 <div class="position-relative mb-3 auth-pass-inputgroup">
+                                                    <?php $user_password = trim($user->password); ?>
                                                     <input type="password"
                                                         class="form-control password-input password-field @error('password') is-invalid @enderror"
-                                                        id="password-input" name="password" required>
+                                                        id="password-input" name="password" required value="{{$user_password}}">
                                                     <button
                                                         class="btn btn-link position-absolute text-decoration-none text-muted shadow-none password-addon"
                                                         type="button" id="password-addon" tabindex="-1"
