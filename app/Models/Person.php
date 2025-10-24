@@ -35,5 +35,8 @@ class Person extends Model
         return $this->belongsTo(Organization::class, 'organization');
     }
 
-     
+     public function quotes()
+    {
+        return $this->hasMany(Quote::class, 'person', 'id');
+    }
 }

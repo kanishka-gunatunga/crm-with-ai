@@ -106,9 +106,9 @@
                                                                 </td>
                                                                 <td>
                                                                     {{-- {{ $sent_email->sender ? $sent_email->sender->name : 'N/A' }}  --}}
-                                                                    {{-- {{ $sent_email->user->userDetails->name ?? 'N/A' }} --}}
+                                                                    {{ $sent_email->user->userDetails->name ?? 'N/A' }}
 
-                                                                    {{$sent_email->sent_by}}
+                                                                    {{-- {{$sent_email->sent_by}} --}}
                                                                 </td>
                                                                 <td class="action-icons d-flex gx-3">
                                                                     <a href="{{ url('delete-emails/' . $sent_email->id) }}"

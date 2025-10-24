@@ -337,7 +337,7 @@ class QuoteController extends Controller
         $permissions = session('user_permissions', []);
 
         if (in_array(strtolower('edit-quotes'), array_map('strtolower', $permissions))) {
-            $quote = Quote::where('id', $id)->first();
+            $quote = Quote::where('id', $id)->with('leadData','personData')->first();
 
             if ($request->isMethod('get')) {
                 $owners = UserDetails::get();

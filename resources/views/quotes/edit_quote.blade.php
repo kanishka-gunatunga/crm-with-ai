@@ -53,7 +53,7 @@
                                                         class="form-label">{{ __('app.quotes.lead') }}</label>
                                                     <select class="myDropdown form-control " name="lead" required>
                                                         <option hidden selected value="{{ $quote->lead }}">
-                                                            {{ Lead::where('id', $quote->lead)->value('title') }}
+                                                            {{ $quote->leadData->title ?? 'N/A' }}
                                                         </option>
                                                         <?php foreach($leads as $lead){ ?>
                                                             <option value="{{ $lead->id }}">{{ $lead->title }}</option>
@@ -95,7 +95,7 @@
                                                     <label for="terms" class="form-label">Person</label>
                                                     <select class="myDropdown form-control" name="person" required>
                                                         <option hidden selected value="{{ $quote->person }}">
-                                                            {{ Person::where('id', $quote->person)->value('name') }}
+                                                            {{ $quote->personData->name ?? 'N/A' }}
                                                         </option>
                                                         <?php foreach($persons as $person){ ?>
                                                         <option value="{{ $person->id }}">{{ $person->name }}</option>
