@@ -152,119 +152,126 @@ class LeadController extends Controller
             //         request()->sales_owner
 
             // ]);
-            $request->validate([
-                'title' => 'required|string',
-                'lead_value' => 'required',
-                'source' => 'required',
-                'pipeline' => 'required',
-                'stage' => 'required',
-                'person' => 'required', // Good practice to validate the person field
-            ]);
+            $permissions = session('user_permissions', []);
 
-            $person = null; // Initialize person variable
+            if (in_array(strtolower('lead-create'), array_map('strtolower', $permissions))) {
+                $request->validate([
+                    'title' => 'required|string',
+                    'lead_value' => 'required',
+                    'source' => 'required',
+                    'pipeline' => 'required',
+                    'stage' => 'required',
+                    'person' => 'required', // Good practice to validate the person field
+                ]);
 
-            // Check if the person exists by ID and update them
-            if (Person::where("id", $request->person)->exists()) {
-                // BUG FIX: Use $request->person instead of the undefined $id
-                $person = Person::findOrFail($request->person);
-                $person->organization = $request->organization;
+                $person = null; // Initialize person variable
 
-                //  update logic for emails/contacts is fine
-                if ($request->has('emails')) {
-                    $emails = [];
-                    foreach ($request->input('emails') as $key => $email) {
-                        $emails[] = [
-                            'value' => $email,
-                            'label' => $request->input("email_types.{$key}")
-                        ];
+                // Check if the person exists by ID and update them
+                if (Person::where("id", $request->person)->exists()) {
+                    // BUG FIX: Use $request->person instead of the undefined $id
+                    $person = Person::findOrFail($request->person);
+                    $person->organization = $request->organization;
+
+                    //  update logic for emails/contacts is fine
+                    if ($request->has('emails')) {
+                        $emails = [];
+                        foreach ($request->input('emails') as $key => $email) {
+                            $emails[] = [
+                                'value' => $email,
+                                'label' => $request->input("email_types.{$key}")
+                            ];
+                        }
+                        $person->emails = $emails;
                     }
-                    $person->emails = $emails;
+
+                    if ($request->has('contact_numbers')) {
+                        $contactNumbers = [];
+                        foreach ($request->input('contact_numbers') as $key => $contactNumber) {
+                            $contactNumbers[] = [
+                                'value' => $contactNumber,
+                                'label' => $request->input("number_types.{$key}")
+                            ];
+                        }
+                        $person->contact_numbers = $contactNumbers;
+                    }
+                    $person->update();
+                } else { // Or create a new person if they don't exist
+                    $person = new Person();
+                    $person->name = $request->person; // Assuming person name is sent if ID doesn't exist
+                    $person->organization = $request->organization;
+
+
+                    if ($request->has('emails')) {
+                        $emails = [];
+                        foreach ($request->input('emails') as $key => $email) {
+                            $emails[] = [
+                                'value' => $email,
+                                'label' => $request->input("email_types.{$key}")
+                            ];
+                        }
+                        $person->emails = $emails;
+                    }
+                    if ($request->has('contact_numbers')) {
+                        $contactNumbers = [];
+                        foreach ($request->input('contact_numbers') as $key => $contactNumber) {
+                            $contactNumbers[] = [
+                                'value' => $contactNumber,
+                                'label' => $request->input("number_types.{$key}")
+                            ];
+                        }
+                        $person->contact_numbers = $contactNumbers;
+                    }
+                    $person->save();
                 }
 
-                if ($request->has('contact_numbers')) {
-                    $contactNumbers = [];
-                    foreach ($request->input('contact_numbers') as $key => $contactNumber) {
-                        $contactNumbers[] = [
-                            'value' => $contactNumber,
-                            'label' => $request->input("number_types.{$key}")
-                        ];
-                    }
-                    $person->contact_numbers = $contactNumbers;
-                }
-                $person->update();
-            } else { // Or create a new person if they don't exist
-                $person = new Person();
-                $person->name = $request->person; // Assuming person name is sent if ID doesn't exist
-                $person->organization = $request->organization;
+                // Lead creation logic
+                $lead = new Lead();
+                $lead->title = $request->title;
+                $lead->lead_value = $request->lead_value;
+                $lead->source = $request->source;
+                $lead->type = $request->type;
+                $lead->sales_owner = $request->sales_owner;
+                $lead->start_date = $request->start_date;
+                $lead->closing_date = $request->closing_date;
+                $lead->description = $request->description;
+                $lead->priority = $request->priority;
+                $lead->status = 'active';
+                $lead->category = 'qualified';
+                $lead->pipeline = $request->pipeline;
+                $lead->stage = $request->stage;
+                $lead->person = $person->id;
+                $lead->save();
 
+                // Product logic (unchanged)
+                if ($request->has('products')) {
+                    foreach ($request->products as $index => $product_id) {
+                        $values = explode('||', $product_id);
+                        $type = $values[0];
+                        $product = $values[1];
 
-                if ($request->has('emails')) {
-                    $emails = [];
-                    foreach ($request->input('emails') as $key => $email) {
-                        $emails[] = [
-                            'value' => $email,
-                            'label' => $request->input("email_types.{$key}")
-                        ];
+                        LeadProduct::create([
+                            'lead_id' => $lead->id,
+                            'type' => $type,
+                            'product_id' => $product,
+                            'price' => $request->prices[$index],
+                            'quantity' => $request->quantities[$index],
+                            'amount' => $request->amounts[$index],
+                        ]);
                     }
-                    $person->emails = $emails;
                 }
-                if ($request->has('contact_numbers')) {
-                    $contactNumbers = [];
-                    foreach ($request->input('contact_numbers') as $key => $contactNumber) {
-                        $contactNumbers[] = [
-                            'value' => $contactNumber,
-                            'label' => $request->input("number_types.{$key}")
-                        ];
-                    }
-                    $person->contact_numbers = $contactNumbers;
-                }
-                $person->save();
+
+                // Activity history logic (unchanged)
+                $activity_history = new ActivityHistory();
+                $activity_history->lead_id = $lead->id;
+                $activity_history->user_id = Auth::user()->id;
+                $activity_history->action = "Lead created";
+                $activity_history->save();
+
+                return redirect()->back()->with('success', 'Lead created successfully!');
+            } else {
+                // Option A: Hard stop
+                abort(403, 'Unauthorized');
             }
-
-            // Lead creation logic
-            $lead = new Lead();
-            $lead->title = $request->title;
-            $lead->lead_value = $request->lead_value;
-            $lead->source = $request->source;
-            $lead->type = $request->type;
-            $lead->sales_owner = $request->sales_owner;
-            $lead->start_date = $request->start_date;
-            $lead->closing_date = $request->closing_date;
-            $lead->description = $request->description;
-            $lead->priority = $request->priority;
-            $lead->status = 'active';
-            $lead->category = 'qualified';
-            $lead->pipeline = $request->pipeline;
-            $lead->stage = $request->stage;
-            $lead->person = $person->id;
-            $lead->save();
-
-            // Product logic (unchanged)
-            if ($request->has('products')) {
-                foreach ($request->products as $index => $product_id) {
-                    $values = explode('||', $product_id);
-                    $type = $values[0];
-                    $product = $values[1];
-
-                    LeadProduct::create([
-                        'lead_id' => $lead->id,
-                        'type' => $type,
-                        'product_id' => $product,
-                        'price' => $request->prices[$index],
-                        'quantity' => $request->quantities[$index],
-                        'amount' => $request->amounts[$index],
-                    ]);
-                }
-            }
-
-            // Activity history logic (unchanged)
-            $activity_history = new ActivityHistory();
-            $activity_history->lead_id = $lead->id;
-            $activity_history->user_id = Auth::user()->id;
-            $activity_history->action = "Lead created";
-            $activity_history->save();
-
-            return redirect()->back()->with('success', 'Lead created successfully!');
         }
         // } else {
         //     // Option A: Hard stop
@@ -1689,5 +1696,3 @@ class LeadController extends Controller
     //         return back()->with('success', 'Leads Successfully Imported');
     //     }
     // }
-
-   

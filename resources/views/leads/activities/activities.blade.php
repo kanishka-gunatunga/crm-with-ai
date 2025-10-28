@@ -282,7 +282,7 @@
                                             @csrf
                                             <div class="table-responsive">
                                                 <table class="table new-table data-table-export2"
-                                                    data-export-title="Attributes" data-export-filename="Attributes">
+                                                    data-export-title="Activities" data-export-filename="Activities">
 
                                                     <thead>
                                                         <tr>
@@ -380,7 +380,7 @@
                                             @csrf
                                             <div class="table-responsive">
                                                 <table class="table new-table data-table-export2"
-                                                    data-export-title="Attributes" data-export-filename="Attributes">
+                                                    data-export-title="Activities" data-export-filename="Activities">
 
                                                     <thead>
                                                         <tr>
@@ -478,7 +478,7 @@
                                             @csrf
                                             <div class="table-responsive">
                                                 <table class="table new-table data-table-export2"
-                                                    data-export-title="Attributes" data-export-filename="Attributes">
+                                                    data-export-title="Activities" data-export-filename="Activities">
 
                                                     <thead>
                                                         <tr>
@@ -577,7 +577,7 @@
                                             @csrf
                                             <div class="table-responsive">
                                                 <table class="table new-table data-table-export2"
-                                                    data-export-title="Attributes" data-export-filename="Attributes">
+                                                    data-export-title="Activities" data-export-filename="Activities">
 
                                                     <thead>
                                                         <tr>

@@ -26,7 +26,7 @@ use App\Models\UserDetails;
 use File;
 use Illuminate\Support\Facades\Crypt;
 use PDF;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 use League\Csv\Writer;
 
 date_default_timezone_set('Asia/Colombo');
@@ -572,7 +572,7 @@ class MainController extends Controller
 
 
             ];
-            Mail::to($request->email)->send(new \App\Mail\ForgotPassword($details));
+            Mail::to($request->email)->send(new \App\Mail\ForgetPassword($details));
 
             return back()->with(['success' => 'Password reset link has been sent to your email']);
         }

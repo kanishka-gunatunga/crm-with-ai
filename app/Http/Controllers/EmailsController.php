@@ -106,6 +106,7 @@ class EmailsController extends Controller
 
         if (in_array(strtolower('compose-mails'), array_map('strtolower', $permissions))) {
             if ($request->isMethod('post')) {
+                //  dd($request->all());
                 $request->validate([
                     'to' => 'required',
                     'subject' => 'required|string|max:255',
@@ -118,7 +119,7 @@ class EmailsController extends Controller
                 $sent_email->bcc = $request->bcc;
                 $sent_email->subject = $request->subject;
                 $sent_email->body = $request->body;
-                $sent_email->sent_by = Auth::user()->id;
+                $sent_email->sent_by = $request->sent_by;
 
                 $attachments = [];
                 if ($request->hasFile('attchments')) {
@@ -149,6 +150,8 @@ class EmailsController extends Controller
 
     public function view_email(Request $request, $uid)
     {
+
+       
         if ($request->isMethod('post')) {
             $request->validate([
                 'to' => 'required',

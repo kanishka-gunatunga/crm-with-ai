@@ -936,11 +936,7 @@
                         type: "checkbox"
                     },
 
-                    {
-                        label: "Sales owner showing tooltip",
-                        value: "lead-owner-showing-tooltip",
-                        type: "checkbox"
-                    },
+                    
 
                     {
                         label: "Delete lead",

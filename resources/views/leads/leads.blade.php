@@ -173,6 +173,7 @@
 
 
                             {{-- create lead button --}}
+                            @if (in_array(strtolower('create-own-leads'), array_map('strtolower', $permissions)) || in_array(strtolower('create-any-leads'), array_map('strtolower', $permissions)))
                             <a href="{{ url('create-lead') }}">
                                 <button class="create-btn">
                                     <div class="icon-container">
@@ -187,6 +188,7 @@
                                     <span class="button-text">{{ __('app.leads.create-title') }}</span>
                                 </button>
                             </a>
+                            @endif
                         </div>
                     </div>
                 </div>

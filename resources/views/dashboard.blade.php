@@ -891,11 +891,10 @@
                                         <div>
                                             <h2 class="dashboard-card-heder">Birthdays</h2>
                                         </div>
-                                        <div class="mb-4">
+                                        {{-- <div class="mb-4">
                                             <button class="btn white-btn" data-bs-toggle="collapse"
                                                 href="#collapseFilter">
-                                                {{-- <button class="btn white-btn" data-bs-toggle="offcanvas" data-bs-target="#offFilter"
-                                        aria-controls="offcanvasRight"> --}}
+                                               
                                                 <svg width="18" height="18" viewBox="0 0 14 15" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
                                                     <path
@@ -907,7 +906,7 @@
                                                 Filter
 
                                             </button>
-                                        </div>
+                                        </div> --}}
 
 
                                     </div>
