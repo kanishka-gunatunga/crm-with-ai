@@ -810,42 +810,45 @@ use App\Models\UserDetails;
             @endif
         });
     </script>
-  <script>
+<script>
     $(document).ready(function() {
+        const addProductBtn = document.getElementById('add-product');
 
         // Object to store product quantities from the database.
-        // You must fill this object with data from your backend.
-        // Example: { 1: 50, 2: 120 }
         let productStock = {}; 
 
         // Populate productStock from your backend
-        // This is a placeholder; you'll need to use an AJAX call or
-        // server-side rendering to get this data.
-        // Example with dummy data:
         const productData = <?php echo json_encode($products); ?>;
-        // const serviceData = <?php echo json_encode($services); ?>;
+        const serviceData = <?php echo json_encode($services); ?>;
         
         productData.forEach(product => {
             productStock['product||' + product.id] = product.quantity;
         });
 
-        // Add services to the stock object (assuming services have a quantity)
         serviceData.forEach(service => {
             productStock['service||' + service.id] = service.quantity;
         });
 
-
         function initializeSelect2() {
+            // Destroy existing Select2 instances before reinitializing
+            $(".product-select").each(function() {
+                if ($(this).hasClass("select2-hidden-accessible")) {
+                    $(this).select2('destroy');
+                }
+            });
+            
             $(".product-select").select2({
-                
                 placeholder: "Select a product",
                 allowClear: true
-            }).on('change', function() {
+            }).off('change').on('change', function() {
                 let row = $(this).closest('tr');
                 let price = $(this).find(':selected').data('price');
-                row.find('input[name="price[]"]').val(price).trigger('input');
+                row.find('input[name="price[]"]').val(price);
                 
-                // Immediately validate after a product is selected
+                // Trigger calculation for the row
+                calculateRow(row);
+                
+                // Validate after selection
                 validateQuantities();
             });
         }
@@ -868,7 +871,7 @@ use App\Models\UserDetails;
             row.find('input[name="total[]"]').val(total.toFixed(2));
 
             updateTotals();
-            validateQuantities(); // Call validation after each row calculation
+            validateQuantities();
         }
 
         function updateTotals() {
@@ -907,23 +910,20 @@ use App\Models\UserDetails;
                 const requestedQuantity = parseFloat(quantityInput.val());
                 const availableStock = productStock[productId];
                 
-                // Only validate if a product is selected and quantity is a number
                 if (productId && !isNaN(requestedQuantity)) {
                     if (requestedQuantity > availableStock) {
                         isValid = false;
-                        quantityInput.addClass('is-invalid'); // Add error styling
-                        // You might want to add a tooltip or a message here
+                        quantityInput.addClass('is-invalid');
                     } else {
-                        quantityInput.removeClass('is-invalid'); // Remove error styling
+                        quantityInput.removeClass('is-invalid');
                     }
                 }
             });
 
-            // Enable/disable the save button based on validation result
             $('#saveBtn').prop('disabled', !isValid);
         }
 
-        // Event listener for quantity and other inputs
+        // Event listener for quantity and other inputs - using event delegation
         $('#products-tbody').on('input',
             'input[name="quantity[]"], input[name="price[]"], input[name="discount[]"], input[name="tax[]"]',
             function() {
@@ -934,43 +934,50 @@ use App\Models\UserDetails;
         $('#products-tbody').on('click', '.remove-product', function() {
             $(this).closest('tr').remove();
             updateTotals();
-            validateQuantities(); // Re-validate after a row is removed
+            validateQuantities();
         });
 
         // Event listener for adding a new product row
-        $('#add-product').on('click', function() {
-            let newRow = `
-                <tr>
-                    <td>
-                        <select class="form-control product-select" name="products[]" required>
-                            <option hidden selected></option>
-                            <?php foreach($products as $product){ ?>
-                            <option value="product||{{ $product->id }}" data-price="{{ $product->cost }}">{{ $product->name }}</option>
-                            <?php } ?>
-                            <?php foreach($services as $service){ ?>
-                            <option value="service||{{ $service->id }}" data-price="{{ $service->cost }}">{{ $service->name }}</option>
-                            <?php } ?>
-                        </select>
-                        <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]" placeholder="Notes"></textarea>
-                    </td>
-                    <td><input type="number" step="any" class="form-control" name="quantity[]" required></td>
-                    <td><input type="number" step="any" class="form-control" name="price[]" required></td>
-                    <td><input type="number" step="any" class="form-control" name="amount[]" readonly required></td>
-                    <td><input type="number" step="any" class="form-control" name="discount[]"></td>
-                    <td><input type="number" step="any" class="form-control" name="tax[]"></td>
-                    <td><input type="number" step="any" class="form-control" name="total[]" readonly></td>
-                    <td><i class="fa-solid fa-trash remove-product remove-append-item mx-2"></i></td>
-                </tr>
-            `;
-            $('#products-tbody').append(newRow);
-            initializeSelect2();
-        });
+        if (addProductBtn) {
+            addProductBtn.addEventListener('click', function() {
+                console.log("Add product button clicked");
+                let newRow = `
+                    <tr>
+                        <td>
+                            <select class="form-control product-select" name="products[]" required>
+                                <option hidden selected></option>
+                                <?php foreach($products as $product){ ?>
+                                <option value="product||<?php echo $product->id; ?>" data-price="<?php echo $product->cost; ?>"><?php echo $product->name; ?></option>
+                                <?php } ?>
+                                <?php foreach($services as $service){ ?>
+                                <option value="service||<?php echo $service->id; ?>" data-price="<?php echo $service->cost; ?>"><?php echo $service->name; ?></option>
+                                <?php } ?>
+                            </select>
+                            <textarea class="form-control w-100 mt-2" rows="3" name="note[]" placeholder="Notes"></textarea>
+                        </td>
+                        <td><input type="number" step="any" class="form-control" name="quantity[]" value="0" required></td>
+                        <td><input type="number" step="any" class="form-control" name="price[]" value="0" required></td>
+                        <td><input type="number" step="any" class="form-control" name="amount[]" value="0" readonly required></td>
+                        <td><input type="number" step="any" class="form-control" name="discount[]" value="0"></td>
+                        <td><input type="number" step="any" class="form-control" name="tax[]" value="0"></td>
+                        <td><input type="number" step="any" class="form-control" name="total[]" value="0" readonly></td>
+                        <td><i class="fa-solid fa-trash remove-product remove-append-item mx-2" style="cursor: pointer;"></i></td>
+                    </tr>
+                `;
+                $('#products-tbody').append(newRow);
+                
+                // Reinitialize Select2 for the new row
+                initializeSelect2();
+                
+                // Update totals after adding a new row
+                updateTotals();
+            });
+        }
         
         // Initial validation on page load
         validateQuantities();
     });
 </script>
-
 
     <script>
         $(document).ready(function() {

@@ -111,7 +111,7 @@ class OrganizationsController extends Controller
             abort(403, 'Unauthorized');
         }
     }
-    public function delete_person($id, Request $request)
+    public function delete_organization($id, Request $request)
     {
         $permissions = session('user_permissions', []);
 

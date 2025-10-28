@@ -122,6 +122,8 @@ class RolesController extends Controller
                 return view('settings.roles.edit_role', ['role' => $role]);
             }
             if ($request->isMethod('post')) {
+
+                // dd($request->all());
                 $request->validate([
                     'name' => 'required|string|max:255',
                     'emails.*' => 'required|email',

@@ -58,7 +58,7 @@ $permissions = session('user_permissions');
 
                     <div class="d-flex gap-3 align-items-center">
 
-                        @if (auth()->user()->role == '2')
+                        @if (in_array(strtolower('lead-stage-change'), array_map('strtolower', $permissions)))
                             <div class="shading-button">
                                 <div class="btn green lead-status-dropdown" id="statusWrapper">
 
@@ -126,7 +126,7 @@ $permissions = session('user_permissions');
                                     @endif
                                 </div>
                             </div>
-                        @elseif (auth()->user()->role == '3')
+                        @elseif (in_array(strtolower('lead-stage-change'), array_map('strtolower', $permissions)))
                             @if ($lead->sales_owner != auth()->user()->id)
                                 <div>
                                     <button class="btn save-btn" id="assignToMeBtn">Assign to me</button>

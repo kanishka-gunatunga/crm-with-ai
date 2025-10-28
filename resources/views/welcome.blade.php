@@ -105,10 +105,10 @@
                 </div>
 
                 <!-- Registration Link (if needed) -->
-                <p class="register-text">
+                {{-- <p class="register-text">
                     <span class="register-prompt">Don't have an account?</span>
                     <a href="#" class="register-link">Register</a>
-                </p>
+                </p> --}}
             </form>
 
             <footer class="copyright-text">

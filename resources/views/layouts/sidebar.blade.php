@@ -250,3 +250,25 @@
         });
     });
 </script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Select all forms on the page
+    const forms = document.querySelectorAll('form');
+
+    forms.forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+            // Find the submit button inside the form
+            const submitButton = form.querySelector('[type="submit"]');
+            if (submitButton) {
+                // Disable the submit button
+                submitButton.disabled = true;
+                // Optional: change text to show loading
+                submitButton.innerText = 'Processing...';
+            }
+        });
+    });
+});
+</script>
+

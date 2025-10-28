@@ -184,95 +184,15 @@
                                     {!! $mail->body ?? 'Email Body' !!}
                                 </p>
 
-                                {{ $mail->attachments[0] ?? '' }}
-
-                                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/ce5871af6d834fd5a6850b168e18d85f093ccb61?placeholderIfAbsent=true&apiKey=0dc2323536aa4d0da794a0c0a61e56f4"
-                                    alt="Email attachment" class="email-attachment" />
-
-                                <div class="email-action-buttons">
-
-
-
-                                    {{-- <button type="submit" class="email-action-button reply-button" id="reply-button">
-                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_542_1578)">
-                                                <path
-                                                    d="M8.33333 7.50033V4.16699L2.5 10.0003L8.33333 15.8337V12.417C12.5 12.417 15.4167 13.7503 17.5 16.667C16.6667 12.5003 14.1667 8.33366 8.33333 7.50033Z"
-                                                    fill="black" fill-opacity="0.54" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_542_1578">
-                                                    <rect width="20" height="20" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-
-                                        <span class="email-button-text">Reply</span>
-                                    </button>
-
-                                    <button class="email-action-button forward-button">
-                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#clip0_542_1587)">
-                                                <path
-                                                    d="M10.0004 6.66634V3.33301L16.6671 9.99967L10.0004 16.6663V13.333H3.33374V6.66634H10.0004Z"
-                                                    fill="black" fill-opacity="0.54" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0_542_1587">
-                                                    <rect width="20" height="20" fill="white" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-
-
-                                        <span class="email-button-text">Forward</span>
-                                    </button> --}}
-
-
-                                </div>
-
+                               
+                                    <a href="{{ asset('uploads/leads/email_attachments/' . $mail->attachments[0]) }}" target="_blank">
+                                        {{ $mail->attachments[0] ?? '' }}
+                                    </a>
+                                
 
                             </section>
 
-                            <div class="mt-3">
 
-                                {{-- Show replies from DB --}}
-                                @if ($mail->replies->count())
-                                    @foreach ($mail->replies as $reply)
-                                        <div class="card mt-3 bg-light">
-                                            <div class="card-body">
-                                                <p class="m-2"><strong>You replied:</strong></p>
-                                                <div class="p-2 border rounded">
-                                                    {!! $reply->body !!}
-                                                </div>
-
-                                                @if (!empty($reply->attachments))
-                                                    <div class="mt-2">
-                                                        <strong>Attachments:</strong>
-                                                        <ul>
-                                                            @foreach ($reply->attachments as $file)
-                                                                <li>
-                                                                    <a href="{{ asset('uploads/leads/email_attachments/' . $file) }}"
-                                                                        target="_blank">
-                                                                        {{ $file }}
-                                                                    </a>
-                                                                </li>
-                                                            @endforeach
-                                                        </ul>
-                                                    </div>
-                                                @endif
-
-                                                <small class="text-muted">Sent on
-                                                    {{ $reply->created_at->format('d M Y, h:i A') }}</small>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @endif
-
-                            </div>
-                            {{-- <div class="mt-3" id="reply-card"></div> --}}
                         </div>
 
                     </div>

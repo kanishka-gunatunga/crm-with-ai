@@ -179,8 +179,7 @@
                         label: "Create Lead",
                         value: "lead-create",
                         type: "checkbox",
-                        children: [
-                            {
+                        children: [{
                                 label: "Create Any Leads",
                                 value: "create-any-leads",
                                 type: "radio",
@@ -1044,421 +1043,369 @@
 
         // Check if item has radio children
         function hasRadioChildren(item) {
-            return item.children && item.children.some(child => child.type === 'radio');
-        }
+    return item.children && item.children.some(child => child.type === 'radio');
+}
 
-        // Generate unique ID from value
-        function generateId(value) {
-            return value.replace(/[^a-zA-Z0-9]/g, '_');
-        }
+function generateId(value) {
+    return value.replace(/[^a-zA-Z0-9]/g, '_');
+}
 
-        // Render permission item recursively
-        function renderPermission(item, level = 0, parentValue = null) {
-            const indentClass = level === 1 ? 'mx-3' : level === 2 ? 'mx-5' : level === 3 ? 'mx-5' : '';
-            const isRadio = item.type === 'radio';
-            const inputType = isRadio ? 'radio' : 'checkbox';
-            const name = isRadio ? item.group : 'permissions[]';
-            const id = generateId(item.value);
+function renderPermission(item, level = 0, parentValue = null) {
+    const indentClass = level === 1 ? 'mx-3' : level === 2 ? 'mx-5' : level === 3 ? 'mx-5' : '';
+    const isRadio = item.type === 'radio';
+    const inputType = isRadio ? 'radio' : 'checkbox';
+    const name = isRadio ? item.group : 'permissions[]';
+    const id = generateId(item.value);
 
-            let html = `
-                <div class="col-md-3">
-                    <div class="form-check mb-3 ${indentClass}">
-                        <input class="form-check-input" 
-                            type="${inputType}" 
-                            id="${id}" 
-                            value="${item.value}" 
-                            name="${name}"
-                            data-value="${item.value}"
-                            ${item.type === 'checkbox' && item.children ? `data-group="${item.value}"` : ''}
-                            ${parentValue ? `data-parent="${parentValue}"` : ''}
-                            ${hasRadioChildren(item) ? 'data-has-radio-children="true"' : ''}>
-                        <label class="form-check-label" for="${id}">
-                            ${item.label}
-                        </label>
-                    </div>
-                </div>`;
+    let html = `
+        <div class="col-md-3">
+            <div class="form-check mb-3 ${indentClass}">
+                <input class="form-check-input" 
+                    type="${inputType}" 
+                    id="${id}" 
+                    value="${item.value}" 
+                    name="${name}"
+                    data-value="${item.value}"
+                    ${item.type === 'checkbox' && item.children ? `data-group="${item.value}"` : ''}
+                    ${parentValue ? `data-parent="${parentValue}"` : ''}
+                    ${hasRadioChildren(item) ? 'data-has-radio-children="true"' : ''}>
+                <label class="form-check-label" for="${id}">
+                    ${item.label}
+                </label>
+            </div>
+        </div>`;
 
-            if (item.children && item.children.length > 0) {
-                item.children.forEach(child => {
-                    html += renderPermission(child, level + 1, item.value);
-                });
-            }
+    if (item.children && item.children.length > 0) {
+        item.children.forEach(child => {
+            html += renderPermission(child, level + 1, item.value);
+        });
+    }
 
-            return html;
-        }
+    return html;
+}
 
+function renderPermissionFromBackend() {
+    const backendPermissions = @json($role->permissions ?? []);
+    const permissionType = '{{ $role->permission_type }}';
 
-        function renderPermissionFromBackend() {
-            const backendPermissions = @json($role->permissions ?? []);
-            const permissionType = '{{ $role->permission_type }}';
+    console.log('Backend Permissions:', backendPermissions);
+    console.log('Permission Type:', permissionType);
 
-            console.log('Backend Permissions:', backendPermissions);
-            console.log('Permission Type:', permissionType);
+    $('#pipeline-select').val(permissionType).trigger('change.select2');
 
-            // Set the dropdown value
-            $('#pipeline-select').val(permissionType).trigger('change.select2');
+    if (permissionType === 'all') {
+        handlePermissionTypeChange('all');
+        console.log('All permissions mode activated');
+        return;
+    }
 
-            // Handle based on permission type
-            if (permissionType === 'all') {
-                // If type is 'all', the handlePermissionTypeChange will check everything
-                handlePermissionTypeChange('all');
-                console.log('All permissions mode activated');
+    handlePermissionTypeChange('custom');
+
+    setTimeout(() => {
+        let checkedCount = 0;
+        let notFoundCount = 0;
+
+        backendPermissions.forEach(permission => {
+            const input = document.querySelector(`[data-value="${permission}"]`);
+
+            if (!input) {
+                console.warn('❌ Permission input not found:', permission);
+                notFoundCount++;
                 return;
             }
 
-            // Custom mode - check individual permissions
-            handlePermissionTypeChange('custom');
-
-            // Wait for DOM to be ready after mode change
-            setTimeout(() => {
-                let checkedCount = 0;
-                let notFoundCount = 0;
-
-                backendPermissions.forEach(permission => {
-                    const input = document.querySelector(`[data-value="${permission}"]`);
-
-                    if (!input) {
-                        console.warn('❌ Permission input not found:', permission);
-                        notFoundCount++;
-                        return;
-                    }
-
-                    if (input.type === 'checkbox') {
-                        input.checked = true;
-                        checkedCount++;
-                        console.log('✅ Checked checkbox:', permission);
-
-                        // Trigger change to handle parent-child relationships
-                        handleCheckboxChange(input);
-
-                    } else if (input.type === 'radio') {
-                        input.checked = true;
-                        input.disabled = false;
-                        checkedCount++;
-                        console.log('✅ Selected radio:', permission);
-
-                        // Trigger change to update parent checkbox
-                        handleRadioChange(input);
-                    }
-                });
-
-                console.log(`✅ Successfully restored ${checkedCount} permissions`);
-                if (notFoundCount > 0) {
-                    console.warn(`⚠️ ${notFoundCount} permissions not found in UI`);
-                }
-            }, 250);
-        }
-
-        // Render all permissions
-        function renderAllPermissions() {
-            const container = document.getElementById('permission-container');
-            if (!container) {
-                console.error('Permission container not found');
-                return;
-            }
-
-            let html = '';
-            permissions.forEach(permission => {
-                html += renderPermission(permission);
-            });
-            container.innerHTML = html;
-            attachEventListeners();
-
-            // Initialize dropdown after rendering
-            initPermissionTypeDropdown();
-        }
-
-        // Get all child inputs for a parent
-        function getChildInputs(parentValue) {
-            return document.querySelectorAll(`[data-parent="${parentValue}"]`);
-        }
-
-        // Get parent input for a child
-        function getParentInput(childInput) {
-            const parentValue = childInput.getAttribute('data-parent');
-            if (!parentValue) return null;
-            return document.querySelector(`[data-value="${parentValue}"]`);
-        }
-
-        // Handle checkbox change
-        function handleCheckboxChange(checkbox) {
-            // Don't process if disabled (in "all" mode)
-            if (checkbox.disabled) return;
-
-            if (checkbox.checked) {
-                // Check all children
-                const children = getChildInputs(checkbox.dataset.value);
-                children.forEach(child => {
-                    if (child.type === 'checkbox') {
-                        child.checked = true;
-                        handleCheckboxChange(child);
-                    } else if (child.type === 'radio') {
-                        child.disabled = false;
-                    }
-                });
-
-                // Select first radio if this has radio children
-                if (checkbox.dataset.hasRadioChildren) {
-                    const radios = Array.from(children).filter(c => c.type === 'radio');
-                    if (radios.length > 0 && !radios.some(r => r.checked)) {
-                        radios[0].checked = true;
-                    }
-                }
-
-                // Check parent
-                const parent = getParentInput(checkbox);
-                if (parent && parent.type === 'checkbox' && !parent.checked && !parent.disabled) {
-                    parent.checked = true;
-                    handleCheckboxChange(parent);
-                }
-            } else {
-                // Uncheck and disable all children
-                const children = getChildInputs(checkbox.dataset.value);
-                children.forEach(child => {
-                    if (child.type === 'checkbox') {
-                        child.checked = false;
-                        handleCheckboxChange(child);
-                    } else if (child.type === 'radio') {
-                        child.checked = false;
-                        child.disabled = true;
-                    }
-                });
-
-                // Check if parent should be unchecked
-                const parent = getParentInput(checkbox);
-                if (parent && parent.type === 'checkbox' && !parent.disabled) {
-                    const siblings = getChildInputs(parent.dataset.value);
-                    const anyChecked = Array.from(siblings).some(s =>
-                        s.type === 'checkbox' && s.checked
-                    );
-                    if (!anyChecked) {
-                        parent.checked = false;
-                        handleCheckboxChange(parent);
-                    }
-                }
-            }
-        }
-
-        // Handle radio change
-        function handleRadioChange(radio) {
-            const parent = getParentInput(radio);
-            if (parent && parent.type === 'checkbox' && !parent.checked) {
-                parent.checked = true;
-                handleCheckboxChange(parent);
-            }
-        }
-
-        // Attach event listeners
-        function attachEventListeners() {
-            document.querySelectorAll('#permission-container input[type="checkbox"]').forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    handleCheckboxChange(this);
-                });
-            });
-
-            document.querySelectorAll('#permission-container input[type="radio"]').forEach(radio => {
-                radio.addEventListener('change', function() {
-                    handleRadioChange(this);
-                });
-                // Initially disable all radios
-                radio.disabled = true;
-            });
-        }
-
-        // Handle permission type dropdown change
-        function handlePermissionTypeChange(value) {
-            const allCheckboxes = document.querySelectorAll('#permission-container input[type="checkbox"]');
-            const allRadios = document.querySelectorAll('#permission-container input[type="radio"]');
-
-            console.log('Handling permission type:', value);
-            console.log('Found checkboxes:', allCheckboxes.length);
-            console.log('Found radios:', allRadios.length);
-
-            if (value === 'all') {
-                // Check and disable all checkboxes
-                allCheckboxes.forEach(checkbox => {
-                    checkbox.checked = true;
-                    checkbox.disabled = true;
-                });
-
-                // Enable and select first radio in each group
-                const radioGroups = {};
-                allRadios.forEach(radio => {
-                    const group = radio.name;
-                    if (!radioGroups[group]) {
-                        radioGroups[group] = [];
-                    }
-                    radioGroups[group].push(radio);
-                });
-
-                Object.values(radioGroups).forEach(radios => {
-                    radios.forEach((radio, index) => {
-                        radio.disabled = true;
-                        radio.checked = index === 0; // Select first radio in each group
-                    });
-                });
-
-                console.log('All permissions enabled and disabled');
-            } else {
-                // Custom mode - enable all and uncheck all
-                allCheckboxes.forEach(checkbox => {
-                    checkbox.disabled = false;
-                    checkbox.checked = false;
-                });
-
-                allRadios.forEach(radio => {
-                    radio.disabled = true;
-                    radio.checked = false;
-                });
-
-                console.log('Custom mode - all permissions cleared and enabled');
-            }
-        }
-
-        // Initialize permission type dropdown listener
-        // Initialize permission type dropdown listener
-        function initPermissionTypeDropdown() {
-            const dropdown = document.getElementById('pipeline-select');
-            if (!dropdown) {
-                console.error('Permission type dropdown not found');
-                return;
-            }
-
-            // Listen for Select2 changes
-            $('#pipeline-select').on('select2:select', function(e) {
-                console.log('Select2 dropdown changed to:', this.value);
-                handlePermissionTypeChange(this.value);
-            });
-
-            // Also listen for regular change event as fallback
-            $('#pipeline-select').on('change', function() {
-                console.log('Dropdown changed to:', this.value);
-                handlePermissionTypeChange(this.value);
-            });
-
-            // Set initial state based on current dropdown value
-            handlePermissionTypeChange(dropdown.value);
-        }
-
-        // Collect selected permissions
-        function collectPermissions() {
-            const result = [];
-
-            // Check if we're in "all" mode - if so, collect everything
-            const permissionType = document.getElementById('pipeline-select');
-            const isAllPermissions = permissionType && permissionType.value === 'all';
-
-            if (isAllPermissions) {
-                // Collect all checkboxes except those with radio children
-                const allCheckboxes = document.querySelectorAll('#permission-container input[type="checkbox"]');
-                allCheckboxes.forEach(checkbox => {
-                    if (!checkbox.dataset.hasRadioChildren) {
-                        result.push(checkbox.value);
-                    }
-                });
-
-                // Collect all checked radios (first in each group)
-                const allRadios = document.querySelectorAll('#permission-container input[type="radio"]:checked');
-                allRadios.forEach(radio => {
-                    result.push(radio.value);
-                });
-
-                return result;
-            }
-
-            // Custom mode - only collect checked items
-            const checkboxes = document.querySelectorAll('#permission-container input[type="checkbox"]:checked');
-
-            // Get all parent values of selected radios
-            const radioParentValues = new Set();
-            const radios = document.querySelectorAll('#permission-container input[type="radio"]:checked');
-            radios.forEach(radio => {
-                const parentValue = radio.getAttribute('data-parent');
-                if (parentValue) {
-                    radioParentValues.add(parentValue);
-                }
-            });
-
-            checkboxes.forEach(checkbox => {
-                // Skip if this checkbox has radio children
-                if (checkbox.dataset.hasRadioChildren) {
-                    return;
-                }
-                // Skip if this checkbox value is a parent of a selected radio
-                if (radioParentValues.has(checkbox.value)) {
-                    return;
-                }
-                result.push(checkbox.value);
-            });
-
-            // Add selected radio values
-            radios.forEach(radio => {
-                result.push(radio.value);
-            });
-
-            return result;
-        }
-
-
-
-        // Update hidden inputs before form submission
-        function updatePermissionsBeforeSubmit(form) {
-            // Remove all existing hidden permission inputs
-            form.querySelectorAll('input[name="permissions[]"][type="hidden"]').forEach(input => {
-                input.remove();
-            });
-
-            // Get the permission type
-            const permissionType = document.getElementById('pipeline-select');
-            const isAllPermissions = permissionType && permissionType.value === 'all';
-
-            if (!isAllPermissions) {
-                // Disable all visible permission inputs so they don't submit (custom mode only)
-                form.querySelectorAll('#permission-container input[name="permissions[]"]').forEach(input => {
-                    input.disabled = true;
-                });
-                form.querySelectorAll('#permission-container input[type="radio"]').forEach(input => {
-                    input.disabled = true;
-                });
-            }
-
-            // Get collected permissions
-            const selectedPermissions = collectPermissions();
-
-            // Create hidden inputs for each permission
-            selectedPermissions.forEach(permission => {
-                const hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = 'permissions[]';
-                hiddenInput.value = permission;
-                form.appendChild(hiddenInput);
-            });
-        }
-
-        // Attach to form submission
-        document.addEventListener('DOMContentLoaded', function() {
-            // First render all permissions
-            renderAllPermissions();
-
-            // Then restore from backend after a delay
-            setTimeout(() => {
-                renderPermissionFromBackend();
-            }, 400);
-
-            // Find the form containing the permission container
-            const permissionContainer = document.getElementById('permission-container');
-            if (permissionContainer) {
-                const form = permissionContainer.closest('form');
-                if (form) {
-                    form.addEventListener('submit', function(e) {
-                        updatePermissionsBeforeSubmit(this);
-                    });
-                }
+            if (input.type === 'checkbox') {
+                input.checked = true;
+                checkedCount++;
+                console.log('✅ Checked checkbox:', permission);
+                handleCheckboxChange(input);
+            } else if (input.type === 'radio') {
+                input.checked = true;
+                input.disabled = false;
+                checkedCount++;
+                console.log('✅ Selected radio:', permission);
+                handleRadioChange(input);
             }
         });
 
-        // Export for manual use if needed
-        window.getPermissions = collectPermissions;
+        console.log(`✅ Successfully restored ${checkedCount} permissions`);
+        if (notFoundCount > 0) {
+            console.warn(`⚠️ ${notFoundCount} permissions not found in UI`);
+        }
+    }, 250);
+}
+
+function renderAllPermissions() {
+    const container = document.getElementById('permission-container');
+    if (!container) {
+        console.error('Permission container not found');
+        return;
+    }
+
+    let html = '';
+    permissions.forEach(permission => {
+        html += renderPermission(permission);
+    });
+    container.innerHTML = html;
+    attachEventListeners();
+    initPermissionTypeDropdown();
+}
+
+function getChildInputs(parentValue) {
+    return document.querySelectorAll(`[data-parent="${parentValue}"]`);
+}
+
+function getParentInput(childInput) {
+    const parentValue = childInput.getAttribute('data-parent');
+    if (!parentValue) return null;
+    return document.querySelector(`[data-value="${parentValue}"]`);
+}
+
+function handleCheckboxChange(checkbox) {
+    if (checkbox.disabled) return;
+
+    if (checkbox.checked) {
+        const children = getChildInputs(checkbox.dataset.value);
+        children.forEach(child => {
+            if (child.type === 'checkbox') {
+                child.checked = true;
+                handleCheckboxChange(child);
+            } else if (child.type === 'radio') {
+                child.disabled = false;
+            }
+        });
+
+        if (checkbox.dataset.hasRadioChildren) {
+            const radios = Array.from(children).filter(c => c.type === 'radio');
+            if (radios.length > 0 && !radios.some(r => r.checked)) {
+                radios[0].checked = true;
+            }
+        }
+
+        const parent = getParentInput(checkbox);
+        if (parent && parent.type === 'checkbox' && !parent.checked && !parent.disabled) {
+            parent.checked = true;
+            handleCheckboxChange(parent);
+        }
+    } else {
+        const children = getChildInputs(checkbox.dataset.value);
+        children.forEach(child => {
+            if (child.type === 'checkbox') {
+                child.checked = false;
+                handleCheckboxChange(child);
+            } else if (child.type === 'radio') {
+                child.checked = false;
+                child.disabled = true;
+            }
+        });
+
+        const parent = getParentInput(checkbox);
+        if (parent && parent.type === 'checkbox' && !parent.disabled) {
+            const siblings = getChildInputs(parent.dataset.value);
+            const anyChecked = Array.from(siblings).some(s =>
+                s.type === 'checkbox' && s.checked
+            );
+            if (!anyChecked) {
+                parent.checked = false;
+                handleCheckboxChange(parent);
+            }
+        }
+    }
+}
+
+function handleRadioChange(radio) {
+    const parent = getParentInput(radio);
+    if (parent && parent.type === 'checkbox' && !parent.checked) {
+        parent.checked = true;
+        handleCheckboxChange(parent);
+    }
+}
+
+function attachEventListeners() {
+    document.querySelectorAll('#permission-container input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            handleCheckboxChange(this);
+        });
+    });
+
+    document.querySelectorAll('#permission-container input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            handleRadioChange(this);
+        });
+        radio.disabled = true;
+    });
+}
+
+function handlePermissionTypeChange(value) {
+    const allCheckboxes = document.querySelectorAll('#permission-container input[type="checkbox"]');
+    const allRadios = document.querySelectorAll('#permission-container input[type="radio"]');
+
+    console.log('Handling permission type:', value);
+    console.log('Found checkboxes:', allCheckboxes.length);
+    console.log('Found radios:', allRadios.length);
+
+    if (value === 'all') {
+        allCheckboxes.forEach(checkbox => {
+            checkbox.checked = true;
+            checkbox.disabled = true;
+        });
+
+        const radioGroups = {};
+        allRadios.forEach(radio => {
+            const group = radio.name;
+            if (!radioGroups[group]) {
+                radioGroups[group] = [];
+            }
+            radioGroups[group].push(radio);
+        });
+
+        Object.values(radioGroups).forEach(radios => {
+            radios.forEach((radio, index) => {
+                radio.disabled = true;
+                radio.checked = index === 0;
+            });
+        });
+
+        console.log('All permissions enabled and disabled');
+    } else {
+        allCheckboxes.forEach(checkbox => {
+            checkbox.disabled = false;
+            checkbox.checked = false;
+        });
+
+        allRadios.forEach(radio => {
+            radio.disabled = true;
+            radio.checked = false;
+        });
+
+        console.log('Custom mode - all permissions cleared and enabled');
+    }
+}
+
+function initPermissionTypeDropdown() {
+    const dropdown = document.getElementById('pipeline-select');
+    if (!dropdown) {
+        console.error('Permission type dropdown not found');
+        return;
+    }
+
+    $('#pipeline-select').on('select2:select', function(e) {
+        console.log('Select2 dropdown changed to:', this.value);
+        handlePermissionTypeChange(this.value);
+    });
+
+    $('#pipeline-select').on('change', function() {
+        console.log('Dropdown changed to:', this.value);
+        handlePermissionTypeChange(this.value);
+    });
+
+    handlePermissionTypeChange(dropdown.value);
+}
+
+function collectPermissions() {
+    const result = [];
+    const permissionType = document.getElementById('pipeline-select');
+    const isAllPermissions = permissionType && permissionType.value === 'all';
+
+    if (isAllPermissions) {
+        const allCheckboxes = document.querySelectorAll('#permission-container input[type="checkbox"]');
+        allCheckboxes.forEach(checkbox => {
+            if (!checkbox.dataset.hasRadioChildren) {
+                result.push(checkbox.value);
+            }
+        });
+
+        const allRadios = document.querySelectorAll('#permission-container input[type="radio"]:checked');
+        allRadios.forEach(radio => {
+            result.push(radio.value);
+        });
+
+        return result;
+    }
+
+    const checkboxes = document.querySelectorAll('#permission-container input[type="checkbox"]:checked');
+    const radioParentValues = new Set();
+    const radios = document.querySelectorAll('#permission-container input[type="radio"]:checked');
+    
+    radios.forEach(radio => {
+        const parentValue = radio.getAttribute('data-parent');
+        if (parentValue) {
+            radioParentValues.add(parentValue);
+        }
+    });
+
+    checkboxes.forEach(checkbox => {
+        if (checkbox.dataset.hasRadioChildren) {
+            return;
+        }
+        if (radioParentValues.has(checkbox.value)) {
+            return;
+        }
+        result.push(checkbox.value);
+    });
+
+    radios.forEach(radio => {
+        result.push(radio.value);
+    });
+
+    return result;
+}
+
+// FIXED: This is the corrected function
+function updatePermissionsBeforeSubmit(form) {
+    console.log('Preparing permissions for submission...');
+    
+    // Remove all existing hidden permission inputs
+    form.querySelectorAll('input[name="permissions[]"][type="hidden"]').forEach(input => {
+        input.remove();
+    });
+
+    // ALWAYS disable visible inputs to prevent them from submitting
+    // Disable checkboxes
+    form.querySelectorAll('#permission-container input[type="checkbox"]').forEach(input => {
+        input.disabled = true;
+    });
+    
+    // Disable radios
+    form.querySelectorAll('#permission-container input[type="radio"]').forEach(input => {
+        input.disabled = true;
+    });
+
+    // Get collected permissions
+    const selectedPermissions = collectPermissions();
+    console.log('Collected permissions:', selectedPermissions);
+
+    // Create hidden inputs for each permission
+    selectedPermissions.forEach(permission => {
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'permissions[]';
+        hiddenInput.value = permission;
+        form.appendChild(hiddenInput);
+    });
+    
+    console.log('Added', selectedPermissions.length, 'hidden permission inputs');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    renderAllPermissions();
+
+    setTimeout(() => {
+        renderPermissionFromBackend();
+    }, 400);
+
+    const permissionContainer = document.getElementById('permission-container');
+    if (permissionContainer) {
+        const form = permissionContainer.closest('form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                updatePermissionsBeforeSubmit(this);
+            });
+        }
+    }
+});
+
+window.getPermissions = collectPermissions;
 window.renderPermissionFromBackend = renderPermissionFromBackend;
     </script>
 @endsection

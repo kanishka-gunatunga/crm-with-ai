@@ -227,7 +227,7 @@ class QuoteController extends Controller
     {
         $permissions = session('user_permissions', []);
 
-        if (in_array(strtolower('delete-quotess'), array_map('strtolower', $permissions))) {
+        if (in_array(strtolower('delete-quotes'), array_map('strtolower', $permissions))) {
             if ($request->isMethod('get')) {
 
                 Quote::where('id', $id)->delete();
@@ -257,6 +257,8 @@ class QuoteController extends Controller
                 return view('quotes.create_quote', ['owners' => $owners, 'authenticatedUser' => $authenticatedUser, 'persons' => $persons, 'products' => $products, 'leads' => $leads, 'services' => $services]);
             }
             if ($request->isMethod('post')) {
+
+                
 
                 // dd($request->all());
                 $request->validate([

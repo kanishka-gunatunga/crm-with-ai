@@ -608,7 +608,7 @@
                                             <div class="table-responsive">
                                                 <div class="d-flex justify-content-between align-items-center mb-5">
                                                     <h5 class="card-title">{{ __('app.quotes.quote-items') }}</h5>
-                                                    <button class="import-leads-button" type="button" id="add-product">
+                                                    <button class="create-btn" type="button" id="add-product">
                                                         <div class="icon-container">
                                                             <svg width="20" height="20" viewBox="0 0 20 20"
                                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -839,175 +839,171 @@
         });
     </script>
     <script>
-        $(document).ready(function() {
+    $(document).ready(function() {
+        const addProductBtn = document.getElementById('add-product');
 
-            let productStock = {};
-            let originalOrderQuantities = {};
+        // Object to store product quantities from the database.
+        let productStock = {}; 
 
-            // 1. Populate productStock with total quantities from the database.
-            // This is a placeholder; ensure these arrays are correctly passed from your backend.
-            const productData = <?php echo json_encode($products); ?>;
-            // const serviceData = <?php echo json_encode($services); ?>;
+        // Populate productStock from your backend
+        const productData = <?php echo json_encode($products); ?>;
+        const serviceData = <?php echo json_encode($services); ?>;
+        
+        productData.forEach(product => {
+            productStock['product||' + product.id] = product.quantity;
+        });
 
-            productData.forEach(product => {
-                productStock['product||' + product.id] = product.quantity;
+        serviceData.forEach(service => {
+            productStock['service||' + service.id] = service.quantity;
+        });
+
+        function initializeSelect2() {
+            // Destroy existing Select2 instances before reinitializing
+            $(".product-select").each(function() {
+                if ($(this).hasClass("select2-hidden-accessible")) {
+                    $(this).select2('destroy');
+                }
+            });
+            
+            $(".product-select").select2({
+                placeholder: "Select a product",
+                allowClear: true
+            }).off('change').on('change', function() {
+                let row = $(this).closest('tr');
+                let price = $(this).find(':selected').data('price');
+                row.find('input[name="price[]"]').val(price);
+                
+                // Trigger calculation for the row
+                calculateRow(row);
+                
+                // Validate after selection
+                validateQuantities();
+            });
+        }
+
+        initializeSelect2();
+
+        function calculateRow(row) {
+            let quantity = parseFloat(row.find('input[name="quantity[]"]').val()) || 0;
+            let price = parseFloat(row.find('input[name="price[]"]').val()) || 0;
+            let discount = parseFloat(row.find('input[name="discount[]"]').val()) || 0;
+            let tax = parseFloat(row.find('input[name="tax[]"]').val()) || 0;
+
+            let amount = quantity * price;
+            let discountAmount = (amount * discount) / 100;
+            let taxableAmount = amount - discountAmount;
+            let taxAmount = (taxableAmount * tax) / 100;
+            let total = taxableAmount + taxAmount;
+
+            row.find('input[name="amount[]"]').val(amount.toFixed(2));
+            row.find('input[name="total[]"]').val(total.toFixed(2));
+
+            updateTotals();
+            validateQuantities();
+        }
+
+        function updateTotals() {
+            let subtotal = 0,
+                totalDiscount = 0,
+                totalTax = 0,
+                grandTotal = 0;
+
+            $('#products-tbody tr').each(function() {
+                let amount = parseFloat($(this).find('input[name="amount[]"]').val()) || 0;
+                let discount = parseFloat($(this).find('input[name="discount[]"]').val()) || 0;
+                let tax = parseFloat($(this).find('input[name="tax[]"]').val()) || 0;
+                let total = parseFloat($(this).find('input[name="total[]"]').val()) || 0;
+
+                subtotal += amount;
+                totalDiscount += (amount * discount) / 100;
+                totalTax += ((amount - (amount * discount) / 100) * tax) / 100;
+                grandTotal += total;
             });
 
-            serviceData.forEach(service => {
-                productStock['service||' + service.id] = service.quantity;
-            });
+            $('#sub-total').text(subtotal.toFixed(2));
+            $('#discount-total').text(totalDiscount.toFixed(2));
+            $('#discount_total_amount').val(totalDiscount.toFixed(2));
+            $('#tax-total').text(totalTax.toFixed(2));
+            $('#tax_total_amount').val(totalTax.toFixed(2));
+            $('#order-total').text(grandTotal.toFixed(2));
+            $('#order_total_input').val(grandTotal.toFixed(2));
+        }
 
-            // 2. Populate originalOrderQuantities with quantities for this specific order.
-            // This is crucial for the edit page. You must pass your existing order items.
-            const orderItems = <?php echo json_encode($quote_products); ?>; // Make sure this variable is defined in your PHP.
-            orderItems.forEach(item => {
-                const itemType = item.product_id ? 'product' : 'service';
-                const itemId = item.product_id || item.service_id;
-                originalOrderQuantities[itemType + '||' + itemId] = item.quantity;
-            });
-
-            function initializeSelect2() {
-                $(".product-select").select2({
-                    allowClear: true,
-                    placeholder: "Select a product",
-                    allowClear: true
-                }).on('change', function() {
-                    let row = $(this).closest('tr');
-                    let price = $(this).find(':selected').data('price');
-                    row.find('input[name="price[]"]').val(price).trigger('input');
-
-                    // Re-validate after a new product is selected.
-                    validateQuantities();
-                });
-            }
-
-            initializeSelect2();
-
-            function calculateRow(row) {
-                let quantity = parseFloat(row.find('input[name="quantity[]"]').val()) || 0;
-                let price = parseFloat(row.find('input[name="price[]"]').val()) || 0;
-                let discount = parseFloat(row.find('input[name="discount[]"]').val()) || 0;
-                let tax = parseFloat(row.find('input[name="tax[]"]').val()) || 0;
-
-                let amount = quantity * price;
-                let discountAmount = (amount * discount) / 100;
-                let taxableAmount = amount - discountAmount;
-                let taxAmount = (taxableAmount * tax) / 100;
-                let total = taxableAmount + taxAmount;
-
-                row.find('input[name="amount[]"]').val(amount.toFixed(2));
-                row.find('input[name="total[]"]').val(total.toFixed(2));
-
-                updateTotals();
-                validateQuantities(); // Call validation after each row calculation.
-            }
-
-            function updateTotals() {
-                let subtotal = 0,
-                    totalDiscount = 0,
-                    totalTax = 0,
-                    grandTotal = 0;
-
-                $('#products-tbody tr').each(function() {
-                    let amount = parseFloat($(this).find('input[name="amount[]"]').val()) || 0;
-                    let discount = parseFloat($(this).find('input[name="discount[]"]').val()) || 0;
-                    let tax = parseFloat($(this).find('input[name="tax[]"]').val()) || 0;
-                    let total = parseFloat($(this).find('input[name="total[]"]').val()) || 0;
-
-                    subtotal += amount;
-                    totalDiscount += (amount * discount) / 100;
-                    totalTax += ((amount - (amount * discount) / 100) * tax) / 100;
-                    grandTotal += total;
-                });
-
-                $('#sub-total').text(subtotal.toFixed(2));
-                $('#discount-total').text(totalDiscount.toFixed(2));
-                $('#discount_total_amount').val(totalDiscount.toFixed(2));
-                $('#tax-total').text(totalTax.toFixed(2));
-                $('#tax_total_amount').val(totalTax.toFixed(2));
-                $('#order-total').text(grandTotal.toFixed(2));
-                $('#order_total_input').val(grandTotal.toFixed(2));
-            }
-
-            function validateQuantities() {
-                let isValid = true;
-                $('#products-tbody tr').each(function() {
-                    const row = $(this);
-                    const productKey = row.find('.product-select').val();
-                    const quantityInput = row.find('input[name="quantity[]"]');
-                    const requestedQuantity = parseFloat(quantityInput.val());
-
-                    // Only perform validation if a product is selected and quantity is a valid number.
-                    if (productKey && !isNaN(requestedQuantity)) {
-                        // Get the stock and original quantity for this item.
-                        const availableStock = productStock[productKey] || 0;
-                        const originalQuantity = originalOrderQuantities[productKey] || 0;
-
-                        // The effective stock is the total stock plus the quantity already in this order.
-                        // This prevents validation errors when a user simply keeps the same quantity.
-                        const effectiveStock = availableStock + originalQuantity;
-
-                        if (requestedQuantity > effectiveStock) {
-                            isValid = false;
-                            quantityInput.addClass('is-invalid');
-                        } else {
-                            quantityInput.removeClass('is-invalid');
-                        }
+        function validateQuantities() {
+            let isValid = true;
+            $('#products-tbody tr').each(function() {
+                const row = $(this);
+                const productId = row.find('.product-select').val();
+                const quantityInput = row.find('input[name="quantity[]"]');
+                const requestedQuantity = parseFloat(quantityInput.val());
+                const availableStock = productStock[productId];
+                
+                if (productId && !isNaN(requestedQuantity)) {
+                    if (requestedQuantity > availableStock) {
+                        isValid = false;
+                        quantityInput.addClass('is-invalid');
                     } else {
-                        // If a product is not selected or quantity is not a number, don't show an error.
                         quantityInput.removeClass('is-invalid');
                     }
-                });
-
-                // Enable or disable the save button based on the overall validation result.
-                $('#saveBtn').prop('disabled', !isValid);
-            }
-
-            // Event listener for quantity and other inputs.
-            $('#products-tbody').on('input',
-                'input[name="quantity[]"], input[name="price[]"], input[name="discount[]"], input[name="tax[]"]',
-                function() {
-                    calculateRow($(this).closest('tr'));
-                });
-
-            // Event listener for removing a product row.
-            $('#products-tbody').on('click', '.remove-product', function() {
-                $(this).closest('tr').remove();
-                updateTotals();
-                validateQuantities(); // Re-validate after a row is removed.
+                }
             });
 
-            // Event listener for adding a new product row.
-            $('#add-product').on('click', function() {
-                let newRow = `
-                <tr>
-                    <td>
-                        <select class="form-control product-select" name="products[]" required>
-                            <option hidden selected></option>
-                            <?php foreach($products as $product){ ?>
-                            <option value="product||{{ $product->id }}" data-price="{{ $product->cost }}">{{ $product->name }}</option>
-                            <?php } ?>
-                            <?php foreach($services as $service){ ?>
-                            <option value="service||{{ $service->id }}" data-price="{{ $service->cost }}">{{ $service->name }}</option>
-                            <?php } ?>
-                        </select>
-                        <textarea class="form-control w-100 mt-2" rows="3" name="note[]" placeholder="Notes"></textarea>
-                    </td>
-                    <td><input type="number" step="any" class="form-control" name="quantity[]" required></td>
-                    <td><input type="number" step="any" class="form-control" name="price[]" required></td>
-                    <td><input type="number" step="any" class="form-control" name="amount[]" readonly required></td>
-                    <td><input type="number" step="any" class="form-control" name="discount[]"></td>
-                    <td><input type="number" step="any" class="form-control" name="tax[]"></td>
-                    <td><input type="number" step="any" class="form-control" name="total[]" readonly></td>
-                    <td><i class="fa-solid fa-trash remove-product remove-append-item mx-2"></i></td>
-                </tr>
-            `;
-                $('#products-tbody').append(newRow);
-                initializeSelect2();
+            $('#saveBtn').prop('disabled', !isValid);
+        }
+
+        // Event listener for quantity and other inputs - using event delegation
+        $('#products-tbody').on('input',
+            'input[name="quantity[]"], input[name="price[]"], input[name="discount[]"], input[name="tax[]"]',
+            function() {
+                calculateRow($(this).closest('tr'));
             });
 
-            // Initial validation on page load to handle pre-filled data.
+        // Event listener for removing a product row
+        $('#products-tbody').on('click', '.remove-product', function() {
+            $(this).closest('tr').remove();
+            updateTotals();
             validateQuantities();
         });
-    </script>
+
+        // Event listener for adding a new product row
+        if (addProductBtn) {
+            addProductBtn.addEventListener('click', function() {
+                console.log("Add product button clicked");
+                let newRow = `
+                    <tr>
+                        <td>
+                            <select class="form-control product-select" name="products[]" required>
+                                <option hidden selected></option>
+                                <?php foreach($products as $product){ ?>
+                                <option value="product||<?php echo $product->id; ?>" data-price="<?php echo $product->cost; ?>"><?php echo $product->name; ?></option>
+                                <?php } ?>
+                                <?php foreach($services as $service){ ?>
+                                <option value="service||<?php echo $service->id; ?>" data-price="<?php echo $service->cost; ?>"><?php echo $service->name; ?></option>
+                                <?php } ?>
+                            </select>
+                            <textarea class="form-control w-100 mt-2" rows="3" name="note[]" placeholder="Notes"></textarea>
+                        </td>
+                        <td><input type="number" step="any" class="form-control" name="quantity[]" value="0" required></td>
+                        <td><input type="number" step="any" class="form-control" name="price[]" value="0" required></td>
+                        <td><input type="number" step="any" class="form-control" name="amount[]" value="0" readonly required></td>
+                        <td><input type="number" step="any" class="form-control" name="discount[]" value="0"></td>
+                        <td><input type="number" step="any" class="form-control" name="tax[]" value="0"></td>
+                        <td><input type="number" step="any" class="form-control" name="total[]" value="0" readonly></td>
+                        <td><i class="fa-solid fa-trash remove-product remove-append-item mx-2" style="cursor: pointer;"></i></td>
+                    </tr>
+                `;
+                $('#products-tbody').append(newRow);
+                
+                // Reinitialize Select2 for the new row
+                initializeSelect2();
+                
+                // Update totals after adding a new row
+                updateTotals();
+            });
+        }
+        
+        // Initial validation on page load
+        validateQuantities();
+    });
+</script>
 @endsection
