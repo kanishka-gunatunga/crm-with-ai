@@ -58,7 +58,79 @@ $permissions = session('user_permissions');
 
                     <div class="d-flex gap-3 align-items-center">
 
-                        @if (in_array(strtolower('lead-stage-change'), array_map('strtolower', $permissions)))
+
+                        <div class="shading-button">
+                            <div class="btn green lead-status-dropdown" id="statusWrapper">
+
+                                @php
+                                    $orderedStages = collect($stages)
+                                        ->sortBy(function ($stage) {
+                                            return match ($stage->name) {
+                                                'New' => 1,
+                                                'Won', 'Lost' => 9999,
+                                                default => 500,
+                                            };
+                                        })
+                                        ->values();
+
+                                    $currentStageIndex = $orderedStages->search(
+                                        fn($stage) => $stage->id == $lead->stage,
+                                    );
+                                    $finalStages = ['main' => [], 'won_lost' => []];
+
+                                    foreach ($orderedStages as $stage) {
+                                        if ($stage->name === 'Won' || $stage->name === 'Lost') {
+                                            $finalStages['won_lost'][] = $stage;
+                                        } else {
+                                            $finalStages['main'][] = $stage;
+                                        }
+                                    }
+                                @endphp
+
+
+
+                                {{-- @if (in_array(strtolower('lead-stage-change'), array_map('strtolower', $permissions)))
+                                    <select id="leadStatusSelect" class="form-select" data-lead-id="{{ $lead->id }}">
+                                        <option value="">-- Select Stage --</option>
+
+                                        @foreach ($finalStages['main'] as $stage)
+                                            @php
+                                                $class =
+                                                    $stage->name === 'New'
+                                                        ? 'blue'
+                                                        : ($stage->name === 'Pending'
+                                                            ? 'orange'
+                                                            : '');
+                                            @endphp
+                                            <option value="{{ $stage->id }}"
+                                                data-color="{{ $class === 'blue' ? '#4A58EC' : ($class === 'orange' ? '#FF932F' : '#000') }}"
+                                                data-class="{{ $class }}" data-stage-id="{{ $stage->id }}"
+                                                @if ($lead->stage == $stage->id) selected @endif>
+                                                {{ $stage->name }}
+                                            </option>
+                                        @endforeach
+
+                                        @foreach ($finalStages['won_lost'] as $stage)
+                                            @php
+                                                $color = $stage->name === 'Won' ? '#00C500' : '#ED2227';
+                                                $class = $stage->name === 'Won' ? 'green' : 'red';
+                                            @endphp
+                                            <option value="{{ $stage->id }}" data-color="{{ $color }}"
+                                                data-class="{{ $class }}" data-stage-id="{{ $stage->id }}"
+                                                @if ($lead->stage == $stage->id) selected @endif>
+                                                {{ $stage->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                @endif --}}
+                            </div>
+                        </div>
+
+                        @if ($lead->sales_owner == null && $lead->stage == '1')
+                            <div>
+                                <button class="btn save-btn" id="assignToMeBtn">Assign to me</button>
+                            </div>
+                        @elseif (in_array(strtolower('lead-stage-change'), array_map('strtolower', $permissions)))
                             <div class="shading-button">
                                 <div class="btn green lead-status-dropdown" id="statusWrapper">
 
@@ -87,115 +159,40 @@ $permissions = session('user_permissions');
                                         }
                                     @endphp
 
+                                    <select id="leadStatusSelect" class="form-select" data-lead-id="{{ $lead->id }}">
+                                        <option value="">-- Select Stage --</option>
 
+                                        @foreach ($finalStages['main'] as $stage)
+                                            @php
+                                                $class =
+                                                    $stage->name === 'New'
+                                                        ? 'blue'
+                                                        : ($stage->name === 'Pending'
+                                                            ? 'orange'
+                                                            : '');
+                                            @endphp
+                                            <option value="{{ $stage->id }}"
+                                                data-color="{{ $class === 'blue' ? '#4A58EC' : ($class === 'orange' ? '#FF932F' : '#000') }}"
+                                                data-class="{{ $class }}" data-stage-id="{{ $stage->id }}"
+                                                @if ($lead->stage == $stage->id) selected @endif>
+                                                {{ $stage->name }}
+                                            </option>
+                                        @endforeach
 
-                                    @if (in_array(strtolower('lead-stage-change'), array_map('strtolower', $permissions)))
-                                        <select id="leadStatusSelect" class="form-select"
-                                            data-lead-id="{{ $lead->id }}">
-                                            <option value="">-- Select Stage --</option>
-
-                                            @foreach ($finalStages['main'] as $stage)
-                                                @php
-                                                    $class =
-                                                        $stage->name === 'New'
-                                                            ? 'blue'
-                                                            : ($stage->name === 'Pending'
-                                                                ? 'orange'
-                                                                : '');
-                                                @endphp
-                                                <option value="{{ $stage->id }}"
-                                                    data-color="{{ $class === 'blue' ? '#4A58EC' : ($class === 'orange' ? '#FF932F' : '#000') }}"
-                                                    data-class="{{ $class }}" data-stage-id="{{ $stage->id }}"
-                                                    @if ($lead->stage == $stage->id) selected @endif>
-                                                    {{ $stage->name }}
-                                                </option>
-                                            @endforeach
-
-                                            @foreach ($finalStages['won_lost'] as $stage)
-                                                @php
-                                                    $color = $stage->name === 'Won' ? '#00C500' : '#ED2227';
-                                                    $class = $stage->name === 'Won' ? 'green' : 'red';
-                                                @endphp
-                                                <option value="{{ $stage->id }}" data-color="{{ $color }}"
-                                                    data-class="{{ $class }}" data-stage-id="{{ $stage->id }}"
-                                                    @if ($lead->stage == $stage->id) selected @endif>
-                                                    {{ $stage->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    @endif
+                                        @foreach ($finalStages['won_lost'] as $stage)
+                                            @php
+                                                $color = $stage->name === 'Won' ? '#00C500' : '#ED2227';
+                                                $class = $stage->name === 'Won' ? 'green' : 'red';
+                                            @endphp
+                                            <option value="{{ $stage->id }}" data-color="{{ $color }}"
+                                                data-class="{{ $class }}" data-stage-id="{{ $stage->id }}"
+                                                @if ($lead->stage == $stage->id) selected @endif>
+                                                {{ $stage->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
-                        @elseif (in_array(strtolower('lead-stage-change'), array_map('strtolower', $permissions)))
-                            @if ($lead->sales_owner != auth()->user()->id)
-                                <div>
-                                    <button class="btn save-btn" id="assignToMeBtn">Assign to me</button>
-                                </div>
-                            @else
-                                <div class="shading-button">
-                                    <div class="btn green lead-status-dropdown" id="statusWrapper">
-
-                                        @php
-                                            $orderedStages = collect($stages)
-                                                ->sortBy(function ($stage) {
-                                                    return match ($stage->name) {
-                                                        'New' => 1,
-                                                        'Won', 'Lost' => 9999,
-                                                        default => 500,
-                                                    };
-                                                })
-                                                ->values();
-
-                                            $currentStageIndex = $orderedStages->search(
-                                                fn($stage) => $stage->id == $lead->stage,
-                                            );
-                                            $finalStages = ['main' => [], 'won_lost' => []];
-
-                                            foreach ($orderedStages as $stage) {
-                                                if ($stage->name === 'Won' || $stage->name === 'Lost') {
-                                                    $finalStages['won_lost'][] = $stage;
-                                                } else {
-                                                    $finalStages['main'][] = $stage;
-                                                }
-                                            }
-                                        @endphp
-
-                                        <select id="leadStatusSelect" class="form-select"
-                                            data-lead-id="{{ $lead->id }}">
-                                            <option value="">-- Select Stage --</option>
-
-                                            @foreach ($finalStages['main'] as $stage)
-                                                @php
-                                                    $class =
-                                                        $stage->name === 'New'
-                                                            ? 'blue'
-                                                            : ($stage->name === 'Pending'
-                                                                ? 'orange'
-                                                                : '');
-                                                @endphp
-                                                <option value="{{ $stage->id }}"
-                                                    data-color="{{ $class === 'blue' ? '#4A58EC' : ($class === 'orange' ? '#FF932F' : '#000') }}"
-                                                    data-class="{{ $class }}" data-stage-id="{{ $stage->id }}"
-                                                    @if ($lead->stage == $stage->id) selected @endif>
-                                                    {{ $stage->name }}
-                                                </option>
-                                            @endforeach
-
-                                            @foreach ($finalStages['won_lost'] as $stage)
-                                                @php
-                                                    $color = $stage->name === 'Won' ? '#00C500' : '#ED2227';
-                                                    $class = $stage->name === 'Won' ? 'green' : 'red';
-                                                @endphp
-                                                <option value="{{ $stage->id }}" data-color="{{ $color }}"
-                                                    data-class="{{ $class }}" data-stage-id="{{ $stage->id }}"
-                                                    @if ($lead->stage == $stage->id) selected @endif>
-                                                    {{ $stage->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            @endif
                         @endif
 
 
@@ -233,6 +230,7 @@ $permissions = session('user_permissions');
                         <div class="card-body col-12">
                             <!-- <article class="project-card"> -->
                             <!-- <div class="card-background"></div> -->
+
                             <div class="tab-content" id="pills-tabContent">
                                 <div class="tab-pane fade show active" id="default-tab" role="tabpanel"
                                     aria-labelledby="default-tab-tab" tabindex="0">
@@ -267,13 +265,6 @@ $permissions = session('user_permissions');
                                                     <p class="field-value">{{ $pipelineName }}</p>
                                                 </div>
 
-
-
-
-                                                {{-- <div class="duration-section">
-                                                <h3 class="field-label">Duration</h3>
-                                                <p class="field-value">5 months</p>
-                                            </div> --}}
                                             </section>
 
                                         </div>
@@ -521,6 +512,8 @@ $permissions = session('user_permissions');
                                                         name="attchments[]" multiple>
                                                 </div>
                                             </div>
+                                            <input type="text" class="form-control" id="field1" name="sent_by" hidden
+                                                value="{{ Auth::user()->id }}">
                                         </div>
 
                                         <div class="col-10 mt-3">
@@ -555,7 +548,7 @@ $permissions = session('user_permissions');
                                                     </div>
                                                     <div class="col-12 mb-3">
                                                         <label for="field5" class="form-label">Description</label>
-                                                        <textarea class="summernoteNormal" id="summernote" name="description"></textarea>
+                                                        <textarea class="form-control" id="summernote" name="description"></textarea>
                                                         {{-- <div id="froala-editor" rows="5" name="description" required>
                                                     </div> --}}
                                                     </div>
@@ -831,39 +824,40 @@ $permissions = session('user_permissions');
                                         <h5 class="mb-3 card-title">All Events</h5>
                                     </div>
                                     {{-- notes --}}
-                                     @if (in_array(strtolower('show-lead-note'), array_map('strtolower', $permissions)))
-                                    <div>
-                                        @if ($notes->isEmpty())
-                                        @else
-                                            <div>
-                                                <h5 class="mb-3 card-title">Notes</h5>
-                                            </div>
+                                    @if (in_array(strtolower('show-lead-note'), array_map('strtolower', $permissions)))
+                                        <div>
+                                            @if ($notes->isEmpty())
+                                                <p>No notes available.</p>
+                                            @else
+                                                <div>
+                                                    <h5 class="mb-3 card-title">Notes</h5>
+                                                </div>
 
-                                            @foreach ($notes as $note)
-                                                <div class="d-flex">
+                                                @foreach ($notes as $note)
+                                                    <div class="d-flex">
 
-                                                    <div class="col-5">
-                                                        <div class="d-flex gap-3 align-items-center mb-3">
-                                                            <img src="{{ asset('images/avatar.png') }}"
-                                                                class="rounded-circle object-fit-cover" alt="..."
-                                                                width="30" height="30">
+                                                        <div class="col-5">
+                                                            <div class="d-flex gap-3 align-items-center mb-3">
+                                                                <img src="{{ asset('images/avatar.png') }}"
+                                                                    class="rounded-circle object-fit-cover" alt="..."
+                                                                    width="30" height="30">
 
 
-                                                            <p class="person-name">
-                                                                {{ \App\Models\UserDetails::where('user_id', $note->created_by)->value('name') ?? 'Unknown User' }}
-                                                            </p>
+                                                                <p class="person-name">
+                                                                    {{ \App\Models\UserDetails::where('user_id', $note->created_by)->value('name') ?? 'Unknown User' }}
+                                                                </p>
 
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4 event-timestamp mb-3">
+                                                            <span>{{ $note->created_at }}</span>
+                                                            <span>></span>
+                                                            <span>{{ $note->note }}</span>
                                                         </div>
                                                     </div>
-                                                    <div class="col-4 event-timestamp mb-3">
-                                                        <span>{{ $note->created_at }}</span>
-                                                        <span>></span>
-                                                        <span>{{ $note->note }}</span>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        @endif
-                                    </div>
+                                                @endforeach
+                                            @endif
+                                        </div>
                                     @endif
 
 
@@ -1444,8 +1438,9 @@ $permissions = session('user_permissions');
                                     aria-labelledby="events-note-tab" tabindex="0">
                                     {{-- notes --}}
                                     <div>
-                                        @if ($calls->isEmpty())
-                                        @else
+                                        @if ($notes->isEmpty())
+                                            <p>No notes available.</p>
+                                        @elseif (in_array(strtolower('show-lead-note'), array_map('strtolower', $permissions)))
                                             <div>
                                                 <h5 class="mb-3 card-title">Notes</h5>
                                             </div>
@@ -1472,9 +1467,14 @@ $permissions = session('user_permissions');
                                                     </div>
                                                 </div>
                                             @endforeach
+                                        @else
+                                            <p>Unauthorized</p>
                                         @endif
                                     </div>
                                 </div>
+
+
+
                                 <div class="tab-pane fade" id="events-calls" role="tabpanel"
                                     aria-labelledby="events-calls-tab" tabindex="0">
                                     {{-- calls --}}
@@ -1483,7 +1483,8 @@ $permissions = session('user_permissions');
                                     <div class="calls-tab mt-3">
 
                                         @if ($calls->isEmpty())
-                                        @else
+                                            <p>No calls available.</p>
+                                        @elseif (in_array(strtolower('show-lead-activity'), array_map('strtolower', $permissions)))
                                             <div>
                                                 <h5 class="mb-3 card-title">Calls</h5>
                                             </div>
@@ -1543,9 +1544,14 @@ $permissions = session('user_permissions');
                                                     </div>
                                                 </div>
                                             @endforeach
+                                        @else
+                                            <p>Unauthorized</p>
                                         @endif
                                     </div>
                                 </div>
+
+
+
                                 <div class="tab-pane fade" id="events-meetings"
                                     role="tabpanel"aria-labelledby="events-meetings-tab" tabindex="0">
                                     {{-- meetings --}}
@@ -1553,7 +1559,7 @@ $permissions = session('user_permissions');
 
                                         @if ($meetings->isEmpty())
                                             <p>No meetings found.</p>
-                                        @else
+                                        @elseif (in_array(strtolower('show-lead-activity'), array_map('strtolower', $permissions)))
                                             <div>
                                                 <h5 class="mb-3 card-title">Meetings</h5>
                                             </div>
@@ -1612,9 +1618,14 @@ $permissions = session('user_permissions');
                                                     </div>
                                                 </div>
                                             @endforeach
+                                        @else
+                                            <p>Unauthorized</p>
                                         @endif
                                     </div>
                                 </div>
+
+
+
                                 <div class="tab-pane fade" id="events-lunches"
                                     role="tabpanel"aria-labelledby="events-lunches-tab" tabindex="0">
                                     {{-- lunches --}}
@@ -1622,7 +1633,7 @@ $permissions = session('user_permissions');
 
                                         @if ($lunches->isEmpty())
                                             <p>No lunches found.</p>
-                                        @else
+                                        @elseif (in_array(strtolower('show-lead-activity'), array_map('strtolower', $permissions)))
                                             <div>
                                                 <h5 class="mb-3 card-title">Lunches</h5>
                                             </div>
@@ -1681,15 +1692,20 @@ $permissions = session('user_permissions');
                                                     </div>
                                                 </div>
                                             @endforeach
+                                        @else
+                                            <p>Unauthorized</p>
                                         @endif
                                     </div>
                                 </div>
+
+
+
                                 <div class="tab-pane fade" id="events-email" role="tabpanel"
                                     aria-labelledby="email-tab-tab" tabindex="0">
                                     {{-- email --}}
                                     @if ($lead_emails->isEmpty())
                                         <p>No emails found.</p>
-                                    @else
+                                    @elseif (in_array(strtolower('show-lead-mail'), array_map('strtolower', $permissions)))
                                         <div>
                                             <div>
                                                 <h5 class="mb-3 card-title">Emails</h5>
@@ -1754,40 +1770,46 @@ $permissions = session('user_permissions');
 
 
                                         </div>
+                                    @else
+                                        <p>Unauthorized</p>
                                     @endif
                                 </div>
+
+
+
                                 <div class="tab-pane fade" id="events-files" role="tabpanel"
                                     aria-labelledby="file-tab-tab" tabindex="0">
+
                                     {{-- <h3>Tab 4</h3>
-                                    <section class="primary-info">
-                                        <div class="title-section">
-                                            <h3 class="field-label">Title</h3>
-                                            <p class="project-title">Design Dashboard Wireframe for Egoagri</p>
-                                        </div>
+                                        <section class="primary-info">
+                                            <div class="title-section">
+                                                <h3 class="field-label">Title</h3>
+                                                <p class="project-title">Design Dashboard Wireframe for Egoagri</p>
+                                            </div>
 
-                                        <div class="status-section mb-3">
-                                            <h3 class="field-label mb-0">Status</h3>
-                                            <span class="priority-badge urgent">Urgent</span>
-                                        </div>
+                                            <div class="status-section mb-3">
+                                                <h3 class="field-label mb-0">Status</h3>
+                                                <span class="priority-badge urgent">Urgent</span>
+                                            </div>
 
-                                        <div class="terms-section">
-                                            <h3 class="field-label">Terms</h3>
-                                            <p class="field-value">None</p>
-                                        </div>
+                                            <div class="terms-section">
+                                                <h3 class="field-label">Terms</h3>
+                                                <p class="field-value">None</p>
+                                            </div>
 
-                                        <div class="start-date-section">
-                                            <h3 class="field-label">Start Date</h3>
-                                            <p class="field-value">May 26, 2025</p>
-                                        </div>
+                                            <div class="start-date-section">
+                                                <h3 class="field-label">Start Date</h3>
+                                                <p class="field-value">May 26, 2025</p>
+                                            </div>
 
-                                        <div class="duration-section">
-                                            <h3 class="field-label">Duration</h3>
-                                            <p class="field-value">5 months</p>
-                                        </div>
-                                    </section> --}}
+                                            <div class="duration-section">
+                                                <h3 class="field-label">Duration</h3>
+                                                <p class="field-value">5 months</p>
+                                            </div>
+                                        </section> --}}
                                     @if ($files->isEmpty())
                                         <p>No Files Found</p>
-                                    @else
+                                    @elseif (in_array(strtolower('show-lead-file'), array_map('strtolower', $permissions)))
                                         <div>
                                             <div>
                                                 <h5 class="mb-3 card-title">Files</h5>
@@ -1853,41 +1875,46 @@ $permissions = session('user_permissions');
 
 
                                         </div>
+                                    @else
+                                        <p>Unauthorized</p>
                                     @endif
                                 </div>
+
+
+
                                 <div class="tab-pane fade" id="events-quotes" role="tabpanel"
                                     aria-labelledby="quote-tab-tab" tabindex="0">
                                     {{-- <h3>Tab 5</h3>
-                                    <section class="primary-info">
-                                        <div class="title-section">
-                                            <h3 class="field-label">Title</h3>
-                                            <p class="project-title">Design Dashboard Wireframe for Egoagri</p>
-                                        </div>
+                                        <section class="primary-info">
+                                            <div class="title-section">
+                                                <h3 class="field-label">Title</h3>
+                                                <p class="project-title">Design Dashboard Wireframe for Egoagri</p>
+                                            </div>
 
-                                        <div class="status-section mb-3">
-                                            <h3 class="field-label mb-0">Status</h3>
-                                            <span class="priority-badge urgent">Urgent</span>
-                                        </div>
+                                            <div class="status-section mb-3">
+                                                <h3 class="field-label mb-0">Status</h3>
+                                                <span class="priority-badge urgent">Urgent</span>
+                                            </div>
 
-                                        <div class="terms-section">
-                                            <h3 class="field-label">Terms</h3>
-                                            <p class="field-value">None</p>
-                                        </div>
+                                            <div class="terms-section">
+                                                <h3 class="field-label">Terms</h3>
+                                                <p class="field-value">None</p>
+                                            </div>
 
-                                        <div class="start-date-section">
-                                            <h3 class="field-label">Start Date</h3>
-                                            <p class="field-value">May 26, 2025</p>
-                                        </div>
+                                            <div class="start-date-section">
+                                                <h3 class="field-label">Start Date</h3>
+                                                <p class="field-value">May 26, 2025</p>
+                                            </div>
 
-                                        <div class="duration-section">
-                                            <h3 class="field-label">Duration</h3>
-                                            <p class="field-value">5 months</p>
-                                        </div>
-                                    </section> --}}
+                                            <div class="duration-section">
+                                                <h3 class="field-label">Duration</h3>
+                                                <p class="field-value">5 months</p>
+                                            </div>
+                                        </section> --}}
 
                                     @if ($quotes->isEmpty())
                                         <p>No Quotes Found</p>
-                                    @else
+                                    @elseif (in_array(strtolower('show-lead-quote'), array_map('strtolower', $permissions)))
                                         <div>
                                             <div>
                                                 <h5 class="mb-3 card-title">Quotes</h5>
@@ -1920,20 +1947,20 @@ $permissions = session('user_permissions');
                                                         <tbody>
 
                                                             <?php foreach($quotes as $quote){
-                                                                    $owner_name = UserDetails::where('id', $quote->owner)->value('name');
-                                                                    $person_name = Person::where('id', $quote->person)->value('name');
-                                                                    $sub_total = 0;
-                                                                    $products = QuoteProduct::where('quote_id', $quote->id)->get();
-                                                                    foreach($products as $product){
-                                                                
-                                                                        $amount = $product->price * $product->quantity;
-                                                                        $discount_amount = ($amount * $product->discount) / 100;
-                                                                        $tax_amount = ($amount - $discount_amount) * ($product->tax / 100);
-                                                                        $total = $amount - $discount_amount + $tax_amount;
-                                                                
-                                                                        $sub_total += $amount;
-                                                                }
-                                                            ?>
+                                                                        $owner_name = UserDetails::where('id', $quote->owner)->value('name');
+                                                                        $person_name = Person::where('id', $quote->person)->value('name');
+                                                                        $sub_total = 0;
+                                                                        $products = QuoteProduct::where('quote_id', $quote->id)->get();
+                                                                        foreach($products as $product){
+                                                                    
+                                                                            $amount = $product->price * $product->quantity;
+                                                                            $discount_amount = ($amount * $product->discount) / 100;
+                                                                            $tax_amount = ($amount - $discount_amount) * ($product->tax / 100);
+                                                                            $total = $amount - $discount_amount + $tax_amount;
+                                                                    
+                                                                            $sub_total += $amount;
+                                                                    }
+                                                                ?>
                                                             <tr class="odd gradeX">
                                                                 <td><input type="checkbox" name="selected_quotes[]"
                                                                         value="{{ $quote->id }}"></td>
@@ -2004,8 +2031,11 @@ $permissions = session('user_permissions');
 
 
                                         </div>
+                                    @else
+                                        <p>Unauthorized</p>
                                     @endif
                                 </div>
+
                             </div>
                         </div>
 

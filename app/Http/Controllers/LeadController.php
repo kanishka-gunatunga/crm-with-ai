@@ -154,7 +154,7 @@ class LeadController extends Controller
             // ]);
             $permissions = session('user_permissions', []);
 
-            if (in_array(strtolower('lead-create'), array_map('strtolower', $permissions))) {
+            // if (in_array(strtolower('lead-create'), array_map('strtolower', $permissions))) {
                 $request->validate([
                     'title' => 'required|string',
                     'lead_value' => 'required',
@@ -268,10 +268,10 @@ class LeadController extends Controller
                 $activity_history->save();
 
                 return redirect()->back()->with('success', 'Lead created successfully!');
-            } else {
-                // Option A: Hard stop
-                abort(403, 'Unauthorized');
-            }
+            // } else {
+                
+            //     abort(403, 'Unauthorized');
+            // }
         }
         // } else {
         //     // Option A: Hard stop
@@ -903,6 +903,7 @@ class LeadController extends Controller
                 $lead_email->bcc = $request->bcc;
                 $lead_email->subject = $request->subject;
                 $lead_email->body = $request->body;
+                $lead_email->sent_by = $request->sent_by;
 
                 $attachments = [];
                 if ($request->hasFile('attchments')) {
@@ -1231,7 +1232,7 @@ class LeadController extends Controller
 
         $permissions = session('user_permissions', []);
 
-        if (in_array(strtolower('lead-imports'), array_map('strtolower', $permissions))) {
+        if (in_array(strtolower('lead-import'), array_map('strtolower', $permissions))) {
             if (! $request->isMethod('post')) {
                 return back();
             }
@@ -1423,7 +1424,7 @@ class LeadController extends Controller
                 }
             } // end foreach
 
-            $message = "Imported {$imported} rows, skipped " . count($skipped) . " rows. Validated all data before import.";
+            $message = "Imported {$imported} rows, skipped " . count($skipped) . " rows. Validate all data before import.";
             // return with summary and skipped rows info (you can show skipped_rows in the view for debugging)
             return back()->with(['success' => $message, 'imported' => $imported, 'skipped_rows' => $skipped]);
         } else {

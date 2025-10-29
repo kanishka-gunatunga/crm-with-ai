@@ -317,7 +317,7 @@
 
 
                                                 <div class="priority-section d-flex align-items-center gap-2">
-                                                    @if (auth()->user()->role == 2)
+                                                    @if (in_array(strtolower('lead-view-all'), array_map('strtolower', $permissions)))
                                                    
                                                         @if ($lead->salesOwner)
                                                            
@@ -326,11 +326,12 @@
                                                                 <img src="{{ asset('images/assigned.svg') }}"
                                                                     alt="assigned" class="assigned-icon" tabindex="0">
                                                             </div>
+                                                        
                                                         @endif
-                                                    @elseif ($stage->name == 'New' && $lead->sales_owner == auth()->user()->id)
+                                                    {{-- @elseif ($stage->name == 'New' && $lead->sales_owner == auth()->user()->id)
                                                         <div>
                                                             <img src="{{ asset('images/assigned.svg') }}" alt="">
-                                                        </div>
+                                                        </div> --}}
                                                     @endif
 
 

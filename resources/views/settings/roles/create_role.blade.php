@@ -935,7 +935,11 @@
                         value: "lead-stage-change",
                         type: "checkbox"
                     },
-
+                    {
+                        label: "Lead Assignment to Own",
+                        value: "lead-assignment",
+                        type: "checkbox"
+                    },
                     
 
                     {
@@ -1423,7 +1427,11 @@
                         value: "delete-groups",
                         type: "checkbox",
                     },
-
+                     {
+                        label: "Export Groups",
+                        value: "export-groups",
+                        type: "checkbox",
+                    },
 
 
                 ]

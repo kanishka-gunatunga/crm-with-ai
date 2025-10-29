@@ -185,10 +185,15 @@
                                 </p>
 
                                
-                                    <a href="{{ asset('uploads/leads/email_attachments/' . $mail->attachments[0]) }}" target="_blank">
-                                        {{ $mail->attachments[0] ?? '' }}
-                                    </a>
-                                
+                                   @php
+    $attachment = $mail->attachments[0] ?? null;
+@endphp
+
+@if ($attachment)
+    <a href="{{ asset('uploads/leads/email_attachments/' . $attachment) }}" target="_blank">
+        {{ $attachment }}
+    </a>
+@endif
 
                             </section>
 

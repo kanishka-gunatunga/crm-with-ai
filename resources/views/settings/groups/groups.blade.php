@@ -50,7 +50,8 @@
                                 </div>
                                 <div>
 
-
+                                    @if( in_array(strtolower('export-groups'), array_map('strtolower',
+                                    session('user_permissions', []))))
                                     <button class="btn white-btn export-toggle">
                                         <svg width="18" height="18" viewBox="0 0 14 15" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -66,6 +67,7 @@
 
 
                                     </button>
+                                    @endif
                                     <button class="btn white-btn" data-bs-toggle="collapse" href="#collapseFilter">
                                         {{-- <button class="btn white-btn" data-bs-toggle="offcanvas" data-bs-target="#offFilter"
                                         aria-controls="offcanvasRight"> --}}
