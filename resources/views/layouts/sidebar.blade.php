@@ -180,7 +180,7 @@
                     {{ __('app.layouts.services') }}</a>
             </li>
 
-            <li class="nav-item stroke-nav-item">
+            {{-- <li class="nav-item stroke-nav-item">
                 <a class="nav-link {{ request()->is('emails') ? 'active' : '' }}" href="{{ url('emails') }}">
                     <svg width="23" height="23" viewBox="0 0 23 23" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -194,7 +194,7 @@
 
 
                     {{ __('app.layouts.mail.title') }}</a>
-            </li>
+            </li> --}}
 
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('settings') ? 'active' : '' }}" href="{{ url('settings') }}">
@@ -253,22 +253,30 @@
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Select all forms on the page
-    const forms = document.querySelectorAll('form');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Select all forms on the page
+        const forms = document.querySelectorAll('form');
 
-    forms.forEach(function(form) {
-        form.addEventListener('submit', function(e) {
-            // Find the submit button inside the form
-            const submitButton = form.querySelector('[type="submit"]');
-            if (submitButton) {
-                // Disable the submit button
-                submitButton.disabled = true;
-                // Optional: change text to show loading
-                submitButton.innerText = 'Processing...';
-            }
+        forms.forEach(function(form) {
+            form.addEventListener('submit', function(e) {
+                // Find the submit button inside the form
+                const submitButton = form.querySelector('[type="submit"]');
+                if (submitButton) {
+                    // Store the original button text
+                    const originalText = submitButton.innerText;
+                    
+                    // Disable the submit button
+                    submitButton.disabled = true;
+                    // Optional: change text to show loading
+                    submitButton.innerText = 'Processing...';
+
+                    // Re-enable the button after 5 seconds if form submission fails
+                    setTimeout(function() {
+                        submitButton.disabled = false;
+                        submitButton.innerText = originalText;
+                    }, 5000);
+                }
+            });
         });
     });
-});
 </script>
-

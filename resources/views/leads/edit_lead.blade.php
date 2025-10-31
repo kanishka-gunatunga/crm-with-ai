@@ -1,5 +1,8 @@
 @extends('master')
+<?php
+$permissions = session('user_permissions');
 
+?>
 @section('content')
     <?php
     use App\Models\Lead;
@@ -160,8 +163,8 @@
 
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Sales Owner</label>
-                                                @if ($userRoleId == 2)
-                                                    <select class="form-control" data-choices id="choices-single-default"
+                                                @if (in_array(strtolower('create-any-leads'), array_map('strtolower', $permissions)))
+                                                    <select class="form-control" data-choices id="choices-single-default" required
                                                         name="sales_owner">
                                                         <!-- Show current owner as hidden selected option -->
                                                         <option selected value="{{ $lead->sales_owner }}">
@@ -176,8 +179,8 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
-                                                @elseif ($userRoleId == 3)
-                                                    <select class="form-control" name="sales_owner">
+                                                @elseif (in_array(strtolower('create-own-leads'), array_map('strtolower', $permissions)))
+                                                    <select class="form-control" name="sales_owner" required>
                                                         <option value="{{ $currentUserId }}" selected>
                                                             {{ $owners->firstWhere('user_id', $currentUserId)?->name ?? '' }}
                                                         </option>

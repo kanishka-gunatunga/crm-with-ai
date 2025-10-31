@@ -1,7 +1,6 @@
 @extends('master')
 <?php
-$permissions = session('user_permissions');
-
+    $permissions = session('user_permissions');
 ?>
 @section('content')
     <!-- Scrollable Content -->
@@ -87,7 +86,7 @@ $permissions = session('user_permissions');
                                             @php
                                                 $selectedStage = request('stage') ?? old('stage');
                                             @endphp
-                                            <div class="col-12 col-md-4">
+                                            {{-- <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Stage</label>
                                                 <select class="form-control tagselect" name="stage" required
                                                     data-parsley-errors-container="#stage-value-errors">
@@ -100,12 +99,8 @@ $permissions = session('user_permissions');
                                                     <?php } ?>
                                                 </select>
                                                 <div id="stage-value-errors"></div>
-                                                {{-- @if ($errors->has('stage'))
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $errors->first('stage') }}
-                                                    </div>
-                                                @endif --}}
-                                            </div>
+                                                
+                                            </div> --}}
 
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Source</label>
@@ -136,25 +131,25 @@ $permissions = session('user_permissions');
                                                     </div>
                                                 @endif
                                             </div>
-
-
+                                            
                                             <div class="col-12 col-md-4">
                                                 <label for="sales_owner" class="form-label">Sales Owner</label>
-                                                <select id="sales_owner" class="form-control" name="sales_owner"
+                                                <select id="sales_owner" class="form-control" name="sales_owner" required
                                                     @if (in_array(strtolower('create-own-leads'), array_map('strtolower', $permissions))) disabled @endif>
                                                     @if (in_array(strtolower('create-own-leads'), array_map('strtolower', $permissions)))
                                                         <option value="{{ auth()->user()->id }}" selected>
                                                             {{-- {{ auth()->user()->name }} --}}
                                                             permissoion selected to create own leads
                                                         </option>
-                                                    @elseif (in_array(strtolower('create-any-leads'), array_map('strtolower', $permissions))) 
+                                                    @elseif (in_array(strtolower('create-any-leads'), array_map('strtolower', $permissions)))
                                                         <option value="" disabled selected>Select Sales Owner</option>
                                                         @foreach ($owners as $owner)
                                                             <option value="{{ $owner->user_id }}">{{ $owner->name }}
                                                             </option>
                                                         @endforeach
                                                     @else
-                                                     <option value="" disabled selected>You don't have permission to select a sales owner</option>
+                                                        <option value="" disabled selected>You don't have permission
+                                                            to select a sales owner</option>
                                                     @endif
                                                 </select>
                                                 @if (in_array(strtolower('create-own-leads'), array_map('strtolower', $permissions)))
@@ -219,17 +214,13 @@ $permissions = session('user_permissions');
 
                                                 <select class="form-control stagselect" id="person-select" name="person"
                                                     required data-parsley-errors-container="#person-value-errors">
-                                                    <option hidden selected></option>
+                                                        <option hidden selected></option>
                                                     <?php foreach($persons as $person){ ?>
-                                                    <option value="{{ $person->id }}">{{ $person->name }}</option>
+                                                        <option value="{{ $person->id }}">{{ $person->name }}</option>
                                                     <?php } ?>
                                                 </select>
                                                 <div id="person-value-errors"></div>
-                                                {{-- @if ($errors->has('person'))
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $errors->first('person') }}
-                                                    </div>
-                                                @endif --}}
+                                                
                                             </div>
 
 

@@ -171,11 +171,11 @@ Route::post( '/delete-selected-attributes', [AttributeController::class, 'delete
 Route::match(['get', 'post'],'edit-attribute/{id}', [AttributeController::class, 'edit_attribute'])->middleware(['auth']);
 
 //Email Templates
-Route::get( '/email-templates', [EmailTemplateController::class, 'email_templates'])->middleware(['auth']);
-Route::match(['get', 'post'],'create-email-template', [EmailTemplateController::class, 'create_email_template'])->middleware(['auth']);
-Route::get( '/delete-email-template/{id}', [EmailTemplateController::class, 'delete_email_template'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-email-template/{id}', [EmailTemplateController::class, 'edit_email_template'])->middleware(['auth']);
-Route::post( '/delete-selected-templates', [EmailTemplateController::class, 'delete_selected_templates'])->middleware(['auth']);
+// Route::get( '/email-templates', [EmailTemplateController::class, 'email_templates'])->middleware(['auth']);
+// Route::match(['get', 'post'],'create-email-template', [EmailTemplateController::class, 'create_email_template'])->middleware(['auth']);
+// Route::get( '/delete-email-template/{id}', [EmailTemplateController::class, 'delete_email_template'])->middleware(['auth']);
+// Route::match(['get', 'post'],'edit-email-template/{id}', [EmailTemplateController::class, 'edit_email_template'])->middleware(['auth']);
+// Route::post( '/delete-selected-templates', [EmailTemplateController::class, 'delete_selected_templates'])->middleware(['auth']);
 
 //Web Flows
 Route::get( '/web-forms', [WebFormController::class, 'web_forms'])->middleware(['auth']);
@@ -188,14 +188,14 @@ Route::match(['get', 'post'],'edit-web-form/{id}', [WebFormController::class, 'e
 Route::post( '/delete-selected-webforms', [WebFormController::class, 'delete_selected_webforms'])->middleware(['auth']);
 
 //Emails
-Route::get( '/emails', [EmailsController::class, 'emails'])->middleware(['auth']);
-Route::match(['get', 'post'],'compose-email', [EmailsController::class, 'compose_email'])->middleware(['auth']);
-Route::match(['get', 'post'], 'view-email/{id}', [EmailsController::class, 'view_email'])->middleware(['auth']);
-Route::get( '/delete-selected-emails', [EmailsController::class, 'delete_selected_emails'])->middleware(['auth']);
-Route::get( '/delete-emails/{id}', [EmailsController::class, 'delete_emails'])->middleware(['auth']);
-Route::post('/toggle-favourite/{id}', [EmailsController::class, 'toggleFavourite'])->middleware(['auth']);});
-Route::get('/favourite-emails', [EmailsController::class, 'fetch_favourite_emails'])->middleware(['auth']);
-Route::post('/emails/reply/{parentId}', [EmailsController::class, 'reply'])->name('emails.reply');
+// Route::get( '/emails', [EmailsController::class, 'emails'])->middleware(['auth']);
+// Route::match(['get', 'post'],'compose-email', [EmailsController::class, 'compose_email'])->middleware(['auth']);
+// Route::match(['get', 'post'], 'view-email/{id}', [EmailsController::class, 'view_email'])->middleware(['auth']);
+// Route::get( '/delete-selected-emails', [EmailsController::class, 'delete_selected_emails'])->middleware(['auth']);
+// Route::get( '/delete-emails/{id}', [EmailsController::class, 'delete_emails'])->middleware(['auth']);
+// Route::post('/toggle-favourite/{id}', [EmailsController::class, 'toggleFavourite'])->middleware(['auth']);
+// Route::get('/favourite-emails', [EmailsController::class, 'fetch_favourite_emails'])->middleware(['auth']);
+// Route::post('/emails/reply/{parentId}', [EmailsController::class, 'reply'])->name('emails.reply');
 
 Route::get('/lang/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'es', 'fa', 'tr', 'ar'])) {
@@ -211,3 +211,4 @@ Route::get('/lang/{locale}', function ($locale) {
 // Route::get('/settings', function () {
 //     return View('settings.settings');
 // })->name('settings');
+});

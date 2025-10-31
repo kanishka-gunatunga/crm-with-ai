@@ -56,10 +56,10 @@
                                                             {{ $quote->leadData->title ?? 'N/A' }}
                                                         </option>
                                                         <?php foreach($leads as $lead){ ?>
-                                                            <option value="{{ $lead->id }}">{{ $lead->title }}</option>
+                                                        <option value="{{ $lead->id }}">{{ $lead->title }}</option>
                                                         <?php } ?>
                                                     </select>
-                                                    
+
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label for="assign_user" class="form-label">Sales Owner</label>
@@ -134,11 +134,11 @@
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="assign_user" class="form-label">Country</label>
+                                                
                                                 <select class="myDropdown form-control" name="country" required>
-                                                    <option selected=""></option>
+                                                    
 
-                                                    <option value="{{ $quote->country }}" selected>{{ $quote->country }}
-                                                    </option>
+                                                    <option value="{{ $quote->country }}" selected>{{ $quote->country }}</option>
 
 
                                                     <option value="Afghanistan">Afghanistan</option>
@@ -291,8 +291,7 @@
                                                     <option value="Rwanda">Rwanda</option>
                                                     <option value="StKitts&Nevis">St Kitts & Nevis</option>
                                                     <option value="StLucia">St Lucia</option>
-                                                    <option value="SaintVincent&theGrenadines">Saint Vincent & the
-                                                        Grenadines</option>
+                                                    <option value="SaintVincent&theGrenadines">Saint Vincent & the Grenadines</option>
                                                     <option value="Samoa">Samoa</option>
                                                     <option value="SanMarino">San Marino</option>
                                                     <option value="SaoTome&Principe">Sao Tome & Principe</option>
@@ -378,11 +377,10 @@
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="assign_user" class="form-label">Country</label>
-                                                <select class="myDropdown form-control" name="country" required>
-                                                    <option selected=""></option>
+                                               <select class="myDropdown form-control" name="country" required>
+                                                    
 
-                                                    <option value="{{ $quote->shipping_country }}" selected>
-                                                        {{ $quote->shipping_country }}</option>
+                                                    <option value="{{ $quote->country }}" selected>{{ $quote->country }}</option>
 
 
                                                     <option value="Afghanistan">Afghanistan</option>
@@ -535,8 +533,7 @@
                                                     <option value="Rwanda">Rwanda</option>
                                                     <option value="StKitts&Nevis">St Kitts & Nevis</option>
                                                     <option value="StLucia">St Lucia</option>
-                                                    <option value="SaintVincent&theGrenadines">Saint Vincent & the
-                                                        Grenadines</option>
+                                                    <option value="SaintVincent&theGrenadines">Saint Vincent & the Grenadines</option>
                                                     <option value="Samoa">Samoa</option>
                                                     <option value="SanMarino">San Marino</option>
                                                     <option value="SaoTome&Principe">Sao Tome & Principe</option>
@@ -642,109 +639,108 @@
                                                         $sub_total = 0;
                                                         foreach($quote_products as $quote_product){ 
                                                             $sub_total += $quote_product->amount;
-                                                            if($quote_product->type == "product"){
-                                                        ?>
-                                                        <tr>
-                                                            <td>
-                                                                <select class="form-control product-select"
-                                                                    name="products[]" required>
-                                                                    <option hidden selected
-                                                                        value="product||{{ $quote_product->product_id }}"
-                                                                        data-price="{{ $quote_product->price }}">
-                                                                        {{ Product::where('id', $quote_product->product_id)->value('name') }}
-                                                                    </option>
-                                                                    <?php foreach($products as $product){ ?>
-                                                                    <option value="product||{{ $product->id }}"
-                                                                        data-price="{{ $product->cost }}">
-                                                                        {{ $product->name }}
-                                                                    </option>
-                                                                    <?php } ?>
-                                                                    <?php foreach($services as $service){ ?>
-                                                                    <option value="service||{{ $service->id }}"
-                                                                        data-price="{{ $service->cost }}">
-                                                                        {{ $service->name }}
-                                                                    </option>
-                                                                    <?php } ?>
-                                                                </select>
-                                                                <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]"
-                                                                    placeholder="Notes">{{ $quote_product->note }}</textarea>
-                                                            </td>
-                                                            <td><input type="number" step="any" class="form-control"
-                                                                    name="quantity[]"
-                                                                    value="{{ $quote_product->quantity }}" required></td>
-                                                            <td><input type="number" step="any" class="form-control"
-                                                                    name="price[]" value="{{ $quote_product->price }}"
-                                                                    required>
-                                                            </td>
-                                                            <td><input type="number" step="any" class="form-control"
-                                                                    name="amount[]" value="{{ $quote_product->amount }}"
-                                                                    readonly required></td>
-                                                            <td><input type="number" step="any" class="form-control"
-                                                                    name="discount[]"
-                                                                    value="{{ $quote_product->discount }}">
-                                                            </td>
-                                                            <td><input type="number" step="any" class="form-control"
-                                                                    name="tax[]" value="{{ $quote_product->tax }}">
-                                                            </td>
-                                                            <td><input type="number" step="any" class="form-control"
-                                                                    name="total[]" value="{{ $quote_product->total }}"
-                                                                    readonly>
-                                                            </td>
-                                                            <td><i
-                                                                    class="fa-solid fa-trash remove-product remove-append-item mx-2"></i>
-                                                            </td>
-                                                        </tr>
-                                                        <?php }else{ ?>
-                                                        <tr>
-                                                            <td>
-                                                                <select class="form-control product-select"
-                                                                    name="products[]" required>
-                                                                    <option hidden selected
-                                                                        value="service||{{ $quote_product->product_id }}"
-                                                                        data-price="{{ $quote_product->price }}">
-                                                                        {{ Service::where('id', $quote_product->product_id)->value('name') }}
-                                                                    </option>
-                                                                    <?php foreach($products as $product){ ?>
-                                                                    <option value="product||{{ $product->id }}"
-                                                                        data-price="{{ $product->cost }}">
-                                                                        {{ $product->name }}
-                                                                    </option>
-                                                                    <?php } ?>
-                                                                    <?php foreach($services as $service){ ?>
-                                                                    <option value="service||{{ $service->id }}"
-                                                                        data-price="{{ $service->cost }}">
-                                                                        {{ $service->name }}
-                                                                    </option>
-                                                                    <?php } ?>
-                                                                </select>
-                                                                <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]"
-                                                                    placeholder="Notes">{{ $quote_product->note }}</textarea>
-                                                            </td>
-                                                            <td><input type="number" step="any" class="form-control"
-                                                                    name="quantity[]"
-                                                                    value="{{ $quote_product->quantity }}" required></td>
-                                                            <td><input type="number" step="any" class="form-control"
-                                                                    name="price[]" value="{{ $quote_product->price }}"
-                                                                    required>
-                                                            </td>
-                                                            <td><input type="number" step="any" class="form-control"
-                                                                    name="amount[]" value="{{ $quote_product->amount }}"
-                                                                    readonly required></td>
-                                                            <td><input type="number" step="any" class="form-control"
-                                                                    name="discount[]"
-                                                                    value="{{ $quote_product->discount }}">
-                                                            </td>
-                                                            <td><input type="number" step="any" class="form-control"
-                                                                    name="tax[]" value="{{ $quote_product->tax }}">
-                                                            </td>
-                                                            <td><input type="number" step="any" class="form-control"
-                                                                    name="total[]" value="{{ $quote_product->total }}"
-                                                                    readonly>
-                                                            </td>
-                                                            <td><i
-                                                                    class="fa-solid fa-trash remove-product remove-append-item mx-2"></i>
-                                                            </td>
-                                                        </tr>
+                                                            if($quote_product->type == "product"){ ?>
+                                                                <tr>
+                                                                    <td>
+                                                                        <select class="form-control product-select"
+                                                                            name="products[]" required>
+                                                                            <option hidden selected
+                                                                                value="product||{{ $quote_product->product_id }}"
+                                                                                data-price="{{ $quote_product->price }}">
+                                                                                {{ Product::where('id', $quote_product->product_id)->value('name') }}
+                                                                            </option>
+                                                                            <?php foreach($products as $product){ ?>
+                                                                                <option value="product||{{ $product->id }}"
+                                                                                    data-price="{{ $product->cost }}">
+                                                                                    {{ $product->name }}
+                                                                                </option>
+                                                                            <?php } ?>
+                                                                            <?php foreach($services as $service){ ?>
+                                                                                <option value="service||{{ $service->id }}"
+                                                                                    data-price="{{ $service->cost }}">
+                                                                                    {{ $service->name }}
+                                                                                </option>
+                                                                            <?php } ?>
+                                                                        </select>
+                                                                        <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]"
+                                                                            placeholder="Notes">{{ $quote_product->note }}</textarea>
+                                                                    </td>
+                                                                    <td><input type="number" step="any" class="form-control"
+                                                                            name="quantity[]"
+                                                                            value="{{ $quote_product->quantity }}" required></td>
+                                                                    <td><input type="number" step="any" class="form-control"
+                                                                            name="price[]" value="{{ $quote_product->price }}"
+                                                                            required>
+                                                                    </td>
+                                                                    <td><input type="number" step="any" class="form-control"
+                                                                            name="amount[]" value="{{ $quote_product->amount }}"
+                                                                            readonly required></td>
+                                                                    <td><input type="number" step="any" class="form-control"
+                                                                            name="discount[]"
+                                                                            value="{{ $quote_product->discount }}">
+                                                                    </td>
+                                                                    <td><input type="number" step="any" class="form-control"
+                                                                            name="tax[]" value="{{ $quote_product->tax }}">
+                                                                    </td>
+                                                                    <td><input type="number" step="any" class="form-control"
+                                                                            name="total[]" value="{{ $quote_product->total }}"
+                                                                            readonly>
+                                                                    </td>
+                                                                    <td><i
+                                                                            class="fa-solid fa-trash remove-product remove-append-item mx-2"></i>
+                                                                    </td>
+                                                                </tr>
+                                                            <?php }else{ ?>
+                                                                <tr>
+                                                                    <td>
+                                                                        <select class="form-control product-select"
+                                                                            name="products[]" required >
+                                                                            <option hidden selected
+                                                                                value="service||{{ $quote_product->product_id }}"
+                                                                                data-price="{{ $quote_product->price }}">
+                                                                                {{ Service::where('id', $quote_product->product_id)->value('name') }}
+                                                                            </option>
+                                                                            <?php foreach($products as $product){ ?>
+                                                                            <option value="product||{{ $product->id }}"
+                                                                                data-price="{{ $product->cost }}">
+                                                                                {{ $product->name }}
+                                                                            </option>
+                                                                            <?php } ?>
+                                                                            <?php foreach($services as $service){ ?>
+                                                                            <option value="service||{{ $service->id }}"
+                                                                                data-price="{{ $service->cost }}">
+                                                                                {{ $service->name }}
+                                                                            </option>
+                                                                            <?php } ?>
+                                                                        </select>
+                                                                        <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]"
+                                                                            placeholder="Notes">{{ $quote_product->note }}</textarea>
+                                                                    </td>
+                                                                    <td><input type="number" step="any" class="form-control"
+                                                                            name="quantity[]"
+                                                                            value="{{ $quote_product->quantity }}" required></td>
+                                                                    <td><input type="number" step="any" class="form-control"
+                                                                            name="price[]" value="{{ $quote_product->price }}"
+                                                                            required>
+                                                                    </td>
+                                                                    <td><input type="number" step="any" class="form-control"
+                                                                            name="amount[]" value="{{ $quote_product->amount }}"
+                                                                            readonly required></td>
+                                                                    <td><input type="number" step="any" class="form-control"
+                                                                            name="discount[]"
+                                                                            value="{{ $quote_product->discount }}">
+                                                                    </td>
+                                                                    <td><input type="number" step="any" class="form-control"
+                                                                            name="tax[]" value="{{ $quote_product->tax }}">
+                                                                    </td>
+                                                                    <td><input type="number" step="any" class="form-control"
+                                                                            name="total[]" value="{{ $quote_product->total }}"
+                                                                            readonly>
+                                                                    </td>
+                                                                    <td><i
+                                                                            class="fa-solid fa-trash remove-product remove-append-item mx-2"></i>
+                                                                    </td>
+                                                                </tr>
                                                         <?php }} ?>
                                                     </tbody>
                                                     <tfoot>
@@ -839,171 +835,229 @@
         });
     </script>
     <script>
-    $(document).ready(function() {
-        const addProductBtn = document.getElementById('add-product');
+        $(document).ready(function() {
+            const addProductBtn = document.getElementById('add-product');
 
-        // Object to store product quantities from the database.
-        let productStock = {}; 
+            // Object to store product quantities from the database.
+            let productStock = {};
 
-        // Populate productStock from your backend
-        const productData = <?php echo json_encode($products); ?>;
-        const serviceData = <?php echo json_encode($services); ?>;
-        
-        productData.forEach(product => {
-            productStock['product||' + product.id] = product.quantity;
-        });
+            // Populate productStock from your backend
+            const productData = <?php echo json_encode($products); ?>;
+            const serviceData = <?php echo json_encode($services); ?>;
 
-        serviceData.forEach(service => {
-            productStock['service||' + service.id] = service.quantity;
-        });
-
-        function initializeSelect2() {
-            // Destroy existing Select2 instances before reinitializing
-            $(".product-select").each(function() {
-                if ($(this).hasClass("select2-hidden-accessible")) {
-                    $(this).select2('destroy');
-                }
+            productData.forEach(product => {
+                productStock['product||' + product.id] = product.quantity;
             });
-            
-            $(".product-select").select2({
-                placeholder: "Select a product",
-                allowClear: true
-            }).off('change').on('change', function() {
-                let row = $(this).closest('tr');
-                let price = $(this).find(':selected').data('price');
-                row.find('input[name="price[]"]').val(price);
-                
-                // Trigger calculation for the row
-                calculateRow(row);
-                
-                // Validate after selection
+
+            serviceData.forEach(service => {
+                productStock['service||' + service.id] = service.quantity;
+            });
+
+            function initializeSelect2() {
+                // Destroy existing Select2 instances before reinitializing
+                $(".product-select").each(function() {
+                    if ($(this).hasClass("select2-hidden-accessible")) {
+                        $(this).select2('destroy');
+                    }
+                });
+
+                $(".product-select").select2({
+                    placeholder: "Select a product",
+                    allowClear: true
+                }).off('change').on('change', function() {
+                    let row = $(this).closest('tr');
+                    let selectedOption = $(this).find(':selected');
+                    let price = selectedOption.data('price');
+                    let selectedText = selectedOption.text();
+
+                    // Update placeholder to selected item name
+                    $(this).data('select2').$container.find('.select2-selection__placeholder').text(
+                        selectedText);
+
+                    // Update price field
+                    row.find('input[name="price[]"]').val(price);
+
+                    // Trigger calculation for the row
+                    calculateRow(row);
+
+                    // Validate after selection
+                    validateQuantities();
+                });
+            }
+
+            initializeSelect2();
+
+            function calculateRow(row) {
+                let quantity = parseFloat(row.find('input[name="quantity[]"]').val()) || 0;
+                let price = parseFloat(row.find('input[name="price[]"]').val()) || 0;
+                let discount = parseFloat(row.find('input[name="discount[]"]').val()) || 0;
+                let tax = parseFloat(row.find('input[name="tax[]"]').val()) || 0;
+
+                let amount = quantity * price;
+                let discountAmount = (amount * discount) / 100;
+                let taxableAmount = amount - discountAmount;
+                let taxAmount = (taxableAmount * tax) / 100;
+                let total = taxableAmount + taxAmount;
+
+                row.find('input[name="amount[]"]').val(amount.toFixed(2));
+                row.find('input[name="total[]"]').val(total.toFixed(2));
+
+                updateTotals();
+                validateQuantities();
+            }
+
+            function updateTotals() {
+                let subtotal = 0,
+                    totalDiscount = 0,
+                    totalTax = 0,
+                    grandTotal = 0;
+
+                $('#products-tbody tr').each(function() {
+                    let amount = parseFloat($(this).find('input[name="amount[]"]').val()) || 0;
+                    let discount = parseFloat($(this).find('input[name="discount[]"]').val()) || 0;
+                    let tax = parseFloat($(this).find('input[name="tax[]"]').val()) || 0;
+                    let total = parseFloat($(this).find('input[name="total[]"]').val()) || 0;
+
+                    subtotal += amount;
+                    totalDiscount += (amount * discount) / 100;
+                    totalTax += ((amount - (amount * discount) / 100) * tax) / 100;
+                    grandTotal += total;
+                });
+
+                $('#sub-total').text(subtotal.toFixed(2));
+                $('#discount-total').text(totalDiscount.toFixed(2));
+                $('#discount_total_amount').val(totalDiscount.toFixed(2));
+                $('#tax-total').text(totalTax.toFixed(2));
+                $('#tax_total_amount').val(totalTax.toFixed(2));
+                $('#order-total').text(grandTotal.toFixed(2));
+                $('#order_total_input').val(grandTotal.toFixed(2));
+            }
+
+            function validateQuantities() {
+                let isValid = true;
+                $('#products-tbody tr').each(function() {
+                    const row = $(this);
+                    const productId = row.find('.product-select').val();
+                    const quantityInput = row.find('input[name="quantity[]"]');
+                    const requestedQuantity = parseFloat(quantityInput.val());
+                    const availableStock = productStock[productId];
+
+                    if (productId && !isNaN(requestedQuantity)) {
+                        if (requestedQuantity > availableStock) {
+                            isValid = false;
+                            quantityInput.addClass('is-invalid');
+                        } else {
+                            quantityInput.removeClass('is-invalid');
+                        }
+                    }
+                });
+
+                $('#saveBtn').prop('disabled', !isValid);
+            }
+
+            // Event listener for quantity and other inputs - using event delegation
+            $('#products-tbody').on('input',
+                'input[name="quantity[]"], input[name="price[]"], input[name="discount[]"], input[name="tax[]"]',
+                function() {
+                    calculateRow($(this).closest('tr'));
+                });
+
+            // Event listener for removing a product row
+            $('#products-tbody').on('click', '.remove-product', function() {
+                $(this).closest('tr').remove();
+                updateTotals();
                 validateQuantities();
             });
-        }
 
-        initializeSelect2();
+            // Event listener for adding a new product row
+            if (addProductBtn) {
+                addProductBtn.addEventListener('click', function() {
+                    console.log("Add product button clicked");
+                    let newRow = `
+                <tr>
+                    <td>
+                        <select class="form-control product-select" name="products[]" required >
+                            <option hidden selected></option>
+                            <?php foreach($products as $product){ ?>
+                            <option value="product||<?php echo $product->id; ?>" data-price="<?php echo $product->cost; ?>"><?php echo $product->name; ?></option>
+                            <?php } ?>
+                            <?php foreach($services as $service){ ?>
+                            <option value="service||<?php echo $service->id; ?>" data-price="<?php echo $service->cost; ?>"><?php echo $service->name; ?></option>
+                            <?php } ?>
+                        </select>
+                        <textarea class="form-control w-100 mt-2" rows="3" name="note[]" placeholder="Notes"></textarea>
+                    </td>
+                    <td><input type="number" step="any" class="form-control" name="quantity[]" value="0" required></td>
+                    <td><input type="number" step="any" class="form-control" name="price[]" value="0" required></td>
+                    <td><input type="number" step="any" class="form-control" name="amount[]" value="0" readonly required></td>
+                    <td><input type="number" step="any" class="form-control" name="discount[]" value="0"></td>
+                    <td><input type="number" step="any" class="form-control" name="tax[]" value="0"></td>
+                    <td><input type="number" step="any" class="form-control" name="total[]" value="0" readonly></td>
+                    <td><i class="fa-solid fa-trash remove-product remove-append-item mx-2" style="cursor: pointer;"></i></td>
+                </tr>
+            `;
+                    $('#products-tbody').append(newRow);
 
-        function calculateRow(row) {
-            let quantity = parseFloat(row.find('input[name="quantity[]"]').val()) || 0;
-            let price = parseFloat(row.find('input[name="price[]"]').val()) || 0;
-            let discount = parseFloat(row.find('input[name="discount[]"]').val()) || 0;
-            let tax = parseFloat(row.find('input[name="tax[]"]').val()) || 0;
+                    // Reinitialize Select2 for the new row
+                    initializeSelect2();
 
-            let amount = quantity * price;
-            let discountAmount = (amount * discount) / 100;
-            let taxableAmount = amount - discountAmount;
-            let taxAmount = (taxableAmount * tax) / 100;
-            let total = taxableAmount + taxAmount;
+                    // Update totals after adding a new row
+                    updateTotals();
+                });
+            }
 
-            row.find('input[name="amount[]"]').val(amount.toFixed(2));
-            row.find('input[name="total[]"]').val(total.toFixed(2));
-
-            updateTotals();
-            validateQuantities();
-        }
-
-        function updateTotals() {
-            let subtotal = 0,
-                totalDiscount = 0,
-                totalTax = 0,
-                grandTotal = 0;
-
-            $('#products-tbody tr').each(function() {
-                let amount = parseFloat($(this).find('input[name="amount[]"]').val()) || 0;
-                let discount = parseFloat($(this).find('input[name="discount[]"]').val()) || 0;
-                let tax = parseFloat($(this).find('input[name="tax[]"]').val()) || 0;
-                let total = parseFloat($(this).find('input[name="total[]"]').val()) || 0;
-
-                subtotal += amount;
-                totalDiscount += (amount * discount) / 100;
-                totalTax += ((amount - (amount * discount) / 100) * tax) / 100;
-                grandTotal += total;
-            });
-
-            $('#sub-total').text(subtotal.toFixed(2));
-            $('#discount-total').text(totalDiscount.toFixed(2));
-            $('#discount_total_amount').val(totalDiscount.toFixed(2));
-            $('#tax-total').text(totalTax.toFixed(2));
-            $('#tax_total_amount').val(totalTax.toFixed(2));
-            $('#order-total').text(grandTotal.toFixed(2));
-            $('#order_total_input').val(grandTotal.toFixed(2));
-        }
-
-        function validateQuantities() {
-            let isValid = true;
-            $('#products-tbody tr').each(function() {
-                const row = $(this);
-                const productId = row.find('.product-select').val();
-                const quantityInput = row.find('input[name="quantity[]"]');
-                const requestedQuantity = parseFloat(quantityInput.val());
-                const availableStock = productStock[productId];
-                
-                if (productId && !isNaN(requestedQuantity)) {
-                    if (requestedQuantity > availableStock) {
-                        isValid = false;
-                        quantityInput.addClass('is-invalid');
-                    } else {
-                        quantityInput.removeClass('is-invalid');
-                    }
-                }
-            });
-
-            $('#saveBtn').prop('disabled', !isValid);
-        }
-
-        // Event listener for quantity and other inputs - using event delegation
-        $('#products-tbody').on('input',
-            'input[name="quantity[]"], input[name="price[]"], input[name="discount[]"], input[name="tax[]"]',
-            function() {
-                calculateRow($(this).closest('tr'));
-            });
-
-        // Event listener for removing a product row
-        $('#products-tbody').on('click', '.remove-product', function() {
-            $(this).closest('tr').remove();
-            updateTotals();
+            // Initial validation on page load
             validateQuantities();
         });
+    </script>
 
-        // Event listener for adding a new product row
-        if (addProductBtn) {
-            addProductBtn.addEventListener('click', function() {
-                console.log("Add product button clicked");
-                let newRow = `
-                    <tr>
-                        <td>
-                            <select class="form-control product-select" name="products[]" required>
-                                <option hidden selected></option>
-                                <?php foreach($products as $product){ ?>
-                                <option value="product||<?php echo $product->id; ?>" data-price="<?php echo $product->cost; ?>"><?php echo $product->name; ?></option>
-                                <?php } ?>
-                                <?php foreach($services as $service){ ?>
-                                <option value="service||<?php echo $service->id; ?>" data-price="<?php echo $service->cost; ?>"><?php echo $service->name; ?></option>
-                                <?php } ?>
-                            </select>
-                            <textarea class="form-control w-100 mt-2" rows="3" name="note[]" placeholder="Notes"></textarea>
-                        </td>
-                        <td><input type="number" step="any" class="form-control" name="quantity[]" value="0" required></td>
-                        <td><input type="number" step="any" class="form-control" name="price[]" value="0" required></td>
-                        <td><input type="number" step="any" class="form-control" name="amount[]" value="0" readonly required></td>
-                        <td><input type="number" step="any" class="form-control" name="discount[]" value="0"></td>
-                        <td><input type="number" step="any" class="form-control" name="tax[]" value="0"></td>
-                        <td><input type="number" step="any" class="form-control" name="total[]" value="0" readonly></td>
-                        <td><i class="fa-solid fa-trash remove-product remove-append-item mx-2" style="cursor: pointer;"></i></td>
-                    </tr>
-                `;
-                $('#products-tbody').append(newRow);
-                
-                // Reinitialize Select2 for the new row
-                initializeSelect2();
-                
-                // Update totals after adding a new row
-                updateTotals();
+    <script>
+        $(document).ready(function() {
+            let userRole = "{{ auth()->user()->role }}";
+            let userId = "{{ auth()->user()->id }}";
+
+            console.log("User Role:", userRole);
+            console.log("User ID:", userId);
+
+            function loadLeads(salesOwnerId) {
+                $.ajax({
+                    url: "{{ route('get.leads') }}",
+                    type: "GET",
+                    data: {
+                        sales_owner_id: salesOwnerId,
+                        role: userRole,
+                        user_id: userId
+                    },
+                    success: function(data) {
+                        console.log("Leads loaded:", data);
+                        // Corrected selector for the lead dropdown
+                        let $leadDropdown = $('select[name="lead"]');
+                        $leadDropdown.empty().append(
+                            '<option value="" disabled selected>Select Lead</option>');
+
+                        if (data.length > 0) {
+                            data.forEach(function(lead) {
+                                $leadDropdown.append('<option value="' + lead.id + '">' + lead
+                                    .title + '</option>');
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error("Error loading leads:", xhr.responseText);
+                    }
+                });
+            }
+
+            // If role = 3, load leads directly for the logged-in user
+            if (userRole == 3) {
+                loadLeads(userId);
+            }
+
+            // Corrected jQuery selector to target the dropdown with name="owner" for Role 2
+            $('select[name="sales_owner"]').on('change', function() {
+                let selectedOwnerId = $(this).val();
+                loadLeads(selectedOwnerId);
             });
-        }
-        
-        // Initial validation on page load
-        validateQuantities();
-    });
-</script>
+        });
+    </script>
 @endsection

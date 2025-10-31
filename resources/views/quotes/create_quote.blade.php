@@ -40,7 +40,7 @@ use App\Models\UserDetails;
                             </div>
 
                         </div>
-                       
+
                         <div class="col-12">
                             <div class="card-container">
                                 <!-- Basic Details Card -->
@@ -53,9 +53,6 @@ use App\Models\UserDetails;
 
 
                                                 @if (auth()->user()->role == 2)
-
-
-                                                
                                                     <!-- Role 2: Can choose any sales owner -->
                                                     <div class="col-12 col-md-4">
                                                         <label for="assign_user" class="form-label">Sales Owner</label>
@@ -64,15 +61,16 @@ use App\Models\UserDetails;
                                                             {{-- <option value="" selected disabled>Select Sales Owner
                                                             </option> --}}
                                                             @foreach ($owners as $owner)
-                                                                <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
+                                                                <option value="{{ $owner->user_id }}">{{ $owner->name }}
+                                                                </option>
                                                             @endforeach
                                                         </select>
-                                                        
+
                                                         <div id="owner-errors"></div>
-                                                      
+
                                                         {{-- <input type="hidden" name="sales_owner"
                                                             value=" {{$owner->id}}"> --}}
-                                                           
+
                                                     </div>
 
                                                     <div class="col-12 col-md-4">
@@ -86,7 +84,6 @@ use App\Models\UserDetails;
                                                         <div id="lead-errors"></div>
                                                     </div>
                                                 @elseif (auth()->user()->role == 3)
-                                                    
                                                     <div class="col-12 col-md-4">
                                                         <label for="assign_user" class="form-label">Sales Owner</label>
                                                         <select class="form-control" name="sales_owner" required selected>
@@ -94,22 +91,22 @@ use App\Models\UserDetails;
                                                                 {{ $authenticatedUser->name }}
                                                             </option>
                                                         </select>
-                                                       {{-- {{ $authenticatedUser->user_id }} --}}
-                                                                {{-- <option value="{{ $authenticatedUser->id }}"
+                                                        {{-- {{ $authenticatedUser->user_id }} --}}
+                                                        {{-- <option value="{{ $authenticatedUser->id }}"
                                                                     {{ auth()->user()->id == $authenticatedUser->id ? 'selected' : '' }}>
                                                                     {{ $authenticatedUser->name }}
 
                                                                 </option> --}}
-                                                            
 
-                                                            
+
+
                                                         {{-- </select> --}}
-                                                        
+
                                                         {{-- <input type="hidden" name="sales_owner"
                                                             value=" {{$owner->id}}"> --}}
 
-                                                            
-                                                            
+
+
                                                     </div>
 
                                                     <div class="col-12 col-md-4">
@@ -215,8 +212,8 @@ use App\Models\UserDetails;
                                         <div class="row g-4">
                                             <div class="col-12 col-md-4">
                                                 <label for="No" class="form-label">Address</label>
-                                                <input type="text" class="form-control" id="No"
-                                                    placeholder="No" name="address" required>
+                                                <input type="text" class="form-control" id="No" placeholder="No"
+                                                    name="address" required>
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="Province" class="form-label">Province</label>
@@ -810,174 +807,182 @@ use App\Models\UserDetails;
             @endif
         });
     </script>
-<script>
-    $(document).ready(function() {
-        const addProductBtn = document.getElementById('add-product');
+    <script>
+        $(document).ready(function() {
+            const addProductBtn = document.getElementById('add-product');
 
-        // Object to store product quantities from the database.
-        let productStock = {}; 
+            // Object to store product quantities from the database.
+            let productStock = {};
 
-        // Populate productStock from your backend
-        const productData = <?php echo json_encode($products); ?>;
-        const serviceData = <?php echo json_encode($services); ?>;
-        
-        productData.forEach(product => {
-            productStock['product||' + product.id] = product.quantity;
-        });
+            // Populate productStock from your backend
+            const productData = <?php echo json_encode($products); ?>;
+            const serviceData = <?php echo json_encode($services); ?>;
 
-        serviceData.forEach(service => {
-            productStock['service||' + service.id] = service.quantity;
-        });
-
-        function initializeSelect2() {
-            // Destroy existing Select2 instances before reinitializing
-            $(".product-select").each(function() {
-                if ($(this).hasClass("select2-hidden-accessible")) {
-                    $(this).select2('destroy');
-                }
+            productData.forEach(product => {
+                productStock['product||' + product.id] = product.quantity;
             });
-            
-            $(".product-select").select2({
-                placeholder: "Select a product",
-                allowClear: true
-            }).off('change').on('change', function() {
-                let row = $(this).closest('tr');
-                let price = $(this).find(':selected').data('price');
-                row.find('input[name="price[]"]').val(price);
-                
-                // Trigger calculation for the row
-                calculateRow(row);
-                
-                // Validate after selection
+
+            serviceData.forEach(service => {
+                productStock['service||' + service.id] = service.quantity;
+            });
+
+            function initializeSelect2() {
+                // Destroy existing Select2 instances before reinitializing
+                $(".product-select").each(function() {
+                    if ($(this).hasClass("select2-hidden-accessible")) {
+                        $(this).select2('destroy');
+                    }
+                });
+
+                $(".product-select").select2({
+                    placeholder: "Select a product",
+                    allowClear: true
+                }).off('change').on('change', function() {
+                    let row = $(this).closest('tr');
+                    let selectedOption = $(this).find(':selected');
+                    let price = selectedOption.data('price');
+                    let selectedText = selectedOption.text();
+
+                    // Update placeholder to selected item name
+                    $(this).data('select2').$container.find('.select2-selection__placeholder').text(
+                        selectedText);
+
+                    // Update price field
+                    row.find('input[name="price[]"]').val(price);
+
+                    // Trigger calculation for the row
+                    calculateRow(row);
+
+                    // Validate after selection
+                    validateQuantities();
+                });
+            }
+
+            initializeSelect2();
+
+            function calculateRow(row) {
+                let quantity = parseFloat(row.find('input[name="quantity[]"]').val()) || 0;
+                let price = parseFloat(row.find('input[name="price[]"]').val()) || 0;
+                let discount = parseFloat(row.find('input[name="discount[]"]').val()) || 0;
+                let tax = parseFloat(row.find('input[name="tax[]"]').val()) || 0;
+
+                let amount = quantity * price;
+                let discountAmount = (amount * discount) / 100;
+                let taxableAmount = amount - discountAmount;
+                let taxAmount = (taxableAmount * tax) / 100;
+                let total = taxableAmount + taxAmount;
+
+                row.find('input[name="amount[]"]').val(amount.toFixed(2));
+                row.find('input[name="total[]"]').val(total.toFixed(2));
+
+                updateTotals();
+                validateQuantities();
+            }
+
+            function updateTotals() {
+                let subtotal = 0,
+                    totalDiscount = 0,
+                    totalTax = 0,
+                    grandTotal = 0;
+
+                $('#products-tbody tr').each(function() {
+                    let amount = parseFloat($(this).find('input[name="amount[]"]').val()) || 0;
+                    let discount = parseFloat($(this).find('input[name="discount[]"]').val()) || 0;
+                    let tax = parseFloat($(this).find('input[name="tax[]"]').val()) || 0;
+                    let total = parseFloat($(this).find('input[name="total[]"]').val()) || 0;
+
+                    subtotal += amount;
+                    totalDiscount += (amount * discount) / 100;
+                    totalTax += ((amount - (amount * discount) / 100) * tax) / 100;
+                    grandTotal += total;
+                });
+
+                $('#sub-total').text(subtotal.toFixed(2));
+                $('#discount-total').text(totalDiscount.toFixed(2));
+                $('#discount_total_amount').val(totalDiscount.toFixed(2));
+                $('#tax-total').text(totalTax.toFixed(2));
+                $('#tax_total_amount').val(totalTax.toFixed(2));
+                $('#order-total').text(grandTotal.toFixed(2));
+                $('#order_total_input').val(grandTotal.toFixed(2));
+            }
+
+            function validateQuantities() {
+                let isValid = true;
+                $('#products-tbody tr').each(function() {
+                    const row = $(this);
+                    const productId = row.find('.product-select').val();
+                    const quantityInput = row.find('input[name="quantity[]"]');
+                    const requestedQuantity = parseFloat(quantityInput.val());
+                    const availableStock = productStock[productId];
+
+                    if (productId && !isNaN(requestedQuantity)) {
+                        if (requestedQuantity > availableStock) {
+                            isValid = false;
+                            quantityInput.addClass('is-invalid');
+                        } else {
+                            quantityInput.removeClass('is-invalid');
+                        }
+                    }
+                });
+
+                $('#saveBtn').prop('disabled', !isValid);
+            }
+
+            // Event listener for quantity and other inputs - using event delegation
+            $('#products-tbody').on('input',
+                'input[name="quantity[]"], input[name="price[]"], input[name="discount[]"], input[name="tax[]"]',
+                function() {
+                    calculateRow($(this).closest('tr'));
+                });
+
+            // Event listener for removing a product row
+            $('#products-tbody').on('click', '.remove-product', function() {
+                $(this).closest('tr').remove();
+                updateTotals();
                 validateQuantities();
             });
-        }
 
-        initializeSelect2();
+            // Event listener for adding a new product row
+            if (addProductBtn) {
+                addProductBtn.addEventListener('click', function() {
+                    console.log("Add product button clicked");
+                    let newRow = `
+                <tr>
+                    <td>
+                        <select class="form-control product-select" name="products[]" required>
+                            <option hidden selected></option>
+                            <?php foreach($products as $product){ ?>
+                            <option value="product||<?php echo $product->id; ?>" data-price="<?php echo $product->cost; ?>"><?php echo $product->name; ?></option>
+                            <?php } ?>
+                            <?php foreach($services as $service){ ?>
+                            <option value="service||<?php echo $service->id; ?>" data-price="<?php echo $service->cost; ?>"><?php echo $service->name; ?></option>
+                            <?php } ?>
+                        </select>
+                        <textarea class="form-control w-100 mt-2" rows="3" name="note[]" placeholder="Notes"></textarea>
+                    </td>
+                    <td><input type="number" step="any" class="form-control" name="quantity[]" value="0" required></td>
+                    <td><input type="number" step="any" class="form-control" name="price[]" value="0" required></td>
+                    <td><input type="number" step="any" class="form-control" name="amount[]" value="0" readonly required></td>
+                    <td><input type="number" step="any" class="form-control" name="discount[]" value="0"></td>
+                    <td><input type="number" step="any" class="form-control" name="tax[]" value="0"></td>
+                    <td><input type="number" step="any" class="form-control" name="total[]" value="0" readonly></td>
+                    <td><i class="fa-solid fa-trash remove-product remove-append-item mx-2" style="cursor: pointer;"></i></td>
+                </tr>
+            `;
+                    $('#products-tbody').append(newRow);
 
-        function calculateRow(row) {
-            let quantity = parseFloat(row.find('input[name="quantity[]"]').val()) || 0;
-            let price = parseFloat(row.find('input[name="price[]"]').val()) || 0;
-            let discount = parseFloat(row.find('input[name="discount[]"]').val()) || 0;
-            let tax = parseFloat(row.find('input[name="tax[]"]').val()) || 0;
+                    // Reinitialize Select2 for the new row
+                    initializeSelect2();
 
-            let amount = quantity * price;
-            let discountAmount = (amount * discount) / 100;
-            let taxableAmount = amount - discountAmount;
-            let taxAmount = (taxableAmount * tax) / 100;
-            let total = taxableAmount + taxAmount;
+                    // Update totals after adding a new row
+                    updateTotals();
+                });
+            }
 
-            row.find('input[name="amount[]"]').val(amount.toFixed(2));
-            row.find('input[name="total[]"]').val(total.toFixed(2));
-
-            updateTotals();
-            validateQuantities();
-        }
-
-        function updateTotals() {
-            let subtotal = 0,
-                totalDiscount = 0,
-                totalTax = 0,
-                grandTotal = 0;
-
-            $('#products-tbody tr').each(function() {
-                let amount = parseFloat($(this).find('input[name="amount[]"]').val()) || 0;
-                let discount = parseFloat($(this).find('input[name="discount[]"]').val()) || 0;
-                let tax = parseFloat($(this).find('input[name="tax[]"]').val()) || 0;
-                let total = parseFloat($(this).find('input[name="total[]"]').val()) || 0;
-
-                subtotal += amount;
-                totalDiscount += (amount * discount) / 100;
-                totalTax += ((amount - (amount * discount) / 100) * tax) / 100;
-                grandTotal += total;
-            });
-
-            $('#sub-total').text(subtotal.toFixed(2));
-            $('#discount-total').text(totalDiscount.toFixed(2));
-            $('#discount_total_amount').val(totalDiscount.toFixed(2));
-            $('#tax-total').text(totalTax.toFixed(2));
-            $('#tax_total_amount').val(totalTax.toFixed(2));
-            $('#order-total').text(grandTotal.toFixed(2));
-            $('#order_total_input').val(grandTotal.toFixed(2));
-        }
-
-        function validateQuantities() {
-            let isValid = true;
-            $('#products-tbody tr').each(function() {
-                const row = $(this);
-                const productId = row.find('.product-select').val();
-                const quantityInput = row.find('input[name="quantity[]"]');
-                const requestedQuantity = parseFloat(quantityInput.val());
-                const availableStock = productStock[productId];
-                
-                if (productId && !isNaN(requestedQuantity)) {
-                    if (requestedQuantity > availableStock) {
-                        isValid = false;
-                        quantityInput.addClass('is-invalid');
-                    } else {
-                        quantityInput.removeClass('is-invalid');
-                    }
-                }
-            });
-
-            $('#saveBtn').prop('disabled', !isValid);
-        }
-
-        // Event listener for quantity and other inputs - using event delegation
-        $('#products-tbody').on('input',
-            'input[name="quantity[]"], input[name="price[]"], input[name="discount[]"], input[name="tax[]"]',
-            function() {
-                calculateRow($(this).closest('tr'));
-            });
-
-        // Event listener for removing a product row
-        $('#products-tbody').on('click', '.remove-product', function() {
-            $(this).closest('tr').remove();
-            updateTotals();
+            // Initial validation on page load
             validateQuantities();
         });
-
-        // Event listener for adding a new product row
-        if (addProductBtn) {
-            addProductBtn.addEventListener('click', function() {
-                console.log("Add product button clicked");
-                let newRow = `
-                    <tr>
-                        <td>
-                            <select class="form-control product-select" name="products[]" required>
-                                <option hidden selected></option>
-                                <?php foreach($products as $product){ ?>
-                                <option value="product||<?php echo $product->id; ?>" data-price="<?php echo $product->cost; ?>"><?php echo $product->name; ?></option>
-                                <?php } ?>
-                                <?php foreach($services as $service){ ?>
-                                <option value="service||<?php echo $service->id; ?>" data-price="<?php echo $service->cost; ?>"><?php echo $service->name; ?></option>
-                                <?php } ?>
-                            </select>
-                            <textarea class="form-control w-100 mt-2" rows="3" name="note[]" placeholder="Notes"></textarea>
-                        </td>
-                        <td><input type="number" step="any" class="form-control" name="quantity[]" value="0" required></td>
-                        <td><input type="number" step="any" class="form-control" name="price[]" value="0" required></td>
-                        <td><input type="number" step="any" class="form-control" name="amount[]" value="0" readonly required></td>
-                        <td><input type="number" step="any" class="form-control" name="discount[]" value="0"></td>
-                        <td><input type="number" step="any" class="form-control" name="tax[]" value="0"></td>
-                        <td><input type="number" step="any" class="form-control" name="total[]" value="0" readonly></td>
-                        <td><i class="fa-solid fa-trash remove-product remove-append-item mx-2" style="cursor: pointer;"></i></td>
-                    </tr>
-                `;
-                $('#products-tbody').append(newRow);
-                
-                // Reinitialize Select2 for the new row
-                initializeSelect2();
-                
-                // Update totals after adding a new row
-                updateTotals();
-            });
-        }
-        
-        // Initial validation on page load
-        validateQuantities();
-    });
-</script>
+    </script>
 
     <script>
         $(document).ready(function() {

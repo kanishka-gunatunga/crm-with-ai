@@ -935,11 +935,11 @@
                         value: "lead-stage-change",
                         type: "checkbox"
                     },
-                    {
-                        label: "Lead Assignment to Own",
-                        value: "lead-assignment",
-                        type: "checkbox"
-                    },
+                    // {
+                    //     label: "Lead Assignment to Own",
+                    //     value: "lead-assignment",
+                    //     type: "checkbox"
+                    // },
                     
 
                     {
@@ -958,31 +958,31 @@
 
                             },
 
-                            {
-                                label: "Activity",
-                                value: "add-lead-activity",
-                                type: "checkbox",
+                            // {
+                            //     label: "Activity",
+                            //     value: "add-lead-activity",
+                            //     type: "checkbox",
 
-                            },
+                            // },
 
-                            {
-                                label: "Email",
-                                value: "add-lead-email",
-                                type: "checkbox",
+                            // {
+                            //     label: "Email",
+                            //     value: "add-lead-email",
+                            //     type: "checkbox",
 
-                            },
+                            // },
                             {
                                 label: "File",
                                 value: "add-lead-file",
                                 type: "checkbox",
 
                             },
-                            {
-                                label: "Quote",
-                                value: "add-lead-quote",
-                                type: "checkbox",
+                            // {
+                            //     label: "Quote",
+                            //     value: "add-lead-quote",
+                            //     type: "checkbox",
 
-                            }
+                            // }
                         ]
                     },
                     {
@@ -996,31 +996,31 @@
 
                             },
 
-                            {
-                                label: "Activity",
-                                value: "show-lead-activity",
-                                type: "checkbox",
+                            // {
+                            //     label: "Activity",
+                            //     value: "show-lead-activity",
+                            //     type: "checkbox",
 
-                            },
+                            // },
 
-                            {
-                                label: "Email",
-                                value: "show-lead-email",
-                                type: "checkbox",
+                            // {
+                            //     label: "Email",
+                            //     value: "show-lead-email",
+                            //     type: "checkbox",
 
-                            },
+                            // },
                             {
                                 label: "File",
                                 value: "show-lead-file",
                                 type: "checkbox",
 
                             },
-                            {
-                                label: "Quote",
-                                value: "show-lead-quote",
-                                type: "checkbox",
+                            // {
+                            //     label: "Quote",
+                            //     value: "show-lead-quote",
+                            //     type: "checkbox",
 
-                            },
+                            // },
                         ]
                     },
 

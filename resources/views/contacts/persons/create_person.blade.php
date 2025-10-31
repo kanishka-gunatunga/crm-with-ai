@@ -61,7 +61,7 @@
                                             <div class="col-12 col-md-4">
                                                 <label for="field1" class="form-label">Date of Birth</label>
                                                 <input type="date" class="form-control" id="field1" placeholder="Name"
-                                                    name="dob" value="{{ old('dob') }}" required>
+                                                    name="dob" value="{{ old('dob') }}">
                                                 @if ($errors->has('dob'))
                                                     <div class="alert alert-danger mt-2">{{ $errors->first('dob') }}</div>
                                                 @endif

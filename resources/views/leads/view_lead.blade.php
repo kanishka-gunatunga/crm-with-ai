@@ -438,7 +438,7 @@ $permissions = session('user_permissions');
                                         {{-- <button type="submit" class="btn btn-info">{{ __('app.leads.save') }}</button> --}}
                                     </form>
                                 </div>
-                                <div class="tab-pane fade" id="email-tab" role="tabpanel"
+                                {{-- <div class="tab-pane fade" id="email-tab" role="tabpanel"
                                     aria-labelledby="email-tab-tab" tabindex="0">
                                     <form action="{{ url('add-lead-email/' . $lead->id . '') }}" method="post"
                                         enctype="multipart/form-data" data-parsley-validate>
@@ -460,13 +460,7 @@ $permissions = session('user_permissions');
                                                         </div>
 
                                                     </div>
-                                                    {{-- <div class="col-md-4 mb-3">
-                                                    <label for="firstNameinput" class="form-label">ggg</label>
-                                                    <select class="form-control tagselect" name="cc[]"
-                                                        multiple="multiple"></select>
-                                                </div> --}}
-
-
+                                                    
 
                                                     <div class="col-md-4 mb-3 cc-input d-none">
 
@@ -500,8 +494,7 @@ $permissions = session('user_permissions');
                                                     <label for="field5" class="form-label">Description</label>
 
                                                     <textarea class="summernoteNormal" id="summernote" name="body"></textarea>
-                                                    {{-- <div id="froala-editor" rows="5"
-                                                        name="body" required></div> --}}
+                                                   
                                                 </div>
 
 
@@ -530,7 +523,7 @@ $permissions = session('user_permissions');
 
                                         </div>
                                     </form>
-                                </div>
+                                </div> --}}
                                 <div class="tab-pane fade" id="file-tab" role="tabpanel" aria-labelledby="file-tab-tab"
                                     tabindex="0">
                                     <form action="{{ url('add-lead-file/' . $lead->id . '') }}" method="post"
@@ -724,7 +717,7 @@ $permissions = session('user_permissions');
                                                     </button>
                                                 </li>
 
-                                                <li class="nav-item stroke-nav-item w-100" role="presentation">
+                                                {{-- <li class="nav-item stroke-nav-item w-100" role="presentation">
                                                     <button class="nav-link filter-button" id="email-tab-tab"
                                                         data-bs-toggle="pill" data-bs-target="#email-tab" type="button"
                                                         role="tab" aria-controls="email-tab" aria-selected="false">
@@ -742,7 +735,7 @@ $permissions = session('user_permissions');
                                                             </div>
                                                         </div>
                                                     </button>
-                                                </li>
+                                                </li> --}}
 
                                                 <li class="nav-item stroke-nav-item w-100" role="presentation">
                                                     <button class="nav-link filter-button" id="file-tab-tab"
@@ -1160,7 +1153,7 @@ $permissions = session('user_permissions');
 
 
                                     {{-- email --}}
-                                    @if (in_array(strtolower('show-lead-email'), array_map('strtolower', $permissions)))
+                                    {{-- @if (in_array(strtolower('show-lead-email'), array_map('strtolower', $permissions)))
                                         @if ($lead_emails->isEmpty())
                                         @else
                                             <div>
@@ -1229,7 +1222,7 @@ $permissions = session('user_permissions');
 
                                             </div>
                                         @endif
-                                    @endif
+                                    @endif --}}
 
                                     {{-- Files --}}
                                     @if (in_array(strtolower('show-lead-file'), array_map('strtolower', $permissions)))
@@ -1700,9 +1693,9 @@ $permissions = session('user_permissions');
 
 
 
-                                <div class="tab-pane fade" id="events-email" role="tabpanel"
+                                {{-- <div class="tab-pane fade" id="events-email" role="tabpanel"
                                     aria-labelledby="email-tab-tab" tabindex="0">
-                                    {{-- email --}}
+                                    
                                     @if ($lead_emails->isEmpty())
                                         <p>No emails found.</p>
                                     @elseif (in_array(strtolower('show-lead-mail'), array_map('strtolower', $permissions)))
@@ -1773,7 +1766,7 @@ $permissions = session('user_permissions');
                                     @else
                                         <p>Unauthorized</p>
                                     @endif
-                                </div>
+                                </div> --}}
 
 
 
@@ -2167,7 +2160,7 @@ $permissions = session('user_permissions');
                                                     </div>
                                                 </button>
                                             </li>
-                                            <li class="nav-item w-100 email-stroke-nav-item" role="presentation">
+                                            {{-- <li class="nav-item w-100 email-stroke-nav-item" role="presentation">
                                                 <button class="nav-link filter-button" id="events-email-tab"
                                                     data-bs-toggle="pill" data-bs-target="#events-email"
                                                     type="button" role="tab" aria-controls="email2"
@@ -2186,7 +2179,7 @@ $permissions = session('user_permissions');
                                                         </div>
                                                     </div>
                                                 </button>
-                                            </li>
+                                            </li> --}}
                                             <li class="nav-item w-100 email-stroke-nav-item" role="presentation">
                                                 <button class="nav-link filter-button" id="events-file-tab"
                                                     data-bs-toggle="pill" data-bs-target="#events-files"
