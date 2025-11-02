@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attribute;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
@@ -71,7 +72,9 @@ class OrganizationsController extends Controller
 
         if (in_array(strtolower('create-organizations'), array_map('strtolower', $permissions))) {
             if ($request->isMethod('get')) {
-                return view('contacts.organizations.create_organization');
+
+                $organizationAttributes = Attribute::where('entity_type', 'organization')->get();
+                return view('contacts.organizations.create_organization', ['organizationAttributes' => $organizationAttributes]);
             }
             if ($request->isMethod('post')) {
                 $request->validate([
@@ -80,6 +83,14 @@ class OrganizationsController extends Controller
                     'email_types.*' => 'required|in:work,home',
                 ]);
 
+
+                $organizationAttributes = Attribute::where('entity_type', 'organization')->get();
+                $attributeData = [];
+
+                foreach ($organizationAttributes as $attribute) {
+                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                }
+
                 $organization = new Organization();
                 $organization->name = $request->name;
                 $organization->address = $request->address;
@@ -87,6 +98,7 @@ class OrganizationsController extends Controller
                 $organization->state = $request->state;
                 $organization->city = $request->city;
                 $organization->post_code = $request->post_code;
+                $organization->custom_attributes = json_encode($attributeData);
 
                 if ($request->has('emails')) {
                     $emails = [];
@@ -133,7 +145,11 @@ class OrganizationsController extends Controller
             $organization = Organization::findOrFail($id);
 
             if ($request->isMethod('get')) {
-                return view('contacts.organizations.edit_organization', ['organization' => $organization]);
+
+                $organizationAttributes = Attribute::where('entity_type', 'organization')->get();
+                // Decode saved JSON data (if any)
+                $customAttributes = json_decode($organization->custom_attributes, true) ?? [];
+                return view('contacts.organizations.edit_organization', ['organization' => $organization, 'organizationAttributes' => $organizationAttributes, 'customAttributes' => $customAttributes]);
             }
             if ($request->isMethod('post')) {
                 $request->validate([
@@ -142,12 +158,21 @@ class OrganizationsController extends Controller
                     'email_types.*' => 'required|in:work,home',
                 ]);
 
+                $organizationAttributes = Attribute::where('entity_type', 'organization')->get();
+
+                // Gather dynamic field values again
+                $attributeData = [];
+                foreach ($organizationAttributes as $attribute) {
+                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                }
+
                 $organization->name = $request->name;
                 $organization->address = $request->address;
                 $organization->country = $request->country;
                 $organization->state = $request->state;
                 $organization->city = $request->city;
                 $organization->post_code = $request->post_code;
+                $organization->custom_attributes = json_encode($attributeData);
 
                 if ($request->has('emails')) {
                     $emails = [];

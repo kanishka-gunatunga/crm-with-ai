@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attribute;
 use App\Models\Lead;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Renderable;
@@ -80,7 +81,8 @@ class PersonsController extends Controller
         if (in_array(strtolower('create-persons'), array_map('strtolower', $permissions))) {
             if ($request->isMethod('get')) {
                 $organizations = Organization::get();
-                return view('contacts.persons.create_person', ['organizations' => $organizations]);
+                $personAttributes = Attribute::where('entity_type', 'person')->get();
+                return view('contacts.persons.create_person', ['organizations' => $organizations, 'personAttributes' => $personAttributes]);
             }
             if ($request->isMethod('post')) {
                 $request->validate([
@@ -90,6 +92,13 @@ class PersonsController extends Controller
                     'email_types.*' => 'required|in:work,home',
                     'number_types.*' => 'required|in:work,home',
                 ]);
+
+                $personAttributes = Attribute::where('entity_type', 'person')->get();
+                $attributeData = [];
+
+                foreach ($personAttributes as $attribute) {
+                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                }
                 $file_name = null;
                 if ($request->picture) {
                     $file_name = time() . '-.' . $request->picture->extension();
@@ -128,6 +137,8 @@ class PersonsController extends Controller
 
                     $person->contact_numbers = $contactNumbers;
                 }
+
+                $person->custom_attributes = json_encode($attributeData);
 
                 $person->save();
 
@@ -180,7 +191,10 @@ class PersonsController extends Controller
 
             if ($request->isMethod('get')) {
                 $organizations = Organization::get();
-                return view('contacts.persons.edit_person', ['person' => $person, 'organizations' => $organizations]);
+                $personAttributes = Attribute::where('entity_type', 'person')->get();
+                // Decode saved JSON data (if any)
+                $customValues = json_decode($person->custom_attributes, true) ?? [];
+                return view('contacts.persons.edit_person', ['person' => $person, 'organizations' => $organizations, 'personAttributes' => $personAttributes, 'customValues' => $customValues]);
             }
             if ($request->isMethod('post')) {
                 $request->validate([
@@ -222,6 +236,16 @@ class PersonsController extends Controller
                     }
                     $person->contact_numbers = $contactNumbers;
                 }
+
+                $personAttributes = Attribute::where('entity_type', 'person')->get();
+
+                // Gather dynamic field values again
+                $attributeData = [];
+                foreach ($personAttributes as $attribute) {
+                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                }
+
+                $person->custom_attributes = json_encode($attributeData);
 
                 $person->save();
 

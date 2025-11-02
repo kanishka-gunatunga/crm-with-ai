@@ -35,6 +35,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 
 use App\Mail\LeadSendEmail;
+use App\Models\Attribute;
 use Carbon\Carbon;
 use File;
 use Illuminate\Support\Arr;
@@ -138,6 +139,7 @@ class LeadController extends Controller
             $services = Service::get();
             $pipelines = Pipeline::get();
             $stages = PipelineStage::where('pipeline_id', $id)->get();
+            $leadAttributes = Attribute::where('entity_type', 'lead')->get();
             return view('leads.create_lead', [
                 'sources' => $sources,
                 'types' => $types,
@@ -147,7 +149,8 @@ class LeadController extends Controller
                 'products' => $products,
                 'services' => $services,
                 'pipelines' => $pipelines,
-                'stages' => $stages
+                'stages' => $stages,
+                'leadAttributes' => $leadAttributes,
             ]);
         }
         if ($request->isMethod('post')) {
@@ -162,6 +165,12 @@ class LeadController extends Controller
 
             // ]);
             $permissions = session('user_permissions', []);
+            $leadAttributes = Attribute::where('entity_type', 'lead')->get();
+            $attributeData = [];
+
+            foreach ($leadAttributes as $attribute) {
+                $attributeData[$attribute->code] = $request->input($attribute->code);
+            }
 
             // if (in_array(strtolower('lead-create'), array_map('strtolower', $permissions))) {
             $request->validate([
@@ -250,6 +259,7 @@ class LeadController extends Controller
             // $lead->stage = $request->stage;
             $lead->stage = '1';
             $lead->person = $person->id;
+            $lead->custom_attributes = json_encode($attributeData);
             $lead->save();
 
             // Product logic (unchanged)
@@ -314,6 +324,9 @@ class LeadController extends Controller
                 $lead_products = LeadProduct::where('lead_id', $id)->get();
                 $pipelines = Pipeline::get();
                 $stages = PipelineStage::where('pipeline_id', $lead->pipeline)->get();
+                $leadAttributes = Attribute::where('entity_type', 'lead')->get();
+                // Decode saved JSON data (if any)
+                $customValues = json_decode($lead->custom_attributes, true) ?? [];
 
                 return view('leads.edit_lead', [
                     'sources' => $sources,
@@ -326,7 +339,9 @@ class LeadController extends Controller
                     'lead_products' => $lead_products,
                     'services' => $services,
                     'pipelines' => $pipelines,
-                    'stages' => $stages
+                    'stages' => $stages,
+                    'leadAttributes' => $leadAttributes,
+                    'customValues' => $customValues,
                 ]);
             }
             if ($request->isMethod('post')) {
@@ -403,6 +418,13 @@ class LeadController extends Controller
                     $person->save();
                 }
 
+                $leadAttributes = Attribute::where('entity_type', 'lead')->get();
+
+                // Gather dynamic field values again
+                $attributeData = [];
+                foreach ($leadAttributes as $attribute) {
+                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                }
                 $lead->title = $request->title;
                 $lead->lead_value = $request->lead_value;
                 $lead->source = $request->source;
@@ -415,6 +437,7 @@ class LeadController extends Controller
                 $lead->person = $person->id;
                 $lead->pipeline = $request->pipeline;
                 $lead->stage = $request->stage;
+                $lead->custom_attributes = json_encode($attributeData);
                 $lead->update();
 
                 LeadProduct::where('lead_id', $id)->delete();

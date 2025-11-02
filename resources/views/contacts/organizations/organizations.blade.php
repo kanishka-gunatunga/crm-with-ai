@@ -207,6 +207,7 @@ $permissions = session('user_permissions');
                                                     <th>{{ __('app.datagrid.name') }}</th>
                                                     <th>{{ __('app.datagrid.persons_count') }}</th>
                                                     <th>{{ __('app.datagrid.created_at') }}</th>
+                                                    <th>Additional Fields</th>
                                                     <th>{{ __('app.leads.actions') }}</th>
                                                 </tr>
                                             </thead>
@@ -224,6 +225,7 @@ $permissions = session('user_permissions');
                                                             href="{{ url('persons?organization=' . $organization->id) }}">{{ number_format($person_count) }}</a>
                                                     </td>
                                                     <td class="">{{ $organization->created_at }} </td>
+                                                    <td class="">{{ $organization->custom_attributes }}</td>
 
                                                     <td class="action-icons d-flex gx-3">
 

@@ -212,6 +212,7 @@ $permissions = session('user_permissions');
                                                             <th>{{ __('app.datagrid.email') }}</th>
                                                             <th>{{ __('app.datagrid.contact_numbers') }}</th>
                                                             <th>{{ __('app.datagrid.organization_name') }}</th>
+                                                            <th>additional_fields</th>
                                                             <th>{{ __('app.leads.actions') }}</th>
                                                         </tr>
                                                     </thead>
@@ -261,6 +262,7 @@ $permissions = session('user_permissions');
                                                                     href="{{ url('organizations?id=' . $person->organization) }}">
                                                                     {{ Organization::where('id', $person->organization)->value('name') ?? '-' }}</a>
                                                             </td>
+                                                            <td>{{ $person->custom_attributes }}</td>
 
                                                             <td class="action-icons d-flex gx-3">
 

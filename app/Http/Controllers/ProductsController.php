@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attribute;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
@@ -61,7 +62,8 @@ class ProductsController extends Controller
 
         if (in_array(strtolower('create-products'), array_map('strtolower', $permissions))) {
             if ($request->isMethod('get')) {
-                return view('products.create_product');
+                $productAttributes = Attribute::where('entity_type', 'product')->get();
+                return view('products.create_product', ['productAttributes' => $productAttributes]);
             }
             if ($request->isMethod('post')) {
 
@@ -72,12 +74,20 @@ class ProductsController extends Controller
                     'cost' => 'required',
                 ]);
 
+                $productAttributes = Attribute::where('entity_type', 'product')->get();
+                $attributeData = [];
+
+                foreach ($productAttributes as $attribute) {
+                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                }
+
                 $product = new Product();
                 $product->name = $request->name;
                 $product->sku = $request->sku;
                 $product->quantity = $request->quantity;
                 $product->cost = $request->cost;
                 $product->description = $request->description;
+                $product->custom_attributes = json_encode($attributeData);
                 $product->save();
 
                 return redirect()->back()->with('success', 'Product created successfully!');
@@ -111,7 +121,10 @@ class ProductsController extends Controller
             $product = Product::findOrFail($id);
 
             if ($request->isMethod('get')) {
-                return view('products.edit_product', ['product' => $product]);
+                $productAttributes = Attribute::where('entity_type', 'product')->get();
+                // Decode saved JSON data (if any)
+                $customValues = json_decode($product->custom_attributes, true) ?? [];
+                return view('products.edit_product', ['product' => $product, 'productAttributes' => $productAttributes, 'customValues' => $customValues]);
             }
             if ($request->isMethod('post')) {
                 $request->validate([
@@ -120,12 +133,20 @@ class ProductsController extends Controller
                     'email_types.*' => 'required|in:work,home',
                 ]);
 
+                $productAttributes = Attribute::where('entity_type', 'product')->get();
+
+                // Gather dynamic field values again
+                $attributeData = [];
+                foreach ($productAttributes as $attribute) {
+                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                }
+
                 $product->name = $request->name;
                 $product->sku = $request->sku;
                 $product->quantity = $request->quantity;
                 $product->cost = $request->cost;
                 $product->description = $request->description;
-
+                $product->custom_attributes = json_encode($attributeData);
                 $product->update();
 
                 return redirect()->back()->with('success', 'Product updated successfully!');

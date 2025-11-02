@@ -79,6 +79,125 @@
                                 </div>
 
 
+                                @if ($productAttributes->isNotEmpty())
+                                    <div class="card card-default mt-3">
+                                        <div class="card-body">
+                                            @foreach ($productAttributes as $attribute)
+                                                <div class="mb-3">
+                                                    <label>{{ $attribute->name }}</label>
+
+                                                    @php
+                                                        $value = $customValues[$attribute->code] ?? '';
+                                                        $options = $attribute->options
+                                                            ? json_decode($attribute->options, true)
+                                                            : [];
+                                                    @endphp
+
+                                                    @if ($attribute->type == 'text')
+                                                        <input type="text" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @elseif ($attribute->type == 'email')
+                                                        <input type="email" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @elseif ($attribute->type == 'textarea')
+                                                        <textarea name="{{ $attribute->code }}" class="form-control"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>{{ $value }}</textarea>
+                                                    @elseif ($attribute->type == 'number' || $attribute->type == 'price')
+                                                        <input type="number" step="0.01"
+                                                            name="{{ $attribute->code }}" class="form-control"
+                                                            value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @elseif ($attribute->type == 'boolean')
+                                                        <select name="{{ $attribute->code }}" class="form-select"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                            <option value="1" {{ $value == '1' ? 'selected' : '' }}>
+                                                                Yes
+                                                            </option>
+                                                            <option value="0" {{ $value == '0' ? 'selected' : '' }}>
+                                                                No
+                                                            </option>
+                                                        </select>
+                                                    @elseif ($attribute->type == 'select')
+                                                        <select name="{{ $attribute->code }}" class="form-select"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                            <option value="">Select</option>
+                                                            @foreach ($options as $opt)
+                                                                <option value="{{ $opt }}"
+                                                                    {{ $value == $opt ? 'selected' : '' }}>
+                                                                    {{ $opt }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    @elseif ($attribute->type == 'multiselect')
+                                                        <select name="{{ $attribute->code }}[]" multiple
+                                                            class="form-select"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                            @foreach ($options as $opt)
+                                                                <option value="{{ $opt }}"
+                                                                    @if (is_array($value) && in_array($opt, $value)) selected @endif>
+                                                                    {{ $opt }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    @elseif ($attribute->type == 'checkbox')
+                                                        @foreach ($options as $opt)
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    name="{{ $attribute->code }}[]"
+                                                                    value="{{ $opt }}"
+                                                                    @if (is_array($value) && in_array($opt, $value)) checked @endif>
+                                                                <label
+                                                                    class="form-check-label">{{ $opt }}</label>
+                                                            </div>
+                                                        @endforeach
+                                                    @elseif ($attribute->type == 'date')
+                                                        <input type="date" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @elseif ($attribute->type == 'datetime')
+                                                        <input type="datetime-local" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @elseif ($attribute->type == 'file')
+                                                        <input type="file" name="{{ $attribute->code }}"
+                                                            class="form-control"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @if ($value)
+                                                            <p class="mt-2">Current file: <a
+                                                                    href="{{ asset('uploads/' . $value) }}"
+                                                                    target="_blank">{{ $value }}</a></p>
+                                                        @endif
+                                                    @elseif ($attribute->type == 'image')
+                                                        <input type="file" accept="image/*"
+                                                            name="{{ $attribute->code }}" class="form-control"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @if ($value)
+                                                            <div class="mt-2">
+                                                                <img src="{{ asset('uploads/' . $value) }}"
+                                                                    alt="Uploaded Image" width="100">
+                                                            </div>
+                                                        @endif
+                                                    @elseif ($attribute->type == 'phone')
+                                                        <input type="tel" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @else
+                                                        <input type="text" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}">
+                                                    @endif
+
+                                                    @error($attribute->code)
+                                                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+
+
 
 
 

@@ -30,6 +30,7 @@ use App\Models\QuoteProduct;
 use App\Models\Service;
 use App\Models\Configuration;
 use App\Mail\LeadSendEmail;
+use App\Models\Attribute;
 use File;
 use PDF;
 use Mail;
@@ -43,6 +44,8 @@ class QuoteController extends Controller
     public function quotes(Request $request)
     {
         if ($request->isMethod('post')) {
+
+
 
             $core = Configuration::first();
 
@@ -145,7 +148,8 @@ class QuoteController extends Controller
                 $services = Service::get();
                 $authenticatedUser = Auth::user()->userDetails;
                 $persons = Person::where('id', $lead->person)->first() ?? [];
-                return view('quotes.create_lead_quote', ['lead' => $lead, 'products' => $products, 'authenticatedUser' => $authenticatedUser, 'services' => $services, 'lead_products' => $lead_products, 'persons' => $persons]);
+                $quoteAttributes = Attribute::where('entity_type', 'quote')->get();
+                return view('quotes.create_lead_quote', ['lead' => $lead, 'products' => $products, 'authenticatedUser' => $authenticatedUser, 'services' => $services, 'lead_products' => $lead_products, 'persons' => $persons, 'quoteAttributes' => $quoteAttributes]);
             }
             if ($request->isMethod('post')) {
 
@@ -163,6 +167,13 @@ class QuoteController extends Controller
                     'post_code' => 'required',
                 ]);
 
+
+                $quoteAttributes = Attribute::where('entity_type', 'quote')->get();
+                $attributeData = [];
+
+                foreach ($quoteAttributes as $attribute) {
+                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                }
 
                 $quote =  new Quote();
                 $quote->lead = $lead->id;
@@ -184,6 +195,7 @@ class QuoteController extends Controller
                 $quote->discount_total_amount =  $request->discount_total_amount;
                 $quote->tax_total_amount =  $request->tax_total_amount;
                 $quote->order_total_input =  $request->order_total_input;
+                $quote->custom_attributes = json_encode($attributeData);
                 $quote->save();
 
                 if ($request->has('products')) {
@@ -254,11 +266,19 @@ class QuoteController extends Controller
                 $leads = Lead::get();
                 $services = Service::get();
                 $authenticatedUser = Auth::user()->userDetails;
-                return view('quotes.create_quote', ['owners' => $owners, 'authenticatedUser' => $authenticatedUser, 'persons' => $persons, 'products' => $products, 'leads' => $leads, 'services' => $services]);
+                $quoteAttributes = Attribute::where('entity_type', 'quote')->get();
+                return view('quotes.create_quote', ['owners' => $owners, 'authenticatedUser' => $authenticatedUser, 'persons' => $persons, 'products' => $products, 'leads' => $leads, 'services' => $services, 'quoteAttributes' => $quoteAttributes]);
             }
             if ($request->isMethod('post')) {
 
-                
+
+                $quoteAttributes = Attribute::where('entity_type', 'quote')->get();
+                $attributeData = [];
+
+                foreach ($quoteAttributes as $attribute) {
+                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                }
+
 
                 // dd($request->all());
                 $request->validate([
@@ -295,6 +315,7 @@ class QuoteController extends Controller
                 $quote->discount_total_amount =  $request->discount_total_amount;
                 $quote->tax_total_amount =  $request->tax_total_amount;
                 $quote->order_total_input =  $request->order_total_input;
+                $quote->custom_attributes = json_encode($attributeData);
                 $quote->save();
 
                 if ($request->has('products')) {
@@ -339,7 +360,7 @@ class QuoteController extends Controller
         $permissions = session('user_permissions', []);
 
         if (in_array(strtolower('edit-quotes'), array_map('strtolower', $permissions))) {
-            $quote = Quote::where('id', $id)->with('leadData','personData')->first();
+            $quote = Quote::where('id', $id)->with('leadData', 'personData')->first();
 
             if ($request->isMethod('get')) {
                 $owners = UserDetails::get();
@@ -348,6 +369,12 @@ class QuoteController extends Controller
                 $leads = Lead::get();
                 $quote_products = QuoteProduct::where('quote_id', $id)->get();
                 $services = Service::get();
+
+                $quoteAttributes = Attribute::where('entity_type', 'quote')->get();
+                // Decode saved JSON data (if any)
+                $customValues = json_decode($quote->custom_attributes, true) ?? [];
+
+
                 return view('quotes.edit_quote', [
                     'owners' => $owners,
                     'persons' => $persons,
@@ -355,7 +382,9 @@ class QuoteController extends Controller
                     'leads' => $leads,
                     'quote_products' => $quote_products,
                     'quote' => $quote,
-                    'services' => $services
+                    'services' => $services,
+                    'quoteAttributes' => $quoteAttributes,
+                    'customValues' => $customValues
                 ]);
             }
             if ($request->isMethod('post')) {
@@ -371,6 +400,15 @@ class QuoteController extends Controller
                     'city' => 'required',
                     'post_code' => 'required',
                 ]);
+
+
+                $quoteAttributes = Attribute::where('entity_type', 'quote')->get();
+
+                // Gather dynamic field values again
+                $attributeData = [];
+                foreach ($quoteAttributes as $attribute) {
+                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                }
 
                 $quote->lead = $request->lead;
                 $quote->owner = $request->owner;
@@ -391,6 +429,7 @@ class QuoteController extends Controller
                 $quote->discount_total_amount =  $request->discount_total_amount;
                 $quote->tax_total_amount =  $request->tax_total_amount;
                 $quote->order_total_input =  $request->order_total_input;
+                $quote->custom_attributes = json_encode($attributeData);
                 $quote->update();
 
                 QuoteProduct::where('quote_id', $id)->delete();

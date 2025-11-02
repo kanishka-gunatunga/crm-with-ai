@@ -251,6 +251,7 @@
                                                     <th>{{ __('app.datagrid.grand-total') }}</th>
                                                     <th>{{ __('app.leads.expired-at') }}</th>
                                                     <th>{{ __('app.datagrid.created_at') }}</th>
+                                                    <th>Additional Fields</th>
                                                     <th>{{ __('app.leads.actions') }}</th>
                                                 </tr>
                                             </thead>
@@ -306,6 +307,7 @@
 
                                                     <!-- Created At -->
                                                     <td>{{ $quote->created_at }}</td>
+                                                    <td>{{ $quote->custom_attributes }}</td>
 
                                                     <td class="action-icons d-flex gx-3">
                                                         <a href="{{ url('delete-quote/' . $quote->id) }}"

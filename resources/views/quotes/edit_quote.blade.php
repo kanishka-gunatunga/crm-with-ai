@@ -134,11 +134,12 @@
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="assign_user" class="form-label">Country</label>
-                                                
-                                                <select class="myDropdown form-control" name="country" required>
-                                                    
 
-                                                    <option value="{{ $quote->country }}" selected>{{ $quote->country }}</option>
+                                                <select class="myDropdown form-control" name="country" required>
+
+
+                                                    <option value="{{ $quote->country }}" selected>{{ $quote->country }}
+                                                    </option>
 
 
                                                     <option value="Afghanistan">Afghanistan</option>
@@ -291,7 +292,8 @@
                                                     <option value="Rwanda">Rwanda</option>
                                                     <option value="StKitts&Nevis">St Kitts & Nevis</option>
                                                     <option value="StLucia">St Lucia</option>
-                                                    <option value="SaintVincent&theGrenadines">Saint Vincent & the Grenadines</option>
+                                                    <option value="SaintVincent&theGrenadines">Saint Vincent & the
+                                                        Grenadines</option>
                                                     <option value="Samoa">Samoa</option>
                                                     <option value="SanMarino">San Marino</option>
                                                     <option value="SaoTome&Principe">Sao Tome & Principe</option>
@@ -377,10 +379,11 @@
                                             </div>
                                             <div class="col-12 col-md-4">
                                                 <label for="assign_user" class="form-label">Country</label>
-                                               <select class="myDropdown form-control" name="country" required>
-                                                    
+                                                <select class="myDropdown form-control" name="country" required>
 
-                                                    <option value="{{ $quote->country }}" selected>{{ $quote->country }}</option>
+
+                                                    <option value="{{ $quote->country }}" selected>{{ $quote->country }}
+                                                    </option>
 
 
                                                     <option value="Afghanistan">Afghanistan</option>
@@ -533,7 +536,8 @@
                                                     <option value="Rwanda">Rwanda</option>
                                                     <option value="StKitts&Nevis">St Kitts & Nevis</option>
                                                     <option value="StLucia">St Lucia</option>
-                                                    <option value="SaintVincent&theGrenadines">Saint Vincent & the Grenadines</option>
+                                                    <option value="SaintVincent&theGrenadines">Saint Vincent & the
+                                                        Grenadines</option>
                                                     <option value="Samoa">Samoa</option>
                                                     <option value="SanMarino">San Marino</option>
                                                     <option value="SaoTome&Principe">Sao Tome & Principe</option>
@@ -640,107 +644,107 @@
                                                         foreach($quote_products as $quote_product){ 
                                                             $sub_total += $quote_product->amount;
                                                             if($quote_product->type == "product"){ ?>
-                                                                <tr>
-                                                                    <td>
-                                                                        <select class="form-control product-select"
-                                                                            name="products[]" required>
-                                                                            <option hidden selected
-                                                                                value="product||{{ $quote_product->product_id }}"
-                                                                                data-price="{{ $quote_product->price }}">
-                                                                                {{ Product::where('id', $quote_product->product_id)->value('name') }}
-                                                                            </option>
-                                                                            <?php foreach($products as $product){ ?>
-                                                                                <option value="product||{{ $product->id }}"
-                                                                                    data-price="{{ $product->cost }}">
-                                                                                    {{ $product->name }}
-                                                                                </option>
-                                                                            <?php } ?>
-                                                                            <?php foreach($services as $service){ ?>
-                                                                                <option value="service||{{ $service->id }}"
-                                                                                    data-price="{{ $service->cost }}">
-                                                                                    {{ $service->name }}
-                                                                                </option>
-                                                                            <?php } ?>
-                                                                        </select>
-                                                                        <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]"
-                                                                            placeholder="Notes">{{ $quote_product->note }}</textarea>
-                                                                    </td>
-                                                                    <td><input type="number" step="any" class="form-control"
-                                                                            name="quantity[]"
-                                                                            value="{{ $quote_product->quantity }}" required></td>
-                                                                    <td><input type="number" step="any" class="form-control"
-                                                                            name="price[]" value="{{ $quote_product->price }}"
-                                                                            required>
-                                                                    </td>
-                                                                    <td><input type="number" step="any" class="form-control"
-                                                                            name="amount[]" value="{{ $quote_product->amount }}"
-                                                                            readonly required></td>
-                                                                    <td><input type="number" step="any" class="form-control"
-                                                                            name="discount[]"
-                                                                            value="{{ $quote_product->discount }}">
-                                                                    </td>
-                                                                    <td><input type="number" step="any" class="form-control"
-                                                                            name="tax[]" value="{{ $quote_product->tax }}">
-                                                                    </td>
-                                                                    <td><input type="number" step="any" class="form-control"
-                                                                            name="total[]" value="{{ $quote_product->total }}"
-                                                                            readonly>
-                                                                    </td>
-                                                                    <td><i
-                                                                            class="fa-solid fa-trash remove-product remove-append-item mx-2"></i>
-                                                                    </td>
-                                                                </tr>
-                                                            <?php }else{ ?>
-                                                                <tr>
-                                                                    <td>
-                                                                        <select class="form-control product-select"
-                                                                            name="products[]" required >
-                                                                            <option hidden selected
-                                                                                value="service||{{ $quote_product->product_id }}"
-                                                                                data-price="{{ $quote_product->price }}">
-                                                                                {{ Service::where('id', $quote_product->product_id)->value('name') }}
-                                                                            </option>
-                                                                            <?php foreach($products as $product){ ?>
-                                                                            <option value="product||{{ $product->id }}"
-                                                                                data-price="{{ $product->cost }}">
-                                                                                {{ $product->name }}
-                                                                            </option>
-                                                                            <?php } ?>
-                                                                            <?php foreach($services as $service){ ?>
-                                                                            <option value="service||{{ $service->id }}"
-                                                                                data-price="{{ $service->cost }}">
-                                                                                {{ $service->name }}
-                                                                            </option>
-                                                                            <?php } ?>
-                                                                        </select>
-                                                                        <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]"
-                                                                            placeholder="Notes">{{ $quote_product->note }}</textarea>
-                                                                    </td>
-                                                                    <td><input type="number" step="any" class="form-control"
-                                                                            name="quantity[]"
-                                                                            value="{{ $quote_product->quantity }}" required></td>
-                                                                    <td><input type="number" step="any" class="form-control"
-                                                                            name="price[]" value="{{ $quote_product->price }}"
-                                                                            required>
-                                                                    </td>
-                                                                    <td><input type="number" step="any" class="form-control"
-                                                                            name="amount[]" value="{{ $quote_product->amount }}"
-                                                                            readonly required></td>
-                                                                    <td><input type="number" step="any" class="form-control"
-                                                                            name="discount[]"
-                                                                            value="{{ $quote_product->discount }}">
-                                                                    </td>
-                                                                    <td><input type="number" step="any" class="form-control"
-                                                                            name="tax[]" value="{{ $quote_product->tax }}">
-                                                                    </td>
-                                                                    <td><input type="number" step="any" class="form-control"
-                                                                            name="total[]" value="{{ $quote_product->total }}"
-                                                                            readonly>
-                                                                    </td>
-                                                                    <td><i
-                                                                            class="fa-solid fa-trash remove-product remove-append-item mx-2"></i>
-                                                                    </td>
-                                                                </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <select class="form-control product-select"
+                                                                    name="products[]" required>
+                                                                    <option hidden selected
+                                                                        value="product||{{ $quote_product->product_id }}"
+                                                                        data-price="{{ $quote_product->price }}">
+                                                                        {{ Product::where('id', $quote_product->product_id)->value('name') }}
+                                                                    </option>
+                                                                    <?php foreach($products as $product){ ?>
+                                                                    <option value="product||{{ $product->id }}"
+                                                                        data-price="{{ $product->cost }}">
+                                                                        {{ $product->name }}
+                                                                    </option>
+                                                                    <?php } ?>
+                                                                    <?php foreach($services as $service){ ?>
+                                                                    <option value="service||{{ $service->id }}"
+                                                                        data-price="{{ $service->cost }}">
+                                                                        {{ $service->name }}
+                                                                    </option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                                <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]"
+                                                                    placeholder="Notes">{{ $quote_product->note }}</textarea>
+                                                            </td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="quantity[]"
+                                                                    value="{{ $quote_product->quantity }}" required></td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="price[]" value="{{ $quote_product->price }}"
+                                                                    required>
+                                                            </td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="amount[]" value="{{ $quote_product->amount }}"
+                                                                    readonly required></td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="discount[]"
+                                                                    value="{{ $quote_product->discount }}">
+                                                            </td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="tax[]" value="{{ $quote_product->tax }}">
+                                                            </td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="total[]" value="{{ $quote_product->total }}"
+                                                                    readonly>
+                                                            </td>
+                                                            <td><i
+                                                                    class="fa-solid fa-trash remove-product remove-append-item mx-2"></i>
+                                                            </td>
+                                                        </tr>
+                                                        <?php }else{ ?>
+                                                        <tr>
+                                                            <td>
+                                                                <select class="form-control product-select"
+                                                                    name="products[]" required>
+                                                                    <option hidden selected
+                                                                        value="service||{{ $quote_product->product_id }}"
+                                                                        data-price="{{ $quote_product->price }}">
+                                                                        {{ Service::where('id', $quote_product->product_id)->value('name') }}
+                                                                    </option>
+                                                                    <?php foreach($products as $product){ ?>
+                                                                    <option value="product||{{ $product->id }}"
+                                                                        data-price="{{ $product->cost }}">
+                                                                        {{ $product->name }}
+                                                                    </option>
+                                                                    <?php } ?>
+                                                                    <?php foreach($services as $service){ ?>
+                                                                    <option value="service||{{ $service->id }}"
+                                                                        data-price="{{ $service->cost }}">
+                                                                        {{ $service->name }}
+                                                                    </option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                                <textarea class="form-control w-100 mt-2" id="exampleFormControlTextarea5" rows="3" name="note[]"
+                                                                    placeholder="Notes">{{ $quote_product->note }}</textarea>
+                                                            </td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="quantity[]"
+                                                                    value="{{ $quote_product->quantity }}" required></td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="price[]" value="{{ $quote_product->price }}"
+                                                                    required>
+                                                            </td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="amount[]" value="{{ $quote_product->amount }}"
+                                                                    readonly required></td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="discount[]"
+                                                                    value="{{ $quote_product->discount }}">
+                                                            </td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="tax[]" value="{{ $quote_product->tax }}">
+                                                            </td>
+                                                            <td><input type="number" step="any" class="form-control"
+                                                                    name="total[]" value="{{ $quote_product->total }}"
+                                                                    readonly>
+                                                            </td>
+                                                            <td><i
+                                                                    class="fa-solid fa-trash remove-product remove-append-item mx-2"></i>
+                                                            </td>
+                                                        </tr>
                                                         <?php }} ?>
                                                     </tbody>
                                                     <tfoot>
@@ -782,7 +786,123 @@
                                     </div>
                                 </div>
 
+                                @if ($quoteAttributes->isNotEmpty())
+                                    <div class="card card-default mt-3">
+                                        <div class="card-body">
+                                            @foreach ($quoteAttributes as $attribute)
+                                                <div class="mb-3">
+                                                    <label>{{ $attribute->name }}</label>
 
+                                                    @php
+                                                        $value = $customValues[$attribute->code] ?? '';
+                                                        $options = $attribute->options
+                                                            ? json_decode($attribute->options, true)
+                                                            : [];
+                                                    @endphp
+
+                                                    @if ($attribute->type == 'text')
+                                                        <input type="text" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @elseif ($attribute->type == 'email')
+                                                        <input type="email" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @elseif ($attribute->type == 'textarea')
+                                                        <textarea name="{{ $attribute->code }}" class="form-control"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>{{ $value }}</textarea>
+                                                    @elseif ($attribute->type == 'number' || $attribute->type == 'price')
+                                                        <input type="number" step="0.01"
+                                                            name="{{ $attribute->code }}" class="form-control"
+                                                            value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @elseif ($attribute->type == 'boolean')
+                                                        <select name="{{ $attribute->code }}" class="form-select"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                            <option value="1" {{ $value == '1' ? 'selected' : '' }}>
+                                                                Yes
+                                                            </option>
+                                                            <option value="0" {{ $value == '0' ? 'selected' : '' }}>
+                                                                No
+                                                            </option>
+                                                        </select>
+                                                    @elseif ($attribute->type == 'select')
+                                                        <select name="{{ $attribute->code }}" class="form-select"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                            <option value="">Select</option>
+                                                            @foreach ($options as $opt)
+                                                                <option value="{{ $opt }}"
+                                                                    {{ $value == $opt ? 'selected' : '' }}>
+                                                                    {{ $opt }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    @elseif ($attribute->type == 'multiselect')
+                                                        <select name="{{ $attribute->code }}[]" multiple
+                                                            class="form-select"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                            @foreach ($options as $opt)
+                                                                <option value="{{ $opt }}"
+                                                                    @if (is_array($value) && in_array($opt, $value)) selected @endif>
+                                                                    {{ $opt }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    @elseif ($attribute->type == 'checkbox')
+                                                        @foreach ($options as $opt)
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    name="{{ $attribute->code }}[]"
+                                                                    value="{{ $opt }}"
+                                                                    @if (is_array($value) && in_array($opt, $value)) checked @endif>
+                                                                <label
+                                                                    class="form-check-label">{{ $opt }}</label>
+                                                            </div>
+                                                        @endforeach
+                                                    @elseif ($attribute->type == 'date')
+                                                        <input type="date" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @elseif ($attribute->type == 'datetime')
+                                                        <input type="datetime-local" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @elseif ($attribute->type == 'file')
+                                                        <input type="file" name="{{ $attribute->code }}"
+                                                            class="form-control"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @if ($value)
+                                                            <p class="mt-2">Current file: <a
+                                                                    href="{{ asset('uploads/' . $value) }}"
+                                                                    target="_blank">{{ $value }}</a></p>
+                                                        @endif
+                                                    @elseif ($attribute->type == 'image')
+                                                        <input type="file" accept="image/*"
+                                                            name="{{ $attribute->code }}" class="form-control"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @if ($value)
+                                                            <div class="mt-2">
+                                                                <img src="{{ asset('uploads/' . $value) }}"
+                                                                    alt="Uploaded Image" width="100">
+                                                            </div>
+                                                        @endif
+                                                    @elseif ($attribute->type == 'phone')
+                                                        <input type="tel" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @else
+                                                        <input type="text" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}">
+                                                    @endif
+
+                                                    @error($attribute->code)
+                                                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
 
                         </div>

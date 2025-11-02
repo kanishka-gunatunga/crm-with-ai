@@ -164,8 +164,8 @@ $permissions = session('user_permissions');
                                             <div class="col-12 col-md-4">
                                                 <label for="field2" class="form-label">Sales Owner</label>
                                                 @if (in_array(strtolower('create-any-leads'), array_map('strtolower', $permissions)))
-                                                    <select class="form-control" data-choices id="choices-single-default" required
-                                                        name="sales_owner">
+                                                    <select class="form-control" data-choices id="choices-single-default"
+                                                        required name="sales_owner">
                                                         <!-- Show current owner as hidden selected option -->
                                                         <option selected value="{{ $lead->sales_owner }}">
                                                             {{ $owners->firstWhere('user_id', $lead->sales_owner)?->name ?? '' }}
@@ -298,6 +298,124 @@ $permissions = session('user_permissions');
                                         </div>
                                     </div>
                                 </div>
+                               
+                                @if ($leadAttributes->isNotEmpty())
+                                    <div class="card card-default mt-3">
+                                        <div class="card-body">
+                                            @foreach ($leadAttributes as $attribute)
+                                                <div class="mb-3">
+                                                    <label>{{ $attribute->name }}</label>
+
+                                                    @php
+                                                        $value = $customValues[$attribute->code] ?? '';
+                                                        $options = $attribute->options
+                                                            ? json_decode($attribute->options, true)
+                                                            : [];
+                                                    @endphp
+
+                                                    @if ($attribute->type == 'text')
+                                                        <input type="text" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @elseif ($attribute->type == 'email')
+                                                        <input type="email" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @elseif ($attribute->type == 'textarea')
+                                                        <textarea name="{{ $attribute->code }}" class="form-control"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>{{ $value }}</textarea>
+                                                    @elseif ($attribute->type == 'number' || $attribute->type == 'price')
+                                                        <input type="number" step="0.01"
+                                                            name="{{ $attribute->code }}" class="form-control"
+                                                            value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @elseif ($attribute->type == 'boolean')
+                                                        <select name="{{ $attribute->code }}" class="form-select"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                            <option value="1" {{ $value == '1' ? 'selected' : '' }}>
+                                                                Yes
+                                                            </option>
+                                                            <option value="0" {{ $value == '0' ? 'selected' : '' }}>
+                                                                No
+                                                            </option>
+                                                        </select>
+                                                    @elseif ($attribute->type == 'select')
+                                                        <select name="{{ $attribute->code }}" class="form-select"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                            <option value="">Select</option>
+                                                            @foreach ($options as $opt)
+                                                                <option value="{{ $opt }}"
+                                                                    {{ $value == $opt ? 'selected' : '' }}>
+                                                                    {{ $opt }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    @elseif ($attribute->type == 'multiselect')
+                                                        <select name="{{ $attribute->code }}[]" multiple
+                                                            class="form-select"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                            @foreach ($options as $opt)
+                                                                <option value="{{ $opt }}"
+                                                                    @if (is_array($value) && in_array($opt, $value)) selected @endif>
+                                                                    {{ $opt }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    @elseif ($attribute->type == 'checkbox')
+                                                        @foreach ($options as $opt)
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    name="{{ $attribute->code }}[]"
+                                                                    value="{{ $opt }}"
+                                                                    @if (is_array($value) && in_array($opt, $value)) checked @endif>
+                                                                <label
+                                                                    class="form-check-label">{{ $opt }}</label>
+                                                            </div>
+                                                        @endforeach
+                                                    @elseif ($attribute->type == 'date')
+                                                        <input type="date" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @elseif ($attribute->type == 'datetime')
+                                                        <input type="datetime-local" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @elseif ($attribute->type == 'file')
+                                                        <input type="file" name="{{ $attribute->code }}"
+                                                            class="form-control"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @if ($value)
+                                                            <p class="mt-2">Current file: <a
+                                                                    href="{{ asset('uploads/' . $value) }}"
+                                                                    target="_blank">{{ $value }}</a></p>
+                                                        @endif
+                                                    @elseif ($attribute->type == 'image')
+                                                        <input type="file" accept="image/*"
+                                                            name="{{ $attribute->code }}" class="form-control"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @if ($value)
+                                                            <div class="mt-2">
+                                                                <img src="{{ asset('uploads/' . $value) }}"
+                                                                    alt="Uploaded Image" width="100">
+                                                            </div>
+                                                        @endif
+                                                    @elseif ($attribute->type == 'phone')
+                                                        <input type="tel" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                    @else
+                                                        <input type="text" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}">
+                                                    @endif
+
+                                                    @error($attribute->code)
+                                                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -416,61 +534,61 @@ $permissions = session('user_permissions');
     {{--  --}}
 
     <script>
-$(document).ready(function() {
-    let emailCounter = 0;
-    let numberCounter = 0;
-    let isExistingPerson = false;
-    let isEditMode = {{ isset($lead->person) && $lead->person ? 'true' : 'false' }};
-    let existingPersonId = {{ $lead->person ?? 'null' }};
-    
-    // Store initial data for edit mode
-    let initialEmails = @json($person->emails ?? []);
-    let initialNumbers = @json($person->contact_numbers ?? []);
+        $(document).ready(function() {
+            let emailCounter = 0;
+            let numberCounter = 0;
+            let isExistingPerson = false;
+            let isEditMode = {{ isset($lead->person) && $lead->person ? 'true' : 'false' }};
+            let existingPersonId = {{ $lead->person ?? 'null' }};
 
-    // Initialize the select2 with tags functionality
-    $('#person-select').select2({
-        allowClear: true,
-        tags: true,
-        tokenSeparators: [','],
-        placeholder: "Select or type to add",
-        createTag: function(params) {
-            var term = $.trim(params.term);
-            if (term === '') {
-                return null;
+            // Store initial data for edit mode
+            let initialEmails = @json($person->emails ?? []);
+            let initialNumbers = @json($person->contact_numbers ?? []);
+
+            // Initialize the select2 with tags functionality
+            $('#person-select').select2({
+                allowClear: true,
+                tags: true,
+                tokenSeparators: [','],
+                placeholder: "Select or type to add",
+                createTag: function(params) {
+                    var term = $.trim(params.term);
+                    if (term === '') {
+                        return null;
+                    }
+                    return {
+                        id: term,
+                        text: term,
+                        newTag: true
+                    };
+                }
+            });
+
+            // Function to clear email and contact number fields
+            function clearFields() {
+                // Remove all fields (both static and dynamic)
+                $('#email-fields').empty();
+                $('#number-fields').empty();
+
+                // Reset counters
+                emailCounter = 0;
+                numberCounter = 0;
             }
-            return {
-                id: term,
-                text: term,
-                newTag: true
-            };
-        }
-    });
 
-    // Function to clear email and contact number fields
-    function clearFields() {
-        // Remove all fields (both static and dynamic)
-        $('#email-fields').empty();
-        $('#number-fields').empty();
-        
-        // Reset counters
-        emailCounter = 0;
-        numberCounter = 0;
-    }
+            // Function to show/hide add more buttons
+            function toggleAddMoreButtons(show) {
+                if (show) {
+                    $('#email-fields .add-more-button').show();
+                    $('#number-fields .add-more-button').show();
+                } else {
+                    $('#email-fields .add-more-button').hide();
+                    $('#number-fields .add-more-button').hide();
+                }
+            }
 
-    // Function to show/hide add more buttons
-    function toggleAddMoreButtons(show) {
-        if (show) {
-            $('#email-fields .add-more-button').show();
-            $('#number-fields .add-more-button').show();
-        } else {
-            $('#email-fields .add-more-button').hide();
-            $('#number-fields .add-more-button').hide();
-        }
-    }
-
-    // Function to create initial empty fields
-    function createEmptyFields() {
-        let emailHtml = `
+            // Function to create initial empty fields
+            function createEmptyFields() {
+                let emailHtml = `
             <div class="email-field-static">
                 <label for="email-0" class="form-label">{{ __('app.leads.emails') }}</label>
                 <input type="email" class="form-control mb-2" name="emails[]" id="email-0" required>
@@ -499,7 +617,7 @@ $(document).ready(function() {
             </div>
         `;
 
-        let numberHtml = `
+                let numberHtml = `
             <div class="number-field-static">
                 <label for="number-0" class="form-label">{{ __('app.leads.contact-numbers') }}</label>
                 <input type="text" class="form-control" name="contact_numbers[]" id="number-0">
@@ -528,14 +646,14 @@ $(document).ready(function() {
             </div>
         `;
 
-        $('#email-fields').html(emailHtml);
-        $('#number-fields').html(numberHtml);
-    }
+                $('#email-fields').html(emailHtml);
+                $('#number-fields').html(numberHtml);
+            }
 
-    // Function to add email field dynamically (below existing ones)
-    window.addEmailField = function() {
-        emailCounter++;
-        let emailHtml = `
+            // Function to add email field dynamically (below existing ones)
+            window.addEmailField = function() {
+                emailCounter++;
+                let emailHtml = `
             <div class="email-field-dynamic mt-3">
                 <label for="email-${emailCounter}" class="form-label">{{ __('app.leads.emails') }}</label>
                 <input type="email" class="form-control" name="emails[]" id="email-${emailCounter}">
@@ -561,13 +679,13 @@ $(document).ready(function() {
                 </div>
             </div>
         `;
-        $('#email-fields').append(emailHtml);
-    };
+                $('#email-fields').append(emailHtml);
+            };
 
-    // Function to add contact number field dynamically (below existing ones)
-    window.addNumberField = function() {
-        numberCounter++;
-        let numberHtml = `
+            // Function to add contact number field dynamically (below existing ones)
+            window.addNumberField = function() {
+                numberCounter++;
+                let numberHtml = `
             <div class="number-field-dynamic mt-3">
                 <label for="number-${numberCounter}" class="form-label">{{ __('app.leads.contact-numbers') }}</label>
                 <input type="text" class="form-control" name="contact_numbers[]" id="number-${numberCounter}">
@@ -593,17 +711,17 @@ $(document).ready(function() {
                 </div>
             </div>
         `;
-        $('#number-fields').append(numberHtml);
-    };
+                $('#number-fields').append(numberHtml);
+            };
 
-    // Function to populate email fields from database
-    function populateEmailFields(emails) {
-        $('#email-fields').empty();
-        
-        if (emails.length > 0) {
-            emails.forEach((email, index) => {
-                let isFirst = index === 0;
-                let emailHtml = `
+            // Function to populate email fields from database
+            function populateEmailFields(emails) {
+                $('#email-fields').empty();
+
+                if (emails.length > 0) {
+                    emails.forEach((email, index) => {
+                        let isFirst = index === 0;
+                        let emailHtml = `
                     <div class="${isFirst ? 'email-field-static' : 'email-field-dynamic'} ${!isFirst ? 'mt-3' : ''}">
                         <label for="email-${index}" class="form-label">{{ __('app.leads.emails') }}</label>
                         <input type="email" class="form-control ${isFirst ? 'mb-2' : ''}" name="emails[]" id="email-${index}" 
@@ -621,33 +739,33 @@ $(document).ready(function() {
                                 <label class="form-check-label" for="email-home-${index}">{{ __('app.common.home') }}</label>
                             </div>
                             ${isFirst ? `
-                            <div class="form-check form-check-inline" style="display: none;">
-                                <button type="button" class="btn add-more-button p-0" onclick="addEmailField()">
-                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z" fill="#4A58EC" />
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z" fill="#4A58EC" />
-                                    </svg>
-                                    <span class="">{{ __('app.common.add_more') }}</span>
-                                </button>
-                            </div>
-                            ` : ''}
+                                                <div class="form-check form-check-inline" style="display: none;">
+                                                    <button type="button" class="btn add-more-button p-0" onclick="addEmailField()">
+                                                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z" fill="#4A58EC" />
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z" fill="#4A58EC" />
+                                                        </svg>
+                                                        <span class="">{{ __('app.common.add_more') }}</span>
+                                                    </button>
+                                                </div>
+                                                ` : ''}
                         </div>
                     </div>
                 `;
-                $('#email-fields').append(emailHtml);
-                emailCounter = index;
-            });
-        }
-    }
+                        $('#email-fields').append(emailHtml);
+                        emailCounter = index;
+                    });
+                }
+            }
 
-    // Function to populate number fields from database
-    function populateNumberFields(numbers) {
-        $('#number-fields').empty();
-        
-        if (numbers.length > 0) {
-            numbers.forEach((number, index) => {
-                let isFirst = index === 0;
-                let numberHtml = `
+            // Function to populate number fields from database
+            function populateNumberFields(numbers) {
+                $('#number-fields').empty();
+
+                if (numbers.length > 0) {
+                    numbers.forEach((number, index) => {
+                        let isFirst = index === 0;
+                        let numberHtml = `
                     <div class="${isFirst ? 'number-field-static' : 'number-field-dynamic'} ${!isFirst ? 'mt-3' : ''}">
                         <label for="number-${index}" class="form-label">{{ __('app.leads.contact-numbers') }}</label>
                         <input type="text" class="form-control" name="contact_numbers[]" id="number-${index}" 
@@ -665,133 +783,134 @@ $(document).ready(function() {
                                 <label class="form-check-label" for="number-home-${index}">{{ __('app.common.home') }}</label>
                             </div>
                             ${isFirst ? `
-                            <div class="form-check form-check-inline" style="display: none;">
-                                <button type="button" class="btn add-more-button p-0" onclick="addNumberField()">
-                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z" fill="#4A58EC" />
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5C 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z" fill="#4A58EC" />
-                                    </svg>
-                                    <span class="">{{ __('app.common.add_more') }}</span>
-                                </button>
-                            </div>
-                            ` : ''}
+                                                <div class="form-check form-check-inline" style="display: none;">
+                                                    <button type="button" class="btn add-more-button p-0" onclick="addNumberField()">
+                                                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z" fill="#4A58EC" />
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5C 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z" fill="#4A58EC" />
+                                                        </svg>
+                                                        <span class="">{{ __('app.common.add_more') }}</span>
+                                                    </button>
+                                                </div>
+                                                ` : ''}
                         </div>
                     </div>
                 `;
-                $('#number-fields').append(numberHtml);
-                numberCounter = index;
-            });
-        }
-    }
+                        $('#number-fields').append(numberHtml);
+                        numberCounter = index;
+                    });
+                }
+            }
 
-    // Event handler for the person select dropdown change
-    $('#person-select').on('change', function() {
-        let selectedData = $(this).select2('data')[0];
-        let personId = $(this).val();
+            // Event handler for the person select dropdown change
+            $('#person-select').on('change', function() {
+                let selectedData = $(this).select2('data')[0];
+                let personId = $(this).val();
 
-        // Clear the fields when a new person is selected
-        clearFields();
+                // Clear the fields when a new person is selected
+                clearFields();
 
-        if (personId) {
-            // Check if this is a new tag (not from database)
-            if (selectedData && selectedData.newTag) {
-                // This is a new person being added
-                isExistingPerson = false;
-                createEmptyFields();
-                toggleAddMoreButtons(true);
-            } else {
-                // This is an existing person from database
-                isExistingPerson = true;
-
-                // Fetch person details from database
-                $.ajax({
-                    url: '{{ url('get-contact-person-details') }}/' + personId,
-                    type: 'GET',
-                    success: function(response) {
-                        console.log(response);
-
-                        // Update organization display
-                        if (response.organization_name) {
-                            $('#organization-display').val(response.organization_name);
-                        } else {
-                            $('#organization-display').val('');
-                        }
-
-                        // Populate emails
-                        if (response.emails && response.emails.length > 0) {
-                            populateEmailFields(response.emails);
-                        } else {
-                            createEmptyFields();
-                            toggleAddMoreButtons(true);
-                        }
-
-                        // Populate contact numbers
-                        if (response.contact_numbers && response.contact_numbers.length > 0) {
-                            populateNumberFields(response.contact_numbers);
-                        } else {
-                            if (!response.emails || response.emails.length === 0) {
-                                createEmptyFields();
-                            }
-                            toggleAddMoreButtons(true);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error fetching person details:', error);
+                if (personId) {
+                    // Check if this is a new tag (not from database)
+                    if (selectedData && selectedData.newTag) {
+                        // This is a new person being added
+                        isExistingPerson = false;
                         createEmptyFields();
                         toggleAddMoreButtons(true);
+                    } else {
+                        // This is an existing person from database
+                        isExistingPerson = true;
+
+                        // Fetch person details from database
+                        $.ajax({
+                            url: '{{ url('get-contact-person-details') }}/' + personId,
+                            type: 'GET',
+                            success: function(response) {
+                                console.log(response);
+
+                                // Update organization display
+                                if (response.organization_name) {
+                                    $('#organization-display').val(response.organization_name);
+                                } else {
+                                    $('#organization-display').val('');
+                                }
+
+                                // Populate emails
+                                if (response.emails && response.emails.length > 0) {
+                                    populateEmailFields(response.emails);
+                                } else {
+                                    createEmptyFields();
+                                    toggleAddMoreButtons(true);
+                                }
+
+                                // Populate contact numbers
+                                if (response.contact_numbers && response.contact_numbers
+                                    .length > 0) {
+                                    populateNumberFields(response.contact_numbers);
+                                } else {
+                                    if (!response.emails || response.emails.length === 0) {
+                                        createEmptyFields();
+                                    }
+                                    toggleAddMoreButtons(true);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error fetching person details:', error);
+                                createEmptyFields();
+                                toggleAddMoreButtons(true);
+                            }
+                        });
                     }
-                });
-            }
-        } else {
-            createEmptyFields();
-            toggleAddMoreButtons(true);
-        }
-    });
+                } else {
+                    createEmptyFields();
+                    toggleAddMoreButtons(true);
+                }
+            });
 
-    // Handle the clear button click event
-    $('#person-select').on('select2:clear', function() {
-        clearFields();
-        createEmptyFields();
-        isExistingPerson = false;
-        toggleAddMoreButtons(true);
-        $('#organization-display').val('');
-    });
-
-    // Remove dynamically added email field
-    $(document).on('click', '.remove-email-field', function() {
-        $(this).closest('.email-field-dynamic').remove();
-    });
-
-    // Remove dynamically added number field
-    $(document).on('click', '.remove-number-field', function() {
-        $(this).closest('.number-field-dynamic').remove();
-    });
-
-    // Initialize on page load
-    if (isEditMode && existingPersonId) {
-        // Load existing data
-        if (initialEmails.length > 0) {
-            populateEmailFields(initialEmails);
-        } else {
-            createEmptyFields();
-        }
-
-        if (initialNumbers.length > 0) {
-            populateNumberFields(initialNumbers);
-        } else {
-            if (initialEmails.length === 0) {
+            // Handle the clear button click event
+            $('#person-select').on('select2:clear', function() {
+                clearFields();
                 createEmptyFields();
+                isExistingPerson = false;
+                toggleAddMoreButtons(true);
+                $('#organization-display').val('');
+            });
+
+            // Remove dynamically added email field
+            $(document).on('click', '.remove-email-field', function() {
+                $(this).closest('.email-field-dynamic').remove();
+            });
+
+            // Remove dynamically added number field
+            $(document).on('click', '.remove-number-field', function() {
+                $(this).closest('.number-field-dynamic').remove();
+            });
+
+            // Initialize on page load
+            if (isEditMode && existingPersonId) {
+                // Load existing data
+                if (initialEmails.length > 0) {
+                    populateEmailFields(initialEmails);
+                } else {
+                    createEmptyFields();
+                }
+
+                if (initialNumbers.length > 0) {
+                    populateNumberFields(initialNumbers);
+                } else {
+                    if (initialEmails.length === 0) {
+                        createEmptyFields();
+                    }
+                }
+
+                toggleAddMoreButtons(false);
+            } else {
+                // Create empty fields for new entry
+                createEmptyFields();
+                toggleAddMoreButtons(true);
             }
-        }
-        
-        toggleAddMoreButtons(false);
-    } else {
-        // Create empty fields for new entry
-        createEmptyFields();
-        toggleAddMoreButtons(true);
-    }
-});
-</script>
+        });
+    </script>
 
     <script>
         $(document).ready(function() {
