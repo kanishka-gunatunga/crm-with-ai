@@ -820,7 +820,7 @@ $permissions = session('user_permissions');
                                     @if (in_array(strtolower('show-lead-note'), array_map('strtolower', $permissions)))
                                         <div>
                                             @if ($notes->isEmpty())
-                                                <p>No notes available.</p>
+                                                <p>No content available.</p>
                                             @else
                                                 <div>
                                                     <h5 class="mb-3 card-title">Notes</h5>

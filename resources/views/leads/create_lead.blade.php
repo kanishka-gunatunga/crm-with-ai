@@ -416,24 +416,26 @@ $permissions = session('user_permissions');
                                                         @break
 
                                                         @case('checkbox')
-                                                            @php
-                                                                $options = [];
-                                                                if ($attribute->options) {
-                                                                    $options = json_decode($attribute->options, true);
-                                                                }
-                                                            @endphp
-                                                            <div>
-                                                                @foreach ($options as $opt)
-                                                                    <div class="form-check">
-                                                                        <input class="form-check-input" type="checkbox"
-                                                                            name="{{ $attribute->code }}[]"
-                                                                            value="{{ $opt }}">
-                                                                        <label
-                                                                            class="form-check-label">{{ $opt }}</label>
-                                                                    </div>
-                                                                @endforeach
-                                                            </div>
-                                                        @break
+    @php
+        $options = [];
+        if ($attribute->options) {
+            $options = is_array($attribute->options)
+                ? $attribute->options
+                : json_decode($attribute->options, true);
+        }
+    @endphp
+    <div>
+        @foreach ($options as $opt)
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox"
+                       name="{{ $attribute->code }}[]"
+                       value="{{ $opt }}">
+                <label class="form-check-label">{{ $opt }}</label>
+            </div>
+        @endforeach
+    </div>
+@break
+
 
                                                         @case('date')
                                                             <input type="date" class="form-control"

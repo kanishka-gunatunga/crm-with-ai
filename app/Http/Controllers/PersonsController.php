@@ -85,6 +85,7 @@ class PersonsController extends Controller
                 return view('contacts.persons.create_person', ['organizations' => $organizations, 'personAttributes' => $personAttributes]);
             }
             if ($request->isMethod('post')) {
+                
                 $request->validate([
                     'name' => 'required|string|max:255',
                     'emails.*' => 'required|email',
@@ -97,7 +98,7 @@ class PersonsController extends Controller
                 $attributeData = [];
 
                 foreach ($personAttributes as $attribute) {
-                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                    $attributeData[$attribute->name] = $request->input($attribute->name);
                 }
                 $file_name = null;
                 if ($request->picture) {
@@ -242,7 +243,7 @@ class PersonsController extends Controller
                 // Gather dynamic field values again
                 $attributeData = [];
                 foreach ($personAttributes as $attribute) {
-                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                    $attributeData[$attribute->name] = $request->input($attribute->name);
                 }
 
                 $person->custom_attributes = json_encode($attributeData);

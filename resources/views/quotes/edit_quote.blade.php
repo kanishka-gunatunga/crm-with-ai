@@ -793,11 +793,13 @@
                                                 <div class="mb-3">
                                                     <label>{{ $attribute->name }}</label>
 
-                                                    @php
+                                                   @php
                                                         $value = $customValues[$attribute->code] ?? '';
-                                                        $options = $attribute->options
-                                                            ? json_decode($attribute->options, true)
-                                                            : [];
+                                                        if ($attribute->options) {
+                                                            $options = is_array($attribute->options)
+                                                                ? $attribute->options
+                                                                : json_decode($attribute->options, true);
+                                                        }
                                                     @endphp
 
                                                     @if ($attribute->type == 'text')

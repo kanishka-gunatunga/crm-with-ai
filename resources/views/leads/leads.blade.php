@@ -102,7 +102,7 @@
                             {{-- <button class="import-leads-button" data-bs-toggle="modal" data-bs-target=".exportTypes"> --}}
 
 
-
+                               
                             <div class="position-relative">
                                 
 
@@ -199,18 +199,18 @@
                 <div class="col-12">
                     <div class="d-flex card-container gap-1 leads-container">
                         <?php
-                $orderedStages = collect($stages)->sortBy(function ($stage) {
-                    if ($stage->name == 'New') {
-                        return 1;
-                    } elseif ($stage->name == 'Won') {
-                        return 9999;
-                    } elseif ($stage->name == 'Lost') {
-                        return 10000;
-                    }
-                    return 500;
-                })->values();
-                $userRoleId = auth()->user()->role;
-                $currentUserId = auth()->user()->id ?? auth()->id();
+                        $orderedStages = collect($stages)->sortBy(function ($stage) {
+                            if ($stage->name == 'New') {
+                                return 1;
+                            } elseif ($stage->name == 'Won') {
+                                return 9999;
+                            } elseif ($stage->name == 'Lost') {
+                                return 10000;
+                            }
+                            return 500;
+                        })->values();
+                        $userRoleId = auth()->user()->role;
+                        $currentUserId = auth()->user()->id ?? auth()->id();
 
                 // $currentUser = auth()->user();
                 // $userRoleId = $currentUser ? $currentUser->role_id : 2;
@@ -229,7 +229,7 @@
                 foreach ($orderedStages as $stage) {
                 $stage_value = 0;
 
-                 $permissions = session('user_permissions', []);
+                $permissions = session('user_permissions', []);
 
          
 
@@ -269,8 +269,9 @@
 
                     $stage_value = $leads->sum('lead_value');
 
-
+               
                             ?>
+                            
                         <div class="col-md-3">
                             <div class="card card-default lead-card ">
                                 <div class="card-body">

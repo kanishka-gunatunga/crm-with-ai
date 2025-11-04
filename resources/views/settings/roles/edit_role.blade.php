@@ -51,19 +51,18 @@
 
                                             <div class="col-12 col-md-4">
                                                 <label for="field3" class="form-label">Permission Type</label>
-
-
-
-
-
                                                 <select class="myDropdown form-control" id="pipeline-select"
                                                     name="permission_type" required>
-                                                    <option selected hidden value="{{ $role->permission_type }}">
-                                                        {{ $role->permission_type }}</option>
-
-                                                    <option value="all">All</option>
-                                                    <option value="custom">Custom</option>
+                                                    <option value="" disabled
+                                                        {{ $role->permission_type == null ? 'selected' : '' }}>Select type
+                                                    </option>
+                                                    <option value="all"
+                                                        {{ $role->permission_type == 'all' ? 'selected' : '' }}>all</option>
+                                                    <option value="custom"
+                                                        {{ $role->permission_type == 'custom' ? 'selected' : '' }}>custom
+                                                    </option>
                                                 </select>
+
                                             </div>
                                         </div>
 
@@ -179,8 +178,7 @@
                         label: "Create Lead",
                         value: "lead-create",
                         type: "checkbox",
-                        children: [
-                            {
+                        children: [{
                                 label: "Create Any Leads",
                                 value: "create-any-leads",
                                 type: "radio",
@@ -236,12 +234,12 @@
                         value: "lead-stage-change",
                         type: "checkbox"
                     },
-                    {
-                        label: "Lead Assignment to Own",
-                        value: "lead-assignment",
-                        type: "checkbox"
-                    },
-                    
+                    // {
+                    //     label: "Lead Assignment to Own",
+                    //     value: "lead-assignment",
+                    //     type: "checkbox"
+                    // },
+
 
                     {
                         label: "Delete lead",
@@ -259,31 +257,31 @@
 
                             },
 
-                            {
-                                label: "Activity",
-                                value: "add-lead-activity",
-                                type: "checkbox",
+                            // {
+                            //     label: "Activity",
+                            //     value: "add-lead-activity",
+                            //     type: "checkbox",
 
-                            },
+                            // },
 
-                            {
-                                label: "Email",
-                                value: "add-lead-email",
-                                type: "checkbox",
+                            // {
+                            //     label: "Email",
+                            //     value: "add-lead-email",
+                            //     type: "checkbox",
 
-                            },
+                            // },
                             {
                                 label: "File",
                                 value: "add-lead-file",
                                 type: "checkbox",
 
                             },
-                            {
-                                label: "Quote",
-                                value: "add-lead-quote",
-                                type: "checkbox",
+                            // {
+                            //     label: "Quote",
+                            //     value: "add-lead-quote",
+                            //     type: "checkbox",
 
-                            }
+                            // }
                         ]
                     },
                     {
@@ -297,31 +295,31 @@
 
                             },
 
-                            {
-                                label: "Activity",
-                                value: "show-lead-activity",
-                                type: "checkbox",
+                            // {
+                            //     label: "Activity",
+                            //     value: "show-lead-activity",
+                            //     type: "checkbox",
 
-                            },
+                            // },
 
-                            {
-                                label: "Email",
-                                value: "show-lead-email",
-                                type: "checkbox",
+                            // {
+                            //     label: "Email",
+                            //     value: "show-lead-email",
+                            //     type: "checkbox",
 
-                            },
+                            // },
                             {
                                 label: "File",
                                 value: "show-lead-file",
                                 type: "checkbox",
 
                             },
-                            {
-                                label: "Quote",
-                                value: "show-lead-quote",
-                                type: "checkbox",
+                            // {
+                            //     label: "Quote",
+                            //     value: "show-lead-quote",
+                            //     type: "checkbox",
 
-                            },
+                            // },
                         ]
                     },
 
@@ -343,12 +341,12 @@
 
                             },
 
-                            {
-                                label: "Email",
-                                value: "delete-lead-email",
-                                type: "checkbox",
+                            // {
+                            //     label: "Email",
+                            //     value: "delete-lead-email",
+                            //     type: "checkbox",
 
-                            },
+                            // },
                             {
                                 label: "File",
                                 value: "delete-lead-file",
@@ -622,83 +620,83 @@
 
 
             // Email templates
-            {
-                label: "Email Templates",
-                value: "email-templates",
-                type: "checkbox",
-                children: [{
-                        label: "Show Email Templates",
-                        value: "show-email-templates",
-                        type: "checkbox",
+            // {
+            //     label: "Email Templates",
+            //     value: "email-templates",
+            //     type: "checkbox",
+            //     children: [{
+            //             label: "Show Email Templates",
+            //             value: "show-email-templates",
+            //             type: "checkbox",
 
-                    },
-                    {
-                        label: "Edit Email Templates",
-                        value: "edit-email-templates",
-                        type: "checkbox",
-                    },
-                    {
-                        label: "Create Email Templates",
-                        value: "create-email-templates",
-                        type: "checkbox",
-                    },
-                    {
-                        label: "Delete Email Templates",
-                        value: "delete-email-templates",
-                        type: "checkbox",
-                    },
+            //         },
+            //         {
+            //             label: "Edit Email Templates",
+            //             value: "edit-email-templates",
+            //             type: "checkbox",
+            //         },
+            //         {
+            //             label: "Create Email Templates",
+            //             value: "create-email-templates",
+            //             type: "checkbox",
+            //         },
+            //         {
+            //             label: "Delete Email Templates",
+            //             value: "delete-email-templates",
+            //             type: "checkbox",
+            //         },
 
 
 
-                ]
-            },
+            //     ]
+            // },
 
 
 
             // mail
 
-            {
-                label: "Mails",
-                value: "mails",
-                type: "checkbox",
-                children: [{
-                        label: "Show Mails",
-                        value: "show-mails",
-                        type: "checkbox",
-                        children: [
+            // {
+            //     label: "Mails",
+            //     value: "mails",
+            //     type: "checkbox",
+            //     children: [{
+            //             label: "Show Mails",
+            //             value: "show-mails",
+            //             type: "checkbox",
+            //             children: [
 
-                            {
-                                label: "Show All Mails",
-                                value: "show-all-mails",
-                                type: "radio",
-                                group: 'show-mails-by-type'
-                            },
-                            {
-                                label: "Show Own Mails",
-                                value: "show-own-mails",
-                                type: "radio",
-                                group: 'show-mails-by-type'
-                            },
+            //                 {
+            //                     label: "Show All Mails",
+            //                     value: "show-all-mails",
+            //                     type: "radio",
+            //                     group: 'show-mails-by-type'
+            //                 },
+            //                 {
+            //                     label: "Show Own Mails",
+            //                     value: "show-own-mails",
+            //                     type: "radio",
+            //                     group: 'show-mails-by-type'
+            //                 },
 
 
 
-                        ]
+            //             ]
 
-                    },
+            //         },
 
-                    {
-                        label: "Compose Mails",
-                        value: "compose-mails",
-                        type: "checkbox",
-                    },
+            //         {
+            //             label: "Compose Mails",
+            //             value: "compose-mails",
+            //             type: "checkbox",
+            //         },
 
-                    {
-                        label: "Delete Mails",
-                        value: "delete-mails",
-                        type: "checkbox",
-                    },
-                ]
-            },
+            //         {
+            //             label: "Delete Mails",
+            //             value: "delete-mails",
+            //             type: "checkbox",
+            //         },
+            //     ]
+            // },
 
 
             // Groups
@@ -728,7 +726,7 @@
                         value: "delete-groups",
                         type: "checkbox",
                     },
-                     {
+                    {
                         label: "Export Groups",
                         value: "export-groups",
                         type: "checkbox",
@@ -1048,21 +1046,21 @@
 
         // Check if item has radio children
         function hasRadioChildren(item) {
-    return item.children && item.children.some(child => child.type === 'radio');
-}
+            return item.children && item.children.some(child => child.type === 'radio');
+        }
 
-function generateId(value) {
-    return value.replace(/[^a-zA-Z0-9]/g, '_');
-}
+        function generateId(value) {
+            return value.replace(/[^a-zA-Z0-9]/g, '_');
+        }
 
-function renderPermission(item, level = 0, parentValue = null) {
-    const indentClass = level === 1 ? 'mx-3' : level === 2 ? 'mx-5' : level === 3 ? 'mx-5' : '';
-    const isRadio = item.type === 'radio';
-    const inputType = isRadio ? 'radio' : 'checkbox';
-    const name = isRadio ? item.group : 'permissions[]';
-    const id = generateId(item.value);
+        function renderPermission(item, level = 0, parentValue = null) {
+            const indentClass = level === 1 ? 'mx-3' : level === 2 ? 'mx-5' : level === 3 ? 'mx-5' : '';
+            const isRadio = item.type === 'radio';
+            const inputType = isRadio ? 'radio' : 'checkbox';
+            const name = isRadio ? item.group : 'permissions[]';
+            const id = generateId(item.value);
 
-    let html = `
+            let html = `
         <div class="col-md-3">
             <div class="form-check mb-3 ${indentClass}">
                 <input class="form-check-input" 
@@ -1080,337 +1078,398 @@ function renderPermission(item, level = 0, parentValue = null) {
             </div>
         </div>`;
 
-    if (item.children && item.children.length > 0) {
-        item.children.forEach(child => {
-            html += renderPermission(child, level + 1, item.value);
-        });
-    }
+            if (item.children && item.children.length > 0) {
+                item.children.forEach(child => {
+                    html += renderPermission(child, level + 1, item.value);
+                });
+            }
 
-    return html;
-}
+            return html;
+        }
 
-function renderPermissionFromBackend() {
-    const backendPermissions = @json($role->permissions ?? []);
-    const permissionType = '{{ $role->permission_type }}';
+        function renderPermissionFromBackend() {
+            const backendPermissions = @json($role->permissions ?? []);
+            const permissionType = '{{ $role->permission_type }}';
 
-    console.log('Backend Permissions:', backendPermissions);
-    console.log('Permission Type:', permissionType);
+            console.log('Backend Permissions:', backendPermissions);
+            console.log('Permission Type:', permissionType);
 
-    $('#pipeline-select').val(permissionType).trigger('change.select2');
+            $('#pipeline-select').val(permissionType).trigger('change.select2');
 
-    if (permissionType === 'all') {
-        handlePermissionTypeChange('all');
-        console.log('All permissions mode activated');
-        return;
-    }
-
-    handlePermissionTypeChange('custom');
-
-    setTimeout(() => {
-        let checkedCount = 0;
-        let notFoundCount = 0;
-
-        backendPermissions.forEach(permission => {
-            const input = document.querySelector(`[data-value="${permission}"]`);
-
-            if (!input) {
-                console.warn('❌ Permission input not found:', permission);
-                notFoundCount++;
+            if (permissionType === 'all') {
+                handlePermissionTypeChange('all');
+                console.log('All permissions mode activated');
                 return;
             }
 
-            if (input.type === 'checkbox') {
-                input.checked = true;
-                checkedCount++;
-                console.log('✅ Checked checkbox:', permission);
-                handleCheckboxChange(input);
-            } else if (input.type === 'radio') {
-                input.checked = true;
-                input.disabled = false;
-                checkedCount++;
-                console.log('✅ Selected radio:', permission);
-                handleRadioChange(input);
-            }
-        });
+            handlePermissionTypeChange('custom');
 
-        console.log(`✅ Successfully restored ${checkedCount} permissions`);
-        if (notFoundCount > 0) {
-            console.warn(`⚠️ ${notFoundCount} permissions not found in UI`);
-        }
-    }, 250);
-}
+            setTimeout(() => {
+                let checkedCount = 0;
+                let notFoundCount = 0;
 
-function renderAllPermissions() {
-    const container = document.getElementById('permission-container');
-    if (!container) {
-        console.error('Permission container not found');
-        return;
-    }
+                // STEP 1: First, set all permissions WITHOUT triggering parent checks
+                backendPermissions.forEach(permission => {
+                    const input = document.querySelector(`[data-value="${permission}"]`);
 
-    let html = '';
-    permissions.forEach(permission => {
-        html += renderPermission(permission);
-    });
-    container.innerHTML = html;
-    attachEventListeners();
-    initPermissionTypeDropdown();
-}
+                    if (!input) {
+                        console.warn('❌ Permission input not found:', permission);
+                        notFoundCount++;
+                        return;
+                    }
 
-function getChildInputs(parentValue) {
-    return document.querySelectorAll(`[data-parent="${parentValue}"]`);
-}
+                    if (input.type === 'checkbox') {
+                        input.checked = true;
+                        checkedCount++;
+                        console.log('✅ Checked checkbox:', permission);
+                        // Don't call handleCheckboxChange yet - just check it
+                    } else if (input.type === 'radio') {
+                        input.checked = true;
+                        input.disabled = false;
+                        checkedCount++;
+                        console.log('✅ Selected radio:', permission);
+                        // Handle radio parent checking
+                        handleRadioChange(input);
+                    }
+                });
 
-function getParentInput(childInput) {
-    const parentValue = childInput.getAttribute('data-parent');
-    if (!parentValue) return null;
-    return document.querySelector(`[data-value="${parentValue}"]`);
-}
+                // STEP 2: Now check all parents based on their children's state
+                updateAllParents();
 
-function handleCheckboxChange(checkbox) {
-    if (checkbox.disabled) return;
-
-    if (checkbox.checked) {
-        const children = getChildInputs(checkbox.dataset.value);
-        children.forEach(child => {
-            if (child.type === 'checkbox') {
-                child.checked = true;
-                handleCheckboxChange(child);
-            } else if (child.type === 'radio') {
-                child.disabled = false;
-            }
-        });
-
-        if (checkbox.dataset.hasRadioChildren) {
-            const radios = Array.from(children).filter(c => c.type === 'radio');
-            if (radios.length > 0 && !radios.some(r => r.checked)) {
-                radios[0].checked = true;
-            }
+                console.log(`✅ Successfully restored ${checkedCount} permissions`);
+                if (notFoundCount > 0) {
+                    console.warn(`⚠️ ${notFoundCount} permissions not found in UI`);
+                }
+            }, 250);
         }
 
-        const parent = getParentInput(checkbox);
-        if (parent && parent.type === 'checkbox' && !parent.checked && !parent.disabled) {
-            parent.checked = true;
-            handleCheckboxChange(parent);
-        }
-    } else {
-        const children = getChildInputs(checkbox.dataset.value);
-        children.forEach(child => {
-            if (child.type === 'checkbox') {
-                child.checked = false;
-                handleCheckboxChange(child);
-            } else if (child.type === 'radio') {
-                child.checked = false;
-                child.disabled = true;
-            }
-        });
+        // NEW FUNCTION: Update all parent checkboxes based on their children
+        function updateAllParents() {
+            // Get all checkboxes that have children (parents)
+            const allCheckboxes = document.querySelectorAll('#permission-container input[type="checkbox"]');
 
-        const parent = getParentInput(checkbox);
-        if (parent && parent.type === 'checkbox' && !parent.disabled) {
-            const siblings = getChildInputs(parent.dataset.value);
-            const anyChecked = Array.from(siblings).some(s =>
-                s.type === 'checkbox' && s.checked
-            );
-            if (!anyChecked) {
-                parent.checked = false;
+            // Filter to get only parent checkboxes (ones that have data-group attribute)
+            const parentCheckboxes = Array.from(allCheckboxes).filter(cb => cb.dataset.group);
+
+            // Sort parents by depth (deepest first) to handle nested hierarchies
+            parentCheckboxes.sort((a, b) => {
+                const depthA = (a.dataset.value.match(/-/g) || []).length;
+                const depthB = (b.dataset.value.match(/-/g) || []).length;
+                return depthB - depthA; // Deepest first
+            });
+
+            // Update each parent based on its children
+            parentCheckboxes.forEach(parent => {
+                // Skip if parent has radio children - those are handled differently
+                if (parent.dataset.hasRadioChildren) {
+                    return;
+                }
+
+                // Get all child checkboxes
+                const children = getChildInputs(parent.dataset.value);
+                const checkboxChildren = Array.from(children).filter(c => c.type === 'checkbox');
+
+                // Check if ALL checkbox children are checked
+                if (checkboxChildren.length > 0) {
+                    const allChecked = checkboxChildren.every(child => child.checked);
+                    parent.checked = allChecked;
+
+                    if (allChecked) {
+                        console.log('✅ Parent auto-checked:', parent.dataset.value);
+                    }
+                }
+            });
+        }
+
+        function renderAllPermissions() {
+            const container = document.getElementById('permission-container');
+            if (!container) {
+                console.error('Permission container not found');
+                return;
+            }
+
+            let html = '';
+            permissions.forEach(permission => {
+                html += renderPermission(permission);
+            });
+            container.innerHTML = html;
+            attachEventListeners();
+            initPermissionTypeDropdown();
+        }
+
+        function getChildInputs(parentValue) {
+            return document.querySelectorAll(`[data-parent="${parentValue}"]`);
+        }
+
+        function getParentInput(childInput) {
+            const parentValue = childInput.getAttribute('data-parent');
+            if (!parentValue) return null;
+            return document.querySelector(`[data-value="${parentValue}"]`);
+        }
+
+        // Handle checkbox change
+        function handleCheckboxChange(checkbox) {
+            // Don't process if disabled (in "all" mode)
+            if (checkbox.disabled) return;
+
+            if (checkbox.checked) {
+                // Check all children
+                const children = getChildInputs(checkbox.dataset.value);
+                children.forEach(child => {
+                    if (child.type === 'checkbox') {
+                        child.checked = true;
+                        handleCheckboxChange(child);
+                    } else if (child.type === 'radio') {
+                        child.disabled = false;
+                    }
+                });
+
+                // Select first radio if this has radio children
+                if (checkbox.dataset.hasRadioChildren) {
+                    const radios = Array.from(children).filter(c => c.type === 'radio');
+                    if (radios.length > 0 && !radios.some(r => r.checked)) {
+                        radios[0].checked = true;
+                    }
+                }
+
+                // *** MODIFIED LOGIC: Check parent only if ALL sibling checkboxes are checked ***
+                const parent = getParentInput(checkbox);
+                if (parent && parent.type === 'checkbox' && !parent.checked && !parent.disabled) {
+                    // Get all child checkboxes of the parent
+                    const siblings = getChildInputs(parent.dataset.value);
+                    const checkboxSiblings = Array.from(siblings).filter(s => s.type === 'checkbox');
+
+                    // Check if ALL checkbox siblings are checked
+                    const allSiblingsChecked = checkboxSiblings.length > 0 &&
+                        checkboxSiblings.every(s => s.checked);
+
+                    // Only check parent if all children are checked
+                    if (allSiblingsChecked) {
+                        parent.checked = true;
+                        handleCheckboxChange(parent);
+                    }
+                }
+            } else {
+                // Uncheck and disable all children
+                const children = getChildInputs(checkbox.dataset.value);
+                children.forEach(child => {
+                    if (child.type === 'checkbox') {
+                        child.checked = false;
+                        handleCheckboxChange(child);
+                    } else if (child.type === 'radio') {
+                        child.checked = false;
+                        child.disabled = true;
+                    }
+                });
+
+                // Check if parent should be unchecked
+                const parent = getParentInput(checkbox);
+                if (parent && parent.type === 'checkbox' && !parent.disabled) {
+                    const siblings = getChildInputs(parent.dataset.value);
+                    const anyChecked = Array.from(siblings).some(s =>
+                        s.type === 'checkbox' && s.checked
+                    );
+                    if (!anyChecked) {
+                        parent.checked = false;
+                        handleCheckboxChange(parent);
+                    }
+                }
+            }
+        }
+
+        function handleRadioChange(radio) {
+            const parent = getParentInput(radio);
+            if (parent && parent.type === 'checkbox' && !parent.checked) {
+                parent.checked = true;
                 handleCheckboxChange(parent);
             }
         }
-    }
-}
 
-function handleRadioChange(radio) {
-    const parent = getParentInput(radio);
-    if (parent && parent.type === 'checkbox' && !parent.checked) {
-        parent.checked = true;
-        handleCheckboxChange(parent);
-    }
-}
+        function attachEventListeners() {
+            document.querySelectorAll('#permission-container input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    handleCheckboxChange(this);
+                });
+            });
 
-function attachEventListeners() {
-    document.querySelectorAll('#permission-container input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            handleCheckboxChange(this);
-        });
-    });
-
-    document.querySelectorAll('#permission-container input[type="radio"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            handleRadioChange(this);
-        });
-        radio.disabled = true;
-    });
-}
-
-function handlePermissionTypeChange(value) {
-    const allCheckboxes = document.querySelectorAll('#permission-container input[type="checkbox"]');
-    const allRadios = document.querySelectorAll('#permission-container input[type="radio"]');
-
-    console.log('Handling permission type:', value);
-    console.log('Found checkboxes:', allCheckboxes.length);
-    console.log('Found radios:', allRadios.length);
-
-    if (value === 'all') {
-        allCheckboxes.forEach(checkbox => {
-            checkbox.checked = true;
-            checkbox.disabled = true;
-        });
-
-        const radioGroups = {};
-        allRadios.forEach(radio => {
-            const group = radio.name;
-            if (!radioGroups[group]) {
-                radioGroups[group] = [];
-            }
-            radioGroups[group].push(radio);
-        });
-
-        Object.values(radioGroups).forEach(radios => {
-            radios.forEach((radio, index) => {
+            document.querySelectorAll('#permission-container input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    handleRadioChange(this);
+                });
                 radio.disabled = true;
-                radio.checked = index === 0;
             });
-        });
+        }
 
-        console.log('All permissions enabled and disabled');
-    } else {
-        allCheckboxes.forEach(checkbox => {
-            checkbox.disabled = false;
-            checkbox.checked = false;
-        });
+        function handlePermissionTypeChange(value) {
+            const allCheckboxes = document.querySelectorAll('#permission-container input[type="checkbox"]');
+            const allRadios = document.querySelectorAll('#permission-container input[type="radio"]');
 
-        allRadios.forEach(radio => {
-            radio.disabled = true;
-            radio.checked = false;
-        });
+            console.log('Handling permission type:', value);
+            console.log('Found checkboxes:', allCheckboxes.length);
+            console.log('Found radios:', allRadios.length);
 
-        console.log('Custom mode - all permissions cleared and enabled');
-    }
-}
+            if (value === 'all') {
+                allCheckboxes.forEach(checkbox => {
+                    checkbox.checked = true;
+                    checkbox.disabled = true;
+                });
 
-function initPermissionTypeDropdown() {
-    const dropdown = document.getElementById('pipeline-select');
-    if (!dropdown) {
-        console.error('Permission type dropdown not found');
-        return;
-    }
+                const radioGroups = {};
+                allRadios.forEach(radio => {
+                    const group = radio.name;
+                    if (!radioGroups[group]) {
+                        radioGroups[group] = [];
+                    }
+                    radioGroups[group].push(radio);
+                });
 
-    $('#pipeline-select').on('select2:select', function(e) {
-        console.log('Select2 dropdown changed to:', this.value);
-        handlePermissionTypeChange(this.value);
-    });
+                Object.values(radioGroups).forEach(radios => {
+                    radios.forEach((radio, index) => {
+                        radio.disabled = true;
+                        radio.checked = index === 0;
+                    });
+                });
 
-    $('#pipeline-select').on('change', function() {
-        console.log('Dropdown changed to:', this.value);
-        handlePermissionTypeChange(this.value);
-    });
+                console.log('All permissions enabled and disabled');
+            } else {
+                allCheckboxes.forEach(checkbox => {
+                    checkbox.disabled = false;
+                    checkbox.checked = false;
+                });
 
-    handlePermissionTypeChange(dropdown.value);
-}
+                allRadios.forEach(radio => {
+                    radio.disabled = true;
+                    radio.checked = false;
+                });
 
-function collectPermissions() {
-    const result = [];
-    const permissionType = document.getElementById('pipeline-select');
-    const isAllPermissions = permissionType && permissionType.value === 'all';
+                console.log('Custom mode - all permissions cleared and enabled');
+            }
+        }
 
-    if (isAllPermissions) {
-        const allCheckboxes = document.querySelectorAll('#permission-container input[type="checkbox"]');
-        allCheckboxes.forEach(checkbox => {
-            if (!checkbox.dataset.hasRadioChildren) {
+        function initPermissionTypeDropdown() {
+            const dropdown = document.getElementById('pipeline-select');
+            if (!dropdown) {
+                console.error('Permission type dropdown not found');
+                return;
+            }
+
+            $('#pipeline-select').on('select2:select', function(e) {
+                console.log('Select2 dropdown changed to:', this.value);
+                handlePermissionTypeChange(this.value);
+            });
+
+            $('#pipeline-select').on('change', function() {
+                console.log('Dropdown changed to:', this.value);
+                handlePermissionTypeChange(this.value);
+            });
+
+            handlePermissionTypeChange(dropdown.value);
+        }
+
+        function collectPermissions() {
+            const result = [];
+            const permissionType = document.getElementById('pipeline-select');
+            const isAllPermissions = permissionType && permissionType.value === 'all';
+
+            if (isAllPermissions) {
+                const allCheckboxes = document.querySelectorAll('#permission-container input[type="checkbox"]');
+                allCheckboxes.forEach(checkbox => {
+                    if (!checkbox.dataset.hasRadioChildren) {
+                        result.push(checkbox.value);
+                    }
+                });
+
+                const allRadios = document.querySelectorAll('#permission-container input[type="radio"]:checked');
+                allRadios.forEach(radio => {
+                    result.push(radio.value);
+                });
+
+                return result;
+            }
+
+            const checkboxes = document.querySelectorAll('#permission-container input[type="checkbox"]:checked');
+            const radioParentValues = new Set();
+            const radios = document.querySelectorAll('#permission-container input[type="radio"]:checked');
+
+            radios.forEach(radio => {
+                const parentValue = radio.getAttribute('data-parent');
+                if (parentValue) {
+                    radioParentValues.add(parentValue);
+                }
+            });
+
+            checkboxes.forEach(checkbox => {
+                if (checkbox.dataset.hasRadioChildren) {
+                    return;
+                }
+                if (radioParentValues.has(checkbox.value)) {
+                    return;
+                }
                 result.push(checkbox.value);
+            });
+
+            radios.forEach(radio => {
+                result.push(radio.value);
+            });
+
+            return result;
+        }
+
+        // FIXED: This is the corrected function
+        function updatePermissionsBeforeSubmit(form) {
+            console.log('Preparing permissions for submission...');
+
+            // Remove all existing hidden permission inputs
+            form.querySelectorAll('input[name="permissions[]"][type="hidden"]').forEach(input => {
+                input.remove();
+            });
+
+            // ALWAYS disable visible inputs to prevent them from submitting
+            // Disable checkboxes
+            form.querySelectorAll('#permission-container input[type="checkbox"]').forEach(input => {
+                input.disabled = true;
+            });
+
+            // Disable radios
+            form.querySelectorAll('#permission-container input[type="radio"]').forEach(input => {
+                input.disabled = true;
+            });
+
+            // Get collected permissions
+            const selectedPermissions = collectPermissions();
+            console.log('Collected permissions:', selectedPermissions);
+
+            // Create hidden inputs for each permission
+            selectedPermissions.forEach(permission => {
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'permissions[]';
+                hiddenInput.value = permission;
+                form.appendChild(hiddenInput);
+            });
+
+            console.log('Added', selectedPermissions.length, 'hidden permission inputs');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderAllPermissions();
+
+            setTimeout(() => {
+                renderPermissionFromBackend();
+            }, 400);
+
+            const permissionContainer = document.getElementById('permission-container');
+            if (permissionContainer) {
+                const form = permissionContainer.closest('form');
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        updatePermissionsBeforeSubmit(this);
+                    });
+                }
             }
         });
 
-        const allRadios = document.querySelectorAll('#permission-container input[type="radio"]:checked');
-        allRadios.forEach(radio => {
-            result.push(radio.value);
-        });
-
-        return result;
-    }
-
-    const checkboxes = document.querySelectorAll('#permission-container input[type="checkbox"]:checked');
-    const radioParentValues = new Set();
-    const radios = document.querySelectorAll('#permission-container input[type="radio"]:checked');
-    
-    radios.forEach(radio => {
-        const parentValue = radio.getAttribute('data-parent');
-        if (parentValue) {
-            radioParentValues.add(parentValue);
-        }
-    });
-
-    checkboxes.forEach(checkbox => {
-        if (checkbox.dataset.hasRadioChildren) {
-            return;
-        }
-        if (radioParentValues.has(checkbox.value)) {
-            return;
-        }
-        result.push(checkbox.value);
-    });
-
-    radios.forEach(radio => {
-        result.push(radio.value);
-    });
-
-    return result;
-}
-
-// FIXED: This is the corrected function
-function updatePermissionsBeforeSubmit(form) {
-    console.log('Preparing permissions for submission...');
-    
-    // Remove all existing hidden permission inputs
-    form.querySelectorAll('input[name="permissions[]"][type="hidden"]').forEach(input => {
-        input.remove();
-    });
-
-    // ALWAYS disable visible inputs to prevent them from submitting
-    // Disable checkboxes
-    form.querySelectorAll('#permission-container input[type="checkbox"]').forEach(input => {
-        input.disabled = true;
-    });
-    
-    // Disable radios
-    form.querySelectorAll('#permission-container input[type="radio"]').forEach(input => {
-        input.disabled = true;
-    });
-
-    // Get collected permissions
-    const selectedPermissions = collectPermissions();
-    console.log('Collected permissions:', selectedPermissions);
-
-    // Create hidden inputs for each permission
-    selectedPermissions.forEach(permission => {
-        const hiddenInput = document.createElement('input');
-        hiddenInput.type = 'hidden';
-        hiddenInput.name = 'permissions[]';
-        hiddenInput.value = permission;
-        form.appendChild(hiddenInput);
-    });
-    
-    console.log('Added', selectedPermissions.length, 'hidden permission inputs');
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    renderAllPermissions();
-
-    setTimeout(() => {
-        renderPermissionFromBackend();
-    }, 400);
-
-    const permissionContainer = document.getElementById('permission-container');
-    if (permissionContainer) {
-        const form = permissionContainer.closest('form');
-        if (form) {
-            form.addEventListener('submit', function(e) {
-                updatePermissionsBeforeSubmit(this);
-            });
-        }
-    }
-});
-
-window.getPermissions = collectPermissions;
-window.renderPermissionFromBackend = renderPermissionFromBackend;
+        window.getPermissions = collectPermissions;
+        window.renderPermissionFromBackend = renderPermissionFromBackend;
     </script>
 @endsection

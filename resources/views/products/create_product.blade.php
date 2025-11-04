@@ -84,8 +84,7 @@
 
                                                     @switch($attribute->type)
                                                         @case('text')
-                                                            <input type="text" class="form-control"
-                                                                name="{{ $attribute->code }}"
+                                                            <input type="text" class="form-control" name="{{ $attribute->code }}"
                                                                 {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
                                                         @break
 
@@ -134,7 +133,9 @@
                                                             @php
                                                                 $options = [];
                                                                 if ($attribute->options) {
-                                                                    $options = json_decode($attribute->options, true);
+                                                                    $options = is_array($attribute->options)
+                                                                        ? $attribute->options
+                                                                        : json_decode($attribute->options, true);
                                                                 }
                                                             @endphp
                                                             <select name="{{ $attribute->code }}[]" multiple class="form-select"
@@ -150,7 +151,9 @@
                                                             @php
                                                                 $options = [];
                                                                 if ($attribute->options) {
-                                                                    $options = json_decode($attribute->options, true);
+                                                                    $options = is_array($attribute->options)
+                                                                        ? $attribute->options
+                                                                        : json_decode($attribute->options, true);
                                                                 }
                                                             @endphp
                                                             <div>
@@ -231,7 +234,8 @@
                     </div>
                     <div>
                         <button type="submit" class="btn save-btn">Save</button>
-                        <a href="{{ url('products') }}"><button type="button" class="btn cancel-btn">Cancel</button></a>
+                        <a href="{{ url('products') }}"><button type="button"
+                                class="btn cancel-btn">Cancel</button></a>
                     </div>
 
                 </div>
@@ -265,8 +269,3 @@
         });
     </script>
 @endsection
-
-
-
-
-

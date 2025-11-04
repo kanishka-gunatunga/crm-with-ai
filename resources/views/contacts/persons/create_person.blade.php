@@ -139,16 +139,16 @@
                                     </div>
 
                                 </div>
-                                @if($personAttributes->isNotEmpty())
-                                <div class="card card-default mt-3">
-                                    <div class="card-body">
+                                @if ($personAttributes->isNotEmpty())
+                                    <div class="card card-default mt-3">
+                                        <div class="card-body">
 
-                                        @foreach ($personAttributes as $attribute)
-                                            <div class="form-group mb-3">
-                                                <label for="{{ $attribute->code }}"
-                                                    class="form-label">{{ $attribute->name }}</label>
+                                            @foreach ($personAttributes as $attribute)
+                                                <div class="form-group mb-3">
+                                                    <label for="{{ $attribute->code }}"
+                                                        class="form-label">{{ $attribute->name }}</label>
 
-                                               @switch($attribute->type)
+                                                    @switch($attribute->type)
                                                         @case('text')
                                                             <input type="text" class="form-control"
                                                                 name="{{ $attribute->code }}"
@@ -216,7 +216,9 @@
                                                             @php
                                                                 $options = [];
                                                                 if ($attribute->options) {
-                                                                    $options = json_decode($attribute->options, true);
+                                                                    $options = is_array($attribute->options)
+                                                                        ? $attribute->options
+                                                                        : json_decode($attribute->options, true);
                                                                 }
                                                             @endphp
                                                             <div>
@@ -270,14 +272,14 @@
                                                     @error($attribute->code)
                                                         <div class="alert alert-danger mt-2">{{ $message }}</div>
                                                     @enderror
-                                            </div>
-                                        @endforeach
+                                                </div>
+                                            @endforeach
+
+
+                                        </div>
 
 
                                     </div>
-
-
-                                </div>
                                 @endif
                             </div>
 

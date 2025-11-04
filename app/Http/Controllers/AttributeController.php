@@ -74,6 +74,8 @@ class AttributeController extends Controller
             }
             if ($request->isMethod('post')) {
 
+                // dd($request->all());
+
                 $validated = $request->validate([
                     'code' => 'required|string|max:255|unique:attributes,code',
                     'name' => 'required|string|max:255',

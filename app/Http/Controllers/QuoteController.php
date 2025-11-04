@@ -172,7 +172,7 @@ class QuoteController extends Controller
                 $attributeData = [];
 
                 foreach ($quoteAttributes as $attribute) {
-                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                    $attributeData[$attribute->name] = $request->input($attribute->name);
                 }
 
                 $quote =  new Quote();
@@ -276,7 +276,7 @@ class QuoteController extends Controller
                 $attributeData = [];
 
                 foreach ($quoteAttributes as $attribute) {
-                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                    $attributeData[$attribute->name] = $request->input($attribute->name);
                 }
 
 
@@ -407,7 +407,7 @@ class QuoteController extends Controller
                 // Gather dynamic field values again
                 $attributeData = [];
                 foreach ($quoteAttributes as $attribute) {
-                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                    $attributeData[$attribute->name] = $request->input($attribute->name);
                 }
 
                 $quote->lead = $request->lead;

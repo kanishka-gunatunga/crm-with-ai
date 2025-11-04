@@ -88,7 +88,7 @@ class OrganizationsController extends Controller
                 $attributeData = [];
 
                 foreach ($organizationAttributes as $attribute) {
-                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                    $attributeData[$attribute->name] = $request->input($attribute->name);
                 }
 
                 $organization = new Organization();
@@ -152,6 +152,8 @@ class OrganizationsController extends Controller
                 return view('contacts.organizations.edit_organization', ['organization' => $organization, 'organizationAttributes' => $organizationAttributes, 'customAttributes' => $customAttributes]);
             }
             if ($request->isMethod('post')) {
+
+                
                 $request->validate([
                     'name' => 'required|string|max:255',
                     'emails.*' => 'required|email',
@@ -163,7 +165,7 @@ class OrganizationsController extends Controller
                 // Gather dynamic field values again
                 $attributeData = [];
                 foreach ($organizationAttributes as $attribute) {
-                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                    $attributeData[$attribute->name] = $request->input($attribute->name);
                 }
 
                 $organization->name = $request->name;

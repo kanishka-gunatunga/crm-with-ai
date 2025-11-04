@@ -90,6 +90,8 @@ class UsersController extends Controller
             }
             if ($request->isMethod('post')) {
 
+                // dd($request->all());
+
                 $request->validate([
                     'name'   => 'required',
                     'role'   => 'required',
@@ -103,7 +105,7 @@ class UsersController extends Controller
                     "email" => $request->email,
                     "password" => Hash::make($request->password),
                     "role" => $request->role,
-                    "status" => $request->status ?? 'active',
+                    "status" => $request->has('status') ? 'active' : 'inactive',
                 ]);
 
                 $userDetails = new UserDetails();

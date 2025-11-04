@@ -169,7 +169,8 @@ class LeadController extends Controller
             $attributeData = [];
 
             foreach ($leadAttributes as $attribute) {
-                $attributeData[$attribute->code] = $request->input($attribute->code);
+                $attributeData[$attribute->name] = $request->input($attribute->name);
+               
             }
 
             // if (in_array(strtolower('lead-create'), array_map('strtolower', $permissions))) {
@@ -423,7 +424,7 @@ class LeadController extends Controller
                 // Gather dynamic field values again
                 $attributeData = [];
                 foreach ($leadAttributes as $attribute) {
-                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                    $attributeData[$attribute->name] = $request->input($attribute->name);
                 }
                 $lead->title = $request->title;
                 $lead->lead_value = $request->lead_value;

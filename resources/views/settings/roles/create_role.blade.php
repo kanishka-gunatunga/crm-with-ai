@@ -878,8 +878,7 @@
                         label: "Create Lead",
                         value: "lead-create",
                         type: "checkbox",
-                        children: [
-                            {
+                        children: [{
                                 label: "Create Any Leads",
                                 value: "create-any-leads",
                                 type: "radio",
@@ -940,7 +939,7 @@
                     //     value: "lead-assignment",
                     //     type: "checkbox"
                     // },
-                    
+
 
                     {
                         label: "Delete lead",
@@ -1042,12 +1041,12 @@
 
                             },
 
-                            {
-                                label: "Email",
-                                value: "delete-lead-email",
-                                type: "checkbox",
+                            // {
+                            //     label: "Email",
+                            //     value: "delete-lead-email",
+                            //     type: "checkbox",
 
-                            },
+                            // },
                             {
                                 label: "File",
                                 value: "delete-lead-file",
@@ -1321,83 +1320,83 @@
 
 
             // Email templates
-            {
-                label: "Email Templates",
-                value: "email-templates",
-                type: "checkbox",
-                children: [{
-                        label: "Show Email Templates",
-                        value: "show-email-templates",
-                        type: "checkbox",
+            // {
+            //     label: "Email Templates",
+            //     value: "email-templates",
+            //     type: "checkbox",
+            //     children: [{
+            //             label: "Show Email Templates",
+            //             value: "show-email-templates",
+            //             type: "checkbox",
 
-                    },
-                    {
-                        label: "Edit Email Templates",
-                        value: "edit-email-templates",
-                        type: "checkbox",
-                    },
-                    {
-                        label: "Create Email Templates",
-                        value: "create-email-templates",
-                        type: "checkbox",
-                    },
-                    {
-                        label: "Delete Email Templates",
-                        value: "delete-email-templates",
-                        type: "checkbox",
-                    },
+            //         },
+            //         {
+            //             label: "Edit Email Templates",
+            //             value: "edit-email-templates",
+            //             type: "checkbox",
+            //         },
+            //         {
+            //             label: "Create Email Templates",
+            //             value: "create-email-templates",
+            //             type: "checkbox",
+            //         },
+            //         {
+            //             label: "Delete Email Templates",
+            //             value: "delete-email-templates",
+            //             type: "checkbox",
+            //         },
 
 
 
-                ]
-            },
+            //     ]
+            // },
 
 
 
             // mail
 
-            {
-                label: "Mails",
-                value: "mails",
-                type: "checkbox",
-                children: [{
-                        label: "Show Mails",
-                        value: "show-mails",
-                        type: "checkbox",
-                        children: [
+            // {
+            //     label: "Mails",
+            //     value: "mails",
+            //     type: "checkbox",
+            //     children: [{
+            //             label: "Show Mails",
+            //             value: "show-mails",
+            //             type: "checkbox",
+            //             children: [
 
-                            {
-                                label: "Show All Mails",
-                                value: "show-all-mails",
-                                type: "radio",
-                                group: 'show-mails-by-type'
-                            },
-                            {
-                                label: "Show Own Mails",
-                                value: "show-own-mails",
-                                type: "radio",
-                                group: 'show-mails-by-type'
-                            },
+            //                 {
+            //                     label: "Show All Mails",
+            //                     value: "show-all-mails",
+            //                     type: "radio",
+            //                     group: 'show-mails-by-type'
+            //                 },
+            //                 {
+            //                     label: "Show Own Mails",
+            //                     value: "show-own-mails",
+            //                     type: "radio",
+            //                     group: 'show-mails-by-type'
+            //                 },
 
 
 
-                        ]
+            //             ]
 
-                    },
+            //         },
 
-                    {
-                        label: "Compose Mails",
-                        value: "compose-mails",
-                        type: "checkbox",
-                    },
+            //         {
+            //             label: "Compose Mails",
+            //             value: "compose-mails",
+            //             type: "checkbox",
+            //         },
 
-                    {
-                        label: "Delete Mails",
-                        value: "delete-mails",
-                        type: "checkbox",
-                    },
-                ]
-            },
+            //         {
+            //             label: "Delete Mails",
+            //             value: "delete-mails",
+            //             type: "checkbox",
+            //         },
+            //     ]
+            // },
 
 
             // Groups
@@ -1427,7 +1426,7 @@
                         value: "delete-groups",
                         type: "checkbox",
                     },
-                     {
+                    {
                         label: "Export Groups",
                         value: "export-groups",
                         type: "checkbox",
@@ -1822,6 +1821,7 @@
         }
 
         // Handle checkbox change
+        // Handle checkbox change
         function handleCheckboxChange(checkbox) {
             // Don't process if disabled (in "all" mode)
             if (checkbox.disabled) return;
@@ -1846,11 +1846,22 @@
                     }
                 }
 
-                // Check parent
+                // Check parent only if ALL sibling checkboxes are checked ***
                 const parent = getParentInput(checkbox);
                 if (parent && parent.type === 'checkbox' && !parent.checked && !parent.disabled) {
-                    parent.checked = true;
-                    handleCheckboxChange(parent);
+                    // Get all child checkboxes of the parent
+                    const siblings = getChildInputs(parent.dataset.value);
+                    const checkboxSiblings = Array.from(siblings).filter(s => s.type === 'checkbox');
+
+                    // Check if ALL checkbox siblings are checked
+                    const allSiblingsChecked = checkboxSiblings.length > 0 &&
+                        checkboxSiblings.every(s => s.checked);
+
+                    // Only check parent if all children are checked
+                    if (allSiblingsChecked) {
+                        parent.checked = true;
+                        handleCheckboxChange(parent);
+                    }
                 }
             } else {
                 // Uncheck and disable all children

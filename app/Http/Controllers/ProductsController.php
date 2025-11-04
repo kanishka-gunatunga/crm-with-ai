@@ -78,7 +78,7 @@ class ProductsController extends Controller
                 $attributeData = [];
 
                 foreach ($productAttributes as $attribute) {
-                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                    $attributeData[$attribute->name] = $request->input($attribute->name);
                 }
 
                 $product = new Product();
@@ -138,7 +138,7 @@ class ProductsController extends Controller
                 // Gather dynamic field values again
                 $attributeData = [];
                 foreach ($productAttributes as $attribute) {
-                    $attributeData[$attribute->code] = $request->input($attribute->code);
+                    $attributeData[$attribute->name] = $request->input($attribute->name);
                 }
 
                 $product->name = $request->name;
