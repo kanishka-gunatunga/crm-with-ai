@@ -957,12 +957,12 @@
 
                             },
 
-                            // {
-                            //     label: "Activity",
-                            //     value: "add-lead-activity",
-                            //     type: "checkbox",
+                            {
+                                label: "Activity",
+                                value: "add-lead-activity",
+                                type: "checkbox",
 
-                            // },
+                            },
 
                             // {
                             //     label: "Email",
@@ -1034,12 +1034,12 @@
 
                             },
 
-                            {
-                                label: "Activity",
-                                value: "delete-lead-activity",
-                                type: "checkbox",
+                            // {
+                            //     label: "Activity",
+                            //     value: "delete-lead-activity",
+                            //     type: "checkbox",
 
-                            },
+                            // },
 
                             // {
                             //     label: "Email",

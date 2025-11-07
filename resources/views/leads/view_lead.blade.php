@@ -861,7 +861,7 @@ $permissions = session('user_permissions');
 
 
 
-                                    @if (in_array(strtolower('show-lead-activity'), array_map('strtolower', $permissions)))
+                                    @if (in_array(strtolower('show-all-activities'), array_map('strtolower', $permissions)) || in_array(strtolower('show-own-activities'), array_map('strtolower', $permissions)))
                                         <div class="calls-tab mt-3">
 
                                             @if ($calls->isEmpty())
@@ -1301,7 +1301,8 @@ $permissions = session('user_permissions');
 
 
                                     {{-- quotes --}}
-                                    @if (in_array(strtolower('show-lead-quote'), array_map('strtolower', $permissions)))
+                                    @if (in_array(strtolower('quotes-view-own'), array_map('strtolower', $permissions)) ||
+                                            in_array(strtolower('quotes-view-all'), array_map('strtolower', $permissions)))
                                         @if ($quotes->isEmpty())
                                         @else
                                             <div>
@@ -1477,7 +1478,8 @@ $permissions = session('user_permissions');
 
                                         @if ($calls->isEmpty())
                                             <p>No calls available.</p>
-                                        @elseif (in_array(strtolower('show-lead-activity'), array_map('strtolower', $permissions)))
+                                        @elseif (in_array(strtolower('show-own-activities'), array_map('strtolower', $permissions)) ||
+                                                in_array(strtolower('show-all-activities'), array_map('strtolower', $permissions)))
                                             <div>
                                                 <h5 class="mb-3 card-title">Calls</h5>
                                             </div>
@@ -1552,7 +1554,7 @@ $permissions = session('user_permissions');
 
                                         @if ($meetings->isEmpty())
                                             <p>No meetings found.</p>
-                                        @elseif (in_array(strtolower('show-lead-activity'), array_map('strtolower', $permissions)))
+                                        @elseif (in_array(strtolower('show-all-activities'), array_map('strtolower', $permissions)) || (in_array(strtolower('show-own-activities'), array_map('strtolower', $permissions))))
                                             <div>
                                                 <h5 class="mb-3 card-title">Meetings</h5>
                                             </div>
@@ -1626,7 +1628,7 @@ $permissions = session('user_permissions');
 
                                         @if ($lunches->isEmpty())
                                             <p>No lunches found.</p>
-                                        @elseif (in_array(strtolower('show-lead-activity'), array_map('strtolower', $permissions)))
+                                        @elseif (in_array(strtolower('show-own-activities'), array_map('strtolower', $permissions)) || in_array(strtolower('show-all-activities'), array_map('strtolower', $permissions)))
                                             <div>
                                                 <h5 class="mb-3 card-title">Lunches</h5>
                                             </div>
@@ -1907,7 +1909,8 @@ $permissions = session('user_permissions');
 
                                     @if ($quotes->isEmpty())
                                         <p>No Quotes Found</p>
-                                    @elseif (in_array(strtolower('show-lead-quote'), array_map('strtolower', $permissions)))
+                                    @elseif (in_array(strtolower('quotes-view-own'), array_map('strtolower', $permissions)) ||
+                                            in_array(strtolower('quotes-view-all'), array_map('strtolower', $permissions)))
                                         <div>
                                             <div>
                                                 <h5 class="mb-3 card-title">Quotes</h5>
@@ -2082,9 +2085,8 @@ $permissions = session('user_permissions');
                                             </li>
                                             <li class="nav-item w-100" role="presentation">
                                                 <button class="nav-link filter-button" id="events-note-tab"
-                                                    data-bs-toggle="pill" data-bs-target="#events-notes"
-                                                    type="button" role="tab" aria-controls="note2"
-                                                    aria-selected="true">
+                                                    data-bs-toggle="pill" data-bs-target="#events-notes" type="button"
+                                                    role="tab" aria-controls="note2" aria-selected="true">
                                                     <div class="menu-item activity-item">
                                                         <div class="item-content">
                                                             <svg width="20" height="20" viewBox="0 0 13 13"
@@ -2102,9 +2104,8 @@ $permissions = session('user_permissions');
                                             </li>
                                             <li class="nav-item w-100" role="presentation">
                                                 <button class="nav-link filter-button" id="events-calls-tab"
-                                                    data-bs-toggle="pill" data-bs-target="#events-calls"
-                                                    type="button" role="tab" aria-controls="calls"
-                                                    aria-selected="false">
+                                                    data-bs-toggle="pill" data-bs-target="#events-calls" type="button"
+                                                    role="tab" aria-controls="calls" aria-selected="false">
                                                     <div class="menu-item activity-item">
                                                         <div class="item-content">
                                                             <svg width="18" height="18" viewBox="0 0 13 13"
@@ -2142,9 +2143,8 @@ $permissions = session('user_permissions');
                                             </li>
                                             <li class="nav-item w-100" role="presentation">
                                                 <button class="nav-link filter-button" id="events-lunches-tab"
-                                                    data-bs-toggle="pill" data-bs-target="#events-lunches"
-                                                    type="button" role="tab" aria-controls="lunches"
-                                                    aria-selected="false">
+                                                    data-bs-toggle="pill" data-bs-target="#events-lunches" type="button"
+                                                    role="tab" aria-controls="lunches" aria-selected="false">
                                                     <div class="menu-item activity-item">
                                                         <div class="item-content">
                                                             <svg width="18" height="18" viewBox="0 0 13 13"
@@ -2182,9 +2182,8 @@ $permissions = session('user_permissions');
                                             </li> --}}
                                             <li class="nav-item w-100 email-stroke-nav-item" role="presentation">
                                                 <button class="nav-link filter-button" id="events-file-tab"
-                                                    data-bs-toggle="pill" data-bs-target="#events-files"
-                                                    type="button" role="tab" aria-controls="file2"
-                                                    aria-selected="false">
+                                                    data-bs-toggle="pill" data-bs-target="#events-files" type="button"
+                                                    role="tab" aria-controls="file2" aria-selected="false">
                                                     <div class="menu-item quote-item">
                                                         <div class="item-content">
                                                             <svg width="22" height="22" viewBox="0 0 15 15"
@@ -2203,9 +2202,8 @@ $permissions = session('user_permissions');
                                             </li>
                                             <li class="nav-item w-100 email-stroke-nav-item" role="presentation">
                                                 <button class="nav-link filter-button" id="events-quote-tab"
-                                                    data-bs-toggle="pill" data-bs-target="#events-quotes"
-                                                    type="button" role="tab" aria-controls="quote2"
-                                                    aria-selected="false">
+                                                    data-bs-toggle="pill" data-bs-target="#events-quotes" type="button"
+                                                    role="tab" aria-controls="quote2" aria-selected="false">
                                                     <div class="menu-item quote-item">
                                                         <div class="item-content">
                                                             <svg width="18" height="18" viewBox="0 0 13 13"

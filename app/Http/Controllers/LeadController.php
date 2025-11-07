@@ -982,7 +982,7 @@ class LeadController extends Controller
     {
         $permissions = session('user_permissions', []);
 
-        if (in_array(strtolower('delete-lead-email'), array_map('strtolower', $permissions))) {
+        
             if ($request->isMethod('get')) {
 
                 $email = SentEmails::find($id);
@@ -1005,10 +1005,7 @@ class LeadController extends Controller
 
                 return redirect()->back()->with('error', 'Note not found.');
             }
-        } else {
-            // Option A: Hard stop
-            abort(403, 'Unauthorized');
-        }
+       
     }
     public function add_lead_file($id, Request $request)
     {

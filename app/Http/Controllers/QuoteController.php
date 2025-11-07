@@ -139,7 +139,7 @@ class QuoteController extends Controller
     {
         $permissions = session('user_permissions', []);
 
-        if (in_array(strtolower('add-lead-quote'), array_map('strtolower', $permissions))) {
+        if (in_array(strtolower('create-quotes'), array_map('strtolower', $permissions))) {
             $lead = Lead::where('id', $id)->first();
 
             if ($request->isMethod('get')) {
