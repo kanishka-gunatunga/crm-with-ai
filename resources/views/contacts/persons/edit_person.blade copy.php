@@ -2,7 +2,7 @@
 
 @section('content')
     <?php
-    use App\Models\Organization;
+        use App\Models\Organization;
     ?>
     <!-- Scrollable Content -->
     <!-- Scrollable Content -->
@@ -138,7 +138,7 @@
                                             <div class="col-12 col-md-4">
                                                 <label for="field1" class="form-label">Date of Birth</label>
                                                 <input type="date" class="form-control" id="field1" placeholder="Name"
-                                                    name="dob" value="{{ $person->dob }}" required>
+                                                    name="dob" value="{{ $person->dob }}">
                                                 @if ($errors->has('dob'))
                                                     <div class="alert alert-danger mt-2">{{ $errors->first('dob') }}</div>
                                                 @endif
@@ -301,7 +301,7 @@
 
 
 
-    {{-- <script>
+    <!-- <script>
         let emailCounter = 1;
         let numberCounter = 1;
 
@@ -368,8 +368,8 @@
             const numberField = element.closest('.number-field');
             numberField.remove();
         }
-    </script> --}}
-
+    </script> -->
+    
     <script>
         let emailCounter = 1;
         let numberCounter = 1;
@@ -478,8 +478,7 @@
             icon.closest('.col-12.col-md-4').remove();
         }
     </script>
-
-    <script>
+ <script>
         $(document).ready(function() {
             @if (Session::has('success'))
                 Swal.fire({
@@ -500,4 +499,5 @@
             @endif
         });
     </script>
+   
 @endsection

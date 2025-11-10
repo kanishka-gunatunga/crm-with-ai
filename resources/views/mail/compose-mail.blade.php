@@ -84,9 +84,11 @@
                                                     </div>
                                                 @endif
                                             </div>
+
+                                            <input type="text" class="form-control" id="field1" name="sent_by" hidden
+                                                value="{{ Auth::user()->id }}">
                                         </div>
                                     </div>
-
                                 </div>
                                 <div class="card card-default mt-3">
                                     <div class="card-body">
@@ -287,6 +289,7 @@
 
     <script>
         $('.tagselectemail').select2({
+                allowClear: true,
             tags: true,
             tokenSeparators: [',', ' '],
             createTag: function(params) {

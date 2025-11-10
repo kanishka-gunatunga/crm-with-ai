@@ -57,7 +57,7 @@ $user = UserDetails::where('user_id', Auth::id())->first();
                 
                 <div class="user-profile"  onclick="toggleDropdown('user-dropdown')" style="cursor:pointer;">
                     <img
-                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/ff47f92652fd0ea04e7b5613333c3cc085fa3036?placeholderIfAbsent=true"
+                        src="{{ asset('images/avatar.png') }}"
                         alt=""
                         class="user-avatar" />
                     <span class="user-name">{{ $user->name }}</span>

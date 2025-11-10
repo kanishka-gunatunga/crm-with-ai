@@ -35,6 +35,14 @@ class Quote extends Model
         'pdf'
     ];
 
+     public function leadData()
+    {
+        return $this->belongsTo(Lead::class, 'lead', 'id');
+    }
 
+    public function personData()
+    {
+        return $this->belongsTo(Person::class, 'person', 'id');
+    }
 
 }

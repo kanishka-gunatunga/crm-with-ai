@@ -93,31 +93,59 @@
                                                     <input type="text" class="form-control" name="location"
                                                         value="{{ $activity->location }}" required>
                                                 </div>
-                                                <div class="col-12 col-md-4">
+                                                <div class="col-12 col-md-4 participant-select-container">
                                                     <label for="field1"
                                                         class="form-label">{{ __('app.activities.participants') }}</label>
-                                                    <select class="myDropdown form-control  " name="participants[]" multiple
+                                                    <select class="myDropdown form-control" name="participants[]" multiple
                                                         required>
-                                                        <?php foreach($activity->participants as $participant){ 
-                                                        if($participant['type'] == 'person'){
-                                                            $participant_name = Person::where('id', $participant['id'])->value('name');
-                                                        }
-                                                        else{
-                                                            $participant_name = UserDetails::where('id', $participant['id'])->value('name');
-                                                        }
-                                                        ?>
-                                                        <option selected
-                                                            value="<?= $participant['type'] ?>||<?= $participant['id'] ?>">
-                                                            {{ $participant_name }}</option>
-                                                        <?php } ?>
-                                                        <?php foreach($persons as $person){ ?>
-                                                        <option value="person||{{ $person->id }}">{{ $person->name }}
-                                                        </option>
-                                                        <?php } ?>
-                                                        <?php foreach($owners as $owner){ ?>
-                                                        <option value="owner||{{ $owner->user_id }}">{{ $owner->name }}
-                                                        </option>
-                                                        <?php } ?>
+                                                        {{-- Show existing participants as selected --}}
+                                                        @foreach ($activity->participants as $participant)
+                                                            @php
+                                                                if ($participant['type'] == 'person') {
+                                                                    $participant_name = Person::where(
+                                                                        'id',
+                                                                        $participant['id'],
+                                                                    )->value('name');
+                                                                } else {
+                                                                    $participant_name = UserDetails::where(
+                                                                        'id',
+                                                                        $participant['id'],
+                                                                    )->value('name');
+                                                                }
+                                                            @endphp
+                                                            <option selected
+                                                                value="{{ $participant['type'] }}||{{ $participant['id'] }}">
+                                                                {{ $participant_name }}
+                                                            </option>
+                                                        @endforeach
+
+                                                        {{-- Show all persons, excluding those already selected --}}
+                                                        @php
+                                                            $selectedPersonIds = collect($activity->participants)
+                                                                ->where('type', 'person')
+                                                                ->pluck('id')
+                                                                ->toArray();
+                                                        @endphp
+                                                        @foreach ($persons as $person)
+                                                            @if (!in_array($person->id, $selectedPersonIds))
+                                                                <option value="person||{{ $person->id }}">
+                                                                    {{ $person->name }}</option>
+                                                            @endif
+                                                        @endforeach
+
+                                                        {{-- Show all owners, excluding those already selected --}}
+                                                        @php
+                                                            $selectedOwnerIds = collect($activity->participants)
+                                                                ->where('type', 'owner')
+                                                                ->pluck('id')
+                                                                ->toArray();
+                                                        @endphp
+                                                        @foreach ($owners as $owner)
+                                                            @if (!in_array($owner->user_id, $selectedOwnerIds))
+                                                                <option value="owner||{{ $owner->user_id }}">
+                                                                    {{ $owner->name }}</option>
+                                                            @endif
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -132,7 +160,8 @@
                                             <div class="col-12">
                                                 <label for="field5"
                                                     class="form-label">{{ __('app.activities.description') }}</label>
-                                                <textarea class="form-control description-form-control" placeholder="Description" id="field5" rows="5" name="description">{{ $activity->description }}</textarea>
+                                                <textarea class="form-control description-form-control" placeholder="Description" id="field5" rows="5"
+                                                    name="description">{{ $activity->description }}</textarea>
 
                                             </div>
                                         </div>

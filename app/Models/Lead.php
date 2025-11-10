@@ -4,13 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Lead extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'leads';
     protected $primaryKey = 'id';
+    protected $dates = ['deleted_at'];
 
     protected $fillable = [
         'title',
@@ -48,7 +50,28 @@ class Lead extends Model
 
     public function salesOwner()
     {
-        return $this->belongsTo(UserDetails::class, 'sales_owner');
+        return $this->belongsTo(UserDetails::class, 'sales_owner', 'user_id');
     }
 
+    public function quotes()
+    {
+        return $this->hasMany(Quote::class, 'lead', 'id');
+    }
+
+
+    public function leadnotes()
+    {
+        return $this->hasMany(LeadNote::class, 'lead_id');
+    }
+
+    public function emails()
+    {
+        return $this->hasMany(SentEmails::class, 'lead_id');
+    }
+
+
+    public function pipeline()
+    {
+        return $this->belongsTo(Pipeline::class, 'pipeline');
+    }
 }

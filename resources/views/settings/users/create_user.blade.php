@@ -189,7 +189,36 @@
             </div>
         </div>
     </form>
+    <script>
+        $(document).ready(function() {
+            @if (Session::has('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: "{{ Session::get('success') }}",
+                    confirmButtonColor: '#3085d6'
+                });
+            @endif
 
+            @if (Session::has('fail'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "{{ Session::get('fail') }}",
+                    confirmButtonColor: '#d33'
+                });
+            @endif
+
+
+            $('#pipeline-select').on('change', function() {
+                if ($(this).val() === 'custom') {
+                    $('#permissions-col').show();
+                } else {
+                    $('#permissions-col').hide();
+                }
+            });
+        });
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

@@ -26,80 +26,118 @@ class SourceController extends Controller
 {
     public function sources(Request $request)
     {
-        if($request->isMethod('get')){
-            $sources = Source::get();
-            return view('settings.sources.sources', ['sources' => $sources]);
-         }
-        
+        $permissions = session('user_permissions', []);
+
+        if (in_array(strtolower('show-sources'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+                $sources = Source::get();
+                return view('settings.sources.sources', ['sources' => $sources]);
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
     }
     public function create_source(Request $request)
     {
 
-        if($request->isMethod('post')){
-            $request->validate([
-                'name' => 'required|string',
-            ]);
-    
-            $source =  new Source();
-            $source->name = $request->name;
-            $source->save();
-    
-            return redirect()->back()->with('success', 'Source created successfully!');
-        }else{
-            return view('settings.sources.create_source');
+        $permissions = session('user_permissions', []);
+
+        if (in_array(strtolower('create-sources'), array_map('strtolower', $permissions))) {
+
+            if ($request->isMethod('post')) {
+                $request->validate([
+                    'name' => 'required|string',
+                ]);
+
+                $source =  new Source();
+                $source->name = $request->name;
+                $source->save();
+
+                return redirect()->back()->with('success', 'Source created successfully!');
+            } else {
+                return view('settings.sources.create_source');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
     }
-    public function delete_source($id,Request $request)
+    public function delete_source($id, Request $request)
     {
-        if($request->isMethod('get')){
-            Source::where('id',$id)->delete();
-            return redirect()->back()->with('success', 'Source deleted successfully!');
 
-         }
-        
+        $permissions = session('user_permissions', []);
+
+        if (in_array(strtolower('delete-sources'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+                Source::where('id', $id)->delete();
+                return redirect()->back()->with('success', 'Source deleted successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
     }
     public function edit_source($id, Request $request)
-{
-    if ($request->isMethod('get')) {
-        $source = Source::where('id', $id)->first();
-        return view('settings.sources.edit_source', ['source' => $source]);
+    {
+
+        $permissions = session('user_permissions', []);
+
+        if (in_array(strtolower('edit-sources'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+                $source = Source::where('id', $id)->first();
+                return view('settings.sources.edit_source', ['source' => $source]);
+            }
+
+            if ($request->isMethod('post')) {
+                $request->validate([
+                    'name' => 'required|string',
+                ]);
+
+                $source =  Source::where('id', $id)->first();;
+                $source->name = $request->name;
+                $source->update();
+
+                return redirect()->back()->with('success', 'Source updated successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
     }
+    public function delete_stage($id, Request $request)
+    {
 
-    if ($request->isMethod('post')) {
-        $request->validate([
-            'name' => 'required|string',
-        ]);
+        $permissions = session('user_permissions', []);
 
-        $source =  Source::where('id', $id)->first();;
-        $source->name = $request->name;
-        $source->update();
+        if (in_array(strtolower('delete-sources'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
 
-       return redirect()->back()->with('success', 'Source updated successfully!');
+                PipelineStage::where('id', $id)->delete();
+                return redirect()->back()->with('success', 'Stage deleted successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
+    }
+    public function delete_selected_sources(Request $request)
+    {
 
+        $permissions = session('user_permissions', []);
+
+        if (in_array(strtolower('delete-sources'), array_map('strtolower', $permissions))) {
+            $sourceIds = $request->input('selected_sources', []);
+
+            if (!empty($sourceIds)) {
+                Source::whereIn('id', $sourceIds)->delete();
+                return back()->with('success', 'Selected soruces deleted successfully.');
+            }
+
+            return back()->with('error', 'No attributes selected.');
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
     }
 }
-public function delete_stage($id,Request $request)
-{
-    if($request->isMethod('get')){
-
-        PipelineStage::where('id',$id)->delete();
-        return redirect()->back()->with('success', 'Stage deleted successfully!');
-
-     }
-    
-}
-public function delete_selected_sources(Request $request)
-{
-    $sourceIds = $request->input('selected_sources', []);
-    
-    if (!empty($sourceIds)) {
-        Source::whereIn('id', $sourceIds)->delete();
-        return back()->with('success', 'Selected soruces deleted successfully.');
-    }
-
-    return back()->with('error', 'No attributes selected.');
-}
-}
-
-
-

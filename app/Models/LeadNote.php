@@ -14,8 +14,15 @@ class LeadNote extends Model
     
     protected $fillable = [
         'lead_id',
-        'note'
+        'note',
+        'created_by',
     ];
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 
 
 }

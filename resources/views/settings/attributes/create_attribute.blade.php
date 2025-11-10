@@ -1,5 +1,11 @@
 @extends('master')
 
+
+<?php
+    $permissions = session('user_permissions');
+?>
+
+
 @section('content')
     <form action="" method="post" enctype="multipart/form-data" data-parsley-validate>
         @csrf

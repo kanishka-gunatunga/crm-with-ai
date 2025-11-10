@@ -1,5 +1,7 @@
 @extends('master')
-
+<?php
+    $permissions = session('user_permissions');
+?>
 @section('content')
     <!-- Scrollable Content -->
     <div class="main-scrollable">
@@ -89,6 +91,7 @@
                                     <h3 class="card-title">{{ __('app.products.title') }}</h3>
                                 </div>
                                 <div>
+                                    @if (in_array(strtolower('export-products'), array_map('strtolower', $permissions)))
                                     <button class="btn white-btn export-toggle">
                                         <svg width="18" height="18" viewBox="0 0 14 15" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -104,6 +107,7 @@
 
 
                                     </button>
+                                    @endif
 
                                     <button class="btn white-btn" data-bs-toggle="collapse" href="#collapseFilter">
                                         {{-- <button class="btn white-btn" data-bs-toggle="offcanvas" data-bs-target="#offFilter"
@@ -171,6 +175,7 @@
                                                     <th>{{ __('app.datagrid.name') }}</th>
                                                     <th>{{ __('app.datagrid.price') }}</th>
                                                     <th>{{ __('app.datagrid.quantity') }}</th>
+                                                    <th>Additional Fields</th>
                                                     <th>{{ __('app.leads.actions') }}</th>
                                                 </tr>
                                             </thead>
@@ -184,6 +189,7 @@
                                                     <td class="">{{ $product->name }} </td>
                                                     <td class="">{{ number_format($product->cost) }}</td>
                                                     <td class="">{{ number_format($product->quantity) }}</td>
+                                                    <td class="">{{ $product->custom_attributes }}</td>
 
                                                     <td class="action-icons d-flex gx-3">
                                                         <a href="{{ url('delete-product/' . $product->id) }}"

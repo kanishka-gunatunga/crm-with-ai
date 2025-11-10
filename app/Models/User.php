@@ -20,8 +20,8 @@ class User extends Authenticatable
     protected $fillable = [
         'email',
         'password',
-        'status',    
-        'role',    
+        'status',
+        'role',
     ];
 
     /**
@@ -52,4 +52,13 @@ class User extends Authenticatable
         return $this->hasOne(UserDetails::class, 'user_id');
     }
 
+    public function sender()
+    {
+        return $this->hasMany(SentEmails::class, 'sent_by');
+    }
+
+    public function roleInfo()
+    {
+        return $this->belongsTo(Role::class, 'role');
+    }
 }

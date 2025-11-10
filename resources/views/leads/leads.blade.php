@@ -1,5 +1,8 @@
 @extends('master')
-
+<?php
+    $permissions = session('user_permissions');
+    
+?>
 @section('content')
     <?php
     use App\Models\Lead;
@@ -73,7 +76,9 @@
 
                             </button>
 
+                            
 
+                            @if (in_array(strtolower('lead-import'), array_map('strtolower', $permissions))) 
                             {{-- import lead button --}}
                             <button class="import-leads-button" data-bs-toggle="modal" data-bs-target=".importLeads">
                                 <div class="icon-container">
@@ -91,14 +96,17 @@
                                 </div>
                                 <span class="button-text white-btn-text">Import leads</span>
                             </button>
+                            @endif
 
                             {{-- export lead button --}}
                             {{-- <button class="import-leads-button" data-bs-toggle="modal" data-bs-target=".exportTypes"> --}}
 
 
-
+                               
                             <div class="position-relative">
+                                
 
+                                @if (in_array(strtolower('lead-export'), array_map('strtolower', $permissions)))
                                 <button class="import-leads-button" data-bs-toggle="collapse"
                                     data-bs-target="#exportCollapse" aria-expanded="false" aria-controls="exportCollapse">
                                     <div class="icon-container">
@@ -117,6 +125,7 @@
                                     <span class="button-text white-btn-text">{{ __('app.leads.export-leads') }}</span>
 
                                 </button>
+                                @endif
                                 <div class="collapse exportCollapseDiv position-absolute" id="exportCollapse">
                                     <div class="col-md-12 text-end">
                                         <div class="mb-3 card card-default export-card">
@@ -164,6 +173,7 @@
 
 
                             {{-- create lead button --}}
+                            @if (in_array(strtolower('create-own-leads'), array_map('strtolower', $permissions)) || in_array(strtolower('create-any-leads'), array_map('strtolower', $permissions)))
                             <a href="{{ url('create-lead') }}">
                                 <button class="create-btn">
                                     <div class="icon-container">
@@ -178,6 +188,7 @@
                                     <span class="button-text">{{ __('app.leads.create-title') }}</span>
                                 </button>
                             </a>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -188,18 +199,18 @@
                 <div class="col-12">
                     <div class="d-flex card-container gap-1 leads-container">
                         <?php
-                $orderedStages = collect($stages)->sortBy(function ($stage) {
-                    if ($stage->name == 'New') {
-                        return 1;
-                    } elseif ($stage->name == 'Won') {
-                        return 9999;
-                    } elseif ($stage->name == 'Lost') {
-                        return 10000;
-                    }
-                    return 500;
-                })->values();
-                $userRoleId = auth()->user()->role;
-                $currentUserId = auth()->user()->id ?? auth()->id();
+                        $orderedStages = collect($stages)->sortBy(function ($stage) {
+                            if ($stage->name == 'New') {
+                                return 1;
+                            } elseif ($stage->name == 'Won') {
+                                return 9999;
+                            } elseif ($stage->name == 'Lost') {
+                                return 10000;
+                            }
+                            return 500;
+                        })->values();
+                        $userRoleId = auth()->user()->role;
+                        $currentUserId = auth()->user()->id ?? auth()->id();
 
                 // $currentUser = auth()->user();
                 // $userRoleId = $currentUser ? $currentUser->role_id : 2;
@@ -218,21 +229,30 @@
                 foreach ($orderedStages as $stage) {
                 $stage_value = 0;
 
-                if ($userRoleId == 2) {
+                $permissions = session('user_permissions', []);
+
+         
+
+                if (in_array(strtolower('lead-view-all'), array_map('strtolower', $permissions))) {
                     // Admin - show all leads for the stage
                     $leads = $leadsGroupedByStage->get($stage->id, collect());
-                } elseif ($userRoleId == 3) {
+                } elseif (in_array(strtolower('lead-view-own'), array_map('strtolower', $permissions))) {
                     // Sales
                     if ($stage->name == 'New') {
                         
-                        // Merge all leads and then keep only unassigned OR owned by current user
+                       
                         $allLeadsFromAllStages = collect();
+                        
                         foreach ($leadsGroupedByStage as $stageId => $stageLeads) {
                             $allLeadsFromAllStages = $allLeadsFromAllStages->merge($stageLeads);
                         }
                         $leads = $allLeadsFromAllStages->filter(function($lead) use ($currentUserId, $stage) {
-                            return (is_null($lead->sales_owner) || $lead->sales_owner == $currentUserId) && ($lead->stage == $stage->id) ;
+                            
+                            return (is_null($lead->sales_owner) || ($lead->sales_owner == 1) || $lead->sales_owner == $currentUserId) && ($lead->stage == $stage->id) ;
+                        
                         });
+
+                       
 
                         
                     } else {
@@ -247,10 +267,11 @@
                     $leads = collect();
                 }
 
-                $stage_value = $leads->sum('lead_value');
+                    $stage_value = $leads->sum('lead_value');
 
-
+               
                             ?>
+                            
                         <div class="col-md-3">
                             <div class="card card-default lead-card ">
                                 <div class="card-body">
@@ -276,7 +297,7 @@
                                     <div id="stage-{{ $stage->id }}" data-status="{{ $stage->id }}"
                                         class="task-list connectedSortable">
                                         <?php foreach ($leads as $lead) {
-                                        $person_name = Person::where('id', $lead->person)->value('name');
+                                            $person_name = Person::where('id', $lead->person)->value('name');
                                     ?>
                                         <article class="task-card" data-lead-id="{{ $lead->id }}"
                                             data-value="{{ $lead->lead_value }}">
@@ -294,12 +315,27 @@
 
                                                     <time class="due-date">{{ $lead->closing_date }}</time>
                                                 </div>
+
+
                                                 <div class="priority-section d-flex align-items-center gap-2">
-                                                    @if ($stage->name == 'New' && $lead->sales_owner == auth()->user()->id)
+                                                    @if (in_array(strtolower('lead-view-all'), array_map('strtolower', $permissions)))
+                                                   
+                                                        @if ($lead->salesOwner)
+                                                           
+                                                            <div class="assigned-wrapper"
+                                                                data-sales-owner="{{ $lead->salesOwner->name }}">
+                                                                <img src="{{ asset('images/assigned.svg') }}"
+                                                                    alt="assigned" class="assigned-icon" tabindex="0">
+                                                            </div>
+                                                        
+                                                        @endif
+                                                    {{-- @elseif ($stage->name == 'New' && $lead->sales_owner == auth()->user()->id)
                                                         <div>
                                                             <img src="{{ asset('images/assigned.svg') }}" alt="">
-                                                        </div>
+                                                        </div> --}}
                                                     @endif
+
+
 
                                                     <div>
                                                         <?php if ($lead->priority == 'Low') { ?>
@@ -387,29 +423,6 @@
 
 
 
-    {{-- <div class="modal fade exportTypes" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myLargeModalLabel">Export Leads</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <div class="row"> --}}
-
-    <!-- Collapse Button for Export Types -->
-    {{-- <div class="col-md-12 text-center mb-3">
-        <button class="btn btn-primary" type="button" >
-            Export Leads
-        </button>
-    </div>
-     --}}
-
-
 
 
     </div>
@@ -461,6 +474,58 @@
             </form>
         </div><!-- /.modal-dialog -->
     </div>
+
+
+
+
+
+<!-- Won Modal -->
+<div class="modal fade" id="wonModal" tabindex="-1" aria-labelledby="wonModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="wonModalLabel">Mark Lead as Won</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        Do you want to mark this lead as Won?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button id="confirmWon" type="button" class="btn btn-success">Yes, Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lost Modal -->
+<div class="modal fade" id="lostModal" tabindex="-1" aria-labelledby="lostModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="lostModalLabel">Mark Lead as Lost</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        Do you want to mark this lead as Lost?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button id="confirmLost" type="button" class="btn btn-danger">Yes, Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
     <script>
         $(document).ready(function() {
 
@@ -499,7 +564,7 @@
                 const stageCard = stage.closest('.lead-card');
                 const stageNameElement = stageCard.querySelector('.notification-label');
                 const stageName = stageNameElement ? stageNameElement.textContent.trim() : '';
-                const isNewStage = stageName === 'New';
+                const isNewStage = stageName === 'New' || stageName === 'Lost' || stageName === 'Won';
 
                 new Sortable(stage, {
                     group: 'leads', // This allows dragging between lists
@@ -554,10 +619,10 @@
         });
 
         function updateLeadStage(leadId, newStage, leadValue, oldStage) {
-            console.log("leadId:", leadId);
-            console.log("newStage:", newStage);
-            console.log("leadValue:", leadValue);
-            console.log("oldStage:", oldStage);
+            // console.log("leadId:", leadId);
+            // console.log("newStage:", newStage);
+            // console.log("leadValue:", leadValue);
+            // console.log("oldStage:", oldStage);
             var csrfToken = "{{ csrf_token() }}";
 
             $.ajax({
@@ -597,5 +662,64 @@
             });
 
         }
+
+
+
+        // const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        // const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // create one tooltip element used for all icons
+            const tooltip = document.createElement('div');
+            tooltip.className = 'assigned-tooltip';
+            tooltip.setAttribute('role', 'tooltip');
+            document.body.appendChild(tooltip);
+
+            // attach listeners
+            document.querySelectorAll('.assigned-wrapper').forEach(wrapper => {
+                const img = wrapper.querySelector('.assigned-icon');
+                const name = (wrapper.dataset.salesOwner || '').trim();
+
+                if (!img) return;
+
+                function show() {
+                    if (!name || name === 'N/A') return; // optional: don't show for N/A
+                    tooltip.textContent = name;
+                    tooltip.classList.add('show');
+
+                    // position tooltip above the icon, centered
+                    const rect = img.getBoundingClientRect();
+                    const top = window.scrollY + rect.top - tooltip.offsetHeight - 8;
+                    let left = rect.left + rect.width / 2 - tooltip.offsetWidth / 2;
+
+                    // keep inside viewport with small margin
+                    left = Math.max(8, Math.min(left, window.innerWidth - tooltip.offsetWidth - 8));
+
+                    tooltip.style.left = left + 'px';
+                    tooltip.style.top = top + 'px';
+                }
+
+                function hide() {
+                    tooltip.classList.remove('show');
+                }
+
+                img.addEventListener('mouseenter', show);
+                img.addEventListener('mouseleave', hide);
+                // keyboard accessible
+                img.addEventListener('focus', show);
+                img.addEventListener('blur', hide);
+
+                // hide tooltip on scroll to avoid wrong position
+                window.addEventListener('scroll', hide, {
+                    passive: true
+                });
+                window.addEventListener('resize', hide);
+            });
+        });
+    </script>
+
+
+
 @endsection

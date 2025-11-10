@@ -15,11 +15,16 @@ class Pipeline extends Model
     protected $fillable = [
         'name',
         'rotting_days',
-        'is_default',  
+        'is_default',
     ];
 
     public function stages()
     {
         return $this->hasMany(PipelineStage::class);
+    }
+
+    public function leads()
+    {
+        return $this->hasMany(Lead::class, 'pipeline');
     }
 }

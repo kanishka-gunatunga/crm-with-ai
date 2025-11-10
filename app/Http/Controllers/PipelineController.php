@@ -25,232 +25,272 @@ class PipelineController extends Controller
 {
     public function pipelines(Request $request)
     {
-        if($request->isMethod('get')){
-            $pipelines = Pipeline::get();
-            return view('settings.pipelines.pipelines', ['pipelines' => $pipelines]);
-         }
-        
+
+        $permissions = session('user_permissions', []);
+
+        if (in_array(strtolower('show-pipelines'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+                $pipelines = Pipeline::get();
+                return view('settings.pipelines.pipelines', ['pipelines' => $pipelines]);
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
     }
     public function create_pipeline(Request $request)
     {
-        if($request->isMethod('get')){
-           
-            return view('settings.pipelines.create_pipeline');
-        }
-        if($request->isMethod('post')){
-            // dd($request->all());
-            $request->validate([
-                'name' => 'required|string',
-                'rotting_days' => 'required|integer',
-                'stages' => 'required|array',
-                'stages.*' => 'required|string',
-                // 'probabilities' => 'required|array',
-                // 'probabilities.*' => 'required|integer',
-            ]);
-            $pipelines = Pipeline::get();
+        $permissions = session('user_permissions', []);
 
-            $shouldBeDefault = $request->has('is_default') || $pipelines->isEmpty();
+        if (in_array(strtolower('create-pipelines'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
 
-            if ($shouldBeDefault) {
-            Pipeline::where('is_default', 'on')->update(['is_default' => 'off']);
+                return view('settings.pipelines.create_pipeline');
             }
-
-            $pipeline = Pipeline::create([
-            'name' => $request->name,
-            'rotting_days' => $request->rotting_days,
-            'is_default' => $shouldBeDefault ? 'on' : 'off',
-            ]);
-           
-            foreach ($request->stages as $index => $stageName) {
-                PipelineStage::create([
-                    'pipeline_id' => $pipeline->id,
-                    'name' => $stageName,
-                    // 'probability' => $request->probabilities[$index],
+            if ($request->isMethod('post')) {
+                // dd($request->all());
+                $request->validate([
+                    'name' => 'required|string',
+                    'rotting_days' => 'required|integer',
+                    'stages' => 'required|array',
+                    'stages.*' => 'required|string',
+                    // 'probabilities' => 'required|array',
+                    // 'probabilities.*' => 'required|integer',
                 ]);
-            }
-    
-            return redirect()->back()->with('success', 'Pipeline created successfully!');
-        }
-    }
-    public function delete_pipeline($id, Request $request)
-{
-    if ($request->isMethod('get')) {
+                $pipelines = Pipeline::get();
 
-        $pipeline = Pipeline::find($id);
+                $shouldBeDefault = $request->has('is_default') || $pipelines->isEmpty();
 
-        if (!$pipeline) {
-            return redirect()->back()->with('fail', 'Pipeline not found!');
-        }
+                if ($shouldBeDefault) {
+                    Pipeline::where('is_default', 'on')->update(['is_default' => 'off']);
+                }
 
-        // Check if this is the last pipeline
-        $totalPipelines = Pipeline::count();
-        if ($totalPipelines <= 1) {
-            return redirect()->back()->with('fail', 'Cannot delete the last remaining pipeline.');
-        }
-
-        // Delete associated stages
-        PipelineStage::where('pipeline_id', $id)->delete();
-
-        // Delete the pipeline
-        $pipeline->delete();
-
-        // Handle session pipeline_id
-        if (session()->has('pipeline_id') && session('pipeline_id') == $id) {
-            // Set session to the first available pipeline
-            $nextPipeline = Pipeline::first();
-            if ($nextPipeline) {
-                session(['pipeline_id' => $nextPipeline->id]);
-            } else {
-                session()->forget('pipeline_id');
-            }
-        }
-
-        return redirect()->back()->with('success', 'Pipeline deleted successfully!');
-    }
-}
-
-//     public function edit_pipeline($id, Request $request)
-// {
-//     if ($request->isMethod('get')) {
-//         $pipeline = Pipeline::where('id', $id)->with('stages')->first();
-//         return view('settings.pipelines.edit_pipeline', ['pipeline' => $pipeline]);
-//     }
-
-//     if ($request->isMethod('post')) {
-//         $request->validate([
-//             'name' => 'required|string',
-//             'rotting_days' => 'required|integer',
-//             'stages' => 'required|array',
-//             'stages.*' => 'required|string',
-//             'probabilities' => 'required|array',
-//             'probabilities.*' => 'required|integer',
-//         ]);
-        
-//         $pipelines = Pipeline::get();
-//             if($request->has('is_default')){
-//                 foreach($pipelines as $pipeline){
-//                     $pipeline_update =  Pipeline::where('id', $pipeline->id)->first();
-//                     $pipeline_update->is_default ='off';
-//                     $pipeline_update->update();
-//                 }
-//             }
-//             if($pipelines->isEmpty()){
-//                 $pipeline =  Pipeline::where('id', $id)->first();;
-//                 $pipeline->name = $request->name;
-//                 $pipeline->rotting_days = $request->rotting_days;
-//                 $pipeline->is_default ='on';
-//                 $pipeline->update();
-//             }
-//             else{
-//                 $pipeline =  Pipeline::where('id', $id)->first();;
-//                 $pipeline->name = $request->name;
-//                 $pipeline->rotting_days = $request->rotting_days;
-//                 $pipeline->is_default =$request->has('is_default') ? 'on' : 'off';
-//                 $pipeline->update();
-//             }
-        
-
-//         foreach ($request->stages as $index => $stageName) {
-
-//             if ($request->id[$index] == 'new') {
-//                 $stage =  new PipelineStage();
-//                 $stage->pipeline_id = $id;
-//                 $stage->name = $stageName;
-//                 $stage->probability =$request->probabilities[$index];
-//                 $stage->save();
-//             } else {
-//                 $stage =  PipelineStage::where('id', $request->id[$index])->first();;
-//                 $stage->name = $stageName;
-//                 $stage->probability =$request->probabilities[$index];
-//                 $stage->update();
-//             }
-//         }
-
-//        return redirect()->back()->with('success', 'Pipeline updated successfully!');
-
-//     }
-// }
-public function edit_pipeline($id, Request $request)
-{
-    if ($request->isMethod('get')) {
-        $pipeline = Pipeline::with('stages')->findOrFail($id);
-        return view('settings.pipelines.edit_pipeline', ['pipeline' => $pipeline]);
-    }
-
-    if ($request->isMethod('post')) {
-
-        // dd($request->all());
-        $request->validate([
-            'name' => 'required|string',
-            'rotting_days' => 'required|integer',
-            'stages' => 'nullable|array',
-            'stages.*' => 'required|string',
-            // 'probabilities' => 'required|array',
-            // 'probabilities.*' => 'required|integer',
-        ]);
-
-        $pipeline = Pipeline::findOrFail($id);
-        $allPipelines = Pipeline::all();
-
-        $shouldBeDefault = $request->has('is_default') || $allPipelines->count() == 1;
-
-        if ($shouldBeDefault) {
-            Pipeline::where('is_default', 'on')->where('id', '!=', $id)->update(['is_default' => 'off']);
-        }
-
-        $pipeline->update([
-            'name' => $request->name,
-            'rotting_days' => $request->rotting_days,
-            'is_default' => $shouldBeDefault ? 'on' : 'off',
-        ]);
-
-       foreach ($request->stages ?? [] as $index => $stageName) {
-            $stageId = $request->id[$index];
-
-            if ($stageId === 'New') {
-                PipelineStage::create([
-                    'pipeline_id' => $pipeline->id,
-                    'name' => $stageName,
-                    // 'probability' => $request->probabilities[$index],
+                $pipeline = Pipeline::create([
+                    'name' => $request->name,
+                    'rotting_days' => $request->rotting_days,
+                    'is_default' => $shouldBeDefault ? 'on' : 'off',
                 ]);
-            } else {
-                $stage = PipelineStage::find($stageId);
-                if ($stage) {
-                    $stage->update([
+
+                foreach ($request->stages as $index => $stageName) {
+                    PipelineStage::create([
+                        'pipeline_id' => $pipeline->id,
                         'name' => $stageName,
                         // 'probability' => $request->probabilities[$index],
                     ]);
                 }
+
+                return redirect()->back()->with('success', 'Pipeline created successfully!');
             }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
+    }
+    public function delete_pipeline($id, Request $request)
+    {
+        $permissions = session('user_permissions', []);
 
-        return redirect()->back()->with('success', 'Pipeline updated successfully!');
+        if (in_array(strtolower('delete-pipelines'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+
+                $pipeline = Pipeline::find($id);
+
+                if (!$pipeline) {
+                    return redirect()->back()->with('fail', 'Pipeline not found!');
+                }
+
+                // Check if this is the last pipeline
+                $totalPipelines = Pipeline::count();
+                if ($totalPipelines <= 1) {
+                    return redirect()->back()->with('fail', 'Cannot delete the last remaining pipeline.');
+                }
+
+                // Delete associated stages
+                PipelineStage::where('pipeline_id', $id)->delete();
+
+                // Delete the pipeline
+                $pipeline->delete();
+
+                // Handle session pipeline_id
+                if (session()->has('pipeline_id') && session('pipeline_id') == $id) {
+                    // Set session to the first available pipeline
+                    $nextPipeline = Pipeline::first();
+                    if ($nextPipeline) {
+                        session(['pipeline_id' => $nextPipeline->id]);
+                    } else {
+                        session()->forget('pipeline_id');
+                    }
+                }
+
+                return redirect()->back()->with('success', 'Pipeline deleted successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
+    }
+
+    //     public function edit_pipeline($id, Request $request)
+    // {
+    //     if ($request->isMethod('get')) {
+    //         $pipeline = Pipeline::where('id', $id)->with('stages')->first();
+    //         return view('settings.pipelines.edit_pipeline', ['pipeline' => $pipeline]);
+    //     }
+
+    //     if ($request->isMethod('post')) {
+    //         $request->validate([
+    //             'name' => 'required|string',
+    //             'rotting_days' => 'required|integer',
+    //             'stages' => 'required|array',
+    //             'stages.*' => 'required|string',
+    //             'probabilities' => 'required|array',
+    //             'probabilities.*' => 'required|integer',
+    //         ]);
+
+    //         $pipelines = Pipeline::get();
+    //             if($request->has('is_default')){
+    //                 foreach($pipelines as $pipeline){
+    //                     $pipeline_update =  Pipeline::where('id', $pipeline->id)->first();
+    //                     $pipeline_update->is_default ='off';
+    //                     $pipeline_update->update();
+    //                 }
+    //             }
+    //             if($pipelines->isEmpty()){
+    //                 $pipeline =  Pipeline::where('id', $id)->first();;
+    //                 $pipeline->name = $request->name;
+    //                 $pipeline->rotting_days = $request->rotting_days;
+    //                 $pipeline->is_default ='on';
+    //                 $pipeline->update();
+    //             }
+    //             else{
+    //                 $pipeline =  Pipeline::where('id', $id)->first();;
+    //                 $pipeline->name = $request->name;
+    //                 $pipeline->rotting_days = $request->rotting_days;
+    //                 $pipeline->is_default =$request->has('is_default') ? 'on' : 'off';
+    //                 $pipeline->update();
+    //             }
+
+
+    //         foreach ($request->stages as $index => $stageName) {
+
+    //             if ($request->id[$index] == 'new') {
+    //                 $stage =  new PipelineStage();
+    //                 $stage->pipeline_id = $id;
+    //                 $stage->name = $stageName;
+    //                 $stage->probability =$request->probabilities[$index];
+    //                 $stage->save();
+    //             } else {
+    //                 $stage =  PipelineStage::where('id', $request->id[$index])->first();;
+    //                 $stage->name = $stageName;
+    //                 $stage->probability =$request->probabilities[$index];
+    //                 $stage->update();
+    //             }
+    //         }
+
+    //        return redirect()->back()->with('success', 'Pipeline updated successfully!');
+
+    //     }
+    // }
+    public function edit_pipeline($id, Request $request)
+    {
+
+        $permissions = session('user_permissions', []);
+
+        if (in_array(strtolower('edit-pipelines'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+                $pipeline = Pipeline::with('stages')->findOrFail($id);
+                return view('settings.pipelines.edit_pipeline', ['pipeline' => $pipeline]);
+            }
+
+            if ($request->isMethod('post')) {
+
+                // dd($request->all());
+                $request->validate([
+                    'name' => 'required|string',
+                    'rotting_days' => 'required|integer',
+                    'stages' => 'nullable|array',
+                    'stages.*' => 'required|string',
+                    // 'probabilities' => 'required|array',
+                    // 'probabilities.*' => 'required|integer',
+                ]);
+
+                $pipeline = Pipeline::findOrFail($id);
+                $allPipelines = Pipeline::all();
+
+                $shouldBeDefault = $request->has('is_default') || $allPipelines->count() == 1;
+
+                if ($shouldBeDefault) {
+                    Pipeline::where('is_default', 'on')->where('id', '!=', $id)->update(['is_default' => 'off']);
+                }
+
+                $pipeline->update([
+                    'name' => $request->name,
+                    'rotting_days' => $request->rotting_days,
+                    'is_default' => $shouldBeDefault ? 'on' : 'off',
+                ]);
+
+                foreach ($request->stages ?? [] as $index => $stageName) {
+                    $stageId = $request->id[$index];
+
+                    if ($stageId === 'New') {
+                        PipelineStage::create([
+                            'pipeline_id' => $pipeline->id,
+                            'name' => $stageName,
+                            // 'probability' => $request->probabilities[$index],
+                        ]);
+                    } else {
+                        $stage = PipelineStage::find($stageId);
+                        if ($stage) {
+                            $stage->update([
+                                'name' => $stageName,
+                                // 'probability' => $request->probabilities[$index],
+                            ]);
+                        }
+                    }
+                }
+
+                return redirect()->back()->with('success', 'Pipeline updated successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
+    }
+
+    public function delete_stage($id, Request $request)
+    {
+
+        $permissions = session('user_permissions', []);
+
+        if (in_array(strtolower('delete-pipelines'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+
+                PipelineStage::where('id', $id)->delete();
+                return redirect()->back()->with('success', 'Stage deleted successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
+    }
+    public function delete_selected_pipelines(Request $request)
+    {
+
+        $permissions = session('user_permissions', []);
+
+        if (in_array(strtolower('delete-pipelines'), array_map('strtolower', $permissions))) {
+            $pipeIds = $request->input('selected_pipelines', []);
+
+            if (!empty($pipeIds)) {
+                Pipeline::whereIn('id', $pipeIds)->delete();
+                PipelineStage::whereIn('pipeline_id', $pipeIds)->delete();
+                return back()->with('success', 'Selected pipelines deleted successfully.');
+            }
+
+            return back()->with('error', 'No attributes selected.');
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
     }
 }
-
-public function delete_stage($id,Request $request)
-{
-    if($request->isMethod('get')){
-
-        PipelineStage::where('id',$id)->delete();
-        return redirect()->back()->with('success', 'Stage deleted successfully!');
-
-     }
-    
-}
-public function delete_selected_pipelines(Request $request)
-{
-    $pipeIds = $request->input('selected_pipelines', []);
-    
-    if (!empty($pipeIds)) {
-        Pipeline::whereIn('id', $pipeIds)->delete();
-        PipelineStage::whereIn('pipeline_id',$pipeIds)->delete();
-        return back()->with('success', 'Selected pipelines deleted successfully.');
-    }
-
-    return back()->with('error', 'No attributes selected.');
-}
-}
-
-
-

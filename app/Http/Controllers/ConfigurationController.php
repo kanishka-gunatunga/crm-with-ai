@@ -24,39 +24,41 @@ class ConfigurationController extends Controller
 {
     public function configuration(Request $request)
     {
-        if($request->isMethod('get')){
+        if ($request->isMethod('get')) {
             $config = Configuration::first();
             return view('configuration.configuration', ['config' => $config]);
-         }
-        
+        }
     }
 
     public function update_company_logo(Request $request)
     {
         try {
-        if ($request->hasFile('company_logo')) {
-            $request->validate([
-                'company_logo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
-            ]);
+            $permissions = session('user_permissions', []);
 
-            $image = $request->file('company_logo');
-           
-            $imag_name = time().'-logo-.'.$image->extension();
-            $image->move(public_path('uploads/'), $imag_name);
-            
-            $core =  Configuration::first();;
-            $core->logo = $imag_name;
-            $core->update();
+            if (in_array(strtolower('terms-logo-add'), array_map('strtolower', $permissions))) {
+                if ($request->hasFile('company_logo')) {
+                    $request->validate([
+                        'company_logo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+                    ]);
+
+                    $image = $request->file('company_logo');
+
+                    $imag_name = time() . '-logo-.' . $image->extension();
+                    $image->move(public_path('uploads/'), $imag_name);
+
+                    $core =  Configuration::first();;
+                    $core->logo = $imag_name;
+                    $core->update();
 
 
-            return response()->json(['success' => true, 'image' => $imag_name]);
-        }
-
+                    return response()->json(['success' => true, 'image' => $imag_name]);
+                }
+            } else {
+                // Option A: Hard stop
+                abort(403, 'Unauthorized');
+            }
         } catch (\Exception $e) {
-        return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
-    }
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 }
-
-
-

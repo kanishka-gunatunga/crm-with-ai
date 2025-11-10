@@ -23,6 +23,7 @@ class SentEmails extends Model
         'body',
         'attachments',
         'is_favourite',
+        'sent_by',
         'parent_id'
     ];
 
@@ -44,5 +45,15 @@ class SentEmails extends Model
     public function replies()
     {
         return $this->hasMany(MailReplies::class, 'parent_id');
+    }
+
+    public function lead(): BelongsTo
+    {
+        return $this->belongsTo(Lead::class, 'lead_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'sent_by', 'id');
     }
 }

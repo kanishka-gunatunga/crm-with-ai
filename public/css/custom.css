@@ -1295,7 +1295,8 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
   /* stroke: var(--primary-color) !important; */
 }
 
-.stroke-nav-item .active path {
+.stroke-nav-item .active path,
+.email-stroke-nav-item .active path {
   fill: inherit !important;
   stroke: var(--primary-color) !important;
 }
@@ -1379,14 +1380,14 @@ div.dt-container .dt-paging .dt-paging-button.current:hover {
 }
 
 .form-check-input {
-  height: 12px !important;
-  width: 12px !important;
+  height: 14px !important;
+  width: 14px !important;
 }
 
 .form-check-label {
   font-family: var(--font-family) !important;
   font-weight: 500 !important;
-  font-size: 10px !important;
+  font-size: 12px !important;
   color: var(--primary-text-color) !important;
   margin-top: 5px !important;
 }
@@ -2111,4 +2112,59 @@ div.dataTables_wrapper div.dataTables_filter {
 
 .select2-results__option--selectable:hover {
   background-color: var(--blue-shading) !important;
+}
+
+
+
+
+.assigned-tooltip {
+  position: absolute;
+  padding: 6px 9px;
+  font-size: 13px;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  border-radius: 6px;
+  pointer-events: none;
+  /* doesn't block mouse */
+  white-space: nowrap;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity .12s ease;
+}
+
+.assigned-tooltip.show {
+  opacity: 1;
+}
+
+
+/* @media screen and (max-width: 1300px) {
+
+  .select2-container--default {
+    width: inherit !important;
+    max-width: 300px !important;
+  }
+
+  .select2-selection--clearable {
+    max-width: 300px !important;
+    min-width: 280px;
+  }
+}
+
+
+@media screen and (min-width: 1300px) and (max-width: 1470px) {
+
+  .select2-container--default {
+    width: inherit !important;
+    max-width: 320px !important;
+  }
+
+  .select2-selection--clearable {
+    max-width: 320px !important;
+    min-width: 280px;
+  }
+} */
+
+
+.participant-select-container .select2-selection{
+  overflow-y: scroll !important;
 }

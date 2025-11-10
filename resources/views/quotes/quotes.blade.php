@@ -8,6 +8,9 @@
     use App\Models\Configuration;
     
     $config = Configuration::first();
+    
+    $permissions = session('user_permissions');
+    
     ?>
     <!-- Scrollable Content -->
     <div class="main-scrollable">
@@ -49,47 +52,52 @@
 
             <div class="col-12 mt-4">
                 <div class="card-container">
-                    <div class="card card-default mb-4">
-                        <div class="card-body">
-                            <form action="" method="post" enctype='multipart/form-data'>
-                                @csrf
-                                <div class="d-md-flex justify-content-between mb-4">
-                                    <div class="col-md-11 col-12">
-                                        <div class="row g-4">
-                                            <div class="col-12 col-md-4">
-                                                <label for="field1" class="form-label">Terms and Conditions</label>
-                                                <input type="text" class="form-control" id="field1"
-                                                    placeholder="Change your T&C from here"
-                                                    value="{{ $config->terms ?? '' }}" name="terms">
-                                            </div>
-                                            <div class="col-12 col-md-4">
-                                                <label for="field2" class="form-label">Quote Logo</label>
-                                                <input type="file" class="form-control" id="field2"
-                                                    placeholder="Pipeline" name="quote_logo">
-                                            </div>
 
-                                            <div class="col-12 col-md-3">
-                                                <?php if($config && $config->quote_logo != null){ ?>
-                                                <img src="{{ asset('uploads/' . $config->quote_logo) }}" width="222px"
-                                                    height="118px" alt="" style="object-fit: cover;">
-                                                <?php } ?>
 
+                    @if (in_array(strtolower('terms-logo-add'), array_map('strtolower', $permissions)))
+                        <div class="card card-default mb-4">
+                            <div class="card-body">
+                                <form action="" method="post" enctype='multipart/form-data'>
+                                    @csrf
+                                    <div class="d-md-flex justify-content-between mb-4">
+                                        <div class="col-md-11 col-12">
+                                            <div class="row g-4">
+                                                <div class="col-12 col-md-4">
+                                                    <label for="field1" class="form-label">Terms and Conditions</label>
+                                                    <input type="text" class="form-control" id="field1"
+                                                        placeholder="Change your T&C from here"
+                                                        value="{{ $config->terms ?? '' }}" name="terms">
+                                                </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label for="field2" class="form-label">Quote Logo</label>
+                                                    <input type="file" class="form-control" id="field2"
+                                                        placeholder="Pipeline" name="quote_logo">
+                                                </div>
+
+                                                <div class="col-12 col-md-3">
+                                                    <?php if($config && $config->quote_logo != null){ ?>
+                                                    <img src="{{ asset('uploads/' . $config->quote_logo) }}" width="222px"
+                                                        height="118px" alt="" style="object-fit: cover;">
+                                                    <?php } ?>
+
+                                                </div>
                                             </div>
                                         </div>
+
+                                        <div class="col-md-1 col-12 d-flex justify-content-end gap-2 align-items-start">
+                                            <a href="{{ url('quotes') }}"><button type="button"
+                                                    class="btn cancel-btn">Cancel</button></a>
+                                            <button type="submit" class="btn save-btn">Save</button>
+                                        </div>
+
+
                                     </div>
 
-                                    <div class="col-md-1 col-12 d-flex justify-content-end gap-2 align-items-start">
-                                         <a href="{{ url('quotes') }}"><button type="button" class="btn cancel-btn">Cancel</button></a>
-                                        <button type="submit" class="btn save-btn">Save</button>
-                                    </div>
 
-
-                                </div>
-
-
-                            </form>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    @endif
 
 
                     <div class="card card-default">
@@ -243,46 +251,63 @@
                                                     <th>{{ __('app.datagrid.grand-total') }}</th>
                                                     <th>{{ __('app.leads.expired-at') }}</th>
                                                     <th>{{ __('app.datagrid.created_at') }}</th>
+                                                    <th>Additional Fields</th>
                                                     <th>{{ __('app.leads.actions') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <?php
+                                                $userRole = Auth::user()->role;
+                                                ?>
+                                               
+                                                @foreach ($quotes as $quote)
+                                               
+                                                <tr>
+                                                    <td>
+                                                        <input type="checkbox" name="selected_quotes[]"
+                                                            value="{{ $quote->id }}">
+                                                    </td>
 
-                                                <?php foreach($quotes as $quote){
-                                        $owner_name = UserDetails::where('id', $quote->owner)->value('name');
-                                        $person_name = Person::where('id', $quote->person)->value('name');
-                                        $sub_total = 0;
-                                        $products = QuoteProduct::where('quote_id', $quote->id)->get();
-                                        foreach($products as $product){
-                                    
-                                            $amount = $product->price * $product->quantity;
-                                            $discount_amount = ($amount * $product->discount) / 100;
-                                            $tax_amount = ($amount - $discount_amount) * ($product->tax / 100);
-                                            $total = $amount - $discount_amount + $tax_amount;
-                                    
-                                            $sub_total += $amount;
-                                        }
-                                    ?>
-                                                <tr class="odd gradeX">
-                                                    <td><input type="checkbox" name="selected_quotes[]"
-                                                            value="{{ $quote->id }}"></td>
-                                                    <td class="">{{ $quote->subject }} </td>
-                                                    <td class=""><a
-                                                            href="{{ url('users?id=' . $quote->owner) }}">{{ $owner_name }}</a>
+                                                    <!-- Subject -->
+                                                    <td>{{ $quote->subject }}</td>
+
+                                                    <!-- Sales Person -->
+                                                    <td>
+                                                        <a href="{{ url('users?id=' . $quote->owner) }}">
+                                                            {{ optional($owners->where('user_id', $quote->owner)->first())->name ?? 'N/A' }}
+                                                        </a>
                                                     </td>
-                                                    <td class="">{{ $quote->expired_at }} </td>
-                                                    <td class=""><a
-                                                            href="{{ url('persons?id=' . $quote->person) }}">{{ $person_name }}</a>
+
+                                                    <!-- Expired Quotes -->
+                                                    <td>
+                                                        {{ \Carbon\Carbon::now()->gt($quote->expired_at) ? 'Yes' : 'No' }}
                                                     </td>
-                                                    <td class="">${{ number_format($sub_total) }}</td>
-                                                    <td class="">
-                                                        ${{ number_format($quote->discount_total_amount, 2) }}</td>
-                                                    <td class="">${{ number_format($quote->tax_total_amount, 2) }}
+
+                                                    <!-- Person -->
+                                                    <td>
+                                                        <a href="{{ url('persons?id=' . $quote->person) }}">
+                                                            {{ optional($persons->find($quote->person))->name ?? 'N/A' }}
+                                                        </a>
                                                     </td>
-                                                    <td class="">${{ number_format($quote->order_total_input, 2) }}
-                                                    </td>
-                                                    <td class="">{{ $quote->expired_at }} </td>
-                                                    <td class="">{{ $quote->created_at }} </td>
+
+                                                    <!-- Sub Total -->
+                                                    <td>${{ number_format($quote->order_total_input , 2) }}</td>
+
+                                                    <!-- Discount -->
+                                                    <td>${{ number_format($quote->discount_total_amount, 2) }}</td>
+
+                                                    <!-- Tax -->
+                                                    <td>${{ number_format($quote->tax_total_amount, 2) }}</td>
+
+                                                    <!-- Grand Total -->
+                                                    <td>${{ number_format($quote->order_total_input, 2) }}</td>
+
+                                                    <!-- Expired At -->
+                                                    <td>{{ $quote->expired_at }}</td>
+
+                                                    <!-- Created At -->
+                                                    <td>{{ $quote->created_at }}</td>
+                                                    <td>{{ $quote->custom_attributes }}</td>
 
                                                     <td class="action-icons d-flex gx-3">
                                                         <a href="{{ url('delete-quote/' . $quote->id) }}"
@@ -325,7 +350,8 @@
                                                         </a>
                                                     </td>
                                                 </tr>
-                                                <?php } ?>
+                                                @endforeach
+                                                
                                             </tbody>
                                         </table>
                                     </div>

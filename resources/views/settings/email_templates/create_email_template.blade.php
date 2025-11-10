@@ -612,6 +612,7 @@
 
             // Initialize Select2
             $('#template-tags-dropdown').select2({
+                allowClear: true,
                 placeholder: 'Select a placeholder tag',
                 allowClear: true,
 

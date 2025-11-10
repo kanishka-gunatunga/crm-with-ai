@@ -19,7 +19,7 @@
 
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="{{ url('persons') }}">Perosons</a></li>
+                                            <li class="breadcrumb-item"><a href="{{ url('persons') }}">Persons</a></li>
                                             <li class="breadcrumb-item active current-breadcrumb" aria-current="page">
                                                 {{ __('app.contacts.persons.create-title') }}</li>
                                         </ol>
@@ -61,7 +61,7 @@
                                             <div class="col-12 col-md-4">
                                                 <label for="field1" class="form-label">Date of Birth</label>
                                                 <input type="date" class="form-control" id="field1" placeholder="Name"
-                                                    name="dob" value="{{ old('dob') }}" required>
+                                                    name="dob" value="{{ old('dob') }}">
                                                 @if ($errors->has('dob'))
                                                     <div class="alert alert-danger mt-2">{{ $errors->first('dob') }}</div>
                                                 @endif
@@ -69,7 +69,7 @@
                                             <div class="col-12 col-md-4">
                                                 <label for="field1" class="form-label">Picture</label>
                                                 <input type="file" class="form-control" id="Picture" name="picture"
-                                                    value="{{ old('picture') }}" required>
+                                                    value="{{ old('picture') }}">
                                                 @if ($errors->has('picture'))
                                                     <div class="alert alert-danger mt-2">{{ $errors->first('picture') }}
                                                     </div>
@@ -131,23 +131,165 @@
                                                 <input type="tel" class="form-control" id="field4"
                                                     placeholder="Contact Numbers" name="contact_numbers[]">
                                             </div>
+
+
+
                                         </div>
 
                                     </div>
 
                                 </div>
+                                @if ($personAttributes->isNotEmpty())
+                                    <div class="card card-default mt-3">
+                                        <div class="card-body">
 
+                                            @foreach ($personAttributes as $attribute)
+                                                <div class="form-group mb-3">
+                                                    <label for="{{ $attribute->code }}"
+                                                        class="form-label">{{ $attribute->name }}</label>
+
+                                                    @switch($attribute->type)
+                                                        @case('text')
+                                                            <input type="text" class="form-control"
+                                                                name="{{ $attribute->code }}"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @break
+
+                                                        @case('textarea')
+                                                            <textarea class="form-control" name="{{ $attribute->code }}" rows="3"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}></textarea>
+                                                        @break
+
+                                                        @case('email')
+                                                            <input type="email" class="form-control"
+                                                                name="{{ $attribute->code }}"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @break
+
+                                                        @case('price')
+                                                            <input type="number" step="0.01" class="form-control"
+                                                                name="{{ $attribute->code }}"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @break
+
+                                                        @case('boolean')
+                                                            <select name="{{ $attribute->code }}" class="form-select">
+                                                                <option value="1">Yes</option>
+                                                                <option value="0">No</option>
+                                                            </select>
+                                                        @break
+
+                                                        @case('select')
+                                                            @php
+                                                                $options = [];
+                                                                if ($attribute->options) {
+                                                                    $options = json_decode($attribute->options, true);
+                                                                }
+                                                            @endphp
+                                                            <select name="{{ $attribute->code }}" class="form-select"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                                <option value="">Select</option>
+                                                                @foreach ($options as $opt)
+                                                                    <option value="{{ $opt }}">{{ $opt }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        @break
+
+                                                        @case('multiselect')
+                                                            @php
+                                                                $options = [];
+                                                                if ($attribute->options) {
+                                                                    $options = json_decode($attribute->options, true);
+                                                                }
+                                                            @endphp
+                                                            <select name="{{ $attribute->code }}[]" multiple class="form-select"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                                @foreach ($options as $opt)
+                                                                    <option value="{{ $opt }}">{{ $opt }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        @break
+
+                                                        @case('checkbox')
+                                                            @php
+                                                                $options = [];
+                                                                if ($attribute->options) {
+                                                                    $options = is_array($attribute->options)
+                                                                        ? $attribute->options
+                                                                        : json_decode($attribute->options, true);
+                                                                }
+                                                            @endphp
+                                                            <div>
+                                                                @foreach ($options as $opt)
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            name="{{ $attribute->code }}[]"
+                                                                            value="{{ $opt }}">
+                                                                        <label
+                                                                            class="form-check-label">{{ $opt }}</label>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        @break
+
+                                                        @case('date')
+                                                            <input type="date" class="form-control"
+                                                                name="{{ $attribute->code }}"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @break
+
+                                                        @case('datetime')
+                                                            <input type="datetime-local" class="form-control"
+                                                                name="{{ $attribute->code }}"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @break
+
+                                                        @case('file')
+                                                            <input type="file" class="form-control"
+                                                                name="{{ $attribute->code }}"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @break
+
+                                                        @case('image')
+                                                            <input type="file" accept="image/*" class="form-control"
+                                                                name="{{ $attribute->code }}"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @break
+
+                                                        @case('phone')
+                                                            <input type="tel" class="form-control"
+                                                                name="{{ $attribute->code }}"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @break
+
+                                                        @default
+                                                            <input type="text" class="form-control"
+                                                                name="{{ $attribute->code }}">
+                                                    @endswitch
+
+                                                    @error($attribute->code)
+                                                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            @endforeach
+
+
+                                        </div>
+
+
+                                    </div>
+                                @endif
                             </div>
 
 
                         </div>
 
-
                     </div>
                 </div>
-
-
             </div>
+
             <div class="col-12 action-bar">
                 <div class="d-flex gap-2 justify-content-between">
                     <div>

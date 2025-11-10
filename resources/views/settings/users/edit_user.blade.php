@@ -107,9 +107,10 @@
                                                 <label for="password-input"
                                                     class="form-label">{{ __('app.settings.users.password') }}</label>
                                                 <div class="position-relative mb-3 auth-pass-inputgroup">
+
                                                     <input type="password"
                                                         class="form-control password-input password-field @error('password') is-invalid @enderror"
-                                                        id="password-input" name="password" required>
+                                                        id="password-input" name="password">
                                                     <button
                                                         class="btn btn-link position-absolute text-decoration-none text-muted shadow-none password-addon"
                                                         type="button" id="password-addon" tabindex="-1"
@@ -135,8 +136,7 @@
                                                 <div class="position-relative mb-3 auth-pass-inputgroup">
                                                     <input type="password"
                                                         class="form-control password-input password-field @error('password_confirmation') is-invalid @enderror"
-                                                        id="password-confirmation-input" name="password_confirmation"
-                                                        required>
+                                                        id="password-confirmation-input" name="password_confirmation">
                                                     <button
                                                         class="btn btn-link position-absolute text-decoration-none text-muted shadow-none password-addon"
                                                         type="button" id="password-confirmation-addon" tabindex="-1"
@@ -166,9 +166,9 @@
                                                 </div>
                                             </div>
                                             <!-- <div class="col-12 col-md-4">
-                                                                    <label for="date_start" class="form-label">Description</label>
-                                                                    <input type="text" class="form-control" id="date_start" placeholder="Date Start">
-                                                                </div> -->
+                                                                        <label for="date_start" class="form-label">Description</label>
+                                                                        <input type="text" class="form-control" id="date_start" placeholder="Date Start">
+                                                                    </div> -->
 
                                         </div>
 
@@ -208,6 +208,26 @@
 
 
     <script>
+        $(document).ready(function() {
+            @if (Session::has('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: "{{ Session::get('success') }}",
+                    confirmButtonColor: '#3085d6'
+                });
+            @endif
+
+            @if (Session::has('fail'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "{{ Session::get('fail') }}",
+                    confirmButtonColor: '#d33'
+                });
+            @endif
+
+        });
         document.addEventListener('DOMContentLoaded', function() {
             // Password toggle visibility function
             function togglePasswordVisibility(inputId, addonId, iconId) {

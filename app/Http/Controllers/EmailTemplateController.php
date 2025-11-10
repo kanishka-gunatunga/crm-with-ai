@@ -29,93 +29,127 @@ class EmailTemplateController extends Controller
 {
     public function email_templates(Request $request)
     {
-        if($request->isMethod('get')){
+        $permissions = session('user_permissions', []);
 
-            $query = EmailTemplate::query();
+        if (in_array(strtolower('show-email-templates'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
 
-            if ($request->filled('id')) {
-                $query->where('id', $request->id);
+                $query = EmailTemplate::query();
+
+                if ($request->filled('id')) {
+                    $query->where('id', $request->id);
+                }
+
+                if ($request->filled('name')) {
+                    $query->where('name', 'like', '%' . $request->name . '%');
+                }
+                if ($request->filled('subject')) {
+                    $query->where('subject', 'like', '%' . $request->subject . '%');
+                }
+                $templates = $query->get();
+
+                return view('settings.email_templates.email_templates', [
+                    'templates' => $templates,
+                    'request' => $request->all()
+                ]);
             }
-
-            if ($request->filled('name')) {
-                $query->where('name', 'like', '%' . $request->name . '%');
-            }
-            if ($request->filled('subject')) {
-                $query->where('subject', 'like', '%' . $request->subject . '%');
-            }
-            $templates = $query->get();
-
-            return view('settings.email_templates.email_templates', [
-                'templates' => $templates,
-                'request' => $request->all()
-            ]);
-         }
-        
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
     }
     public function create_email_template(Request $request)
     {
-        if($request->isMethod('get')){
-            return view('settings.email_templates.create_email_template');
-        }
-        if($request->isMethod('post')){
-            $request->validate([
-                'name' => 'required',
-                'subject' => 'required',
-                'content' => 'required',
-            ]);
-    
-            $template =  new EmailTemplate();
-            $template->name = $request->name;
-            $template->subject = $request->subject;
-            $template->content = $request->content;
-            $template->save();
-    
-            return redirect()->back()->with('success', 'Template created successfully!');
+        $permissions = session('user_permissions', []);
+
+        if (in_array(strtolower('create-email-templates'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+                return view('settings.email_templates.create_email_template');
+            }
+            if ($request->isMethod('post')) {
+                $request->validate([
+                    'name' => 'required',
+                    'subject' => 'required',
+                    'content' => 'required',
+                ]);
+
+                $template =  new EmailTemplate();
+                $template->name = $request->name;
+                $template->subject = $request->subject;
+                $template->content = $request->content;
+                $template->save();
+
+                return redirect()->back()->with('success', 'Template created successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
         }
     }
-    public function delete_email_template($id,Request $request)
+    public function delete_email_template($id, Request $request)
     {
-        if($request->isMethod('get')){
-            EmailTemplate::where('id',$id)->delete();
-            return redirect()->back()->with('success', 'Template deleted successfully!');
-         }
+        $permissions = session('user_permissions', []);
+
+        if (in_array(strtolower('delete-email-templates'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+                EmailTemplate::where('id', $id)->delete();
+                return redirect()->back()->with('success', 'Template deleted successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
     }
     public function edit_email_template($id, Request $request)
-{
-    if ($request->isMethod('get')) {
-        $template = EmailTemplate::where('id', $id)->first();
-        return view('settings.email_templates.edit_email_template', ['template' => $template]);
+    {
+        $permissions = session('user_permissions', []);
+
+        if (in_array(strtolower('edit-email-templates'), array_map('strtolower', $permissions))) {
+            if ($request->isMethod('get')) {
+                $template = EmailTemplate::where('id', $id)->first();
+                return view('settings.email_templates.edit_email_template', ['template' => $template]);
+            }
+
+            if ($request->isMethod('post')) {
+                $request->validate([
+                    'name' => 'required',
+                    'subject' => 'required',
+                    'content' => 'required',
+                ]);
+
+                $template =  EmailTemplate::where('id', $id)->first();;
+                $template->name = $request->name;
+                $template->subject = $request->subject;
+                $template->content = $request->content;
+                $template->update();
+
+                return redirect()->back()->with('success', 'Template updated successfully!');
+            }
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
     }
+    public function delete_selected_templates(Request $request)
+    {
+        $permissions = session('user_permissions', []);
 
-    if ($request->isMethod('post')) {
-        $request->validate([
-            'name' => 'required',
-            'subject' => 'required',
-            'content' => 'required',
-        ]);
+        if (in_array(strtolower('delete-email-templates'), array_map('strtolower', $permissions))) {
+            $tempalteIds = $request->input('selected_templates', []);
 
-        $template =  EmailTemplate::where('id', $id)->first();;
-        $template->name = $request->name;
-        $template->subject = $request->subject;
-        $template->content = $request->content;
-        $template->update();
+            if (!empty($tempalteIds)) {
+                EmailTemplate::whereIn('id', $tempalteIds)->delete();
+                return back()->with('success', 'Selected templates deleted successfully.');
+            }
 
-       return redirect()->back()->with('success', 'Template updated successfully!');
-
+            return back()->with('error', 'No attributes selected.');
+        } else {
+            // Option A: Hard stop
+            abort(403, 'Unauthorized');
+        }
     }
 }
-public function delete_selected_templates(Request $request)
-{
-    $tempalteIds = $request->input('selected_templates', []);
-    
-    if (!empty($tempalteIds)) {
-        EmailTemplate::whereIn('id', $tempalteIds)->delete();
-        return back()->with('success', 'Selected templates deleted successfully.');
-    }
 
-    return back()->with('error', 'No attributes selected.');
-}
-}
 
 
 
