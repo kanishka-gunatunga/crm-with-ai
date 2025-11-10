@@ -58,7 +58,9 @@ class PersonsController extends Controller
                 if ($request->has('organization') && $request->get('organization') != '') {
                     $query->where('organization', $request->get('organization'));
                 }
-                $persons = $query->get();
+                $persons = $query
+                ->orderBy('created_at', 'desc')
+                ->get();
                 $organizations = Organization::all();
 
                 return view('contacts.persons.persons', [
@@ -198,6 +200,7 @@ class PersonsController extends Controller
                 return view('contacts.persons.edit_person', ['person' => $person, 'organizations' => $organizations, 'personAttributes' => $personAttributes, 'customValues' => $customValues]);
             }
             if ($request->isMethod('post')) {
+                
                 $request->validate([
                     'name' => 'required|string|max:255',
                     'emails.*' => 'required|email',
@@ -246,8 +249,12 @@ class PersonsController extends Controller
                     $attributeData[$attribute->name] = $request->input($attribute->name);
                 }
 
+                
+
                 $person->custom_attributes = json_encode($attributeData);
 
+               
+                
                 $person->save();
 
                 return redirect()->back()->with('success', 'Person updated successfully!');

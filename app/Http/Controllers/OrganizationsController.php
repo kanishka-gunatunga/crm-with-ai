@@ -53,7 +53,9 @@ class OrganizationsController extends Controller
                     $query->where('created_at', '<=', $request->created_end_date);
                 }
 
-                $organizations = $query->get();
+                $organizations = $query
+                ->orderBy('created_at', 'desc')
+                ->get();
 
                 return view('contacts.organizations.organizations', [
                     'organizations' => $organizations,

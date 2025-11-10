@@ -152,6 +152,7 @@ class UsersController extends Controller
                 return view('settings.users.edit_user', ['user' => $user, 'user_details' => $user_details, 'roles' => $roles, 'groups' => $groups]);
             }
             if ($request->isMethod('post')) {
+                // dd($request->all());
 
                 $request->validate([
                     'name'   => 'required',
@@ -179,10 +180,13 @@ class UsersController extends Controller
                     $user = User::find($id);
                     $user->email = $email;
                     $user->role = $request->role;
+                    $user->status = $request->has('status') ? 'active' : 'inactive';
                     $user->password = Hash::make($request->input('password'));
                     $user->update();
                     return back()->with('success', 'User Details Successfully  Updated');
                 } else {
+
+                    // dd($request->all());
                     if (User::where("id", "=", $id)->where("email", "=", $request->email)->exists()) {
                         $email = $request->email;
                     } elseif (User::where("email", "=", $request->email)->exists()) {
@@ -198,8 +202,9 @@ class UsersController extends Controller
                     $user = User::find($id);
                     $user->email = $email;
                     $user->role = $request->role;
+                    $user->status = $request->has('status') ? 'active' : 'inactive';
                     $user->update();
-                    return back()->with('success', 'Admin Details Successfully  Updated');
+                    return back()->with('success', 'User Details Successfully  Updated');
                 }
             }
         } else {
