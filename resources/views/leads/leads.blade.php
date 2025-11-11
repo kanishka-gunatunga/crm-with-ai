@@ -1,7 +1,7 @@
 @extends('master')
 <?php
-    $permissions = session('user_permissions');
-    
+$permissions = session('user_permissions');
+
 ?>
 @section('content')
     <?php
@@ -76,44 +76,16 @@
 
                             </button>
 
-                            
-
-                            @if (in_array(strtolower('lead-import'), array_map('strtolower', $permissions))) 
-                            {{-- import lead button --}}
-                            <button class="import-leads-button" data-bs-toggle="modal" data-bs-target=".importLeads">
-                                <div class="icon-container">
-                                    <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M9.04372 7.04375C9.08664 6.9977 9.13839 6.96076 9.19589 6.93514C9.25339 6.90952 9.31546 6.89574 9.3784 6.89463C9.44134 6.89352 9.50386 6.9051 9.56222 6.92867C9.62059 6.95225 9.67361 6.98734 9.71812 7.03185C9.76263 7.07636 9.79773 7.12938 9.8213 7.18775C9.84488 7.24612 9.85645 7.30864 9.85534 7.37158C9.85423 7.43452 9.84046 7.49659 9.81484 7.55409C9.78922 7.61159 9.75228 7.66334 9.70622 7.70625L7.83122 9.58125C7.74333 9.66903 7.62419 9.71834 7.49997 9.71834C7.37576 9.71834 7.25662 9.66903 7.16872 9.58125L5.29372 7.70625C5.24767 7.66334 5.21073 7.61159 5.18511 7.55409C5.15949 7.49659 5.14571 7.43452 5.1446 7.37158C5.14349 7.30864 5.15507 7.24612 5.17865 7.18775C5.20222 7.12938 5.23731 7.07636 5.28183 7.03185C5.32634 6.98734 5.37936 6.95225 5.43773 6.92867C5.49609 6.9051 5.55861 6.89352 5.62155 6.89463C5.68449 6.89574 5.74656 6.90952 5.80406 6.93514C5.86156 6.96076 5.91331 6.9977 5.95622 7.04375L7.03122 8.11875V3C7.03122 2.87568 7.08061 2.75645 7.16852 2.66854C7.25643 2.58064 7.37565 2.53125 7.49997 2.53125C7.62429 2.53125 7.74352 2.58064 7.83143 2.66854C7.91934 2.75645 7.96872 2.87568 7.96872 3V8.11875L9.04372 7.04375Z"
-                                            fill="#556476" />
-                                        <path
-                                            d="M12.9688 8C12.9688 7.87568 12.9194 7.75645 12.8315 7.66854C12.7435 7.58064 12.6243 7.53125 12.5 7.53125C12.3757 7.53125 12.2565 7.58064 12.1685 7.66854C12.0806 7.75645 12.0312 7.87568 12.0312 8C12.0312 8.59505 11.914 9.18428 11.6863 9.73403C11.4586 10.2838 11.1248 10.7833 10.7041 11.2041C10.2833 11.6248 9.78379 11.9586 9.23403 12.1863C8.68428 12.414 8.09505 12.5312 7.5 12.5312C6.90495 12.5312 6.31572 12.414 5.76597 12.1863C5.21621 11.9586 4.71669 11.6248 4.29592 11.2041C3.87516 10.7833 3.54139 10.2838 3.31367 9.73403C3.08595 9.18428 2.96875 8.59505 2.96875 8C2.96875 7.87568 2.91936 7.75645 2.83146 7.66854C2.74355 7.58064 2.62432 7.53125 2.5 7.53125C2.37568 7.53125 2.25645 7.58064 2.16854 7.66854C2.08064 7.75645 2.03125 7.87568 2.03125 8C2.03125 9.4504 2.60742 10.8414 3.63301 11.867C4.6586 12.8926 6.0496 13.4688 7.5 13.4688C8.9504 13.4688 10.3414 12.8926 11.367 11.867C12.3926 10.8414 12.9688 9.4504 12.9688 8Z"
-                                            fill="#556476" />
-                                    </svg>
 
 
-                                </div>
-                                <span class="button-text white-btn-text">Import leads</span>
-                            </button>
-                            @endif
-
-                            {{-- export lead button --}}
-                            {{-- <button class="import-leads-button" data-bs-toggle="modal" data-bs-target=".exportTypes"> --}}
-
-
-                               
-                            <div class="position-relative">
-                                
-
-                                @if (in_array(strtolower('lead-export'), array_map('strtolower', $permissions)))
-                                <button class="import-leads-button" data-bs-toggle="collapse"
-                                    data-bs-target="#exportCollapse" aria-expanded="false" aria-controls="exportCollapse">
+                            @if (in_array(strtolower('lead-import'), array_map('strtolower', $permissions)))
+                                {{-- import lead button --}}
+                                <button class="import-leads-button" data-bs-toggle="modal" data-bs-target=".importLeads">
                                     <div class="icon-container">
                                         <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
-                                                d="M9.04378 5.20625C9.08669 5.2523 9.13844 5.28924 9.19594 5.31486C9.25344 5.34048 9.31551 5.35426 9.37845 5.35537C9.44139 5.35648 9.50391 5.3449 9.56227 5.32133C9.62064 5.29775 9.67366 5.26266 9.71817 5.21815C9.76269 5.17364 9.79778 5.12062 9.82135 5.06225C9.84493 5.00388 9.85651 4.94136 9.8554 4.87842C9.85429 4.81548 9.84051 4.75341 9.81489 4.69591C9.78927 4.63841 9.75233 4.58666 9.70628 4.54375L7.83128 2.66875C7.74339 2.58097 7.62425 2.53166 7.50003 2.53166C7.37581 2.53166 7.25667 2.58097 7.16878 2.66875L5.29378 4.54375C5.21098 4.63261 5.1659 4.75014 5.16804 4.87158C5.17018 4.99301 5.21938 5.10888 5.30526 5.19476C5.39115 5.28065 5.50701 5.32984 5.62845 5.33198C5.74989 5.33413 5.86742 5.28905 5.95628 5.20625L7.03128 4.13125V9.25C7.03128 9.37432 7.08066 9.49355 7.16857 9.58146C7.25648 9.66936 7.37571 9.71875 7.50003 9.71875C7.62435 9.71875 7.74357 9.66936 7.83148 9.58146C7.91939 9.49355 7.96878 9.37432 7.96878 9.25V4.13125L9.04378 5.20625Z"
+                                                d="M9.04372 7.04375C9.08664 6.9977 9.13839 6.96076 9.19589 6.93514C9.25339 6.90952 9.31546 6.89574 9.3784 6.89463C9.44134 6.89352 9.50386 6.9051 9.56222 6.92867C9.62059 6.95225 9.67361 6.98734 9.71812 7.03185C9.76263 7.07636 9.79773 7.12938 9.8213 7.18775C9.84488 7.24612 9.85645 7.30864 9.85534 7.37158C9.85423 7.43452 9.84046 7.49659 9.81484 7.55409C9.78922 7.61159 9.75228 7.66334 9.70622 7.70625L7.83122 9.58125C7.74333 9.66903 7.62419 9.71834 7.49997 9.71834C7.37576 9.71834 7.25662 9.66903 7.16872 9.58125L5.29372 7.70625C5.24767 7.66334 5.21073 7.61159 5.18511 7.55409C5.15949 7.49659 5.14571 7.43452 5.1446 7.37158C5.14349 7.30864 5.15507 7.24612 5.17865 7.18775C5.20222 7.12938 5.23731 7.07636 5.28183 7.03185C5.32634 6.98734 5.37936 6.95225 5.43773 6.92867C5.49609 6.9051 5.55861 6.89352 5.62155 6.89463C5.68449 6.89574 5.74656 6.90952 5.80406 6.93514C5.86156 6.96076 5.91331 6.9977 5.95622 7.04375L7.03122 8.11875V3C7.03122 2.87568 7.08061 2.75645 7.16852 2.66854C7.25643 2.58064 7.37565 2.53125 7.49997 2.53125C7.62429 2.53125 7.74352 2.58064 7.83143 2.66854C7.91934 2.75645 7.96872 2.87568 7.96872 3V8.11875L9.04372 7.04375Z"
                                                 fill="#556476" />
                                             <path
                                                 d="M12.9688 8C12.9688 7.87568 12.9194 7.75645 12.8315 7.66854C12.7435 7.58064 12.6243 7.53125 12.5 7.53125C12.3757 7.53125 12.2565 7.58064 12.1685 7.66854C12.0806 7.75645 12.0312 7.87568 12.0312 8C12.0312 8.59505 11.914 9.18428 11.6863 9.73403C11.4586 10.2838 11.1248 10.7833 10.7041 11.2041C10.2833 11.6248 9.78379 11.9586 9.23403 12.1863C8.68428 12.414 8.09505 12.5312 7.5 12.5312C6.90495 12.5312 6.31572 12.414 5.76597 12.1863C5.21621 11.9586 4.71669 11.6248 4.29592 11.2041C3.87516 10.7833 3.54139 10.2838 3.31367 9.73403C3.08595 9.18428 2.96875 8.59505 2.96875 8C2.96875 7.87568 2.91936 7.75645 2.83146 7.66854C2.74355 7.58064 2.62432 7.53125 2.5 7.53125C2.37568 7.53125 2.25645 7.58064 2.16854 7.66854C2.08064 7.75645 2.03125 7.87568 2.03125 8C2.03125 9.4504 2.60742 10.8414 3.63301 11.867C4.6586 12.8926 6.0496 13.4688 7.5 13.4688C8.9504 13.4688 10.3414 12.8926 11.367 11.867C12.3926 10.8414 12.9688 9.4504 12.9688 8Z"
@@ -122,9 +94,38 @@
 
 
                                     </div>
-                                    <span class="button-text white-btn-text">{{ __('app.leads.export-leads') }}</span>
-
+                                    <span class="button-text white-btn-text">Import leads</span>
                                 </button>
+                            @endif
+
+                            {{-- export lead button --}}
+                            {{-- <button class="import-leads-button" data-bs-toggle="modal" data-bs-target=".exportTypes"> --}}
+
+
+
+                            <div class="position-relative">
+
+
+                                @if (in_array(strtolower('lead-export'), array_map('strtolower', $permissions)))
+                                    <button class="import-leads-button" data-bs-toggle="collapse"
+                                        data-bs-target="#exportCollapse" aria-expanded="false"
+                                        aria-controls="exportCollapse">
+                                        <div class="icon-container">
+                                            <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M9.04378 5.20625C9.08669 5.2523 9.13844 5.28924 9.19594 5.31486C9.25344 5.34048 9.31551 5.35426 9.37845 5.35537C9.44139 5.35648 9.50391 5.3449 9.56227 5.32133C9.62064 5.29775 9.67366 5.26266 9.71817 5.21815C9.76269 5.17364 9.79778 5.12062 9.82135 5.06225C9.84493 5.00388 9.85651 4.94136 9.8554 4.87842C9.85429 4.81548 9.84051 4.75341 9.81489 4.69591C9.78927 4.63841 9.75233 4.58666 9.70628 4.54375L7.83128 2.66875C7.74339 2.58097 7.62425 2.53166 7.50003 2.53166C7.37581 2.53166 7.25667 2.58097 7.16878 2.66875L5.29378 4.54375C5.21098 4.63261 5.1659 4.75014 5.16804 4.87158C5.17018 4.99301 5.21938 5.10888 5.30526 5.19476C5.39115 5.28065 5.50701 5.32984 5.62845 5.33198C5.74989 5.33413 5.86742 5.28905 5.95628 5.20625L7.03128 4.13125V9.25C7.03128 9.37432 7.08066 9.49355 7.16857 9.58146C7.25648 9.66936 7.37571 9.71875 7.50003 9.71875C7.62435 9.71875 7.74357 9.66936 7.83148 9.58146C7.91939 9.49355 7.96878 9.37432 7.96878 9.25V4.13125L9.04378 5.20625Z"
+                                                    fill="#556476" />
+                                                <path
+                                                    d="M12.9688 8C12.9688 7.87568 12.9194 7.75645 12.8315 7.66854C12.7435 7.58064 12.6243 7.53125 12.5 7.53125C12.3757 7.53125 12.2565 7.58064 12.1685 7.66854C12.0806 7.75645 12.0312 7.87568 12.0312 8C12.0312 8.59505 11.914 9.18428 11.6863 9.73403C11.4586 10.2838 11.1248 10.7833 10.7041 11.2041C10.2833 11.6248 9.78379 11.9586 9.23403 12.1863C8.68428 12.414 8.09505 12.5312 7.5 12.5312C6.90495 12.5312 6.31572 12.414 5.76597 12.1863C5.21621 11.9586 4.71669 11.6248 4.29592 11.2041C3.87516 10.7833 3.54139 10.2838 3.31367 9.73403C3.08595 9.18428 2.96875 8.59505 2.96875 8C2.96875 7.87568 2.91936 7.75645 2.83146 7.66854C2.74355 7.58064 2.62432 7.53125 2.5 7.53125C2.37568 7.53125 2.25645 7.58064 2.16854 7.66854C2.08064 7.75645 2.03125 7.87568 2.03125 8C2.03125 9.4504 2.60742 10.8414 3.63301 11.867C4.6586 12.8926 6.0496 13.4688 7.5 13.4688C8.9504 13.4688 10.3414 12.8926 11.367 11.867C12.3926 10.8414 12.9688 9.4504 12.9688 8Z"
+                                                    fill="#556476" />
+                                            </svg>
+
+
+                                        </div>
+                                        <span class="button-text white-btn-text">{{ __('app.leads.export-leads') }}</span>
+
+                                    </button>
                                 @endif
                                 <div class="collapse exportCollapseDiv position-absolute" id="exportCollapse">
                                     <div class="col-md-12 text-end">
@@ -173,21 +174,22 @@
 
 
                             {{-- create lead button --}}
-                            @if (in_array(strtolower('create-own-leads'), array_map('strtolower', $permissions)) || in_array(strtolower('create-any-leads'), array_map('strtolower', $permissions)))
-                            <a href="{{ url('create-lead') }}">
-                                <button class="create-btn">
-                                    <div class="icon-container">
-                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M8.625 9.375H4.5V8.625H8.625V4.5H9.375V8.625H13.5V9.375H9.375V13.5H8.625V9.375Z"
-                                                fill="white" />
-                                        </svg>
+                            @if (in_array(strtolower('create-own-leads'), array_map('strtolower', $permissions)) ||
+                                    in_array(strtolower('create-any-leads'), array_map('strtolower', $permissions)))
+                                <a href="{{ url('create-lead') }}">
+                                    <button class="create-btn">
+                                        <div class="icon-container">
+                                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M8.625 9.375H4.5V8.625H8.625V4.5H9.375V8.625H13.5V9.375H9.375V13.5H8.625V9.375Z"
+                                                    fill="white" />
+                                            </svg>
 
-                                    </div>
-                                    <span class="button-text">{{ __('app.leads.create-title') }}</span>
-                                </button>
-                            </a>
+                                        </div>
+                                        <span class="button-text">{{ __('app.leads.create-title') }}</span>
+                                    </button>
+                                </a>
                             @endif
                         </div>
                     </div>
@@ -230,48 +232,55 @@
                 $stage_value = 0;
 
                 $permissions = session('user_permissions', []);
-
+                $leads = $leadsGroupedByStage->get($stage->id, collect());
+                // dd($orderedStages);
          
 
-                if (in_array(strtolower('lead-view-all'), array_map('strtolower', $permissions))) {
-                    // Admin - show all leads for the stage
-                    $leads = $leadsGroupedByStage->get($stage->id, collect());
-                } elseif (in_array(strtolower('lead-view-own'), array_map('strtolower', $permissions))) {
-                    // Sales
-                    if ($stage->name == 'New') {
+                // if (in_array(strtolower('lead-view-all'), array_map('strtolower', $permissions))) {
+                //     // Admin - show all leads for the stage
+                //     $leads = $leadsGroupedByStage->get($stage->id, collect());
+                // } elseif (in_array(strtolower('lead-view-own'), array_map('strtolower', $permissions))) {
+                   
+
+
+                //     // Sales
+                //     if ($stage->name == 'New') {
                         
                        
-                        $allLeadsFromAllStages = collect();
+                //         $allLeadsFromAllStages = collect();
                         
-                        foreach ($leadsGroupedByStage as $stageId => $stageLeads) {
-                            $allLeadsFromAllStages = $allLeadsFromAllStages->merge($stageLeads);
-                        }
-                        $leads = $allLeadsFromAllStages->filter(function($lead) use ($currentUserId, $stage) {
+                //         foreach ($leadsGroupedByStage as $stageId => $stageLeads) {
+                //             $allLeadsFromAllStages = $allLeadsFromAllStages->merge($stageLeads);
+                //         }
+                //         $leads = $allLeadsFromAllStages->filter(function($lead) use ($currentUserId, $stage) {
                             
-                            return (is_null($lead->sales_owner) || ($lead->sales_owner == 1) || $lead->sales_owner == $currentUserId) && ($lead->stage == $stage->id) ;
+                //             return (is_null($lead->sales_owner) 
+                //             //  || ($lead->sales_owner == 1) 
+                //             || $lead->sales_owner == $currentUserId) 
+                //             // && ($lead->stage == $stage->id) 
+                //             ;
                         
-                        });
-
-                       
-
+                //         });
                         
-                    } else {
-                        // Other stages: only leads owned by current user
-                        $stageLeads = $leadsGroupedByStage->get($stage->id, collect());
-                        $leads = $stageLeads->filter(function($lead) use ($currentUserId) {
-                            return $lead->sales_owner == $currentUserId;
-                        });
-                    }
-                } else {
-                    // Other roles: show no leads
-                    $leads = collect();
-                }
+                //     } else {
+                //         // Other stages: only leads owned by current user
+                //         $stageLeads = $leadsGroupedByStage->get($stage->id, collect());
+                //         $leads = $stageLeads->filter(function($lead) use ($currentUserId) {
+                //             return $lead->sales_owner == $currentUserId;
+                //         });
+                //     }
+                // } else {
+                //     // Other roles: show no leads
+                //     $leads = collect();
+                // }
 
                     $stage_value = $leads->sum('lead_value');
 
-               
+            //    var_dump($leads);  
                             ?>
-                            
+
+
+
                         <div class="col-md-3">
                             <div class="card card-default lead-card ">
                                 <div class="card-body">
@@ -319,17 +328,14 @@
 
                                                 <div class="priority-section d-flex align-items-center gap-2">
                                                     @if (in_array(strtolower('lead-view-all'), array_map('strtolower', $permissions)))
-                                                   
                                                         @if ($lead->salesOwner)
-                                                           
                                                             <div class="assigned-wrapper"
                                                                 data-sales-owner="{{ $lead->salesOwner->name }}">
                                                                 <img src="{{ asset('images/assigned.svg') }}"
                                                                     alt="assigned" class="assigned-icon" tabindex="0">
                                                             </div>
-                                                        
                                                         @endif
-                                                    {{-- @elseif ($stage->name == 'New' && $lead->sales_owner == auth()->user()->id)
+                                                        {{-- @elseif ($stage->name == 'New' && $lead->sales_owner == auth()->user()->id)
                                                         <div>
                                                             <img src="{{ asset('images/assigned.svg') }}" alt="">
                                                         </div> --}}
@@ -479,43 +485,43 @@
 
 
 
-<!-- Won Modal -->
-<div class="modal fade" id="wonModal" tabindex="-1" aria-labelledby="wonModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="wonModalLabel">Mark Lead as Won</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        Do you want to mark this lead as Won?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button id="confirmWon" type="button" class="btn btn-success">Yes, Continue</button>
-      </div>
+    <!-- Won Modal -->
+    <div class="modal fade" id="wonModal" tabindex="-1" aria-labelledby="wonModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="wonModalLabel">Mark Lead as Won</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    Do you want to mark this lead as Won?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="confirmWon" type="button" class="btn btn-success">Yes, Continue</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- Lost Modal -->
-<div class="modal fade" id="lostModal" tabindex="-1" aria-labelledby="lostModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="lostModalLabel">Mark Lead as Lost</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        Do you want to mark this lead as Lost?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button id="confirmLost" type="button" class="btn btn-danger">Yes, Continue</button>
-      </div>
+    <!-- Lost Modal -->
+    <div class="modal fade" id="lostModal" tabindex="-1" aria-labelledby="lostModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="lostModalLabel">Mark Lead as Lost</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    Do you want to mark this lead as Lost?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="confirmLost" type="button" class="btn btn-danger">Yes, Continue</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
 
 

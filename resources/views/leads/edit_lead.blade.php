@@ -173,8 +173,8 @@ $permissions = session('user_permissions');
 
                                                         <!-- List all owners -->
                                                         @foreach ($owners as $owner)
-                                                            <option value="{{ $owner->id }}"
-                                                                {{ $owner->id == $lead->sales_owner ? 'selected' : '' }}>
+                                                            <option value="{{ $owner->user_id }}"
+                                                                {{ $owner->user_id == $lead->sales_owner ? 'selected' : '' }}>
                                                                 {{ $owner->name }}
                                                             </option>
                                                         @endforeach

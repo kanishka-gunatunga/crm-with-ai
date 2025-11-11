@@ -811,6 +811,12 @@ $permissions = session('user_permissions');
                             <!-- <article class="project-card"> -->
                             <!-- <div class="card-background"></div> -->
                             <div class="tab-content" id="pills-tabContent">
+                                @if ($notes->isEmpty() && $calls->isEmpty() && $meetings->isEmpty() && $lunches->isEmpty() && $files->isEmpty() && $quotes->isEmpty())
+                                <div class="no-events-message p-3">
+                                    <p class="mb-0">No events to display.</p>
+                                </div>
+                                @else
+
                                 <div class="tab-pane fade show active" id="events-all" role="tabpanel"
                                     aria-labelledby="events-all-tab" tabindex="0">
                                     <div>
@@ -820,7 +826,7 @@ $permissions = session('user_permissions');
                                     @if (in_array(strtolower('show-lead-note'), array_map('strtolower', $permissions)))
                                         <div>
                                             @if ($notes->isEmpty())
-                                                <p>No content available.</p>
+                                               
                                             @else
                                                 <div>
                                                     <h5 class="mb-3 card-title">Notes</h5>
@@ -1426,7 +1432,7 @@ $permissions = session('user_permissions');
                                         @endif
                                     @endif
                                 </div>
-
+                                @endif
 
                                 <div class="tab-pane fade" id="events-notes" role="tabpanel"
                                     aria-labelledby="events-note-tab" tabindex="0">

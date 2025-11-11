@@ -38,6 +38,7 @@ use App\Mail\LeadSendEmail;
 use App\Models\Attribute;
 use Carbon\Carbon;
 use File;
+use Google\Service\TrafficDirectorService\Pipe;
 use Illuminate\Support\Arr;
 use PDF;
 use Mail;
@@ -64,6 +65,7 @@ class LeadController extends Controller
                 }
             }
 
+            // $pipeline = Pipeline::find(11);
             $pipeline = Pipeline::find(session('pipeline_id'));
             $pipelines = Pipeline::get();
 
@@ -71,6 +73,12 @@ class LeadController extends Controller
 
             $leadFilters = Lead::query()
                 ->where('pipeline', $pipeline->id);
+
+                
+            $permissions = session('user_permissions', []);
+            if (in_array(strtolower('lead-view-own'), array_map('strtolower', $permissions))) {
+                 $leadFilters->where('sales_owner', Auth::id());
+            }
 
             if ($request->filled('name')) {
                 $leadFilters->where('title', 'like', '%' . $request->name . '%');
@@ -84,9 +92,14 @@ class LeadController extends Controller
                 $leadFilters->whereDate('created_at', '<=', $request->end_date);
             }
 
+
+            
+
             $filteredLeads = $leadFilters->get();
             $userId = Auth::id();
             $leadsGroupedByStage = $filteredLeads->groupBy('stage');
+
+            // dd($leadsGroupedByStage);
 
             return view('leads.leads', [
                 'types' => $types,
@@ -243,6 +256,9 @@ class LeadController extends Controller
                 $person->save();
             }
 
+            $stage = Pipeline::find($request->pipeline)->stages;
+            // dd($stage->where('name', 'New')->first()->id);
+
             // Lead creation logic
             $lead = new Lead();
             $lead->title = $request->title;
@@ -257,8 +273,8 @@ class LeadController extends Controller
             $lead->status = 'active';
             $lead->category = 'qualified';
             $lead->pipeline = $request->pipeline;
-            // $lead->stage = $request->stage;
-            $lead->stage = '1';
+            // $lead->stage = $request->(stage; pipeline->stages->check 'New' get the id)
+            $lead->stage = $stage->where('name', 'New')->first()->id;
             $lead->person = $person->id;
             $lead->custom_attributes = json_encode($attributeData);
             $lead->save();

@@ -188,7 +188,7 @@
                                                     <label>{{ $attribute->name }}</label>
 
                                                     @php
-                                                        $value = $customValues[$attribute->code] ?? '';
+                                                        $value = $customValues[$attribute->code] ?? $customValues[$attribute->name] ?? '';
                                                         if ($attribute->options) {
                                                             $options = is_array($attribute->options)
                                                                 ? $attribute->options

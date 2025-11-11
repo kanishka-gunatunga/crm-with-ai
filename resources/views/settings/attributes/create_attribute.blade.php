@@ -332,4 +332,6 @@
             $(this).closest('.row').remove();
         });
     </script>
+
+
 @endsection

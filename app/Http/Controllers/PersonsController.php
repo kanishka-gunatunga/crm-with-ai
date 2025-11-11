@@ -59,8 +59,8 @@ class PersonsController extends Controller
                     $query->where('organization', $request->get('organization'));
                 }
                 $persons = $query
-                ->orderBy('created_at', 'desc')
-                ->get();
+                    ->orderBy('created_at', 'desc')
+                    ->get();
                 $organizations = Organization::all();
 
                 return view('contacts.persons.persons', [
@@ -77,7 +77,7 @@ class PersonsController extends Controller
 
     public function create_person(Request $request)
     {
-
+        // dd($request->all());
         $permissions = session('user_permissions', []);
 
         if (in_array(strtolower('create-persons'), array_map('strtolower', $permissions))) {
@@ -87,7 +87,7 @@ class PersonsController extends Controller
                 return view('contacts.persons.create_person', ['organizations' => $organizations, 'personAttributes' => $personAttributes]);
             }
             if ($request->isMethod('post')) {
-                
+
                 $request->validate([
                     'name' => 'required|string|max:255',
                     'emails.*' => 'required|email',
@@ -99,8 +99,19 @@ class PersonsController extends Controller
                 $personAttributes = Attribute::where('entity_type', 'person')->get();
                 $attributeData = [];
 
+                // foreach ($personAttributes as $attribute) {
+                //     $attributeData[$attribute->name] = $request->input($attribute->name);
+                // }
+
                 foreach ($personAttributes as $attribute) {
-                    $attributeData[$attribute->name] = $request->input($attribute->name);
+                    $value = $request->input($attribute->code);
+
+                    // Handle checkboxes or multiselects
+                    if (in_array($attribute->type, ['checkbox', 'multiselect']) && is_array($value)) {
+                        $value = $value;
+                    }
+
+                    $attributeData[$attribute->name] = $value; // store by display name
                 }
                 $file_name = null;
                 if ($request->picture) {
@@ -141,8 +152,9 @@ class PersonsController extends Controller
                     $person->contact_numbers = $contactNumbers;
                 }
 
-                $person->custom_attributes = json_encode($attributeData);
-
+                // $person->custom_attributes = json_encode($attributeData);
+                // dd($person);
+                $person->custom_attributes = $attributeData;
                 $person->save();
 
                 return redirect()->back()->with('success', 'Person created successfully!');
@@ -187,6 +199,8 @@ class PersonsController extends Controller
 
     public function edit_person($id, Request $request)
     {
+
+       
         $permissions = session('user_permissions', []);
 
         if (in_array(strtolower('edit-persons'), array_map('strtolower', $permissions))) {
@@ -196,11 +210,15 @@ class PersonsController extends Controller
                 $organizations = Organization::get();
                 $personAttributes = Attribute::where('entity_type', 'person')->get();
                 // Decode saved JSON data (if any)
-                $customValues = json_decode($person->custom_attributes, true) ?? [];
+                $customValues = is_array($person->custom_attributes)
+                    ? $person->custom_attributes
+                    : (json_decode($person->custom_attributes, true) ?? []);
                 return view('contacts.persons.edit_person', ['person' => $person, 'organizations' => $organizations, 'personAttributes' => $personAttributes, 'customValues' => $customValues]);
             }
             if ($request->isMethod('post')) {
-                
+
+                // dd($request->all());
+
                 $request->validate([
                     'name' => 'required|string|max:255',
                     'emails.*' => 'required|email',
@@ -246,15 +264,24 @@ class PersonsController extends Controller
                 // Gather dynamic field values again
                 $attributeData = [];
                 foreach ($personAttributes as $attribute) {
-                    $attributeData[$attribute->name] = $request->input($attribute->name);
+                    $value = $request->input($attribute->code);
+
+                    // Handle checkboxes or multiselects
+                    if (in_array($attribute->type, ['checkbox', 'multiselect']) && is_array($value)) {
+                        $value = $value;
+                    }
+
+                    $attributeData[$attribute->name] = $value; // store by display name
                 }
 
-                
 
-                $person->custom_attributes = json_encode($attributeData);
 
-               
-                
+                // $person->custom_attributes = json_encode($attributeData);
+
+                $person->custom_attributes = $attributeData;
+
+
+
                 $person->save();
 
                 return redirect()->back()->with('success', 'Person updated successfully!');

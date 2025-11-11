@@ -262,7 +262,7 @@ $permissions = session('user_permissions');
                                                                     href="{{ url('organizations?id=' . $person->organization) }}">
                                                                     {{ Organization::where('id', $person->organization)->value('name') ?? '-' }}</a>
                                                             </td>
-                                                            <td>{{ $person->custom_attributes }}</td>
+                                                            <td>{{ json_encode($person->custom_attributes) }}</td>
 
                                                             <td class="action-icons d-flex gx-3">
 

@@ -23,6 +23,7 @@ class Person extends Model
     protected $casts = [
         'emails' => 'array',  
         'contact_numbers' => 'array',  
+        'custom_attributes' => 'array',
     ];
 
     public function leads()
