@@ -78,7 +78,40 @@ class ProductsController extends Controller
                 $attributeData = [];
 
                 foreach ($productAttributes as $attribute) {
-                    $attributeData[$attribute->name] = $request->input($attribute->name);
+                    $value = null;
+
+                    // Handle file or image uploads
+                    if (in_array($attribute->type, ['file', 'image'])) {
+                        if ($request->hasFile($attribute->code)) {
+                            $file = $request->file($attribute->code);
+
+                            // Create directory if it doesn’t exist
+                            $path = public_path('uploads/products/custom_attributes');
+                            if (!file_exists($path)) {
+                                mkdir($path, 0777, true);
+                            }
+
+                            // Create unique file name
+                            $fileName = time() . '_' . $attribute->code . '.' . $file->getClientOriginalExtension();
+
+                            // Move file to uploads directory
+                            $file->move($path, $fileName);
+
+                            // Store only the relative path or filename
+                            $value = 'products/custom_attributes/' . $fileName;
+                        }
+                    }
+                    // Handle checkboxes or multiselects
+                    elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
+                        $value = $request->input($attribute->code) ?? [];
+                    }
+                    // Handle all other types (text, email, number, select, etc.)
+                    else {
+                        $value = $request->input($attribute->code);
+                    }
+
+                    
+                    $attributeData[$attribute->name] = $value;
                 }
 
                 $product = new Product();
@@ -87,7 +120,7 @@ class ProductsController extends Controller
                 $product->quantity = $request->quantity;
                 $product->cost = $request->cost;
                 $product->description = $request->description;
-                $product->custom_attributes = json_encode($attributeData);
+                $product->custom_attributes = $attributeData;
                 $product->save();
 
                 return redirect()->back()->with('success', 'Product created successfully!');
@@ -123,7 +156,9 @@ class ProductsController extends Controller
             if ($request->isMethod('get')) {
                 $productAttributes = Attribute::where('entity_type', 'product')->get();
                 // Decode saved JSON data (if any)
-                $customValues = json_decode($product->custom_attributes, true) ?? [];
+               $customValues = is_array($product->custom_attributes)
+                    ? $product->custom_attributes
+                    : (json_decode($product->custom_attributes, true) ?? []);
                 return view('products.edit_product', ['product' => $product, 'productAttributes' => $productAttributes, 'customValues' => $customValues]);
             }
             if ($request->isMethod('post')) {
@@ -138,7 +173,40 @@ class ProductsController extends Controller
                 // Gather dynamic field values again
                 $attributeData = [];
                 foreach ($productAttributes as $attribute) {
-                    $attributeData[$attribute->name] = $request->input($attribute->name);
+                    $value = null;
+
+                    // Handle file or image uploads
+                    if (in_array($attribute->type, ['file', 'image'])) {
+                        if ($request->hasFile($attribute->code)) {
+                            $file = $request->file($attribute->code);
+
+                            // Create directory if it doesn’t exist
+                            $path = public_path('uploads/products/custom_attributes');
+                            if (!file_exists($path)) {
+                                mkdir($path, 0777, true);
+                            }
+
+                            // Create unique file name
+                            $fileName = time() . '_' . $attribute->code . '.' . $file->getClientOriginalExtension();
+
+                            // Move file to uploads directory
+                            $file->move($path, $fileName);
+
+                            // Store only the relative path or filename
+                            $value = 'products/custom_attributes/' . $fileName;
+                        }
+                    }
+                    // Handle checkboxes or multiselects
+                    elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
+                        $value = $request->input($attribute->code) ?? [];
+                    }
+                    // Handle all other types (text, email, number, select, etc.)
+                    else {
+                        $value = $request->input($attribute->code);
+                    }
+
+                   
+                    $attributeData[$attribute->name] = $value;
                 }
 
                 $product->name = $request->name;
@@ -146,7 +214,7 @@ class ProductsController extends Controller
                 $product->quantity = $request->quantity;
                 $product->cost = $request->cost;
                 $product->description = $request->description;
-                $product->custom_attributes = json_encode($attributeData);
+                $product->custom_attributes = $attributeData;
                 $product->update();
 
                 return redirect()->back()->with('success', 'Product updated successfully!');

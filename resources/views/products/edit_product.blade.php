@@ -86,8 +86,10 @@
                                                 <div class="mb-3">
                                                     <label>{{ $attribute->name }}</label>
 
-                                                   @php
-                                                        $value = $customValues[$attribute->code] ?? '';
+                                                    @php
+                                                        $value =
+                                                            $customValues[$attribute->code] ??
+                                                            ($customValues[$attribute->name] ?? '');
                                                         if ($attribute->options) {
                                                             $options = is_array($attribute->options)
                                                                 ? $attribute->options
@@ -104,12 +106,10 @@
                                                             class="form-control" value="{{ $value }}"
                                                             {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
                                                     @elseif ($attribute->type == 'textarea')
-                                                        <textarea name="{{ $attribute->code }}" class="form-control"
-                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>{{ $value }}</textarea>
+                                                        <textarea name="{{ $attribute->code }}" class="form-control" {{ $attribute->is_required == 'yes' ? 'required' : '' }}>{{ $value }}</textarea>
                                                     @elseif ($attribute->type == 'number' || $attribute->type == 'price')
-                                                        <input type="number" step="0.01"
-                                                            name="{{ $attribute->code }}" class="form-control"
-                                                            value="{{ $value }}"
+                                                        <input type="number" step="0.01" name="{{ $attribute->code }}"
+                                                            class="form-control" value="{{ $value }}"
                                                             {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
                                                     @elseif ($attribute->type == 'boolean')
                                                         <select name="{{ $attribute->code }}" class="form-select"
@@ -224,7 +224,8 @@
                     </div>
                     <div>
                         <button type="submit" class="btn save-btn">Save</button>
-                        <a href="{{ url('products') }}"><button type="button" class="btn cancel-btn">Cancel</button></a>
+                        <a href="{{ url('products') }}"><button type="button"
+                                class="btn cancel-btn">Cancel</button></a>
                     </div>
 
                 </div>

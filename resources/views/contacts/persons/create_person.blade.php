@@ -240,6 +240,30 @@
                                                                 {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
                                                         @break
 
+                                                        @case('lookup')
+                                                            @php
+                                                                // Get lookup options prepared in the controller
+                                                                $options = $lookupOptions[$attribute->code] ?? [];
+
+                                                                // If editing, prefill the saved value
+                                                                $value = $customValues[$attribute->code] ?? '';
+                                                            @endphp
+
+                                                            <select name="{{ $attribute->code }}" class="form-select"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                                <option value="">Select</option>
+
+                                                               
+
+                                                                @foreach ($options as $name => $label)
+                                                                    <option value="{{ $name }}"
+                                                                        {{ (string) $value === (string) $name ? 'selected' : '' }}>
+                                                                        {{ $label }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        @break
+
                                                         @case('datetime')
                                                             <input type="datetime-local" class="form-control"
                                                                 name="{{ $attribute->code }}"

@@ -188,12 +188,15 @@
                                                     <label>{{ $attribute->name }}</label>
 
                                                     @php
-                                                        $value = $customValues[$attribute->code] ?? $customValues[$attribute->name] ?? '';
+                                                        $value =
+                                                            $customValues[$attribute->code] ??
+                                                            ($customValues[$attribute->name] ?? '');
                                                         if ($attribute->options) {
                                                             $options = is_array($attribute->options)
                                                                 ? $attribute->options
                                                                 : json_decode($attribute->options, true);
                                                         }
+                                                        $options = $lookupOptions[$attribute->code] ?? [];
                                                     @endphp
 
                                                     @if ($attribute->type == 'text')
@@ -255,6 +258,29 @@
                                                                     class="form-check-label">{{ $opt }}</label>
                                                             </div>
                                                         @endforeach
+                                                    @elseif ($attribute->type == 'lookup')
+                                                        @php
+                                                            // Retrieve lookup options for this attribute
+                                                            $options = $lookupOptions[$attribute->code] ?? [];
+
+                                                            // Get the saved value (the name, e.g., 'Facebook')
+                                                            $value =
+                                                                $customValues[$attribute->code] ??
+                                                                ($customValues[$attribute->name] ?? '');
+                                                        @endphp
+
+                                                        <select name="{{ $attribute->code }}" class="form-select"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                            <option value="">Select</option>
+
+
+                                                            @foreach ($options as $id => $label)
+                                                                <option value="{{ $id }}"
+                                                                    {{ $label === $value ? 'selected' : '' }}>
+                                                                    {{ $label }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
                                                     @elseif ($attribute->type == 'date')
                                                         <input type="date" name="{{ $attribute->code }}"
                                                             class="form-control" value="{{ $value }}"

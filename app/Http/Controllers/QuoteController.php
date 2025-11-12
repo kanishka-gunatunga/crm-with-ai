@@ -172,7 +172,12 @@ class QuoteController extends Controller
                 $attributeData = [];
 
                 foreach ($quoteAttributes as $attribute) {
-                    $attributeData[$attribute->name] = $request->input($attribute->name);
+                    $value = $request->input($attribute->code);
+                    if (in_array($attribute->type, ['checkbox', 'multiselect']) && is_array($value)) {
+                        $value = $value;
+                    }
+
+                    $attributeData[$attribute->name] = $value;
                 }
 
                 $quote =  new Quote();
@@ -195,7 +200,7 @@ class QuoteController extends Controller
                 $quote->discount_total_amount =  $request->discount_total_amount;
                 $quote->tax_total_amount =  $request->tax_total_amount;
                 $quote->order_total_input =  $request->order_total_input;
-                $quote->custom_attributes = json_encode($attributeData);
+                $quote->custom_attributes = $attributeData;
                 $quote->save();
 
                 if ($request->has('products')) {
@@ -276,7 +281,11 @@ class QuoteController extends Controller
                 $attributeData = [];
 
                 foreach ($quoteAttributes as $attribute) {
-                    $attributeData[$attribute->name] = $request->input($attribute->name);
+                    $value = $request->input($attribute->code);
+                    if (in_array($attribute->type, ['checkbox', 'multiselect']) && is_array($value)) {
+                        $value = $value;
+                    }
+                    $attributeData[$attribute->name] = $value;
                 }
 
 
@@ -315,7 +324,7 @@ class QuoteController extends Controller
                 $quote->discount_total_amount =  $request->discount_total_amount;
                 $quote->tax_total_amount =  $request->tax_total_amount;
                 $quote->order_total_input =  $request->order_total_input;
-                $quote->custom_attributes = json_encode($attributeData);
+                $quote->custom_attributes = $attributeData;
                 $quote->save();
 
                 if ($request->has('products')) {
@@ -372,7 +381,10 @@ class QuoteController extends Controller
 
                 $quoteAttributes = Attribute::where('entity_type', 'quote')->get();
                 // Decode saved JSON data (if any)
-                $customValues = json_decode($quote->custom_attributes, true) ?? [];
+                // $customValues = json_decode($quote->custom_attributes, true) ?? [];
+                $customValues = is_array($quote->custom_attributes)
+                    ? $quote->custom_attributes
+                    : (json_decode($quote->custom_attributes, true) ?? []);
 
 
                 return view('quotes.edit_quote', [
@@ -407,7 +419,40 @@ class QuoteController extends Controller
                 // Gather dynamic field values again
                 $attributeData = [];
                 foreach ($quoteAttributes as $attribute) {
-                    $attributeData[$attribute->name] = $request->input($attribute->name);
+                    $value = null;
+
+                    // Handle file or image uploads
+                    if (in_array($attribute->type, ['file', 'image'])) {
+                        if ($request->hasFile($attribute->code)) {
+                            $file = $request->file($attribute->code);
+
+                            // Create directory if it doesn’t exist
+                            $path = public_path('uploads/quotes/custom_attributes');
+                            if (!file_exists($path)) {
+                                mkdir($path, 0777, true);
+                            }
+
+                            // Create unique file name
+                            $fileName = time() . '_' . $attribute->code . '.' . $file->getClientOriginalExtension();
+
+                            // Move file to uploads directory
+                            $file->move($path, $fileName);
+
+                            // Store only the relative path or filename
+                            $value = 'quotes/custom_attributes/' . $fileName;
+                        }
+                    }
+                    // Handle checkboxes or multiselects
+                    elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
+                        $value = $request->input($attribute->code) ?? [];
+                    }
+                    // Handle all other types (text, email, number, select, etc.)
+                    else {
+                        $value = $request->input($attribute->code);
+                    }
+
+                    
+                    $attributeData[$attribute->name] = $value;
                 }
 
                 $quote->lead = $request->lead;
@@ -429,7 +474,7 @@ class QuoteController extends Controller
                 $quote->discount_total_amount =  $request->discount_total_amount;
                 $quote->tax_total_amount =  $request->tax_total_amount;
                 $quote->order_total_input =  $request->order_total_input;
-                $quote->custom_attributes = json_encode($attributeData);
+                $quote->custom_attributes = $attributeData;
                 $quote->update();
 
                 QuoteProduct::where('quote_id', $id)->delete();

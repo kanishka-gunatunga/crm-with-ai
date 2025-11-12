@@ -54,8 +54,8 @@ class OrganizationsController extends Controller
                 }
 
                 $organizations = $query
-                ->orderBy('created_at', 'desc')
-                ->get();
+                    ->orderBy('created_at', 'desc')
+                    ->get();
 
                 return view('contacts.organizations.organizations', [
                     'organizations' => $organizations,
@@ -90,7 +90,40 @@ class OrganizationsController extends Controller
                 $attributeData = [];
 
                 foreach ($organizationAttributes as $attribute) {
-                    $attributeData[$attribute->name] = $request->input($attribute->name);
+                    $value = null;
+
+                    // Handle file or image uploads
+                    if (in_array($attribute->type, ['file', 'image'])) {
+                        if ($request->hasFile($attribute->code)) {
+                            $file = $request->file($attribute->code);
+
+                            // Create directory if it doesn’t exist
+                            $path = public_path('uploads/organizations/custom_attributes');
+                            if (!file_exists($path)) {
+                                mkdir($path, 0777, true);
+                            }
+
+                            // Create unique file name
+                            $fileName = time() . '_' . $attribute->code . '.' . $file->getClientOriginalExtension();
+
+                            // Move file to uploads directory
+                            $file->move($path, $fileName);
+
+                            // Store only the relative path or filename
+                            $value = 'organizations/custom_attributes/' . $fileName;
+                        }
+                    }
+                    // Handle checkboxes or multiselects
+                    elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
+                        $value = $request->input($attribute->code) ?? [];
+                    }
+                    // Handle all other types (text, email, number, select, etc.)
+                    else {
+                        $value = $request->input($attribute->code);
+                    }
+
+                    // Save by code (recommended)
+                    $attributeData[$attribute->code] = $value;
                 }
 
                 $organization = new Organization();
@@ -150,12 +183,14 @@ class OrganizationsController extends Controller
 
                 $organizationAttributes = Attribute::where('entity_type', 'organization')->get();
                 // Decode saved JSON data (if any)
-                $customAttributes = json_decode($organization->custom_attributes, true) ?? [];
+                $customAttributes = is_array($organization->custom_attributes)
+                    ? $organization->custom_attributes
+                    : (json_decode($organization->custom_attributes, true) ?? []);
                 return view('contacts.organizations.edit_organization', ['organization' => $organization, 'organizationAttributes' => $organizationAttributes, 'customAttributes' => $customAttributes]);
             }
             if ($request->isMethod('post')) {
 
-                
+
                 $request->validate([
                     'name' => 'required|string|max:255',
                     'emails.*' => 'required|email',
@@ -167,7 +202,40 @@ class OrganizationsController extends Controller
                 // Gather dynamic field values again
                 $attributeData = [];
                 foreach ($organizationAttributes as $attribute) {
-                    $attributeData[$attribute->name] = $request->input($attribute->name);
+                    $value = null;
+
+                    // Handle file or image uploads
+                    if (in_array($attribute->type, ['file', 'image'])) {
+                        if ($request->hasFile($attribute->code)) {
+                            $file = $request->file($attribute->code);
+
+                            // Create directory if it doesn’t exist
+                            $path = public_path('uploads/organizations/custom_attributes');
+                            if (!file_exists($path)) {
+                                mkdir($path, 0777, true);
+                            }
+
+                            // Create unique file name
+                            $fileName = time() . '_' . $attribute->code . '.' . $file->getClientOriginalExtension();
+
+                            // Move file to uploads directory
+                            $file->move($path, $fileName);
+
+                            // Store only the relative path or filename
+                            $value = 'organizations/custom_attributes/' . $fileName;
+                        }
+                    }
+                    // Handle checkboxes or multiselects
+                    elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
+                        $value = $request->input($attribute->code) ?? [];
+                    }
+                    // Handle all other types (text, email, number, select, etc.)
+                    else {
+                        $value = $request->input($attribute->code);
+                    }
+
+                    // Save by code (recommended)
+                    $attributeData[$attribute->code] = $value;
                 }
 
                 $organization->name = $request->name;
@@ -176,7 +244,7 @@ class OrganizationsController extends Controller
                 $organization->state = $request->state;
                 $organization->city = $request->city;
                 $organization->post_code = $request->post_code;
-                $organization->custom_attributes = json_encode($attributeData);
+                $organization->custom_attributes = $attributeData;
 
                 if ($request->has('emails')) {
                     $emails = [];

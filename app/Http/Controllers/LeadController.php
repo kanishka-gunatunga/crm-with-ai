@@ -74,10 +74,10 @@ class LeadController extends Controller
             $leadFilters = Lead::query()
                 ->where('pipeline', $pipeline->id);
 
-                
+
             $permissions = session('user_permissions', []);
             if (in_array(strtolower('lead-view-own'), array_map('strtolower', $permissions))) {
-                 $leadFilters->where('sales_owner', Auth::id());
+                $leadFilters->where('sales_owner', Auth::id());
             }
 
             if ($request->filled('name')) {
@@ -93,7 +93,7 @@ class LeadController extends Controller
             }
 
 
-            
+
 
             $filteredLeads = $leadFilters->get();
             $userId = Auth::id();
@@ -182,8 +182,12 @@ class LeadController extends Controller
             $attributeData = [];
 
             foreach ($leadAttributes as $attribute) {
-                $attributeData[$attribute->name] = $request->input($attribute->name);
-               
+                $value = $request->input($attribute->code);
+                if (in_array($attribute->type, ['checkbox', 'multiselect']) && is_array($value)) {
+                    $value = $value;
+                }
+
+                $attributeData[$attribute->name] = $value;
             }
 
             // if (in_array(strtolower('lead-create'), array_map('strtolower', $permissions))) {
@@ -276,7 +280,7 @@ class LeadController extends Controller
             // $lead->stage = $request->(stage; pipeline->stages->check 'New' get the id)
             $lead->stage = $stage->where('name', 'New')->first()->id;
             $lead->person = $person->id;
-            $lead->custom_attributes = json_encode($attributeData);
+            $lead->custom_attributes = $attributeData;
             $lead->save();
 
             // Product logic (unchanged)
@@ -343,7 +347,9 @@ class LeadController extends Controller
                 $stages = PipelineStage::where('pipeline_id', $lead->pipeline)->get();
                 $leadAttributes = Attribute::where('entity_type', 'lead')->get();
                 // Decode saved JSON data (if any)
-                $customValues = json_decode($lead->custom_attributes, true) ?? [];
+                $customValues = is_array($lead->custom_attributes)
+                    ? $lead->custom_attributes
+                    : (json_decode($lead->custom_attributes, true) ?? []);
 
                 return view('leads.edit_lead', [
                     'sources' => $sources,
@@ -440,7 +446,40 @@ class LeadController extends Controller
                 // Gather dynamic field values again
                 $attributeData = [];
                 foreach ($leadAttributes as $attribute) {
-                    $attributeData[$attribute->name] = $request->input($attribute->name);
+                    $value = null;
+
+                    // Handle file or image uploads
+                    if (in_array($attribute->type, ['file', 'image'])) {
+                        if ($request->hasFile($attribute->code)) {
+                            $file = $request->file($attribute->code);
+
+                            // Create directory if it doesn’t exist
+                            $path = public_path('uploads/leads/custom_attributes');
+                            if (!file_exists($path)) {
+                                mkdir($path, 0777, true);
+                            }
+
+                            // Create unique file name
+                            $fileName = time() . '_' . $attribute->code . '.' . $file->getClientOriginalExtension();
+
+                            // Move file to uploads directory
+                            $file->move($path, $fileName);
+
+                            // Store only the relative path or filename
+                            $value = 'leads/custom_attributes/' . $fileName;
+                        }
+                    }
+                    // Handle checkboxes or multiselects
+                    elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
+                        $value = $request->input($attribute->code) ?? [];
+                    }
+                    // Handle all other types (text, email, number, select, etc.)
+                    else {
+                        $value = $request->input($attribute->code);
+                    }
+
+                    
+                    $attributeData[$attribute->name] = $value;
                 }
                 $lead->title = $request->title;
                 $lead->lead_value = $request->lead_value;
@@ -454,7 +493,7 @@ class LeadController extends Controller
                 $lead->person = $person->id;
                 $lead->pipeline = $request->pipeline;
                 $lead->stage = $request->stage;
-                $lead->custom_attributes = json_encode($attributeData);
+                $lead->custom_attributes = $attributeData;
                 $lead->update();
 
                 LeadProduct::where('lead_id', $id)->delete();
@@ -998,30 +1037,29 @@ class LeadController extends Controller
     {
         $permissions = session('user_permissions', []);
 
-        
-            if ($request->isMethod('get')) {
 
-                $email = SentEmails::find($id);
+        if ($request->isMethod('get')) {
 
-                if ($email) {
-                    $lead_id = $email->lead_id;
+            $email = SentEmails::find($id);
 
-                    $email->delete();
+            if ($email) {
+                $lead_id = $email->lead_id;
 
-                    $activity_history = new ActivityHistory();
-                    $activity_history->lead_id = $lead_id;
-                    $activity_history->source = 'email';
-                    $activity_history->source_id = $id;
-                    $activity_history->user_id = Auth::id();
-                    $activity_history->action = "Email (#{$id}) has been deleted.";
-                    $activity_history->save();
+                $email->delete();
 
-                    return redirect()->back()->with('success', 'Email deleted successfully!');
-                }
+                $activity_history = new ActivityHistory();
+                $activity_history->lead_id = $lead_id;
+                $activity_history->source = 'email';
+                $activity_history->source_id = $id;
+                $activity_history->user_id = Auth::id();
+                $activity_history->action = "Email (#{$id}) has been deleted.";
+                $activity_history->save();
 
-                return redirect()->back()->with('error', 'Note not found.');
+                return redirect()->back()->with('success', 'Email deleted successfully!');
             }
-       
+
+            return redirect()->back()->with('error', 'Note not found.');
+        }
     }
     public function add_lead_file($id, Request $request)
     {

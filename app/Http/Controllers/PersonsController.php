@@ -84,8 +84,51 @@ class PersonsController extends Controller
             if ($request->isMethod('get')) {
                 $organizations = Organization::get();
                 $personAttributes = Attribute::where('entity_type', 'person')->get();
-                return view('contacts.persons.create_person', ['organizations' => $organizations, 'personAttributes' => $personAttributes]);
+
+                $lookupOptions = [];
+
+                foreach ($personAttributes as $attribute) {
+                    if (trim(strtolower($attribute->type)) === 'lookup') {
+                        switch (trim(strtolower($attribute->lookup_type))) {
+                            case 'leads':
+                                $lookupOptions[$attribute->code] = Lead::pluck('name', 'id');
+                                break;
+                            case 'lead_sources':
+                                $lookupOptions[$attribute->code] = Source::pluck('name', 'id');
+                                break;
+                            case 'lead_types':
+                                $lookupOptions[$attribute->code] = Type::pluck('name', 'id');
+                                break;
+                            case 'lead_pipelines':
+                                $lookupOptions[$attribute->code] = Pipeline::pluck('name', 'id');
+                                break;
+                            case 'lead_pipeline_stages':
+                                $lookupOptions[$attribute->code] = PipelineStage::pluck('name', 'id');
+                                break;
+                            case 'users':
+                                $lookupOptions[$attribute->code] = User::pluck('name', 'id');
+                                break;
+                            case 'organizations':
+                                $lookupOptions[$attribute->code] = Organization::pluck('name', 'id');
+                                break;
+                            case 'persons':
+                                $lookupOptions[$attribute->code] = Person::pluck('name', 'id');
+                                break;
+                            default:
+                                $lookupOptions[$attribute->code] = collect();
+                                break;
+                        }
+                    }
+                }
+
+
+                return view('contacts.persons.create_person', [
+                    'organizations' => $organizations,
+                    'personAttributes' => $personAttributes,
+                    'lookupOptions' => $lookupOptions,
+                ]);
             }
+
             if ($request->isMethod('post')) {
 
                 $request->validate([
@@ -104,15 +147,76 @@ class PersonsController extends Controller
                 // }
 
                 foreach ($personAttributes as $attribute) {
-                    $value = $request->input($attribute->code);
+                    $value = null;
 
+                    // Handle file or image uploads
+                    if (in_array($attribute->type, ['file', 'image'])) {
+                        if ($request->hasFile($attribute->code)) {
+                            $file = $request->file($attribute->code);
+
+                            // Create directory if it doesn’t exist
+                            $path = public_path('uploads/persons/custom_attributes');
+                            if (!file_exists($path)) {
+                                mkdir($path, 0777, true);
+                            }
+
+                            // Create unique file name
+                            $fileName = time() . '_' . $attribute->code . '.' . $file->getClientOriginalExtension();
+
+                            // Move file to uploads directory
+                            $file->move($path, $fileName);
+
+                            // Store only the relative path or filename
+                            $value = 'persons/custom_attributes/' . $fileName;
+                        }
+                    }
                     // Handle checkboxes or multiselects
-                    if (in_array($attribute->type, ['checkbox', 'multiselect']) && is_array($value)) {
-                        $value = $value;
+                    elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
+                        $value = $request->input($attribute->code) ?? [];
+                    } elseif ($attribute->type == 'lookup') {
+                        $selectedId = $request->input($attribute->code);
+
+                        if ($selectedId) {
+                            switch ($attribute->lookup_type) {
+                                case 'leads':
+                                    $value = Lead::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_sources':
+                                    $value = Source::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_types':
+                                    $value = Type::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipelines':
+                                    $value = Pipeline::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipeline_stages':
+                                    $value = PipelineStage::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'users':
+                                    $value = User::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'organizations':
+                                    $value = Organization::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'persons':
+                                    $value = Person::where('id', $selectedId)->value('name');
+                                    break;
+                                default:
+                                    $value = null;
+                                    break;
+                            }
+                        }
+                    }
+                    // Handle all other types (text, email, number, select, etc.)
+                    else {
+                        $value = $request->input($attribute->code);
                     }
 
-                    $attributeData[$attribute->name] = $value; // store by display name
+
+                    $attributeData[$attribute->name] = $value;
                 }
+
                 $file_name = null;
                 if ($request->picture) {
                     $file_name = time() . '-.' . $request->picture->extension();
@@ -164,13 +268,6 @@ class PersonsController extends Controller
             abort(403, 'Unauthorized');
         }
     }
-    // public function delete_person($id,Request $request)
-    // {
-    //     if($request->isMethod('get')){
-    //         Person::where('id',$id)->delete();
-    //         return redirect()->back()->with('success', 'Person deleted successfully!');
-    //     }
-    // }
 
     public function deleteAndAssign($personToDeleteId, $personToAssignId)
     {
@@ -200,7 +297,7 @@ class PersonsController extends Controller
     public function edit_person($id, Request $request)
     {
 
-       
+
         $permissions = session('user_permissions', []);
 
         if (in_array(strtolower('edit-persons'), array_map('strtolower', $permissions))) {
@@ -209,11 +306,58 @@ class PersonsController extends Controller
             if ($request->isMethod('get')) {
                 $organizations = Organization::get();
                 $personAttributes = Attribute::where('entity_type', 'person')->get();
+
                 // Decode saved JSON data (if any)
                 $customValues = is_array($person->custom_attributes)
                     ? $person->custom_attributes
                     : (json_decode($person->custom_attributes, true) ?? []);
-                return view('contacts.persons.edit_person', ['person' => $person, 'organizations' => $organizations, 'personAttributes' => $personAttributes, 'customValues' => $customValues]);
+                $lookupOptions = [];
+
+                foreach ($personAttributes as $attribute) {
+                    if (trim(strtolower($attribute->type)) === 'lookup') {
+                        switch (trim(strtolower($attribute->lookup_type))) {
+                            case 'leads':
+                                $lookupOptions[$attribute->code] = Lead::pluck('name', 'id');
+                                break;
+                            case 'lead_sources':
+                                $lookupOptions[$attribute->code] = Source::pluck('name', 'id');
+                                break;
+                            case 'lead_types':
+                                $lookupOptions[$attribute->code] = Type::pluck('name', 'id');
+                                break;
+                            case 'lead_pipelines':
+                                $lookupOptions[$attribute->code] = Pipeline::pluck('name', 'id');
+                                break;
+                            case 'lead_pipeline_stages':
+                                $lookupOptions[$attribute->code] = PipelineStage::pluck('name', 'id');
+                                break;
+                            case 'users':
+                                $lookupOptions[$attribute->code] = User::pluck('name', 'id');
+                                break;
+                            case 'organizations':
+                                $lookupOptions[$attribute->code] = Organization::pluck('name', 'id');
+                                break;
+                            case 'persons':
+                                $lookupOptions[$attribute->code] = Person::pluck('name', 'id');
+                                break;
+                            default:
+                                $lookupOptions[$attribute->code] = collect();
+                                break;
+                        }
+                    }
+                }
+
+
+                return view(
+                    'contacts.persons.edit_person',
+                    [
+                        'person' => $person,
+                        'organizations' => $organizations,
+                        'personAttributes' => $personAttributes,
+                        'customValues' => $customValues,
+                        'lookupOptions' => $lookupOptions
+                    ]
+                );
             }
             if ($request->isMethod('post')) {
 
@@ -264,14 +408,40 @@ class PersonsController extends Controller
                 // Gather dynamic field values again
                 $attributeData = [];
                 foreach ($personAttributes as $attribute) {
-                    $value = $request->input($attribute->code);
+                    $value = null;
 
+                    // Handle file or image uploads
+                    if (in_array($attribute->type, ['file', 'image'])) {
+                        if ($request->hasFile($attribute->code)) {
+                            $file = $request->file($attribute->code);
+
+                            // Create directory if it doesn’t exist
+                            $path = public_path('uploads/persons/custom_attributes');
+                            if (!file_exists($path)) {
+                                mkdir($path, 0777, true);
+                            }
+
+                            // Create unique file name
+                            $fileName = time() . '_' . $attribute->code . '.' . $file->getClientOriginalExtension();
+
+                            // Move file to uploads directory
+                            $file->move($path, $fileName);
+
+                            // Store only the relative path or filename
+                            $value = 'persons/custom_attributes/' . $fileName;
+                        }
+                    }
                     // Handle checkboxes or multiselects
-                    if (in_array($attribute->type, ['checkbox', 'multiselect']) && is_array($value)) {
-                        $value = $value;
+                    elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
+                        $value = $request->input($attribute->code) ?? [];
+                    }
+                    // Handle all other types (text, email, number, select, etc.)
+                    else {
+                        $value = $request->input($attribute->code);
                     }
 
-                    $attributeData[$attribute->name] = $value; // store by display name
+
+                    $attributeData[$attribute->name] = $value;
                 }
 
 
