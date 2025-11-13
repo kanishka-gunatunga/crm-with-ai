@@ -106,9 +106,27 @@ class PersonsController extends Controller
                                 $lookupOptions[$attribute->code] = PipelineStage::pluck('name', 'id');
                                 break;
                             case 'users':
-                               $lookupOptions[$attribute->code] = User::with('userDetails')
+                                $lookupOptions[$attribute->code] = User::with('userDetails')
                                     ->get()
                                     ->pluck('userDetails.name', 'id');
+                                break;
+                            case 'organizations':
+                                $lookupOptions[$attribute->code] = Organization::pluck('name', 'id');
+                                break;
+                            case 'persons':
+                                $lookupOptions[$attribute->code] = Person::pluck('name', 'id');
+                                break;
+                            default:
+                                $lookupOptions[$attribute->code] = collect();
+                                break;
+                        }
+                    } elseif (trim(strtolower($attribute->type)) === 'multiselect' && trim(strtolower($attribute->option_type)) === 'lookups') {
+                        switch (trim(strtolower($attribute->lookup_type))) {
+                            case 'leads':
+                                $lookupOptions[$attribute->code] = Lead::pluck('title', 'id');
+                                break;
+                            case 'users':
+                                $lookupOptions[$attribute->code] = User::with('userDetails')->get()->pluck('userDetails.name', 'id');
                                 break;
                             case 'organizations':
                                 $lookupOptions[$attribute->code] = Organization::pluck('name', 'id');
@@ -171,10 +189,59 @@ class PersonsController extends Controller
                             // Store only the relative path or filename
                             $value = 'persons/custom_attributes/' . $fileName;
                         }
-                    }
-                    // Handle checkboxes or multiselects
-                    elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
+                    } elseif ($attribute->type === 'checkbox') {
                         $value = $request->input($attribute->code) ?? [];
+                    } elseif ($attribute->type === 'multiselect') {
+                        $selectedIds = $request->input($attribute->code, []);
+                        if (!is_array($selectedIds)) {
+                            $selectedIds = [$selectedIds];
+                        }
+
+                        $value = [];
+
+                        if ($attribute->option_type === 'lookups' && !empty($selectedIds)) {
+                            // dd($selectedIds);
+                            foreach ($selectedIds as $id) {
+                                switch ($attribute->lookup_type) {
+                                    case 'leads':
+                                        $value[] = Lead::where('id', $id)->value('title');
+
+                                        break;
+                                    case 'lead_sources':
+                                        $value[] = Source::where('id', $id)->value('name');
+                                        break;
+                                    case 'lead_types':
+                                        $value[] = Type::where('id', $id)->value('name');
+                                        break;
+                                    case 'lead_pipelines':
+                                        $value[] = Pipeline::where('id', $id)->value('name');
+                                        break;
+                                    case 'lead_pipeline_stages':
+                                        $value[] = PipelineStage::where('id', $id)->value('name');
+                                        break;
+                                    case 'users':
+                                        $value[] = User::with('userDetails')->find($id)?->userDetails?->name;
+                                        break;
+                                    case 'organizations':
+                                        $value[] = Organization::where('id', $id)->value('name');
+                                        break;
+                                    case 'persons':
+                                        $value[] = Person::where('id', $id)->value('name');
+                                        break;
+                                    default:
+                                        $value[] = null;
+                                        break;
+                                }
+                            }
+
+                            //  dd($value);
+
+                            // remove null or empty values
+                            $value = array_values(array_filter($value));
+                        } else {
+                            // Manual options (not lookups)
+                            $value = array_values(array_filter($selectedIds, fn($v) => !empty($v)));
+                        }
                     } elseif ($attribute->type == 'lookup') {
                         $selectedId = $request->input($attribute->code);
 
@@ -196,7 +263,7 @@ class PersonsController extends Controller
                                     $value = PipelineStage::where('id', $selectedId)->value('name');
                                     break;
                                 case 'users':
-                                     $value = User::with('userDetails')->find($selectedId)?->userDetails?->name;
+                                    $value = User::with('userDetails')->find($selectedId)?->userDetails?->name;
                                     break;
                                 case 'organizations':
                                     $value = Organization::where('id', $selectedId)->value('name');
@@ -259,8 +326,9 @@ class PersonsController extends Controller
                 }
 
                 // $person->custom_attributes = json_encode($attributeData);
-                // dd($person);
+
                 $person->custom_attributes = $attributeData;
+                // dd($person);
                 $person->save();
 
                 return redirect()->back()->with('success', 'Person created successfully!');
@@ -316,7 +384,21 @@ class PersonsController extends Controller
                 $lookupOptions = [];
 
                 foreach ($personAttributes as $attribute) {
-                    if (trim(strtolower($attribute->type)) === 'lookup') {
+                    if (isset($customValues[$attribute->code])) {
+                        $customValues[$attribute->code] = $customValues[$attribute->code];
+                    } elseif (isset($customValues[$attribute->name])) {
+                        $customValues[$attribute->code] = $customValues[$attribute->name];
+                    }
+                }
+
+
+                foreach ($personAttributes as $attribute) {
+                    if (
+                        trim(strtolower($attribute->type)) === 'lookup' ||
+                        (trim(strtolower($attribute->type)) === 'multiselect' &&
+                            trim(strtolower($attribute->option_type)) === 'lookups')
+                    ) {
+
                         switch (trim(strtolower($attribute->lookup_type))) {
                             case 'leads':
                                 $lookupOptions[$attribute->code] = Lead::pluck('title', 'id');
@@ -334,7 +416,7 @@ class PersonsController extends Controller
                                 $lookupOptions[$attribute->code] = PipelineStage::pluck('name', 'id');
                                 break;
                             case 'users':
-                               $lookupOptions[$attribute->code] = User::with('userDetails')
+                                $lookupOptions[$attribute->code] = User::with('userDetails')
                                     ->get()
                                     ->pluck('userDetails.name', 'id');
                                 break;
@@ -350,8 +432,6 @@ class PersonsController extends Controller
                         }
                     }
                 }
-
-
                 return view(
                     'contacts.persons.edit_person',
                     [
@@ -436,8 +516,51 @@ class PersonsController extends Controller
                         }
                     }
                     // Handle checkboxes or multiselects
-                    elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
+                    elseif ($attribute->type === 'checkbox') {
                         $value = $request->input($attribute->code) ?? [];
+                    } elseif ($attribute->type === 'multiselect') {
+                        $selectedIds = $request->input($attribute->code, []);
+                        if (!is_array($selectedIds)) {
+                            $selectedIds = [$selectedIds];
+                        }
+
+                        $value = [];
+
+                        if ($attribute->option_type === 'lookups' && !empty($selectedIds)) {
+                            foreach ($selectedIds as $id) {
+                                switch ($attribute->lookup_type) {
+                                    case 'leads':
+                                        $value[] = Lead::where('id', $id)->value('title');
+                                        break;
+                                    case 'lead_sources':
+                                        $value[] = Source::where('id', $id)->value('name');
+                                        break;
+                                    case 'lead_types':
+                                        $value[] = Type::where('id', $id)->value('name');
+                                        break;
+                                    case 'lead_pipelines':
+                                        $value[] = Pipeline::where('id', $id)->value('name');
+                                        break;
+                                    case 'lead_pipeline_stages':
+                                        $value[] = PipelineStage::where('id', $id)->value('name');
+                                        break;
+                                    case 'users':
+                                        $value[] = User::with('userDetails')->find($id)?->userDetails?->name;
+                                        break;
+                                    case 'organizations':
+                                        $value[] = Organization::where('id', $id)->value('name');
+                                        break;
+                                    case 'persons':
+                                        $value[] = Person::where('id', $id)->value('name');
+                                        break;
+                                }
+                            }
+                            // remove nulls
+                            $value = array_values(array_filter($value));
+                        } else {
+                            // Manual multiselect
+                            $value = array_values(array_filter($selectedIds, fn($v) => !empty($v)));
+                        }
                     } elseif ($attribute->type == 'lookup') {
                         $selectedId = $request->input($attribute->code);
 
@@ -459,7 +582,7 @@ class PersonsController extends Controller
                                     $value = PipelineStage::where('id', $selectedId)->value('name');
                                     break;
                                 case 'users':
-                                     $value = User::with('userDetails')->find($selectedId)?->userDetails?->name;
+                                    $value = User::with('userDetails')->find($selectedId)?->userDetails?->name;
                                     break;
                                 case 'organizations':
                                     $value = Organization::where('id', $selectedId)->value('name');

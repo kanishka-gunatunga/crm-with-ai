@@ -237,13 +237,40 @@
                                                             @endforeach
                                                         </select>
                                                     @elseif ($attribute->type == 'multiselect')
+                                                        @php
+                                                            $value = $customValues[$attribute->code] ?? [];
+                                                            $options = [];
+                                                            if ($attribute->option_type === 'lookups') {
+                                                                $options = $lookupOptions[$attribute->code] ?? [];
+                                                            } else {
+                                                                if ($attribute->options) {
+                                                                    $options = is_array($attribute->options)
+                                                                        ? $attribute->options
+                                                                        : json_decode($attribute->options, true);
+                                                                }
+                                                            }
+
+                                                            // Make sure value is always an array
+                                                            if (!is_array($value)) {
+                                                                $value = [$value];
+                                                            }
+                                                        @endphp
+
                                                         <select name="{{ $attribute->code }}[]" multiple
-                                                            class="form-select"
+                                                            class="form-select tagselect"
                                                             {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
-                                                            @foreach ($options as $opt)
-                                                                <option value="{{ $opt }}"
-                                                                    @if (is_array($value) && in_array($opt, $value)) selected @endif>
-                                                                    {{ $opt }}
+
+
+                                                            @foreach ($options as $id => $label)
+                                                                @php
+                                                                    // The saved value may contain names or IDs depending on how it was stored.
+                                                                    $isSelected =
+                                                                        in_array($label, $value, true) ||
+                                                                        in_array($id, $value, true);
+                                                                @endphp
+                                                                <option value="{{ $id }}"
+                                                                    {{ $isSelected ? 'selected' : '' }}>
+                                                                    {{ $label }}
                                                                 </option>
                                                             @endforeach
                                                         </select>

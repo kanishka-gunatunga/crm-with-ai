@@ -39,23 +39,23 @@
                         <div class="col-12">
                             <div class="card-container">
                                 <!-- <div class="card card-default mb-4">
-                                                                                <div class="card-body">
-                                                                                    <div class="row g-4">
-                                                                                        <div class="col-12 col-md-4">
-                                                                                            <label for="field1" class="form-label">Terms and Conditions</label>
-                                                                                            <input type="text" class="form-control" id="field1" placeholder="Change your T&C from here">
-                                                                                        </div>
-                                                                                        <div class="col-12 col-md-4">
-                                                                                            <label for="field2" class="form-label">Quote Logo</label>
-                                                                                            <input type="file" class="form-control" id="field2" placeholder="Pipeline">
-                                                                                        </div>
+                                                                                    <div class="card-body">
+                                                                                        <div class="row g-4">
+                                                                                            <div class="col-12 col-md-4">
+                                                                                                <label for="field1" class="form-label">Terms and Conditions</label>
+                                                                                                <input type="text" class="form-control" id="field1" placeholder="Change your T&C from here">
+                                                                                            </div>
+                                                                                            <div class="col-12 col-md-4">
+                                                                                                <label for="field2" class="form-label">Quote Logo</label>
+                                                                                                <input type="file" class="form-control" id="field2" placeholder="Pipeline">
+                                                                                            </div>
 
-                                                                                        <div class="col-12 col-md-4">
-                                                                                            <img src="../images/d6af22486fc0ee1005bfcdbe7e596b125bc8e316.png" width="222px" height="118px" alt="" style="object-fit: cover;">
+                                                                                            <div class="col-12 col-md-4">
+                                                                                                <img src="../images/d6af22486fc0ee1005bfcdbe7e596b125bc8e316.png" width="222px" height="118px" alt="" style="object-fit: cover;">
+                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                </div>
-                                                                            </div> -->
+                                                                                </div> -->
 
 
                                 <div class="card card-default">
@@ -181,69 +181,69 @@
 
 
                                         <!-- <div class="col-12 col-md-4">
-                                                                                                        <div>
-                                                                                                            <label for="field4" class="form-label">Emails</label>
-                                                                                                            <input type="text" class="form-control" id="field4" placeholder="Emails">
-                                                                                                        </div>
-
-                                                                                                        <div class="d-flex align-items-center mt-2">
-                                                                                                            <div class="form-check form-check-inline">
-                                                                                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                                                                                                                <label class="form-check-label" for="inlineRadio1">Work</label>
-                                                                                                            </div>
-                                                                                                            <div class="form-check form-check-inline">
-                                                                                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                                                                                                <label class="form-check-label" for="inlineRadio2">Organizational</label>
-                                                                                                            </div>
-                                                                                                            <div class="ms-3">
-                                                                                                                <button class="btn add-more-button p-0">
-                                                                                                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z" fill="#4A58EC" />
-                                                                                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z" fill="#4A58EC" />
-                                                                                                                    </svg>
-
-                                                                                                                    <span class="">Add More</span>
-                                                                                                                </button>
+                                                                                                            <div>
+                                                                                                                <label for="field4" class="form-label">Emails</label>
+                                                                                                                <input type="text" class="form-control" id="field4" placeholder="Emails">
                                                                                                             </div>
 
+                                                                                                            <div class="d-flex align-items-center mt-2">
+                                                                                                                <div class="form-check form-check-inline">
+                                                                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                                                                                                    <label class="form-check-label" for="inlineRadio1">Work</label>
+                                                                                                                </div>
+                                                                                                                <div class="form-check form-check-inline">
+                                                                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                                                                                                    <label class="form-check-label" for="inlineRadio2">Organizational</label>
+                                                                                                                </div>
+                                                                                                                <div class="ms-3">
+                                                                                                                    <button class="btn add-more-button p-0">
+                                                                                                                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z" fill="#4A58EC" />
+                                                                                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z" fill="#4A58EC" />
+                                                                                                                        </svg>
 
-                                                                                                        </div>
+                                                                                                                        <span class="">Add More</span>
+                                                                                                                    </button>
+                                                                                                                </div>
 
-                                                                                                    </div>
-                                                                                                    <div class="col-12 col-md-4 mt-0">
-                                                                                                        <div>
-                                                                                                            <label for="field4" class="form-label">Contact Numbers</label>
-                                                                                                            <input type="text" class="form-control" id="field4" placeholder="Contact Numbers">
-                                                                                                        </div>
 
-                                                                                                        <div class="d-flex align-items-center mt-2">
-                                                                                                            <div class="form-check form-check-inline">
-                                                                                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                                                                                                                <label class="form-check-label" for="inlineRadio1">Work</label>
                                                                                                             </div>
-                                                                                                            <div class="form-check form-check-inline">
-                                                                                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                                                                                                <label class="form-check-label" for="inlineRadio2">Organizational</label>
-                                                                                                            </div>
-                                                                                                            <div class="ms-3">
-                                                                                                                <button class="btn add-more-button p-0">
-                                                                                                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z" fill="#4A58EC" />
-                                                                                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z" fill="#4A58EC" />
-                                                                                                                    </svg>
-
-                                                                                                                    <span class="">Add More</span>
-                                                                                                                </button>
-                                                                                                            </div>
-
 
                                                                                                         </div>
+                                                                                                        <div class="col-12 col-md-4 mt-0">
+                                                                                                            <div>
+                                                                                                                <label for="field4" class="form-label">Contact Numbers</label>
+                                                                                                                <input type="text" class="form-control" id="field4" placeholder="Contact Numbers">
+                                                                                                            </div>
 
-                                                                                                    </div> -->
+                                                                                                            <div class="d-flex align-items-center mt-2">
+                                                                                                                <div class="form-check form-check-inline">
+                                                                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                                                                                                    <label class="form-check-label" for="inlineRadio1">Work</label>
+                                                                                                                </div>
+                                                                                                                <div class="form-check form-check-inline">
+                                                                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                                                                                                    <label class="form-check-label" for="inlineRadio2">Organizational</label>
+                                                                                                                </div>
+                                                                                                                <div class="ms-3">
+                                                                                                                    <button class="btn add-more-button p-0">
+                                                                                                                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M1.1665 6.99984C1.1665 3.77809 3.77809 1.1665 6.99984 1.1665C10.2216 1.1665 12.8332 3.77809 12.8332 6.99984C12.8332 10.2216 10.2216 12.8332 6.99984 12.8332C3.77809 12.8332 1.1665 10.2216 1.1665 6.99984ZM6.99984 2.33317C5.76216 2.33317 4.57518 2.82484 3.70001 3.70001C2.82484 4.57518 2.33317 5.76216 2.33317 6.99984C2.33317 8.23751 2.82484 9.4245 3.70001 10.2997C4.57518 11.1748 5.76216 11.6665 6.99984 11.6665C8.23751 11.6665 9.4245 11.1748 10.2997 10.2997C11.1748 9.4245 11.6665 8.23751 11.6665 6.99984C11.6665 5.76216 11.1748 4.57518 10.2997 3.70001C9.4245 2.82484 8.23751 2.33317 6.99984 2.33317Z" fill="#4A58EC" />
+                                                                                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.58333 4.08333C7.58333 3.92862 7.52187 3.78025 7.41248 3.67085C7.30308 3.56146 7.15471 3.5 7 3.5C6.84529 3.5 6.69692 3.56146 6.58752 3.67085C6.47812 3.78025 6.41667 3.92862 6.41667 4.08333V6.41667H4.08333C3.92862 6.41667 3.78025 6.47812 3.67085 6.58752C3.56146 6.69692 3.5 6.84529 3.5 7C3.5 7.15471 3.56146 7.30308 3.67085 7.41248C3.78025 7.52187 3.92862 7.58333 4.08333 7.58333H6.41667V9.91667C6.41667 10.0714 6.47812 10.2197 6.58752 10.3291C6.69692 10.4385 6.84529 10.5 7 10.5C7.15471 10.5 7.30308 10.4385 7.41248 10.3291C7.52187 10.2197 7.58333 10.0714 7.58333 9.91667V7.58333H9.91667C10.0714 7.58333 10.2197 7.52187 10.3291 7.41248C10.4385 7.30308 10.5 7.15471 10.5 7C10.5 6.84529 10.4385 6.69692 10.3291 6.58752C10.2197 6.47812 10.0714 6.41667 9.91667 6.41667H7.58333V4.08333Z" fill="#4A58EC" />
+                                                                                                                        </svg>
+
+                                                                                                                        <span class="">Add More</span>
+                                                                                                                    </button>
+                                                                                                                </div>
+
+
+                                                                                                            </div>
+
+                                                                                                        </div> -->
                                         <!-- <div class="col-12 col-md-4">
-                                                                                                <label for="field5" class="form-label">Reminders</label>
-                                                                                                <input type="text" class="form-control" id="field5" placeholder="Reminders">
-                                                                                            </div> -->
+                                                                                                    <label for="field5" class="form-label">Reminders</label>
+                                                                                                    <input type="text" class="form-control" id="field5" placeholder="Reminders">
+                                                                                                </div> -->
 
                                     </div>
 
@@ -303,12 +303,40 @@
                                                         @endforeach
                                                     </select>
                                                 @elseif ($attribute->type == 'multiselect')
-                                                    <select name="{{ $attribute->code }}[]" multiple class="form-select"
+                                                    @php
+                                                        $value = $customAttributes[$attribute->code] ?? [];
+                                                        $options = [];
+                                                        if ($attribute->option_type === 'lookups') {
+                                                            $options = $lookupOptions[$attribute->code] ?? [];
+                                                        } else {
+                                                            if ($attribute->options) {
+                                                                $options = is_array($attribute->options)
+                                                                    ? $attribute->options
+                                                                    : json_decode($attribute->options, true);
+                                                            }
+                                                        }
+
+                                                        // Make sure value is always an array
+                                                        if (!is_array($value)) {
+                                                            $value = [$value];
+                                                        }
+                                                    @endphp
+
+                                                    <select name="{{ $attribute->code }}[]" multiple
+                                                        class="form-select tagselect"
                                                         {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
-                                                        @foreach ($options as $opt)
-                                                            <option value="{{ $opt }}"
-                                                                @if (is_array($value) && in_array($opt, $value)) selected @endif>
-                                                                {{ $opt }}
+
+
+                                                        @foreach ($options as $id => $label)
+                                                            @php
+                                                                // The saved value may contain names or IDs depending on how it was stored.
+                                                                $isSelected =
+                                                                    in_array($label, $value, true) ||
+                                                                    in_array($id, $value, true);
+                                                            @endphp
+                                                            <option value="{{ $id }}"
+                                                                {{ $isSelected ? 'selected' : '' }}>
+                                                                {{ $label }}
                                                             </option>
                                                         @endforeach
                                                     </select>

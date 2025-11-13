@@ -404,7 +404,7 @@ $permissions = session('user_permissions');
                                         </article>
                                         <?php } ?>
                                     </div>
-                                    <div class="add-card-wrapper">
+                                    {{-- <div class="add-card-wrapper">
                                         <a
                                             href="{{ url('create-lead') . '?pipeline=' . session('pipeline_id') . '&stage=' . $stage->id }}">
                                             <div class="add-card-container">
@@ -415,7 +415,7 @@ $permissions = session('user_permissions');
                                                 </div>
                                             </div>
                                         </a>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>

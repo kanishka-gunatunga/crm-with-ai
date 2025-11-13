@@ -729,15 +729,27 @@ use App\Models\UserDetails;
 
                                                         @case('multiselect')
                                                             @php
+                                                                $value = $customValues[$attribute->code] ?? [];
                                                                 $options = [];
-                                                                if ($attribute->options) {
-                                                                    $options = json_decode($attribute->options, true);
+
+                                                                if ($attribute->option_type == 'lookups') {
+                                                                    $options = $lookupOptions[$attribute->code] ?? [];
+                                                                } else {
+                                                                    if ($attribute->options) {
+                                                                        $options = is_array($attribute->options)
+                                                                            ? $attribute->options
+                                                                            : json_decode($attribute->options, true);
+                                                                    }
                                                                 }
                                                             @endphp
-                                                            <select name="{{ $attribute->code }}[]" multiple class="form-select"
+
+                                                            <select name="{{ $attribute->code }}[]" multiple
+                                                                class="form-select tagselect"
                                                                 {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
-                                                                @foreach ($options as $opt)
-                                                                    <option value="{{ $opt }}">{{ $opt }}
+                                                                @foreach ($options as $id => $label)
+                                                                    <option value="{{ $id }}"
+                                                                        @if (is_array($value) && in_array($label, $value)) selected @endif>
+                                                                        {{ $label }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>
