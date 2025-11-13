@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attribute;
+use App\Models\Lead;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
@@ -76,7 +77,46 @@ class OrganizationsController extends Controller
             if ($request->isMethod('get')) {
 
                 $organizationAttributes = Attribute::where('entity_type', 'organization')->get();
-                return view('contacts.organizations.create_organization', ['organizationAttributes' => $organizationAttributes]);
+                $lookupOptions = [];
+                foreach ($organizationAttributes as $attribute) {
+                    if (trim(strtolower($attribute->type)) === 'lookup') {
+                        switch (trim(strtolower($attribute->lookup_type))) {
+                            case 'leads':
+                                $lookupOptions[$attribute->code] = Lead::pluck('title', 'id');
+                                break;
+                            case 'lead_sources':
+                                $lookupOptions[$attribute->code] = Source::pluck('name', 'id');
+                                break;
+                            case 'lead_types':
+                                $lookupOptions[$attribute->code] = Type::pluck('name', 'id');
+                                break;
+                            case 'lead_pipelines':
+                                $lookupOptions[$attribute->code] = Pipeline::pluck('name', 'id');
+                                break;
+                            case 'lead_pipeline_stages':
+                                $lookupOptions[$attribute->code] = PipelineStage::pluck('name', 'id');
+                                break;
+                            case 'users':
+                               $lookupOptions[$attribute->code] = User::with('userDetails')
+                                    ->get()
+                                    ->pluck('userDetails.name', 'id');
+                                break;
+                            case 'organizations':
+                                $lookupOptions[$attribute->code] = Organization::pluck('name', 'id');
+                                break;
+                            case 'persons':
+                                $lookupOptions[$attribute->code] = Person::pluck('name', 'id');
+                                break;
+                            default:
+                                $lookupOptions[$attribute->code] = collect();
+                                break;
+                        }
+                    }
+                }
+                return view(
+                    'contacts.organizations.create_organization',
+                    ['organizationAttributes' => $organizationAttributes, 'lookupOptions' => $lookupOptions]
+                );
             }
             if ($request->isMethod('post')) {
                 $request->validate([
@@ -88,7 +128,7 @@ class OrganizationsController extends Controller
 
                 $organizationAttributes = Attribute::where('entity_type', 'organization')->get();
                 $attributeData = [];
-
+                $lookupOptions = [];
                 foreach ($organizationAttributes as $attribute) {
                     $value = null;
 
@@ -116,6 +156,40 @@ class OrganizationsController extends Controller
                     // Handle checkboxes or multiselects
                     elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
                         $value = $request->input($attribute->code) ?? [];
+                    } elseif ($attribute->type == 'lookup') {
+                        $selectedId = $request->input($attribute->code);
+
+                        if ($selectedId) {
+                            switch ($attribute->lookup_type) {
+                                case 'leads':
+                                    $value = Lead::where('id', $selectedId)->value('title');
+                                    break;
+                                case 'lead_sources':
+                                    $value = Source::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_types':
+                                    $value = Type::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipelines':
+                                    $value = Pipeline::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipeline_stages':
+                                    $value = PipelineStage::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'users':
+                                     $value = User::with('userDetails')->find($selectedId)?->userDetails?->name;
+                                    break;
+                                case 'organizations':
+                                    $value = Organization::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'persons':
+                                    $value = Person::where('id', $selectedId)->value('name');
+                                    break;
+                                default:
+                                    $value = null;
+                                    break;
+                            }
+                        }
                     }
                     // Handle all other types (text, email, number, select, etc.)
                     else {
@@ -123,7 +197,7 @@ class OrganizationsController extends Controller
                     }
 
                     // Save by code (recommended)
-                    $attributeData[$attribute->code] = $value;
+                    $attributeData[$attribute->name] = $value;
                 }
 
                 $organization = new Organization();
@@ -186,7 +260,52 @@ class OrganizationsController extends Controller
                 $customAttributes = is_array($organization->custom_attributes)
                     ? $organization->custom_attributes
                     : (json_decode($organization->custom_attributes, true) ?? []);
-                return view('contacts.organizations.edit_organization', ['organization' => $organization, 'organizationAttributes' => $organizationAttributes, 'customAttributes' => $customAttributes]);
+                $lookupOptions = [];
+                foreach ($organizationAttributes as $attribute) {
+                    if (trim(strtolower($attribute->type)) === 'lookup') {
+                        switch (trim(strtolower($attribute->lookup_type))) {
+                            case 'leads':
+                                $lookupOptions[$attribute->code] = Lead::pluck('title', 'id');
+                                break;
+                            case 'lead_sources':
+                                $lookupOptions[$attribute->code] = Source::pluck('name', 'id');
+                                break;
+                            case 'lead_types':
+                                $lookupOptions[$attribute->code] = Type::pluck('name', 'id');
+                                break;
+                            case 'lead_pipelines':
+                                $lookupOptions[$attribute->code] = Pipeline::pluck('name', 'id');
+                                break;
+                            case 'lead_pipeline_stages':
+                                $lookupOptions[$attribute->code] = PipelineStage::pluck('name', 'id');
+                                break;
+                            case 'users':
+                               $lookupOptions[$attribute->code] = User::with('userDetails')
+                                    ->get()
+                                    ->pluck('userDetails.name', 'id');
+                                break;
+                            case 'organizations':
+                                $lookupOptions[$attribute->code] = Organization::pluck('name', 'id');
+                                break;
+                            case 'persons':
+                                $lookupOptions[$attribute->code] = Person::pluck('name', 'id');
+                                break;
+                            default:
+                                $lookupOptions[$attribute->code] = collect();
+                                break;
+                        }
+                    }
+                }
+                return view(
+                    'contacts.organizations.edit_organization',
+                    [
+                        'organization' => $organization,
+                        'organizationAttributes' => $organizationAttributes,
+                        'customAttributes' => $customAttributes,
+                        'lookupOptions' => $lookupOptions,
+
+                    ]
+                );
             }
             if ($request->isMethod('post')) {
 
@@ -228,14 +347,48 @@ class OrganizationsController extends Controller
                     // Handle checkboxes or multiselects
                     elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
                         $value = $request->input($attribute->code) ?? [];
+                    } elseif ($attribute->type == 'lookup') {
+                        $selectedId = $request->input($attribute->code);
+
+                        if ($selectedId) {
+                            switch ($attribute->lookup_type) {
+                                case 'leads':
+                                    $value = Lead::where('id', $selectedId)->value('title');
+                                    break;
+                                case 'lead_sources':
+                                    $value = Source::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_types':
+                                    $value = Type::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipelines':
+                                    $value = Pipeline::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipeline_stages':
+                                    $value = PipelineStage::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'users':
+                                     $value = User::with('userDetails')->find($selectedId)?->userDetails?->name;
+                                    break;
+                                case 'organizations':
+                                    $value = Organization::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'persons':
+                                    $value = Person::where('id', $selectedId)->value('name');
+                                    break;
+                                default:
+                                    $value = null;
+                                    break;
+                            }
+                        }
                     }
                     // Handle all other types (text, email, number, select, etc.)
                     else {
                         $value = $request->input($attribute->code);
                     }
 
-                    // Save by code (recommended)
-                    $attributeData[$attribute->code] = $value;
+                   
+                    $attributeData[$attribute->name] = $value;
                 }
 
                 $organization->name = $request->name;

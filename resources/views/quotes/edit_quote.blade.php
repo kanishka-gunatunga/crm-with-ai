@@ -65,10 +65,10 @@
                                                     <label for="assign_user" class="form-label">Sales Owner</label>
                                                     <select class="myDropdown form-control" name="owner" required>
                                                         <option hidden selected value="{{ $quote->owner }}">
-                                                            {{ UserDetails::where('id', $quote->owner)->value('name') }}
+                                                            {{ UserDetails::where('user_id', $quote->owner)->value('name') }}
                                                         </option>
                                                         <?php foreach($owners as $owner){ ?>
-                                                        <option value="{{ $owner->user_id }}">{{ $owner->name }}</option>
+                                                            <option value="{{ $owner->id }}">{{ $owner->name }}</option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
@@ -863,6 +863,29 @@
                                                                     class="form-check-label">{{ $opt }}</label>
                                                             </div>
                                                         @endforeach
+                                                    @elseif ($attribute->type == 'lookup')
+                                                        @php
+                                                            // Retrieve lookup options for this attribute
+                                                            $options = $lookupOptions[$attribute->code] ?? [];
+
+                                                            // Get the saved value (the name, e.g., 'Facebook')
+                                                            $value =
+                                                                $customValues[$attribute->code] ??
+                                                                ($customValues[$attribute->name] ?? '');
+                                                        @endphp
+
+                                                        <select name="{{ $attribute->code }}" class="form-select"
+                                                            {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                            <option value="">Select</option>
+
+
+                                                            @foreach ($options as $id => $label)
+                                                                <option value="{{ $id }}"
+                                                                    {{ $label === $value ? 'selected' : '' }}>
+                                                                    {{ $label }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
                                                     @elseif ($attribute->type == 'date')
                                                         <input type="date" name="{{ $attribute->code }}"
                                                             class="form-control" value="{{ $value }}"
@@ -1135,10 +1158,10 @@
         });
     </script>
 
-    <script>
+   <script>
         $(document).ready(function() {
             let userRole = "{{ auth()->user()->role }}";
-            let userId = "{{ auth()->user()->id }}";
+            let userId = "{{ auth()->user()->user_id }}";
 
             console.log("User Role:", userRole);
             console.log("User ID:", userId);

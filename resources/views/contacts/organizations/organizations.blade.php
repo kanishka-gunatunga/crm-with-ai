@@ -225,7 +225,7 @@ $permissions = session('user_permissions');
                                                             href="{{ url('persons?organization=' . $organization->id) }}">{{ number_format($person_count) }}</a>
                                                     </td>
                                                     <td class="">{{ $organization->created_at }} </td>
-                                                    <td class="">{{ $organization->custom_attributes }}</td>
+                                                    <td class="">{{ json_encode($organization->custom_attributes) }}</td>
 
                                                     <td class="action-icons d-flex gx-3">
 

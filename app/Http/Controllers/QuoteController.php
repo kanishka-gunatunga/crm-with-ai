@@ -149,7 +149,56 @@ class QuoteController extends Controller
                 $authenticatedUser = Auth::user()->userDetails;
                 $persons = Person::where('id', $lead->person)->first() ?? [];
                 $quoteAttributes = Attribute::where('entity_type', 'quote')->get();
-                return view('quotes.create_lead_quote', ['lead' => $lead, 'products' => $products, 'authenticatedUser' => $authenticatedUser, 'services' => $services, 'lead_products' => $lead_products, 'persons' => $persons, 'quoteAttributes' => $quoteAttributes]);
+                $lookupOptions = [];
+
+                foreach ($quoteAttributes as $attribute) {
+                    if (trim(strtolower($attribute->type)) === 'lookup') {
+                        switch (trim(strtolower($attribute->lookup_type))) {
+                            case 'leads':
+                                $lookupOptions[$attribute->code] = Lead::pluck('title', 'id');
+                                break;
+                            case 'lead_sources':
+                                $lookupOptions[$attribute->code] = Source::pluck('name', 'id');
+                                break;
+                            case 'lead_types':
+                                $lookupOptions[$attribute->code] = Type::pluck('name', 'id');
+                                break;
+                            case 'lead_pipelines':
+                                $lookupOptions[$attribute->code] = Pipeline::pluck('name', 'id');
+                                break;
+                            case 'lead_pipeline_stages':
+                                $lookupOptions[$attribute->code] = PipelineStage::pluck('name', 'id');
+                                break;
+                            case 'users':
+                                $lookupOptions[$attribute->code] = User::with('userDetails')
+                                    ->get()
+                                    ->pluck('userDetails.name', 'id');
+                                break;
+                            case 'organizations':
+                                $lookupOptions[$attribute->code] = Organization::pluck('name', 'id');
+                                break;
+                            case 'persons':
+                                $lookupOptions[$attribute->code] = Person::pluck('name', 'id');
+                                break;
+                            default:
+                                $lookupOptions[$attribute->code] = collect();
+                                break;
+                        }
+                    }
+                }
+                return view(
+                    'quotes.create_lead_quote',
+                    [
+                        'lead' => $lead,
+                        'products' => $products,
+                        'authenticatedUser' => $authenticatedUser,
+                        'services' => $services,
+                        'lead_products' => $lead_products,
+                        'persons' => $persons,
+                        'quoteAttributes' => $quoteAttributes,
+                        'lookupOptions' => $lookupOptions,
+                    ]
+                );
             }
             if ($request->isMethod('post')) {
 
@@ -172,10 +221,72 @@ class QuoteController extends Controller
                 $attributeData = [];
 
                 foreach ($quoteAttributes as $attribute) {
-                    $value = $request->input($attribute->code);
-                    if (in_array($attribute->type, ['checkbox', 'multiselect']) && is_array($value)) {
-                        $value = $value;
+                    $value = null;
+
+                    // Handle file or image uploads
+                    if (in_array($attribute->type, ['file', 'image'])) {
+                        if ($request->hasFile($attribute->code)) {
+                            $file = $request->file($attribute->code);
+
+                            // Create directory if it doesn’t exist
+                            $path = public_path('uploads/quotes/custom_attributes');
+                            if (!file_exists($path)) {
+                                mkdir($path, 0777, true);
+                            }
+
+                            // Create unique file name
+                            $fileName = time() . '_' . $attribute->code . '.' . $file->getClientOriginalExtension();
+
+                            // Move file to uploads directory
+                            $file->move($path, $fileName);
+
+                            // Store only the relative path or filename
+                            $value = 'quotes/custom_attributes/' . $fileName;
+                        }
                     }
+                    // Handle checkboxes or multiselects
+                    elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
+                        $value = $request->input($attribute->code) ?? [];
+                    } elseif ($attribute->type == 'lookup') {
+                        $selectedId = $request->input($attribute->code);
+
+                        if ($selectedId) {
+                            switch ($attribute->lookup_type) {
+                                case 'leads':
+                                    $value = Lead::where('id', $selectedId)->value('title');
+                                    break;
+                                case 'lead_sources':
+                                    $value = Source::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_types':
+                                    $value = Type::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipelines':
+                                    $value = Pipeline::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipeline_stages':
+                                    $value = PipelineStage::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'users':
+                                    $value = User::with('userDetails')->find($selectedId)?->userDetails?->name;
+                                    break;
+                                case 'organizations':
+                                    $value = Organization::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'persons':
+                                    $value = Person::where('id', $selectedId)->value('name');
+                                    break;
+                                default:
+                                    $value = null;
+                                    break;
+                            }
+                        }
+                    }
+                    // Handle all other types (text, email, number, select, etc.)
+                    else {
+                        $value = $request->input($attribute->code);
+                    }
+
 
                     $attributeData[$attribute->name] = $value;
                 }
@@ -272,19 +383,128 @@ class QuoteController extends Controller
                 $services = Service::get();
                 $authenticatedUser = Auth::user()->userDetails;
                 $quoteAttributes = Attribute::where('entity_type', 'quote')->get();
-                return view('quotes.create_quote', ['owners' => $owners, 'authenticatedUser' => $authenticatedUser, 'persons' => $persons, 'products' => $products, 'leads' => $leads, 'services' => $services, 'quoteAttributes' => $quoteAttributes]);
+                $lookupOptions = [];
+
+                foreach ($quoteAttributes as $attribute) {
+                    if (trim(strtolower($attribute->type)) === 'lookup') {
+                        switch (trim(strtolower($attribute->lookup_type))) {
+                            case 'leads':
+                                $lookupOptions[$attribute->code] = Lead::pluck('title', 'id');
+                                break;
+                            case 'lead_sources':
+                                $lookupOptions[$attribute->code] = Source::pluck('name', 'id');
+                                break;
+                            case 'lead_types':
+                                $lookupOptions[$attribute->code] = Type::pluck('name', 'id');
+                                break;
+                            case 'lead_pipelines':
+                                $lookupOptions[$attribute->code] = Pipeline::pluck('name', 'id');
+                                break;
+                            case 'lead_pipeline_stages':
+                                $lookupOptions[$attribute->code] = PipelineStage::pluck('name', 'id');
+                                break;
+                            case 'users':
+                                $lookupOptions[$attribute->code] = User::with('userDetails')
+                                    ->get()
+                                    ->pluck('userDetails.name', 'id');
+                                break;
+                            case 'organizations':
+                                $lookupOptions[$attribute->code] = Organization::pluck('name', 'id');
+                                break;
+                            case 'persons':
+                                $lookupOptions[$attribute->code] = Person::pluck('name', 'id');
+                                break;
+                            default:
+                                $lookupOptions[$attribute->code] = collect();
+                                break;
+                        }
+                    }
+                }
+                return view('quotes.create_quote', [
+                    'owners' => $owners,
+                    'authenticatedUser' => $authenticatedUser,
+                    'persons' => $persons,
+                    'products' => $products,
+                    'leads' => $leads,
+                    'services' => $services,
+                    'quoteAttributes' => $quoteAttributes,
+                    'lookupOptions' => $lookupOptions,
+                ]);
             }
             if ($request->isMethod('post')) {
-
+                
 
                 $quoteAttributes = Attribute::where('entity_type', 'quote')->get();
                 $attributeData = [];
 
                 foreach ($quoteAttributes as $attribute) {
-                    $value = $request->input($attribute->code);
-                    if (in_array($attribute->type, ['checkbox', 'multiselect']) && is_array($value)) {
-                        $value = $value;
+                    $value = null;
+
+                    // Handle file or image uploads
+                    if (in_array($attribute->type, ['file', 'image'])) {
+                        if ($request->hasFile($attribute->code)) {
+                            $file = $request->file($attribute->code);
+
+                            // Create directory if it doesn’t exist
+                            $path = public_path('uploads/quotes/custom_attributes');
+                            if (!file_exists($path)) {
+                                mkdir($path, 0777, true);
+                            }
+
+                            // Create unique file name
+                            $fileName = time() . '_' . $attribute->code . '.' . $file->getClientOriginalExtension();
+
+                            // Move file to uploads directory
+                            $file->move($path, $fileName);
+
+                            // Store only the relative path or filename
+                            $value = 'quotes/custom_attributes/' . $fileName;
+                        }
                     }
+                    // Handle checkboxes or multiselects
+                    elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
+                        $value = $request->input($attribute->code) ?? [];
+                    } elseif ($attribute->type == 'lookup') {
+                        $selectedId = $request->input($attribute->code);
+
+                        if ($selectedId) {
+                            switch ($attribute->lookup_type) {
+                                case 'leads':
+                                    $value = Lead::where('id', $selectedId)->value('title');
+                                    break;
+                                case 'lead_sources':
+                                    $value = Source::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_types':
+                                    $value = Type::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipelines':
+                                    $value = Pipeline::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipeline_stages':
+                                    $value = PipelineStage::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'users':
+                                    $value = User::with('userDetails')->find($selectedId)?->userDetails?->name;
+                                    break;
+                                case 'organizations':
+                                    $value = Organization::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'persons':
+                                    $value = Person::where('id', $selectedId)->value('name');
+                                    break;
+                                default:
+                                    $value = null;
+                                    break;
+                            }
+                        }
+                    }
+                    // Handle all other types (text, email, number, select, etc.)
+                    else {
+                        $value = $request->input($attribute->code);
+                    }
+
+
                     $attributeData[$attribute->name] = $value;
                 }
 
@@ -385,8 +605,42 @@ class QuoteController extends Controller
                 $customValues = is_array($quote->custom_attributes)
                     ? $quote->custom_attributes
                     : (json_decode($quote->custom_attributes, true) ?? []);
-
-
+                $lookupOptions = [];
+                foreach ($quoteAttributes as $attribute) {
+                    if (trim(strtolower($attribute->type)) === 'lookup') {
+                        switch (trim(strtolower($attribute->lookup_type))) {
+                            case 'leads':
+                                $lookupOptions[$attribute->code] = Lead::pluck('title', 'id');
+                                break;
+                            case 'lead_sources':
+                                $lookupOptions[$attribute->code] = Source::pluck('name', 'id');
+                                break;
+                            case 'lead_types':
+                                $lookupOptions[$attribute->code] = Type::pluck('name', 'id');
+                                break;
+                            case 'lead_pipelines':
+                                $lookupOptions[$attribute->code] = Pipeline::pluck('name', 'id');
+                                break;
+                            case 'lead_pipeline_stages':
+                                $lookupOptions[$attribute->code] = PipelineStage::pluck('name', 'id');
+                                break;
+                            case 'users':
+                                $lookupOptions[$attribute->code] = User::with('userDetails')
+                                    ->get()
+                                    ->pluck('userDetails.name', 'id');
+                                break;
+                            case 'organizations':
+                                $lookupOptions[$attribute->code] = Organization::pluck('name', 'id');
+                                break;
+                            case 'persons':
+                                $lookupOptions[$attribute->code] = Person::pluck('name', 'id');
+                                break;
+                            default:
+                                $lookupOptions[$attribute->code] = collect();
+                                break;
+                        }
+                    }
+                }
                 return view('quotes.edit_quote', [
                     'owners' => $owners,
                     'persons' => $persons,
@@ -396,7 +650,8 @@ class QuoteController extends Controller
                     'quote' => $quote,
                     'services' => $services,
                     'quoteAttributes' => $quoteAttributes,
-                    'customValues' => $customValues
+                    'customValues' => $customValues,
+                    'lookupOptions' => $lookupOptions,
                 ]);
             }
             if ($request->isMethod('post')) {
@@ -445,13 +700,47 @@ class QuoteController extends Controller
                     // Handle checkboxes or multiselects
                     elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
                         $value = $request->input($attribute->code) ?? [];
+                    } elseif ($attribute->type == 'lookup') {
+                        $selectedId = $request->input($attribute->code);
+
+                        if ($selectedId) {
+                            switch ($attribute->lookup_type) {
+                                case 'leads':
+                                    $value = Lead::where('id', $selectedId)->value('title');
+                                    break;
+                                case 'lead_sources':
+                                    $value = Source::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_types':
+                                    $value = Type::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipelines':
+                                    $value = Pipeline::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipeline_stages':
+                                    $value = PipelineStage::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'users':
+                                    $value = User::with('userDetails')->find($selectedId)?->userDetails?->name;
+                                    break;
+                                case 'organizations':
+                                    $value = Organization::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'persons':
+                                    $value = Person::where('id', $selectedId)->value('name');
+                                    break;
+                                default:
+                                    $value = null;
+                                    break;
+                            }
+                        }
                     }
                     // Handle all other types (text, email, number, select, etc.)
                     else {
                         $value = $request->input($attribute->code);
                     }
 
-                    
+
                     $attributeData[$attribute->name] = $value;
                 }
 
@@ -542,14 +831,19 @@ class QuoteController extends Controller
         $userId = $request->input('user_id');
         $salesOwnerId = $request->input('sales_owner_id');
 
-        if ($role == 3) {
-            // Role 3: show only logged user's leads
+
+        $permissions = session('user_permissions', []);
+
+        
+
+        if (in_array(strtolower('create-own-leads'), array_map('strtolower', $permissions))){
+            //show only logged user's leads
             $leads = Lead::where('sales_owner', $userId)->get(['id', 'title']);
-        } elseif ($role == 2) {
-            // Role 2: show leads based on selected sales_owner
+        } elseif  (in_array(strtolower('create-any-leads'), array_map('strtolower', $permissions))) {
+            // show leads based on selected sales_owner
             $leads = Lead::where('sales_owner', $salesOwnerId)->get(['id', 'title']);
         } else {
-            $leads = collect(); // return empty if role not matched
+            $leads = collect(); // Empty collection if no permissions
         }
 
         return response()->json($leads);

@@ -91,7 +91,7 @@ class PersonsController extends Controller
                     if (trim(strtolower($attribute->type)) === 'lookup') {
                         switch (trim(strtolower($attribute->lookup_type))) {
                             case 'leads':
-                                $lookupOptions[$attribute->code] = Lead::pluck('name', 'id');
+                                $lookupOptions[$attribute->code] = Lead::pluck('title', 'id');
                                 break;
                             case 'lead_sources':
                                 $lookupOptions[$attribute->code] = Source::pluck('name', 'id');
@@ -106,7 +106,9 @@ class PersonsController extends Controller
                                 $lookupOptions[$attribute->code] = PipelineStage::pluck('name', 'id');
                                 break;
                             case 'users':
-                                $lookupOptions[$attribute->code] = User::pluck('name', 'id');
+                               $lookupOptions[$attribute->code] = User::with('userDetails')
+                                    ->get()
+                                    ->pluck('userDetails.name', 'id');
                                 break;
                             case 'organizations':
                                 $lookupOptions[$attribute->code] = Organization::pluck('name', 'id');
@@ -179,7 +181,7 @@ class PersonsController extends Controller
                         if ($selectedId) {
                             switch ($attribute->lookup_type) {
                                 case 'leads':
-                                    $value = Lead::where('id', $selectedId)->value('name');
+                                    $value = Lead::where('id', $selectedId)->value('title');
                                     break;
                                 case 'lead_sources':
                                     $value = Source::where('id', $selectedId)->value('name');
@@ -194,7 +196,7 @@ class PersonsController extends Controller
                                     $value = PipelineStage::where('id', $selectedId)->value('name');
                                     break;
                                 case 'users':
-                                    $value = User::where('id', $selectedId)->value('name');
+                                     $value = User::with('userDetails')->find($selectedId)?->userDetails?->name;
                                     break;
                                 case 'organizations':
                                     $value = Organization::where('id', $selectedId)->value('name');
@@ -317,7 +319,7 @@ class PersonsController extends Controller
                     if (trim(strtolower($attribute->type)) === 'lookup') {
                         switch (trim(strtolower($attribute->lookup_type))) {
                             case 'leads':
-                                $lookupOptions[$attribute->code] = Lead::pluck('name', 'id');
+                                $lookupOptions[$attribute->code] = Lead::pluck('title', 'id');
                                 break;
                             case 'lead_sources':
                                 $lookupOptions[$attribute->code] = Source::pluck('name', 'id');
@@ -332,7 +334,9 @@ class PersonsController extends Controller
                                 $lookupOptions[$attribute->code] = PipelineStage::pluck('name', 'id');
                                 break;
                             case 'users':
-                                $lookupOptions[$attribute->code] = User::pluck('name', 'id');
+                               $lookupOptions[$attribute->code] = User::with('userDetails')
+                                    ->get()
+                                    ->pluck('userDetails.name', 'id');
                                 break;
                             case 'organizations':
                                 $lookupOptions[$attribute->code] = Organization::pluck('name', 'id');
@@ -355,7 +359,7 @@ class PersonsController extends Controller
                         'organizations' => $organizations,
                         'personAttributes' => $personAttributes,
                         'customValues' => $customValues,
-                        'lookupOptions' => $lookupOptions
+                        'lookupOptions' => $lookupOptions,
                     ]
                 );
             }
@@ -434,6 +438,40 @@ class PersonsController extends Controller
                     // Handle checkboxes or multiselects
                     elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
                         $value = $request->input($attribute->code) ?? [];
+                    } elseif ($attribute->type == 'lookup') {
+                        $selectedId = $request->input($attribute->code);
+
+                        if ($selectedId) {
+                            switch ($attribute->lookup_type) {
+                                case 'leads':
+                                    $value = Lead::where('id', $selectedId)->value('title');
+                                    break;
+                                case 'lead_sources':
+                                    $value = Source::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_types':
+                                    $value = Type::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipelines':
+                                    $value = Pipeline::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipeline_stages':
+                                    $value = PipelineStage::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'users':
+                                     $value = User::with('userDetails')->find($selectedId)?->userDetails?->name;
+                                    break;
+                                case 'organizations':
+                                    $value = Organization::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'persons':
+                                    $value = Person::where('id', $selectedId)->value('name');
+                                    break;
+                                default:
+                                    $value = null;
+                                    break;
+                            }
+                        }
                     }
                     // Handle all other types (text, email, number, select, etc.)
                     else {

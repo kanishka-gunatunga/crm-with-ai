@@ -23,7 +23,8 @@ class Organization extends Model
     ];
 
     protected $casts = [
-        'emails' => 'array'
+        'emails' => 'array',
+        'custom_attributes' => 'array',
     ];
 
 

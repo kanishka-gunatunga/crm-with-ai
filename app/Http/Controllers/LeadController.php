@@ -153,6 +153,42 @@ class LeadController extends Controller
             $pipelines = Pipeline::get();
             $stages = PipelineStage::where('pipeline_id', $id)->get();
             $leadAttributes = Attribute::where('entity_type', 'lead')->get();
+            $lookupOptions = [];
+            foreach ($leadAttributes as $attribute) {
+                if (trim(strtolower($attribute->type)) === 'lookup') {
+                    switch (trim(strtolower($attribute->lookup_type))) {
+                        case 'leads':
+                            $lookupOptions[$attribute->code] = Lead::pluck('title', 'id');
+                            break;
+                        case 'lead_sources':
+                            $lookupOptions[$attribute->code] = Source::pluck('name', 'id');
+                            break;
+                        case 'lead_types':
+                            $lookupOptions[$attribute->code] = Type::pluck('name', 'id');
+                            break;
+                        case 'lead_pipelines':
+                            $lookupOptions[$attribute->code] = Pipeline::pluck('name', 'id');
+                            break;
+                        case 'lead_pipeline_stages':
+                            $lookupOptions[$attribute->code] = PipelineStage::pluck('name', 'id');
+                            break;
+                        case 'users':
+                            $lookupOptions[$attribute->code] = User::with('userDetails')
+                                ->get()
+                                ->pluck('userDetails.name', 'id');
+                            break;
+                        case 'organizations':
+                            $lookupOptions[$attribute->code] = Organization::pluck('name', 'id');
+                            break;
+                        case 'persons':
+                            $lookupOptions[$attribute->code] = Person::pluck('name', 'id');
+                            break;
+                        default:
+                            $lookupOptions[$attribute->code] = collect();
+                            break;
+                    }
+                }
+            }
             return view('leads.create_lead', [
                 'sources' => $sources,
                 'types' => $types,
@@ -164,6 +200,7 @@ class LeadController extends Controller
                 'pipelines' => $pipelines,
                 'stages' => $stages,
                 'leadAttributes' => $leadAttributes,
+                'lookupOptions' => $lookupOptions,
             ]);
         }
         if ($request->isMethod('post')) {
@@ -182,10 +219,72 @@ class LeadController extends Controller
             $attributeData = [];
 
             foreach ($leadAttributes as $attribute) {
-                $value = $request->input($attribute->code);
-                if (in_array($attribute->type, ['checkbox', 'multiselect']) && is_array($value)) {
-                    $value = $value;
+                $value = null;
+
+                // Handle file or image uploads
+                if (in_array($attribute->type, ['file', 'image'])) {
+                    if ($request->hasFile($attribute->code)) {
+                        $file = $request->file($attribute->code);
+
+                        // Create directory if it doesn’t exist
+                        $path = public_path('uploads/leads/custom_attributes');
+                        if (!file_exists($path)) {
+                            mkdir($path, 0777, true);
+                        }
+
+                        // Create unique file name
+                        $fileName = time() . '_' . $attribute->code . '.' . $file->getClientOriginalExtension();
+
+                        // Move file to uploads directory
+                        $file->move($path, $fileName);
+
+                        // Store only the relative path or filename
+                        $value = 'leads/custom_attributes/' . $fileName;
+                    }
                 }
+                // Handle checkboxes or multiselects
+                elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
+                    $value = $request->input($attribute->code) ?? [];
+                } elseif ($attribute->type == 'lookup') {
+                    $selectedId = $request->input($attribute->code);
+
+                    if ($selectedId) {
+                        switch ($attribute->lookup_type) {
+                            case 'leads':
+                                $value = Lead::where('id', $selectedId)->value('title');
+                                break;
+                            case 'lead_sources':
+                                $value = Source::where('id', $selectedId)->value('name');
+                                break;
+                            case 'lead_types':
+                                $value = Type::where('id', $selectedId)->value('name');
+                                break;
+                            case 'lead_pipelines':
+                                $value = Pipeline::where('id', $selectedId)->value('name');
+                                break;
+                            case 'lead_pipeline_stages':
+                                $value = PipelineStage::where('id', $selectedId)->value('name');
+                                break;
+                            case 'users':
+                                $value = User::with('userDetails')->find($selectedId)?->userDetails?->name;
+                                break;
+                            case 'organizations':
+                                $value = Organization::where('id', $selectedId)->value('name');
+                                break;
+                            case 'persons':
+                                $value = Person::where('id', $selectedId)->value('name');
+                                break;
+                            default:
+                                $value = null;
+                                break;
+                        }
+                    }
+                }
+                // Handle all other types (text, email, number, select, etc.)
+                else {
+                    $value = $request->input($attribute->code);
+                }
+
 
                 $attributeData[$attribute->name] = $value;
             }
@@ -350,6 +449,44 @@ class LeadController extends Controller
                 $customValues = is_array($lead->custom_attributes)
                     ? $lead->custom_attributes
                     : (json_decode($lead->custom_attributes, true) ?? []);
+                $lookupOptions = [];
+
+
+                foreach ($leadAttributes as $attribute) {
+                    if (trim(strtolower($attribute->type)) === 'lookup') {
+                        switch (trim(strtolower($attribute->lookup_type))) {
+                            case 'leads':
+                                $lookupOptions[$attribute->code] = Lead::pluck('title', 'id');
+                                break;
+                            case 'lead_sources':
+                                $lookupOptions[$attribute->code] = Source::pluck('name', 'id');
+                                break;
+                            case 'lead_types':
+                                $lookupOptions[$attribute->code] = Type::pluck('name', 'id');
+                                break;
+                            case 'lead_pipelines':
+                                $lookupOptions[$attribute->code] = Pipeline::pluck('name', 'id');
+                                break;
+                            case 'lead_pipeline_stages':
+                                $lookupOptions[$attribute->code] = PipelineStage::pluck('name', 'id');
+                                break;
+                            case 'users':
+                                $lookupOptions[$attribute->code] = User::with('userDetails')
+                                    ->get()
+                                    ->pluck('userDetails.name', 'id');
+                                break;
+                            case 'organizations':
+                                $lookupOptions[$attribute->code] = Organization::pluck('name', 'id');
+                                break;
+                            case 'persons':
+                                $lookupOptions[$attribute->code] = Person::pluck('name', 'id');
+                                break;
+                            default:
+                                $lookupOptions[$attribute->code] = collect();
+                                break;
+                        }
+                    }
+                }
 
                 return view('leads.edit_lead', [
                     'sources' => $sources,
@@ -365,6 +502,7 @@ class LeadController extends Controller
                     'stages' => $stages,
                     'leadAttributes' => $leadAttributes,
                     'customValues' => $customValues,
+                    'lookupOptions' => $lookupOptions,
                 ]);
             }
             if ($request->isMethod('post')) {
@@ -472,13 +610,47 @@ class LeadController extends Controller
                     // Handle checkboxes or multiselects
                     elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
                         $value = $request->input($attribute->code) ?? [];
+                    } elseif ($attribute->type == 'lookup') {
+                        $selectedId = $request->input($attribute->code);
+
+                        if ($selectedId) {
+                            switch ($attribute->lookup_type) {
+                                case 'leads':
+                                    $value = Lead::where('id', $selectedId)->value('title');
+                                    break;
+                                case 'lead_sources':
+                                    $value = Source::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_types':
+                                    $value = Type::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipelines':
+                                    $value = Pipeline::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipeline_stages':
+                                    $value = PipelineStage::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'users':
+                                    $value = User::with('userDetails')->find($selectedId)?->userDetails?->name;
+                                    break;
+                                case 'organizations':
+                                    $value = Organization::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'persons':
+                                    $value = Person::where('id', $selectedId)->value('name');
+                                    break;
+                                default:
+                                    $value = null;
+                                    break;
+                            }
+                        }
                     }
                     // Handle all other types (text, email, number, select, etc.)
                     else {
                         $value = $request->input($attribute->code);
                     }
 
-                    
+
                     $attributeData[$attribute->name] = $value;
                 }
                 $lead->title = $request->title;

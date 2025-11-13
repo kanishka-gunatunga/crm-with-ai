@@ -53,36 +53,36 @@ use App\Models\UserDetails;
 
 
                                                 {{-- @if (auth()->user()->role == 2) --}}
-                                                    <!-- Role 2: Can choose any sales owner -->
-                                                    <div class="col-12 col-md-4">
-                                                        <label for="assign_user" class="form-label">Sales Owner</label>
-                                                        <select class="myDropdown form-control" name="sales_owner"
-                                                            data-parsley-errors-container="#owner-errors" required>
-                                                            {{-- <option value="" selected disabled>Select Sales Owner
+                                                <!-- Role 2: Can choose any sales owner -->
+                                                <div class="col-12 col-md-4">
+                                                    <label for="assign_user" class="form-label">Sales Owner</label>
+                                                    <select class="myDropdown form-control" name="sales_owner"
+                                                        data-parsley-errors-container="#owner-errors" required>
+                                                        {{-- <option value="" selected disabled>Select Sales Owner
                                                             </option> --}}
-                                                            @foreach ($owners as $owner)
-                                                                <option value="{{ $owner->user_id }}">{{ $owner->name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
+                                                        @foreach ($owners as $owner)
+                                                            <option value="{{ $owner->user_id }}">{{ $owner->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
 
-                                                        <div id="owner-errors"></div>
+                                                    <div id="owner-errors"></div>
 
-                                                        {{-- <input type="hidden" name="sales_owner"
+                                                    {{-- <input type="hidden" name="sales_owner"
                                                             value=" {{$owner->id}}"> --}}
 
-                                                    </div>
+                                                </div>
 
-                                                    <div class="col-12 col-md-4">
-                                                        <label for="assign_user"
-                                                            class="form-label">{{ __('app.quotes.lead') }}</label>
-                                                        <select class="myDropdown form-control" name="lead"
-                                                            data-parsley-errors-container="#lead-errors" required>
-                                                            <option value="" selected disabled>Select Lead</option>
-                                                            {{-- Leads will be filled by AJAX after selecting owner --}}
-                                                        </select>
-                                                        <div id="lead-errors"></div>
-                                                    </div>
+                                                <div class="col-12 col-md-4">
+                                                    <label for="assign_user"
+                                                        class="form-label">{{ __('app.quotes.lead') }}</label>
+                                                    <select class="myDropdown form-control" name="lead"
+                                                        data-parsley-errors-container="#lead-errors" required>
+                                                        <option value="" selected disabled>Select Lead</option>
+                                                        {{-- Leads will be filled by AJAX after selecting owner --}}
+                                                    </select>
+                                                    <div id="lead-errors"></div>
+                                                </div>
                                                 {{-- @elseif (auth()->user()->role == 3)
                                                     <div class="col-12 col-md-4">
                                                         <label for="assign_user" class="form-label">Sales Owner</label>
@@ -763,6 +763,30 @@ use App\Models\UserDetails;
                                                                     </div>
                                                                 @endforeach
                                                             </div>
+                                                        @break
+
+                                                        @case('lookup')
+                                                            @php
+                                                                // Get lookup options prepared in the controller
+                                                                $options = $lookupOptions[$attribute->code] ?? [];
+
+                                                                // If editing, prefill the saved value
+                                                                $value = $customValues[$attribute->code] ?? '';
+                                                            @endphp
+
+                                                            <select name="{{ $attribute->code }}" class="form-select"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                                <option value="">Select</option>
+
+
+
+                                                                @foreach ($options as $name => $label)
+                                                                    <option value="{{ $name }}"
+                                                                        {{ (string) $value === (string) $name ? 'selected' : '' }}>
+                                                                        {{ $label }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
                                                         @break
 
                                                         @case('date')

@@ -35,7 +35,11 @@ class Quote extends Model
         'pdf'
     ];
 
-     public function leadData()
+    protected $casts = [
+        'custom_attributes' => 'array',
+    ];
+
+    public function leadData()
     {
         return $this->belongsTo(Lead::class, 'lead', 'id');
     }
@@ -44,5 +48,4 @@ class Quote extends Model
     {
         return $this->belongsTo(Person::class, 'person', 'id');
     }
-
 }

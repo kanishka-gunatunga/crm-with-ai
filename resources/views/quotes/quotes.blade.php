@@ -307,7 +307,7 @@
 
                                                     <!-- Created At -->
                                                     <td>{{ $quote->created_at }}</td>
-                                                    <td>{{ $quote->custom_attributes }}</td>
+                                                    <td>{{ json_encode($quote->custom_attributes) }}</td>
 
                                                     <td class="action-icons d-flex gx-3">
                                                         <a href="{{ url('delete-quote/' . $quote->id) }}"

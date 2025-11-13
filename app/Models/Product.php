@@ -20,4 +20,7 @@ class Product extends Model
         'description',
     ];
 
+    protected $casts = [
+        'custom_attributes' => 'array',
+    ];
 }

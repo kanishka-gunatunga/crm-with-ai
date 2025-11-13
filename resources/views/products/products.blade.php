@@ -189,7 +189,7 @@
                                                     <td class="">{{ $product->name }} </td>
                                                     <td class="">{{ number_format($product->cost) }}</td>
                                                     <td class="">{{ number_format($product->quantity) }}</td>
-                                                    <td class="">{{ $product->custom_attributes }}</td>
+                                                    <td class="">{{ json_encode($product->custom_attributes) }}</td>
 
                                                     <td class="action-icons d-flex gx-3">
                                                         <a href="{{ url('delete-product/' . $product->id) }}"

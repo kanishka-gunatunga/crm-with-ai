@@ -34,6 +34,10 @@ class Lead extends Model
         'start_date',
     ];
 
+    protected $casts = [
+        'custom_attributes' => 'array',
+    ];
+
     public function person()
     {
         return $this->belongsTo(Person::class, 'person');

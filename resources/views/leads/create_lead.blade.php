@@ -347,9 +347,10 @@ $permissions = session('user_permissions');
                                 @if ($leadAttributes->isNotEmpty())
                                     <div class="card card-default mt-3">
                                         <div class="card-body">
-                                            @foreach ($leadAttributes as $attribute)
+                                           @foreach ($leadAttributes as $attribute)
                                                 <div class="form-group mb-3">
-                                                    <label class="form-label">{{ $attribute->name }}</label>
+                                                    <label for="{{ $attribute->code }}"
+                                                        class="form-label">{{ $attribute->name }}</label>
 
                                                     @switch($attribute->type)
                                                         @case('text')
@@ -416,31 +417,55 @@ $permissions = session('user_permissions');
                                                         @break
 
                                                         @case('checkbox')
-    @php
-        $options = [];
-        if ($attribute->options) {
-            $options = is_array($attribute->options)
-                ? $attribute->options
-                : json_decode($attribute->options, true);
-        }
-    @endphp
-    <div>
-        @foreach ($options as $opt)
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox"
-                       name="{{ $attribute->code }}[]"
-                       value="{{ $opt }}">
-                <label class="form-check-label">{{ $opt }}</label>
-            </div>
-        @endforeach
-    </div>
-@break
-
+                                                            @php
+                                                                $options = [];
+                                                                if ($attribute->options) {
+                                                                    $options = is_array($attribute->options)
+                                                                        ? $attribute->options
+                                                                        : json_decode($attribute->options, true);
+                                                                }
+                                                            @endphp
+                                                            <div>
+                                                                @foreach ($options as $opt)
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            name="{{ $attribute->code }}[]"
+                                                                            value="{{ $opt }}">
+                                                                        <label
+                                                                            class="form-check-label">{{ $opt }}</label>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        @break
 
                                                         @case('date')
                                                             <input type="date" class="form-control"
                                                                 name="{{ $attribute->code }}"
                                                                 {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @break
+
+                                                        @case('lookup')
+                                                            @php
+                                                                // Get lookup options prepared in the controller
+                                                                $options = $lookupOptions[$attribute->code] ?? [];
+
+                                                                // If editing, prefill the saved value
+                                                                $value = $customValues[$attribute->code] ?? '';
+                                                            @endphp
+
+                                                            <select name="{{ $attribute->code }}" class="form-select"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                                <option value="">Select</option>
+
+                                                               
+
+                                                                @foreach ($options as $name => $label)
+                                                                    <option value="{{ $name }}"
+                                                                        {{ (string) $value === (string) $name ? 'selected' : '' }}>
+                                                                        {{ $label }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
                                                         @break
 
                                                         @case('datetime')

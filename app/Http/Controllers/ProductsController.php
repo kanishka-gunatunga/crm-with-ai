@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attribute;
+use App\Models\Lead;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\Auth;
@@ -63,7 +64,50 @@ class ProductsController extends Controller
         if (in_array(strtolower('create-products'), array_map('strtolower', $permissions))) {
             if ($request->isMethod('get')) {
                 $productAttributes = Attribute::where('entity_type', 'product')->get();
-                return view('products.create_product', ['productAttributes' => $productAttributes]);
+                $lookupOptions = [];
+                foreach ($productAttributes as $attribute) {
+                    if (trim(strtolower($attribute->type)) === 'lookup') {
+                        switch (trim(strtolower($attribute->lookup_type))) {
+                            case 'leads':
+                                $lookupOptions[$attribute->code] = Lead::pluck('title', 'id');
+                                break;
+                            case 'lead_sources':
+                                $lookupOptions[$attribute->code] = Source::pluck('name', 'id');
+                                break;
+                            case 'lead_types':
+                                $lookupOptions[$attribute->code] = Type::pluck('name', 'id');
+                                break;
+                            case 'lead_pipelines':
+                                $lookupOptions[$attribute->code] = Pipeline::pluck('name', 'id');
+                                break;
+                            case 'lead_pipeline_stages':
+                                $lookupOptions[$attribute->code] = PipelineStage::pluck('name', 'id');
+                                break;
+                            case 'users':
+                                $lookupOptions[$attribute->code] = User::with('userDetails')
+                                    ->get()
+                                    ->pluck('userDetails.name', 'id');
+                                break;
+                            case 'organizations':
+                                $lookupOptions[$attribute->code] = Organization::pluck('name', 'id');
+                                break;
+                            case 'persons':
+                                $lookupOptions[$attribute->code] = Person::pluck('name', 'id');
+                                break;
+                            default:
+                                $lookupOptions[$attribute->code] = collect();
+                                break;
+                        }
+                    }
+                }
+
+                return view(
+                    'products.create_product',
+                    [
+                        'productAttributes' => $productAttributes,
+                        'lookupOptions' => $lookupOptions,
+                    ]
+                );
             }
             if ($request->isMethod('post')) {
 
@@ -104,13 +148,47 @@ class ProductsController extends Controller
                     // Handle checkboxes or multiselects
                     elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
                         $value = $request->input($attribute->code) ?? [];
+                    } elseif ($attribute->type == 'lookup') {
+                        $selectedId = $request->input($attribute->code);
+
+                        if ($selectedId) {
+                            switch ($attribute->lookup_type) {
+                                case 'leads':
+                                    $value = Lead::where('id', $selectedId)->value('title');
+                                    break;
+                                case 'lead_sources':
+                                    $value = Source::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_types':
+                                    $value = Type::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipelines':
+                                    $value = Pipeline::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipeline_stages':
+                                    $value = PipelineStage::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'users':
+                                    $value = User::with('userDetails')->find($selectedId)?->userDetails?->name;
+                                    break;
+                                case 'organizations':
+                                    $value = Organization::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'persons':
+                                    $value = Person::where('id', $selectedId)->value('name');
+                                    break;
+                                default:
+                                    $value = null;
+                                    break;
+                            }
+                        }
                     }
                     // Handle all other types (text, email, number, select, etc.)
                     else {
                         $value = $request->input($attribute->code);
                     }
 
-                    
+
                     $attributeData[$attribute->name] = $value;
                 }
 
@@ -156,10 +234,51 @@ class ProductsController extends Controller
             if ($request->isMethod('get')) {
                 $productAttributes = Attribute::where('entity_type', 'product')->get();
                 // Decode saved JSON data (if any)
-               $customValues = is_array($product->custom_attributes)
+                $customValues = is_array($product->custom_attributes)
                     ? $product->custom_attributes
                     : (json_decode($product->custom_attributes, true) ?? []);
-                return view('products.edit_product', ['product' => $product, 'productAttributes' => $productAttributes, 'customValues' => $customValues]);
+                $lookupOptions = [];
+                foreach ($productAttributes as $attribute) {
+                    if (trim(strtolower($attribute->type)) === 'lookup') {
+                        switch (trim(strtolower($attribute->lookup_type))) {
+                            case 'leads':
+                                $lookupOptions[$attribute->code] = Lead::pluck('title', 'id');
+                                break;
+                            case 'lead_sources':
+                                $lookupOptions[$attribute->code] = Source::pluck('name', 'id');
+                                break;
+                            case 'lead_types':
+                                $lookupOptions[$attribute->code] = Type::pluck('name', 'id');
+                                break;
+                            case 'lead_pipelines':
+                                $lookupOptions[$attribute->code] = Pipeline::pluck('name', 'id');
+                                break;
+                            case 'lead_pipeline_stages':
+                                $lookupOptions[$attribute->code] = PipelineStage::pluck('name', 'id');
+                                break;
+                            case 'users':
+                                $lookupOptions[$attribute->code] = User::with('userDetails')
+                                    ->get()
+                                    ->pluck('userDetails.name', 'id');
+                                break;
+                            case 'organizations':
+                                $lookupOptions[$attribute->code] = Organization::pluck('name', 'id');
+                                break;
+                            case 'persons':
+                                $lookupOptions[$attribute->code] = Person::pluck('name', 'id');
+                                break;
+                            default:
+                                $lookupOptions[$attribute->code] = collect();
+                                break;
+                        }
+                    }
+                }
+                return view('products.edit_product', [
+                    'product' => $product,
+                    'productAttributes' => $productAttributes,
+                    'customValues' => $customValues,
+                    'lookupOptions' => $lookupOptions,
+                ]);
             }
             if ($request->isMethod('post')) {
                 $request->validate([
@@ -199,13 +318,47 @@ class ProductsController extends Controller
                     // Handle checkboxes or multiselects
                     elseif (in_array($attribute->type, ['checkbox', 'multiselect'])) {
                         $value = $request->input($attribute->code) ?? [];
+                    } elseif ($attribute->type == 'lookup') {
+                        $selectedId = $request->input($attribute->code);
+
+                        if ($selectedId) {
+                            switch ($attribute->lookup_type) {
+                                case 'leads':
+                                    $value = Lead::where('id', $selectedId)->value('title');
+                                    break;
+                                case 'lead_sources':
+                                    $value = Source::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_types':
+                                    $value = Type::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipelines':
+                                    $value = Pipeline::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'lead_pipeline_stages':
+                                    $value = PipelineStage::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'users':
+                                    $value = User::with('userDetails')->find($selectedId)?->userDetails?->name;
+                                    break;
+                                case 'organizations':
+                                    $value = Organization::where('id', $selectedId)->value('name');
+                                    break;
+                                case 'persons':
+                                    $value = Person::where('id', $selectedId)->value('name');
+                                    break;
+                                default:
+                                    $value = null;
+                                    break;
+                            }
+                        }
                     }
                     // Handle all other types (text, email, number, select, etc.)
                     else {
                         $value = $request->input($attribute->code);
                     }
 
-                   
+
                     $attributeData[$attribute->name] = $value;
                 }
 
