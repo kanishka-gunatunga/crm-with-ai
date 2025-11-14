@@ -192,8 +192,22 @@ class LeadController extends Controller
                         case 'leads':
                             $lookupOptions[$attribute->code] = Lead::pluck('title', 'id');
                             break;
+                        case 'lead_sources':
+                            $lookupOptions[$attribute->code] = Source::pluck('name', 'id');
+                            break;
+                        case 'lead_types':
+                            $lookupOptions[$attribute->code] = Type::pluck('name', 'id');
+                            break;
+                        case 'lead_pipelines':
+                            $lookupOptions[$attribute->code] = Pipeline::pluck('name', 'id');
+                            break;
+                        case 'lead_pipeline_stages':
+                            $lookupOptions[$attribute->code] = PipelineStage::pluck('name', 'id');
+                            break;
                         case 'users':
-                            $lookupOptions[$attribute->code] = User::with('userDetails')->get()->pluck('userDetails.name', 'id');
+                            $lookupOptions[$attribute->code] = User::with('userDetails')
+                                ->get()
+                                ->pluck('userDetails.name', 'id');
                             break;
                         case 'organizations':
                             $lookupOptions[$attribute->code] = Organization::pluck('name', 'id');
@@ -888,6 +902,8 @@ class LeadController extends Controller
                 return strtotime($b['created_at']) - strtotime($a['created_at']);
             });
 
+           
+                
             return view('leads.view_lead', [
                 'sources' => $sources,
                 'types' => $types,
@@ -1113,6 +1129,7 @@ class LeadController extends Controller
                 }
                 $lead_activity->participants = $participants;
                 $lead_activity->is_completed = 0;
+                
                 $lead_activity->save();
 
                 $this->addEventToGoogleCalendar($lead_activity);

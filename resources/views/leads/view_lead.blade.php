@@ -2315,9 +2315,13 @@ $permissions = session('user_permissions');
                     <div>
                         <h5 class="mb-3 card-title">Activities</h5>
                     </div>
+
+                    {{-- @php var_dump($activity_logs); @endphp --}}
                     <?php foreach($activity_logs as $activity_log){ 
                         $user_name = UserDetails::where('user_id', $activity_log->user_id)->value('name');
                     ?>
+
+                    
 
                     <div class="d-flex">
                         <div class="col-5">

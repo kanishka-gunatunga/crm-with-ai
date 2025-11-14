@@ -134,6 +134,18 @@ class PersonsController extends Controller
                             case 'persons':
                                 $lookupOptions[$attribute->code] = Person::pluck('name', 'id');
                                 break;
+                            case 'lead_sources':
+                                $lookupOptions[$attribute->code] = Source::pluck('name', 'id');
+                                break;
+                            case 'lead_types':
+                                $lookupOptions[$attribute->code] = Type::pluck('name', 'id');
+                                break;
+                            case 'lead_pipelines':
+                                $lookupOptions[$attribute->code] = Pipeline::pluck('name', 'id');
+                                break;
+                            case 'lead_pipeline_stages':
+                                $lookupOptions[$attribute->code] = PipelineStage::pluck('name', 'id');
+                                break;
                             default:
                                 $lookupOptions[$attribute->code] = collect();
                                 break;

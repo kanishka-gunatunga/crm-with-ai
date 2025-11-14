@@ -69,8 +69,7 @@
                                                 <label for="field3"
                                                     class="form-label">{{ __('app.settings.attributes.entity-type') }}</label>
                                                 <select class="myDropdown form-control" name="entity_type" required>
-                                                    <option selected hidden value="{{ $attribute->entity_type }}">
-                                                        {{ $attribute->entity_type }}</option>
+                                                    <option selected hidden value="{{ $attribute->entity_type }}">{{ $attribute->entity_type }}</option>
                                                     <option value="lead">Lead</option>
                                                     <option value="person">Person</option>
                                                     <option value="organization">Organization</option>
@@ -94,8 +93,7 @@
 
                                                 <select class="myDropdown form-control" name="type" id="type"
                                                     required>
-                                                    <option selected hidden value="{{ $attribute->type }}">
-                                                        {{ $attribute->type }}</option>
+                                                    <option selected hidden value="{{ $attribute->type }}">{{ $attribute->type }}</option>
                                                     <option value="text">Text</option>
                                                     <option value="textarea">Textarea</option>
                                                     <option value="price">Price</option>
@@ -276,75 +274,95 @@
     <!-- Bottom Action Buttons -->
 
     <script>
-        $(document).ready(function() {
-            @if (Session::has('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: "{{ Session::get('success') }}",
-                    confirmButtonColor: '#3085d6'
-                });
-            @endif
-
-            @if (Session::has('fail'))
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: "{{ Session::get('fail') }}",
-                    confirmButtonColor: '#d33'
-                });
-            @endif
-
-            $('#type').on('change', function() {
-                const selectedType = $(this).val();
-
-                if (selectedType === 'text') {
-                    $('#validation-col').show();
-                } else {
-                    $('#validation-col').hide();
-                }
-
-                if (selectedType === 'lookup') {
-                    $('#multi-options').show();
-                    $('#option-types').hide();
-                    $('#lookups').show();
-                } else if (selectedType === 'select' || selectedType === 'multiselect' || selectedType ===
-                    'checkbox') {
-                    $('#multi-options').show();
-                    $('#option-types').show();
-                    $('#lookups').show();
-                } else {
-                    $('#multi-options').hide();
-                    $('#option-types').hide();
-                    $('#lookups').hide();
-                }
+    $(document).ready(function() {
+        // Show SweetAlerts
+        @if (Session::has('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: "{{ Session::get('success') }}",
+                confirmButtonColor: '#3085d6'
             });
-            $('#option_type').on('change', function() {
-                const selectedType = $(this).val();
+        @endif
 
-                if (selectedType === 'options') {
+        @if (Session::has('fail'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "{{ Session::get('fail') }}",
+                confirmButtonColor: '#d33'
+            });
+        @endif
+
+        function toggleFields(type, optionType) {
+            // Handle validation input
+            if (type === 'text') {
+                $('#validation-col').show();
+            } else {
+                $('#validation-col').hide();
+            }
+
+            // Handle multi-option related fields
+            if (type === 'lookup') {
+                $('#multi-options').show();
+                $('#option-types').hide();
+                $('#lookups').show();
+                $('#options-container').hide();
+            } else if (type === 'select' || type === 'multiselect' || type === 'checkbox') {
+                $('#multi-options').show();
+                $('#option-types').show();
+
+                if (optionType === 'options') {
                     $('#lookups').hide();
                     $('#options-container').show();
                 } else {
                     $('#lookups').show();
                     $('#options-container').hide();
                 }
+            } else {
+                $('#multi-options').hide();
+                $('#option-types').hide();
+                $('#lookups').hide();
+                $('#options-container').hide();
+            }
+        }
 
+        // Initial display based on database values
+        const currentType = "{{ $attribute->type }}";
+        const currentOptionType = "{{ $attribute->option_type }}";
+        toggleFields(currentType, currentOptionType);
 
-            });
+        // Change events
+        $('#type').on('change', function() {
+            const selectedType = $(this).val();
+            const selectedOptionType = $('#option_type').val();
+            toggleFields(selectedType, selectedOptionType);
         });
+
+        $('#option_type').on('change', function() {
+            const selectedType = $('#type').val();
+            const selectedOptionType = $(this).val();
+            toggleFields(selectedType, selectedOptionType);
+        });
+
+        // Dynamic options adding/removing
         $('#add-option').on('click', function() {
             let newRow = `
-            <div class="row mb-2 align-items-center">
-                <div class="col-md-10"><input type="text" class="form-control" name="options[]" required></div>
-                <div class="col-md-2"><i class="fa-solid fa-trash delete-stage remove-append-item mx-2 remove-option"></i></div>
-            </div>
-        `;
+                <div class="row mb-2 align-items-center">
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" name="options[]" required>
+                    </div>
+                    <div class="col-md-2">
+                        <i class="fa-solid fa-trash delete-stage remove-append-item mx-2 remove-option"></i>
+                    </div>
+                </div>`;
             $('#dynamic-options').append(newRow);
         });
 
         $('#dynamic-options').on('click', '.remove-option', function() {
             $(this).closest('.row').remove();
         });
-    </script>
+    });
+</script>
+
 @endsection

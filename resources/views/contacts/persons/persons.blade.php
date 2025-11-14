@@ -480,52 +480,40 @@ $permissions = session('user_permissions');
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('assignPersonModal');
-            const deletePersonLink = document.getElementById('deletePersonLink');
-            const personSelect = document.getElementById('person-select');
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('assignPersonModal');
+    const deletePersonLink = document.getElementById('deletePersonLink');
+    const personSelect = document.getElementById('person-select');
 
-            modal.addEventListener('show.bs.modal', function(event) {
-                // Get the button that triggered the modal
-                const button = event.relatedTarget;
+    modal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const personToDeleteId = button.getAttribute('data-person-id');
+        const currentPersonId = personSelect.options[0].value;
+        const deleteButton = deletePersonLink.querySelector('button');
 
-                // Person to delete (from button data attribute)
-                const personToDeleteId = button.getAttribute('data-person-id');
+        // Reset state
+        deleteButton.disabled = true;
 
-                // Current person already assigned (from the hidden selected option)
-                const currentPersonId = personSelect.options[0].value;
+        // Reset href to avoid using old data
+        deletePersonLink.removeAttribute('href');
 
-                // Disable delete button initially
-                deletePersonLink.querySelector('button').disabled = true;
+        // When dropdown changes
+        personSelect.addEventListener('change', function() {
+            const selectedPersonId = personSelect.value;
 
-                // Watch for changes in dropdown
-                personSelect.addEventListener('change', function() {
-                    const selectedPersonId = personSelect.value;
-
-                    if (selectedPersonId && selectedPersonId !== currentPersonId) {
-                        deletePersonLink.querySelector('button').disabled = false;
-                    } else {
-                        deletePersonLink.querySelector('button').disabled = true;
-                    }
-                });
-
-                // Click event for delete
-                deletePersonLink.addEventListener('click', function(e) {
-                    e.preventDefault();
-
-                    const personToAssignId = personSelect.value;
-
-                    if (!personToAssignId || personToAssignId === currentPersonId) {
-                        return; // Stop if not valid
-                    }
-
-                    const newUrl =
-                        `/delete-person/${personToDeleteId}/assign-to/${personToAssignId}`;
-                    window.location.href = newUrl;
-                });
-            });
+            if (selectedPersonId && selectedPersonId !== currentPersonId) {
+                deleteButton.disabled = false;
+                // Set href dynamically for SweetAlert script
+                deletePersonLink.href = `/delete-person/${personToDeleteId}/assign-to/${selectedPersonId}`;
+            } else {
+                deleteButton.disabled = true;
+                deletePersonLink.removeAttribute('href');
+            }
         });
-    </script>
+    });
+});
+</script>
+
 
 
 @endsection
