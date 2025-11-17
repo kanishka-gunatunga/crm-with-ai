@@ -51,7 +51,7 @@
                                                 <div class="col-12 col-md-4">
                                                     <label for="assign_user"
                                                         class="form-label">{{ __('app.quotes.lead') }}</label>
-                                                    <select class="myDropdown form-control " name="lead" required>
+                                                    <select class="myDropdown form-control " name="lead" required disabled>
                                                         <option hidden selected value="{{ $quote->lead }}">
                                                             {{ $quote->leadData->title ?? 'N/A' }}
                                                         </option>
@@ -63,7 +63,7 @@
                                                 </div>
                                                 <div class="col-12 col-md-4">
                                                     <label for="assign_user" class="form-label">Sales Owner</label>
-                                                    <select class="myDropdown form-control" name="owner" required>
+                                                    <select class="myDropdown form-control" name="owner" required disabled>
                                                         <option hidden selected value="{{ $quote->owner }}">
                                                             {{ UserDetails::where('user_id', $quote->owner)->value('name') }}
                                                         </option>
