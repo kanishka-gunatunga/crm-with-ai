@@ -520,7 +520,7 @@ $permissions = session('user_permissions');
                         </div>
                         <div>
                             <button type="submit" class="btn save-btn">Save</button>
-                            <button type="button" class="btn cancel-btn">Cancel</button>
+                            <a href="{{ url('leads') }}"><button type="button" class="btn cancel-btn">Cancel</button></a>
                         </div>
 
                     </div>
