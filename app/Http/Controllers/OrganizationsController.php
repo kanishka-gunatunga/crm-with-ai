@@ -55,7 +55,7 @@ class OrganizationsController extends Controller
                 }
 
                 $organizations = $query
-                    ->orderBy('created_at', 'desc')
+                    ->orderBy('id', 'desc')
                     ->get();
 
                 return view('contacts.organizations.organizations', [

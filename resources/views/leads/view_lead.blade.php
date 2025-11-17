@@ -1267,7 +1267,7 @@ $permissions = session('user_permissions');
                                                                                 name="selected_quotes[]"
                                                                                 value="{{ $file->id }}"></td>
                                                                         <td class="">{{ $file->name }} </td>
-                                                                        <td class="">{{ $file->description }} </td>
+                                                                        <td class="">{!! $file->description !!} </td>
                                                                         <td class=""> <a
                                                                                 href="{{ asset('uploads/leads/files/' . $file->file) }}"
                                                                                 download="{{ $file->file }}">{{ $file->file }}
@@ -1843,7 +1843,7 @@ $permissions = session('user_permissions');
                                                                     <td><input type="checkbox" name="selected_quotes[]"
                                                                             value="{{ $file->id }}"></td>
                                                                     <td class="">{{ $file->name }} </td>
-                                                                    <td class="">{{ $file->description }} </td>
+                                                                    <td class="">{!! $file->description !!} </td>
                                                                     <td class=""> <a
                                                                             href="{{ asset('storage/' . $file->file) }}"
                                                                             download="{{ $file->file }}">{{ $file->file }}

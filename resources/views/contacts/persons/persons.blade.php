@@ -324,47 +324,49 @@ $permissions = session('user_permissions');
                                             <div class="modal-dialog">
                                                 <div class="modal-content " style="background-color: white">
                                                     <div class="modal-header">
-                                                       
-                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Assigned a
-                                                                person before delete
-                                                            </h1>
-                                                       
+
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Assigned a
+                                                            person before delete
+                                                        </h1>
+
                                                         <button type="button" class="btn-close btn-sm"
                                                             data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <div>
                                                             @if (in_array(strtolower('delete-persons'), array_map('strtolower', $permissions)))
-                                                            <select class="form-control" id="person-select" required>
-                                                                <option selected hidden value="{{ $lead->person ?? '' }}">
-                                                                    {{ $person->name ?? '' }}
-                                                                </option>
-                                                                @foreach ($persons as $person)
-                                                                    <option value="{{ $person->id }}">
-                                                                        {{ $person->name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                            <div id="person-value-errors"></div>
+                                                                <select class="form-control" id="person-select" required>
+                                                                    <option selected hidden
+                                                                        value="{{ $lead->person ?? '' }}">
+                                                                        {{ $person->name ?? '' }}
+                                                                    </option>
+                                                                    @foreach ($persons as $person)
+                                                                        <option value="{{ $person->id }}">
+                                                                            {{ $person->name }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <div id="person-value-errors"></div>
                                                             @else
-                                                             <select class="form-control" id="">
-                                                                <option value="" selected readonly> Unauthorized</option>
-                                                            </select>
+                                                                <select class="form-control" id="">
+                                                                    <option value="" selected readonly> Unauthorized
+                                                                    </option>
+                                                                </select>
                                                             @endif
 
-                                                            
+
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary btn-sm"
                                                             data-bs-dismiss="modal">Close</button>
                                                         @if (in_array(strtolower('delete-persons'), array_map('strtolower', $permissions)))
-                                                        <a id="deletePersonLink" href="#"
-                                                            class="delete-link-confirm">
-                                                            <button type="button"
-                                                                class="btn btn-danger btn-sm delete-form-confirm">
-                                                                Delete Person
-                                                            </button>
-                                                        </a>
+                                                            <a id="deletePersonLink" href="#"
+                                                                class="delete-link-confirm">
+                                                                <button type="button"
+                                                                    class="btn btn-danger btn-sm delete-form-confirm">
+                                                                    Delete Person
+                                                                </button>
+                                                            </a>
                                                         @endif
                                                     </div>
                                                 </div>
@@ -421,7 +423,7 @@ $permissions = session('user_permissions');
 
     </div>
 
-    
+
     <div class="modal fade importPersons" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-md">
@@ -480,39 +482,42 @@ $permissions = session('user_permissions');
     </script>
 
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById('assignPersonModal');
-    const deletePersonLink = document.getElementById('deletePersonLink');
-    const personSelect = document.getElementById('person-select');
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('assignPersonModal');
+            const deletePersonLink = document.getElementById('deletePersonLink');
+            const personSelect = document.getElementById('person-select');
 
-    modal.addEventListener('show.bs.modal', function(event) {
-        const button = event.relatedTarget;
-        const personToDeleteId = button.getAttribute('data-person-id');
-        const currentPersonId = personSelect.options[0].value;
-        const deleteButton = deletePersonLink.querySelector('button');
+            modal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const personToDeleteId = button.getAttribute('data-person-id');
+                const currentPersonId = personSelect.options[0].value;
+                const deleteButton = deletePersonLink.querySelector('button');
 
-        // Reset state
-        deleteButton.disabled = true;
-
-        // Reset href to avoid using old data
-        deletePersonLink.removeAttribute('href');
-
-        // When dropdown changes
-        personSelect.addEventListener('change', function() {
-            const selectedPersonId = personSelect.value;
-
-            if (selectedPersonId && selectedPersonId !== currentPersonId) {
-                deleteButton.disabled = false;
-                // Set href dynamically for SweetAlert script
-                deletePersonLink.href = `/delete-person/${personToDeleteId}/assign-to/${selectedPersonId}`;
-            } else {
+                // Reset state
                 deleteButton.disabled = true;
+
+                // Reset href to avoid using old data
                 deletePersonLink.removeAttribute('href');
-            }
+
+                // When dropdown changes
+                personSelect.addEventListener('change', function() {
+                    const selectedPersonId = personSelect.value;
+
+                    if (selectedPersonId && selectedPersonId !== currentPersonId) {
+                        deleteButton.disabled = false;
+                        // Set href dynamically for SweetAlert script
+                        deletePersonLink.href =
+                            "{{ url('delete-person') }}/" + personToDeleteId + "/assign-to/" +
+                            selectedPersonId;
+
+                    } else {
+                        deleteButton.disabled = true;
+                        deletePersonLink.removeAttribute('href');
+                    }
+                });
+            });
         });
-    });
-});
-</script>
+    </script>
 
 
 

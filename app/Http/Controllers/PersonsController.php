@@ -59,7 +59,7 @@ class PersonsController extends Controller
                     $query->where('organization', $request->get('organization'));
                 }
                 $persons = $query
-                    ->orderBy('created_at', 'desc')
+                    ->orderBy('id', 'desc')
                     ->get();
                 $organizations = Organization::all();
 

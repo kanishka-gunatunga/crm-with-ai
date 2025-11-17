@@ -1232,37 +1232,35 @@
                     }
                 }
 
-                // *** MODIFIED LOGIC: Check parent only if ALL sibling checkboxes are checked ***
+                // Check parent only if ALL sibling checkboxes are checked
                 const parent = getParentInput(checkbox);
                 if (parent && parent.type === 'checkbox' && !parent.checked && !parent.disabled) {
-                    // Get all child checkboxes of the parent
                     const siblings = getChildInputs(parent.dataset.value);
                     const checkboxSiblings = Array.from(siblings).filter(s => s.type === 'checkbox');
 
-                    // Check if ALL checkbox siblings are checked
                     const allSiblingsChecked = checkboxSiblings.length > 0 &&
                         checkboxSiblings.every(s => s.checked);
 
-                    // Only check parent if all children are checked
                     if (allSiblingsChecked) {
                         parent.checked = true;
                         handleCheckboxChange(parent);
                     }
                 }
             } else {
-                // Uncheck and disable all children
+                // FIXED: Uncheck all children first WITHOUT checking parents
                 const children = getChildInputs(checkbox.dataset.value);
                 children.forEach(child => {
                     if (child.type === 'checkbox') {
                         child.checked = false;
-                        handleCheckboxChange(child);
+                        // Recursively uncheck children WITHOUT parent logic
+                        uncheckChildrenOnly(child);
                     } else if (child.type === 'radio') {
                         child.checked = false;
                         child.disabled = true;
                     }
                 });
 
-                // Check if parent should be unchecked
+                // AFTER all children are unchecked, THEN update parent
                 const parent = getParentInput(checkbox);
                 if (parent && parent.type === 'checkbox' && !parent.disabled) {
                     const siblings = getChildInputs(parent.dataset.value);
@@ -1275,6 +1273,20 @@
                     }
                 }
             }
+        }
+
+        // NEW helper function: Uncheck children without triggering parent checks
+        function uncheckChildrenOnly(checkbox) {
+            const children = getChildInputs(checkbox.dataset.value);
+            children.forEach(child => {
+                if (child.type === 'checkbox') {
+                    child.checked = false;
+                    uncheckChildrenOnly(child); // Recursively uncheck
+                } else if (child.type === 'radio') {
+                    child.checked = false;
+                    child.disabled = true;
+                }
+            });
         }
 
         function handleRadioChange(radio) {

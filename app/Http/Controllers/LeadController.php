@@ -79,6 +79,10 @@ class LeadController extends Controller
             if (in_array(strtolower('lead-view-own'), array_map('strtolower', $permissions))) {
                 $leadFilters->where('sales_owner', Auth::id());
             }
+            if (!(in_array (strtolower('lead-view-own'), array_map('strtolower', $permissions)) || in_array(strtolower('lead-view-all'), array_map('strtolower', $permissions)))) {
+                $leadFilters = $leadFilters->whereRaw('1 = 0');
+               
+            }
 
             if ($request->filled('name')) {
                 $leadFilters->where('title', 'like', '%' . $request->name . '%');
@@ -866,6 +870,7 @@ class LeadController extends Controller
             $files = LeadFile::where('lead_id', $id)->get();
             $quotes = Quote::where('lead', $id)->get();
             $activity_logs = ActivityHistory::orderBy('id', 'DESC')->where('lead_id', $id)->get();
+            
 
             $allItems = [];
             $personNames = [];
@@ -1119,11 +1124,11 @@ class LeadController extends Controller
                 $participants = [];
                 if ($request->has('participants')) {
                     foreach ($request->participants as $participant) {
-                        list($type, $id) = explode('||', $participant);
+                        list($type, $id2) = explode('||', $participant);
 
                         $participants[] = [
                             'type' => $type,
-                            'id'   => (int) $id
+                            'id'   => (int) $id2
                         ];
                     }
                 }

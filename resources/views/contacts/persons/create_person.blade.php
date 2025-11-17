@@ -98,9 +98,28 @@
                                                     </div>
 
 
+
                                                 </div>
                                                 <input type="email" class="form-control" id="field4"
                                                     placeholder="Emails" name="emails[]" required>
+
+                                                <div class="d-flex align-items-center mt-2">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="email_types[0]"
+                                                            id="email-work-0" checked value="work">
+                                                        <label class="form-check-label"
+                                                            for="email-work-0">{{ __('app.common.work') }}</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="email_types[0]"
+                                                            id="email-home-0" value="home">
+                                                        <label class="form-check-label"
+                                                            for="email-home-0">{{ __('app.common.home') }}</label>
+                                                    </div>
+
+                                                </div>
                                             </div>
 
 
@@ -130,6 +149,25 @@
                                                 </div>
                                                 <input type="tel" class="form-control" id="field4"
                                                     placeholder="Contact Numbers" name="contact_numbers[]">
+
+
+                                                <div class="d-flex align-items-center mt-2">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="number_types[0]"
+                                                            id="number-work-0" checked value="work">
+                                                        <label class="form-check-label"
+                                                            for="number-work-0">{{ __('app.common.work') }}</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="number_types[0]"
+                                                            id="number-home-0" value="home">
+                                                        <label class="form-check-label"
+                                                            for="number-home-0">{{ __('app.common.home') }}</label>
+                                                    </div>
+
+                                                </div>
                                             </div>
 
 
@@ -196,7 +234,7 @@
                                                             </select>
                                                         @break
 
-                                                       @case('multiselect')
+                                                        @case('multiselect')
                                                             @php
                                                                 $value = $customValues[$attribute->code] ?? [];
                                                                 $options = [];
@@ -223,7 +261,6 @@
                                                                 @endforeach
                                                             </select>
                                                         @break
-
 
                                                         @case('checkbox')
                                                             @php
