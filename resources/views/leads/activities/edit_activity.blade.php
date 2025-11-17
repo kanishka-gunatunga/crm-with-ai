@@ -185,7 +185,7 @@
                         </div>
                         <div>
                             <button type="submit" class="btn save-btn">Save</button>
-                            <a href="{{ url('products') }}"><button type="button"
+                            <a href="{{ url('activities') }}"><button type="button"
                                     class="btn cancel-btn">Cancel</button></a>
                         </div>
 

@@ -521,6 +521,8 @@ class QuoteController extends Controller
                         }
                     }
                 }
+
+                
                 return view('quotes.create_quote', [
                     'owners' => $owners,
                     'authenticatedUser' => $authenticatedUser,

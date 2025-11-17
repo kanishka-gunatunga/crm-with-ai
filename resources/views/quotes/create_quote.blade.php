@@ -68,6 +68,8 @@ use App\Models\UserDetails;
 
                                                     <div id="owner-errors"></div>
 
+                                                    
+
                                                     {{-- <input type="hidden" name="sales_owner"
                                                             value=" {{$owner->id}}"> --}}
 
@@ -1183,9 +1185,12 @@ use App\Models\UserDetails;
             }
 
             // If role = 3, load leads directly for the logged-in user
-            if (userRole == 3) {
-                loadLeads(userId);
-            }
+            // if (userRole == 3) {
+            //     loadLeads(userId);
+            // }
+
+            
+
 
             // Corrected jQuery selector to target the dropdown with name="owner" for Role 2
             $('select[name="sales_owner"]').on('change', function() {
