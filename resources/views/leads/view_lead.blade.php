@@ -811,355 +811,370 @@ $permissions = session('user_permissions');
                             <!-- <article class="project-card"> -->
                             <!-- <div class="card-background"></div> -->
                             <div class="tab-content" id="pills-tabContent">
-                                @if ($notes->isEmpty() && $calls->isEmpty() && $meetings->isEmpty() && $lunches->isEmpty() && $files->isEmpty() && $quotes->isEmpty())
-                                <div class="no-events-message p-3">
-                                    <p class="mb-0">No events to display.</p>
-                                </div>
-                                @else
-
-                                <div class="tab-pane fade show active" id="events-all" role="tabpanel"
-                                    aria-labelledby="events-all-tab" tabindex="0">
-                                    <div>
-                                        <h5 class="mb-3 card-title">All Events</h5>
+                                @if (
+                                    $notes->isEmpty() &&
+                                        $calls->isEmpty() &&
+                                        $meetings->isEmpty() &&
+                                        $lunches->isEmpty() &&
+                                        $files->isEmpty() &&
+                                        $quotes->isEmpty())
+                                    <div class="no-events-message p-3">
+                                        <p class="mb-0">No events to display.</p>
                                     </div>
-                                    {{-- notes --}}
-                                    @if (in_array(strtolower('show-lead-note'), array_map('strtolower', $permissions)))
+                                @else
+                                    <div class="tab-pane fade show active" id="events-all" role="tabpanel"
+                                        aria-labelledby="events-all-tab" tabindex="0">
                                         <div>
-                                            @if ($notes->isEmpty())
-                                               
-                                            @else
-                                                <div>
-                                                    <h5 class="mb-3 card-title">Notes</h5>
-                                                </div>
+                                            <h5 class="mb-3 card-title">All Events</h5>
+                                        </div>
+                                        {{-- notes --}}
+                                        @if (in_array(strtolower('show-lead-note'), array_map('strtolower', $permissions)))
+                                            <div>
+                                                @if ($notes->isEmpty())
+                                                @else
+                                                    <div>
+                                                        <h5 class="mb-3 card-title">Notes</h5>
+                                                    </div>
 
-                                                @foreach ($notes as $note)
-                                                    <div class="d-flex">
+                                                    @foreach ($notes as $note)
+                                                        <div class="d-flex">
 
-                                                        <div class="col-5">
-                                                            <div class="d-flex gap-3 align-items-center mb-3">
-                                                                <img src="{{ asset('images/avatar.png') }}"
-                                                                    class="rounded-circle object-fit-cover" alt="..."
-                                                                    width="30" height="30">
+                                                            <div class="col-5">
+                                                                <div class="d-flex gap-3 align-items-center mb-3">
+                                                                    <img src="{{ asset('images/avatar.png') }}"
+                                                                        class="rounded-circle object-fit-cover"
+                                                                        alt="..." width="30" height="30">
 
 
-                                                                <p class="person-name">
-                                                                    {{ \App\Models\UserDetails::where('user_id', $note->created_by)->value('name') ?? 'Unknown User' }}
-                                                                </p>
+                                                                    <p class="person-name">
+                                                                        {{ \App\Models\UserDetails::where('user_id', $note->created_by)->value('name') ?? 'Unknown User' }}
+                                                                    </p>
 
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-4 event-timestamp mb-3">
+                                                                <span>{{ $note->created_at }}</span>
+                                                                <span>></span>
+                                                                <span>{{ $note->note }}</span>
                                                             </div>
                                                         </div>
-                                                        <div class="col-4 event-timestamp mb-3">
-                                                            <span>{{ $note->created_at }}</span>
-                                                            <span>></span>
-                                                            <span>{{ $note->note }}</span>
-                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                            </div>
+                                        @endif
+
+
+
+
+
+                                        {{-- calls --}}
+
+
+
+                                        @if (in_array(strtolower('show-all-activities'), array_map('strtolower', $permissions)) ||
+                                                in_array(strtolower('show-own-activities'), array_map('strtolower', $permissions)))
+                                            <div class="calls-tab mt-3">
+
+                                                @if ($calls->isEmpty())
+                                                @else
+                                                    <div>
+                                                        <h5 class="mb-3 card-title">Calls</h5>
                                                     </div>
-                                                @endforeach
-                                            @endif
-                                        </div>
-                                    @endif
+                                                    @foreach ($calls as $call)
+                                                        @php
+                                                            $activity = $call['activity'];
+                                                        @endphp
+                                                        <div class="card card-default mb-2">
+                                                            <div class="card-body d-flex mb-3 position-relative mt-4 ">
+                                                                <div class="col-12 col-md-3 col-lg-6">
+                                                                    <section class="primary-info ">
 
+                                                                        <div class="title-section">
+                                                                            <h3 class="field-label">Title</h3>
+                                                                            <p class="project-title">
+                                                                                {{ $activity->title }}
+                                                                            </p>
+                                                                        </div>
 
+                                                                        <div class="terms-section">
+                                                                            <h3 class="field-label">From</h3>
+                                                                            <p class="field-value">{{ $activity->from }}
+                                                                            </p>
+                                                                        </div>
 
+                                                                        <div class="start-date-section">
+                                                                            <h3 class="field-label">Participants</h3>
+                                                                            @if (is_array($activity->participants) && count($activity->participants))
+                                                                                @foreach ($activity->participants as $participant)
+                                                                                    <p>
+                                                                                        Type: {{ $participant['type'] }},
 
+                                                                                        @php
+                                                                                            $person = null;
+                                                                                            if (
+                                                                                                $participant['type'] ===
+                                                                                                'person'
+                                                                                            ) {
+                                                                                                $person = $persons->firstWhere(
+                                                                                                    'id',
+                                                                                                    $participant['id'],
+                                                                                                );
+                                                                                            } elseif (
+                                                                                                $participant['type'] ===
+                                                                                                'owner'
+                                                                                            ) {
+                                                                                                $person = $owners->firstWhere(
+                                                                                                    'user_id',
+                                                                                                    $participant['id'],
+                                                                                                );
+                                                                                            }
+                                                                                        @endphp
 
-                                    {{-- calls --}}
-
-
-
-                                    @if (in_array(strtolower('show-all-activities'), array_map('strtolower', $permissions)) || in_array(strtolower('show-own-activities'), array_map('strtolower', $permissions)))
-                                        <div class="calls-tab mt-3">
-
-                                            @if ($calls->isEmpty())
-                                            @else
-                                                <div>
-                                                    <h5 class="mb-3 card-title">Calls</h5>
-                                                </div>
-                                                @foreach ($calls as $call)
-                                                    @php
-                                                        $activity = $call['activity'];
-                                                    @endphp
-                                                    <div class="card card-default mb-2">
-                                                        <div class="card-body d-flex mb-3 position-relative mt-4 ">
-                                                            <div class="col-12 col-md-3 col-lg-6">
-                                                                <section class="primary-info ">
-
-                                                                    <div class="title-section">
-                                                                        <h3 class="field-label">Title</h3>
-                                                                        <p class="project-title">{{ $activity->title }}
-                                                                        </p>
-                                                                    </div>
-
-                                                                    <div class="terms-section">
-                                                                        <h3 class="field-label">From</h3>
-                                                                        <p class="field-value">{{ $activity->from }}</p>
-                                                                    </div>
-
-                                                                    <div class="start-date-section">
-                                                                        <h3 class="field-label">Participants</h3>
-                                                                        @if (is_array($activity->participants) && count($activity->participants))
-                                                                            @foreach ($activity->participants as $participant)
-                                                                                <p>
-                                                                                    Type: {{ $participant['type'] }},
-
-                                                                                    @php
-                                                                                        $person = null;
-                                                                                        if (
-                                                                                            $participant['type'] ===
-                                                                                            'person'
-                                                                                        ) {
-                                                                                            $person = $persons->firstWhere(
-                                                                                                'id',
-                                                                                                $participant['id'],
-                                                                                            );
-                                                                                        } elseif (
-                                                                                            $participant['type'] ===
-                                                                                            'owner'
-                                                                                        ) {
-                                                                                            $person = $owners->firstWhere(
-                                                                                                'user_id',
-                                                                                                $participant['id'],
-                                                                                            );
-                                                                                        }
-                                                                                    @endphp
-
-                                                                                    Name:
-                                                                                    {{ $person->name ?? 'Name Not Found' }}
+                                                                                        Name:
+                                                                                        {{ $person->name ?? 'Name Not Found' }}
+                                                                                    </p>
+                                                                                @endforeach
+                                                                            @else
+                                                                                <p>No participants found for this activity.
                                                                                 </p>
-                                                                            @endforeach
-                                                                        @else
-                                                                            <p>No participants found for this activity.</p>
-                                                                        @endif
-                                                                    </div>
+                                                                            @endif
+                                                                        </div>
 
-                                                                </section>
-                                                            </div>
+                                                                    </section>
+                                                                </div>
 
 
 
-                                                            <div class="col-12 col-md-3 col-lg-4">
-                                                                <section class="secondary-info">
-                                                                    <div class="terms-section">
-                                                                        <h3 class="field-label">Location</h3>
-                                                                        <p class="field-value">{{ $activity->location }}
-                                                                        </p>
-                                                                    </div>
-                                                                    <div class="terms-section">
-                                                                        <h3 class="field-label">To</h3>
-                                                                        <p class="field-value">{{ $activity->to }}</p>
-                                                                    </div>
-                                                                    <div class="start-date-section">
-                                                                        <h3 class="field-label">Description</h3>
-                                                                        <p class="field-value">
-                                                                            {{ $activity->description }}
-                                                                        </p>
-                                                                    </div>
-                                                                </section>
+                                                                <div class="col-12 col-md-3 col-lg-4">
+                                                                    <section class="secondary-info">
+                                                                        <div class="terms-section">
+                                                                            <h3 class="field-label">Location</h3>
+                                                                            <p class="field-value">
+                                                                                {{ $activity->location }}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="terms-section">
+                                                                            <h3 class="field-label">To</h3>
+                                                                            <p class="field-value">{{ $activity->to }}</p>
+                                                                        </div>
+                                                                        <div class="start-date-section">
+                                                                            <h3 class="field-label">Description</h3>
+                                                                            <p class="field-value">
+                                                                                {{ $activity->description }}
+                                                                            </p>
+                                                                        </div>
+                                                                    </section>
 
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            @endif
-                                        </div>
-
-
-
-                                        {{-- meetings --}}
-                                        <div class="meetings-tab mt-3">
-
-                                            @if ($meetings->isEmpty())
-                                                {{-- <p>No meetings found.</p> --}}
-                                            @else
-                                                <div>
-                                                    <h5 class="mb-3 card-title">Meetings</h5>
-                                                </div>
-                                                @foreach ($meetings as $meeting)
-                                                    @php
-                                                        $activity = $meeting['activity'];
-                                                    @endphp
-                                                    <div class="card card-default mb-2">
-                                                        <div class="card-body d-flex mb-3 position-relative mt-4 ">
-                                                            <div class="col-12 col-md-3 col-lg-6">
-                                                                <section class="primary-info ">
-
-                                                                    <div class="title-section">
-                                                                        <h3 class="field-label">Title</h3>
-                                                                        <p class="project-title">{{ $activity->title }}
-                                                                        </p>
-                                                                    </div>
-
-                                                                    <div class="terms-section">
-                                                                        <h3 class="field-label">From</h3>
-                                                                        <p class="field-value">{{ $activity->from }}</p>
-                                                                    </div>
-
-                                                                    <div class="start-date-section">
-                                                                        <h3 class="field-label">Participants</h3>
-                                                                        @if (is_array($activity->participants) && count($activity->participants))
-                                                                            @foreach ($activity->participants as $participant)
-                                                                                <p>
-                                                                                    Type: {{ $participant['type'] }},
-
-                                                                                    @php
-                                                                                        $person = null;
-                                                                                        if (
-                                                                                            $participant['type'] ===
-                                                                                            'person'
-                                                                                        ) {
-                                                                                            $person = $persons->firstWhere(
-                                                                                                'id',
-                                                                                                $participant['id'],
-                                                                                            );
-                                                                                        } elseif (
-                                                                                            $participant['type'] ===
-                                                                                            'owner'
-                                                                                        ) {
-                                                                                            $person = $owners->firstWhere(
-                                                                                                'user_id',
-                                                                                                $participant['id'],
-                                                                                            );
-                                                                                        }
-                                                                                    @endphp
-
-                                                                                    Name:
-                                                                                    {{ $person->name ?? 'Name Not Found' }}
-                                                                                </p>
-                                                                            @endforeach
-                                                                        @else
-                                                                            <p>No participants found.</p>
-                                                                        @endif
-                                                                    </div>
-                                                                </section>
-                                                            </div>
-
-
-                                                            <div class="col-12 col-md-3 col-lg-4">
-                                                                <section class="secondary-info">
-                                                                    <div class="terms-section">
-                                                                        <h3 class="field-label">Location</h3>
-                                                                        <p class="field-value">{{ $activity->location }}
-                                                                        </p>
-                                                                    </div>
-                                                                    <div class="terms-section">
-                                                                        <h3 class="field-label">To</h3>
-                                                                        <p class="field-value">{{ $activity->to }}</p>
-                                                                    </div>
-                                                                    <div class="start-date-section">
-                                                                        <h3 class="field-label">Description</h3>
-                                                                        <p class="field-value">
-                                                                            {{ $activity->description }}
-                                                                        </p>
-                                                                    </div>
-                                                                </section>
-
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                    @endforeach
+                                                @endif
+                                            </div>
+
+
+
+                                            {{-- meetings --}}
+                                            <div class="meetings-tab mt-3">
+
+                                                @if ($meetings->isEmpty())
+                                                    {{-- <p>No meetings found.</p> --}}
+                                                @else
+                                                    <div>
+                                                        <h5 class="mb-3 card-title">Meetings</h5>
                                                     </div>
-                                                @endforeach
-                                            @endif
-                                        </div>
+                                                    @foreach ($meetings as $meeting)
+                                                        @php
+                                                            $activity = $meeting['activity'];
+                                                        @endphp
+                                                        <div class="card card-default mb-2">
+                                                            <div class="card-body d-flex mb-3 position-relative mt-4 ">
+                                                                <div class="col-12 col-md-3 col-lg-6">
+                                                                    <section class="primary-info ">
+
+                                                                        <div class="title-section">
+                                                                            <h3 class="field-label">Title</h3>
+                                                                            <p class="project-title">
+                                                                                {{ $activity->title }}
+                                                                            </p>
+                                                                        </div>
+
+                                                                        <div class="terms-section">
+                                                                            <h3 class="field-label">From</h3>
+                                                                            <p class="field-value">{{ $activity->from }}
+                                                                            </p>
+                                                                        </div>
+
+                                                                        <div class="start-date-section">
+                                                                            <h3 class="field-label">Participants</h3>
+                                                                            @if (is_array($activity->participants) && count($activity->participants))
+                                                                                @foreach ($activity->participants as $participant)
+                                                                                    <p>
+                                                                                        Type: {{ $participant['type'] }},
+
+                                                                                        @php
+                                                                                            $person = null;
+                                                                                            if (
+                                                                                                $participant['type'] ===
+                                                                                                'person'
+                                                                                            ) {
+                                                                                                $person = $persons->firstWhere(
+                                                                                                    'id',
+                                                                                                    $participant['id'],
+                                                                                                );
+                                                                                            } elseif (
+                                                                                                $participant['type'] ===
+                                                                                                'owner'
+                                                                                            ) {
+                                                                                                $person = $owners->firstWhere(
+                                                                                                    'user_id',
+                                                                                                    $participant['id'],
+                                                                                                );
+                                                                                            }
+                                                                                        @endphp
+
+                                                                                        Name:
+                                                                                        {{ $person->name ?? 'Name Not Found' }}
+                                                                                    </p>
+                                                                                @endforeach
+                                                                            @else
+                                                                                <p>No participants found.</p>
+                                                                            @endif
+                                                                        </div>
+                                                                    </section>
+                                                                </div>
 
 
-                                        {{-- lunches --}}
-                                        <div class="lunches-tab mt-3">
+                                                                <div class="col-12 col-md-3 col-lg-4">
+                                                                    <section class="secondary-info">
+                                                                        <div class="terms-section">
+                                                                            <h3 class="field-label">Location</h3>
+                                                                            <p class="field-value">
+                                                                                {{ $activity->location }}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="terms-section">
+                                                                            <h3 class="field-label">To</h3>
+                                                                            <p class="field-value">{{ $activity->to }}</p>
+                                                                        </div>
+                                                                        <div class="start-date-section">
+                                                                            <h3 class="field-label">Description</h3>
+                                                                            <p class="field-value">
+                                                                                {{ $activity->description }}
+                                                                            </p>
+                                                                        </div>
+                                                                    </section>
 
-                                            @if ($lunches->isEmpty())
-                                                {{-- <p>No lunches found.</p> --}}
-                                            @else
-                                                <div>
-                                                    <h5 class="mb-3 card-title">Lunches</h5>
-                                                </div>
-                                                @foreach ($lunches as $lunche)
-                                                    @php
-                                                        $activity = $lunche['activity'];
-                                                    @endphp
-                                                    <div class="card card-default mb-2">
-                                                        <div class="card-body d-flex mb-3 position-relative mt-4 ">
-                                                            <div class="col-12 col-md-3 col-lg-6">
-                                                                <section class="primary-info ">
-
-                                                                    <div class="title-section">
-                                                                        <h3 class="field-label">Title</h3>
-                                                                        <p class="project-title">{{ $activity->title }}
-                                                                        </p>
-                                                                    </div>
-
-                                                                    <div class="terms-section">
-                                                                        <h3 class="field-label">From</h3>
-                                                                        <p class="field-value">{{ $activity->from }}</p>
-                                                                    </div>
-
-                                                                    <div class="start-date-section">
-                                                                        <h3 class="field-label">Participants</h3>
-                                                                        @if (is_array($activity->participants) && count($activity->participants))
-                                                                            @foreach ($activity->participants as $participant)
-                                                                                <p>
-                                                                                    Type: {{ $participant['type'] }},
-
-                                                                                    @php
-                                                                                        $person = null;
-                                                                                        if (
-                                                                                            $participant['type'] ===
-                                                                                            'person'
-                                                                                        ) {
-                                                                                            $person = $persons->firstWhere(
-                                                                                                'id',
-                                                                                                $participant['id'],
-                                                                                            );
-                                                                                        } elseif (
-                                                                                            $participant['type'] ===
-                                                                                            'owner'
-                                                                                        ) {
-                                                                                            $person = $owners->firstWhere(
-                                                                                                'user_id',
-                                                                                                $participant['id'],
-                                                                                            );
-                                                                                        }
-                                                                                    @endphp
-
-                                                                                    Name:
-                                                                                    {{ $person->name ?? 'Name Not Found' }}
-                                                                                </p>
-                                                                            @endforeach
-                                                                        @else
-                                                                            <p>No participants found.</p>
-                                                                        @endif
-                                                                    </div>
-                                                                </section>
-                                                            </div>
-
-
-                                                            <div class="col-12 col-md-3 col-lg-4">
-                                                                <section class="secondary-info">
-                                                                    <div class="terms-section">
-                                                                        <h3 class="field-label">Location</h3>
-                                                                        <p class="field-value">{{ $activity->location }}
-                                                                        </p>
-                                                                    </div>
-                                                                    <div class="terms-section">
-                                                                        <h3 class="field-label">To</h3>
-                                                                        <p class="field-value">{{ $activity->to }}</p>
-                                                                    </div>
-                                                                    <div class="start-date-section">
-                                                                        <h3 class="field-label">Description</h3>
-                                                                        <p class="field-value">
-                                                                            {{ $activity->description }}
-                                                                        </p>
-                                                                    </div>
-                                                                </section>
-
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                    @endforeach
+                                                @endif
+                                            </div>
+
+
+                                            {{-- lunches --}}
+                                            <div class="lunches-tab mt-3">
+
+                                                @if ($lunches->isEmpty())
+                                                    {{-- <p>No lunches found.</p> --}}
+                                                @else
+                                                    <div>
+                                                        <h5 class="mb-3 card-title">Lunches</h5>
                                                     </div>
-                                                @endforeach
-                                            @endif
-                                        </div>
-                                    @endif
+                                                    @foreach ($lunches as $lunche)
+                                                        @php
+                                                            $activity = $lunche['activity'];
+                                                        @endphp
+                                                        <div class="card card-default mb-2">
+                                                            <div class="card-body d-flex mb-3 position-relative mt-4 ">
+                                                                <div class="col-12 col-md-3 col-lg-6">
+                                                                    <section class="primary-info ">
+
+                                                                        <div class="title-section">
+                                                                            <h3 class="field-label">Title</h3>
+                                                                            <p class="project-title">
+                                                                                {{ $activity->title }}
+                                                                            </p>
+                                                                        </div>
+
+                                                                        <div class="terms-section">
+                                                                            <h3 class="field-label">From</h3>
+                                                                            <p class="field-value">{{ $activity->from }}
+                                                                            </p>
+                                                                        </div>
+
+                                                                        <div class="start-date-section">
+                                                                            <h3 class="field-label">Participants</h3>
+                                                                            @if (is_array($activity->participants) && count($activity->participants))
+                                                                                @foreach ($activity->participants as $participant)
+                                                                                    <p>
+                                                                                        Type: {{ $participant['type'] }},
+
+                                                                                        @php
+                                                                                            $person = null;
+                                                                                            if (
+                                                                                                $participant['type'] ===
+                                                                                                'person'
+                                                                                            ) {
+                                                                                                $person = $persons->firstWhere(
+                                                                                                    'id',
+                                                                                                    $participant['id'],
+                                                                                                );
+                                                                                            } elseif (
+                                                                                                $participant['type'] ===
+                                                                                                'owner'
+                                                                                            ) {
+                                                                                                $person = $owners->firstWhere(
+                                                                                                    'user_id',
+                                                                                                    $participant['id'],
+                                                                                                );
+                                                                                            }
+                                                                                        @endphp
+
+                                                                                        Name:
+                                                                                        {{ $person->name ?? 'Name Not Found' }}
+                                                                                    </p>
+                                                                                @endforeach
+                                                                            @else
+                                                                                <p>No participants found.</p>
+                                                                            @endif
+                                                                        </div>
+                                                                    </section>
+                                                                </div>
 
 
-                                    {{-- email --}}
-                                    {{-- @if (in_array(strtolower('show-lead-email'), array_map('strtolower', $permissions)))
+                                                                <div class="col-12 col-md-3 col-lg-4">
+                                                                    <section class="secondary-info">
+                                                                        <div class="terms-section">
+                                                                            <h3 class="field-label">Location</h3>
+                                                                            <p class="field-value">
+                                                                                {{ $activity->location }}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="terms-section">
+                                                                            <h3 class="field-label">To</h3>
+                                                                            <p class="field-value">{{ $activity->to }}</p>
+                                                                        </div>
+                                                                        <div class="start-date-section">
+                                                                            <h3 class="field-label">Description</h3>
+                                                                            <p class="field-value">
+                                                                                {{ $activity->description }}
+                                                                            </p>
+                                                                        </div>
+                                                                    </section>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                            </div>
+                                        @endif
+
+
+                                        {{-- email --}}
+                                        {{-- @if (in_array(strtolower('show-lead-email'), array_map('strtolower', $permissions)))
                                         @if ($lead_emails->isEmpty())
                                         @else
                                             <div>
@@ -1230,119 +1245,122 @@ $permissions = session('user_permissions');
                                         @endif
                                     @endif --}}
 
-                                    {{-- Files --}}
-                                    @if (in_array(strtolower('show-lead-file'), array_map('strtolower', $permissions)))
-                                        @if ($files->isEmpty())
-                                        @else
-                                            <div>
+                                        {{-- Files --}}
+                                        @if (in_array(strtolower('show-lead-file'), array_map('strtolower', $permissions)))
+                                            @if ($files->isEmpty())
+                                            @else
                                                 <div>
-                                                    <h5 class="mb-3 card-title">Files</h5>
-                                                </div>
-                                                <form id="bulk-delete-form" method="POST"
-                                                    action="{{ url('delete-selected-quotes') }}">
-                                                    @csrf
-                                                    <div class="table-responsive">
-                                                        <table class="table new-table data-table-export"
-                                                            data-export-title="Quotes" data-export-filename="Quotes">
-
-                                                            <thead>
-
-                                                                <tr>
-                                                                    <th class="corner-left"><input type="checkbox"
-                                                                            id="select-all">
-                                                                    </th>
-                                                                    <th>Name</th>
-                                                                    <th>Description</th>
-                                                                    <th>File</th>
-                                                                    <th class="corner-right">Actions</th>
-                                                                </tr>
-
-
-                                                            </thead>
-                                                            <tbody>
-
-                                                                @foreach ($files as $file)
-                                                                    <tr class="odd gradeX">
-                                                                        <td><input type="checkbox"
-                                                                                name="selected_quotes[]"
-                                                                                value="{{ $file->id }}"></td>
-                                                                        <td class="">{{ $file->name }} </td>
-                                                                        <td class="">{!! $file->description !!} </td>
-                                                                        <td class=""> <a
-                                                                                href="{{ asset('uploads/leads/files/' . $file->file) }}"
-                                                                                download="{{ $file->file }}">{{ $file->file }}
-                                                                            </a></td>
-                                                                        <td class="action-icons d-flex gx-3">
-                                                                            <a href="{{ url('delete-file/' . $file->id) }}"
-                                                                                onclick="return confirm('Are you sure you want to delete this record?')">
-                                                                                <div class="text-muted">
-                                                                                    <svg width="20" height="20"
-                                                                                        viewBox="0 0 18 18" fill="none"
-                                                                                        xmlns="http://www.w3.org/2000/svg">
-                                                                                        <rect width="18"
-                                                                                            height="18" rx="2.90323"
-                                                                                            fill="#FFE9E5" />
-                                                                                        <path
-                                                                                            d="M6.9431 12.7013C6.71689 12.7013 6.52331 12.6208 6.36236 12.4599C6.20141 12.2989 6.12079 12.1052 6.12052 11.8787V6.53197H5.70923V5.70939H7.76568V5.2981H10.2334V5.70939H12.2899V6.53197H11.8786V11.8787C11.8786 12.105 11.7981 12.2987 11.6372 12.4599C11.4762 12.6211 11.2825 12.7016 11.056 12.7013H6.9431ZM11.056 6.53197H6.9431V11.8787H11.056V6.53197ZM7.76568 11.0562H8.58826V7.35455H7.76568V11.0562ZM9.41084 11.0562H10.2334V7.35455H9.41084V11.0562Z"
-                                                                                            fill="#ED2227" />
-                                                                                    </svg>
-                                                                                </div>
-                                                                            </a>
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                        </table>
+                                                    <div>
+                                                        <h5 class="mb-3 card-title">Files</h5>
                                                     </div>
-                                                    <button type="submit" class="btn btn-danger btn-sm mb-2"
-                                                        onclick="return confirm('Are you sure you want to delete selected records?')">Delete
-                                                        Selected</button>
-                                                </form>
+                                                    <form id="bulk-delete-form" method="POST"
+                                                        action="{{ url('delete-selected-quotes') }}">
+                                                        @csrf
+                                                        <div class="table-responsive">
+                                                            <table class="table new-table data-table-export"
+                                                                data-export-title="Quotes" data-export-filename="Quotes">
+
+                                                                <thead>
+
+                                                                    <tr>
+                                                                        <th class="corner-left"><input type="checkbox"
+                                                                                id="select-all">
+                                                                        </th>
+                                                                        <th>Name</th>
+                                                                        <th>Description</th>
+                                                                        <th>File</th>
+                                                                        <th class="corner-right">Actions</th>
+                                                                    </tr>
 
 
-                                            </div>
-                                        @endif
-                                    @endif
+                                                                </thead>
+                                                                <tbody>
+
+                                                                    @foreach ($files as $file)
+                                                                        <tr class="odd gradeX">
+                                                                            <td><input type="checkbox"
+                                                                                    name="selected_quotes[]"
+                                                                                    value="{{ $file->id }}"></td>
+                                                                            <td class="">{{ $file->name }} </td>
+                                                                            <td class="">{!! $file->description !!}
+                                                                            </td>
+                                                                            <td class=""> <a
+                                                                                    href="{{ asset('uploads/leads/files/' . $file->file) }}"
+                                                                                    download="{{ $file->file }}">{{ $file->file }}
+                                                                                </a></td>
+                                                                            <td class="action-icons d-flex gx-3">
+                                                                                <a href="{{ url('delete-file/' . $file->id) }}"
+                                                                                    onclick="return confirm('Are you sure you want to delete this record?')">
+                                                                                    <div class="text-muted">
+                                                                                        <svg width="20" height="20"
+                                                                                            viewBox="0 0 18 18"
+                                                                                            fill="none"
+                                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                                            <rect width="18"
+                                                                                                height="18"
+                                                                                                rx="2.90323"
+                                                                                                fill="#FFE9E5" />
+                                                                                            <path
+                                                                                                d="M6.9431 12.7013C6.71689 12.7013 6.52331 12.6208 6.36236 12.4599C6.20141 12.2989 6.12079 12.1052 6.12052 11.8787V6.53197H5.70923V5.70939H7.76568V5.2981H10.2334V5.70939H12.2899V6.53197H11.8786V11.8787C11.8786 12.105 11.7981 12.2987 11.6372 12.4599C11.4762 12.6211 11.2825 12.7016 11.056 12.7013H6.9431ZM11.056 6.53197H6.9431V11.8787H11.056V6.53197ZM7.76568 11.0562H8.58826V7.35455H7.76568V11.0562ZM9.41084 11.0562H10.2334V7.35455H9.41084V11.0562Z"
+                                                                                                fill="#ED2227" />
+                                                                                        </svg>
+                                                                                    </div>
+                                                                                </a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-danger btn-sm mb-2"
+                                                            onclick="return confirm('Are you sure you want to delete selected records?')">Delete
+                                                            Selected</button>
+                                                    </form>
 
 
-
-                                    {{-- quotes --}}
-                                    @if (in_array(strtolower('quotes-view-own'), array_map('strtolower', $permissions)) ||
-                                            in_array(strtolower('quotes-view-all'), array_map('strtolower', $permissions)))
-                                        @if ($quotes->isEmpty())
-                                        @else
-                                            <div>
-                                                <div>
-                                                    <h5 class="mb-3 card-title">Quotes</h5>
                                                 </div>
-                                                <form id="bulk-delete-form" method="POST"
-                                                    action="{{ url('delete-selected-quotes') }}">
-                                                    @csrf
-                                                    <div class="table-responsive">
-                                                        <table class="table new-table data-table-export"
-                                                            data-export-title="Quotes" data-export-filename="Quotes">
+                                            @endif
+                                        @endif
 
-                                                            <thead>
-                                                                <tr>
-                                                                    <th class="corner-left"><input type="checkbox"
-                                                                            id="select-all">
-                                                                    </th>
-                                                                    <th>{{ __('app.datagrid.subject') }}</th>
-                                                                    <th>{{ __('app.datagrid.sales-person') }}</th>
-                                                                    <th>{{ __('app.datagrid.expired_quotes') }}</th>
-                                                                    <th>{{ __('app.datagrid.person') }}</th>
-                                                                    <th>{{ __('app.datagrid.sub-total') }}</th>
-                                                                    <th>{{ __('app.datagrid.discount') }}</th>
-                                                                    <th>{{ __('app.datagrid.tax') }}</th>
-                                                                    <th>{{ __('app.datagrid.grand-total') }}</th>
-                                                                    <th>{{ __('app.leads.expired-at') }}</th>
-                                                                    <th>{{ __('app.datagrid.created_at') }}</th>
-                                                                    <th>{{ __('app.leads.actions') }}</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
 
-                                                                <?php foreach($quotes as $quote){
+
+                                        {{-- quotes --}}
+                                        @if (in_array(strtolower('quotes-view-own'), array_map('strtolower', $permissions)) ||
+                                                in_array(strtolower('quotes-view-all'), array_map('strtolower', $permissions)))
+                                            @if ($quotes->isEmpty())
+                                            @else
+                                                <div>
+                                                    <div>
+                                                        <h5 class="mb-3 card-title">Quotes</h5>
+                                                    </div>
+                                                    <form id="bulk-delete-form" method="POST"
+                                                        action="{{ url('delete-selected-quotes') }}">
+                                                        @csrf
+                                                        <div class="table-responsive">
+                                                            <table class="table new-table data-table-export"
+                                                                data-export-title="Quotes" data-export-filename="Quotes">
+
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="corner-left"><input type="checkbox"
+                                                                                id="select-all">
+                                                                        </th>
+                                                                        <th>{{ __('app.datagrid.subject') }}</th>
+                                                                        <th>{{ __('app.datagrid.sales-person') }}</th>
+                                                                        <th>{{ __('app.datagrid.expired_quotes') }}</th>
+                                                                        <th>{{ __('app.datagrid.person') }}</th>
+                                                                        <th>{{ __('app.datagrid.sub-total') }}</th>
+                                                                        <th>{{ __('app.datagrid.discount') }}</th>
+                                                                        <th>{{ __('app.datagrid.tax') }}</th>
+                                                                        <th>{{ __('app.datagrid.grand-total') }}</th>
+                                                                        <th>{{ __('app.leads.expired-at') }}</th>
+                                                                        <th>{{ __('app.datagrid.created_at') }}</th>
+                                                                        <th>{{ __('app.leads.actions') }}</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+
+                                                                    <?php foreach($quotes as $quote){
                                                                     $owner_name = UserDetails::where('user_id', $quote->owner)->value('name');
                                                                     $person_name = Person::where('id', $quote->person)->value('name');
                                                                     $sub_total = 0;
@@ -1357,81 +1375,86 @@ $permissions = session('user_permissions');
                                                                         $sub_total += $amount;
                                                                 }
                                                             ?>
-                                                                <tr class="odd gradeX">
-                                                                    <td><input type="checkbox" name="selected_quotes[]"
-                                                                            value="{{ $quote->id }}"></td>
-                                                                    <td class="">{{ $quote->subject }} </td>
-                                                                    <td class=""><a
-                                                                            href="{{ url('users?id=' . $quote->owner) }}">{{ $owner_name }}</a>
-                                                                    </td>
-                                                                    <td class="">{{ $quote->expired_at }} </td>
-                                                                    <td class=""><a
-                                                                            href="{{ url('persons?id=' . $quote->person) }}">{{ $person_name }}</a>
-                                                                    </td>
-                                                                    <td class="">${{ number_format($sub_total) }}
-                                                                    </td>
-                                                                    <td class="">
-                                                                        ${{ number_format($quote->discount_total_amount, 2) }}
-                                                                    </td>
-                                                                    <td class="">
-                                                                        ${{ number_format($quote->tax_total_amount, 2) }}
-                                                                    </td>
-                                                                    <td class="">
-                                                                        ${{ number_format($quote->order_total_input, 2) }}
-                                                                    </td>
-                                                                    <td class="">{{ $quote->expired_at }} </td>
-                                                                    <td class="">{{ $quote->created_at }} </td>
+                                                                    <tr class="odd gradeX">
+                                                                        <td><input type="checkbox"
+                                                                                name="selected_quotes[]"
+                                                                                value="{{ $quote->id }}"></td>
+                                                                        <td class="">{{ $quote->subject }} </td>
+                                                                        <td class=""><a
+                                                                                href="{{ url('users?id=' . $quote->owner) }}">{{ $owner_name }}</a>
+                                                                        </td>
+                                                                        <td class="">{{ $quote->expired_at }} </td>
+                                                                        <td class=""><a
+                                                                                href="{{ url('persons?id=' . $quote->person) }}">{{ $person_name }}</a>
+                                                                        </td>
+                                                                        <td class="">
+                                                                            ${{ number_format($sub_total) }}
+                                                                        </td>
+                                                                        <td class="">
+                                                                            ${{ number_format($quote->discount_total_amount, 2) }}
+                                                                        </td>
+                                                                        <td class="">
+                                                                            ${{ number_format($quote->tax_total_amount, 2) }}
+                                                                        </td>
+                                                                        <td class="">
+                                                                            ${{ number_format($quote->order_total_input, 2) }}
+                                                                        </td>
+                                                                        <td class="">{{ $quote->expired_at }} </td>
+                                                                        <td class="">{{ $quote->created_at }} </td>
 
-                                                                    <td class="action-icons d-flex gx-3">
-                                                                        <a href="{{ url('delete-quote/' . $quote->id) }}"
-                                                                            onclick="return confirm('Are you sure you want to delete this record?')">
-                                                                            <div class="text-muted" type="button">
-                                                                                <svg width="20" height="20"
-                                                                                    viewBox="0 0 18 18" fill="none"
-                                                                                    xmlns="http://www.w3.org/2000/svg">
-                                                                                    <rect width="18" height="18"
-                                                                                        rx="2.90323" fill="#FFE9E5" />
-                                                                                    <path
-                                                                                        d="M6.9431 12.7013C6.71689 12.7013 6.52331 12.6208 6.36236 12.4599C6.20141 12.2989 6.12079 12.1052 6.12052 11.8787V6.53197H5.70923V5.70939H7.76568V5.2981H10.2334V5.70939H12.2899V6.53197H11.8786V11.8787C11.8786 12.105 11.7981 12.2987 11.6372 12.4599C11.4762 12.6211 11.2825 12.7016 11.056 12.7013H6.9431ZM11.056 6.53197H6.9431V11.8787H11.056V6.53197ZM7.76568 11.0562H8.58826V7.35455H7.76568V11.0562ZM9.41084 11.0562H10.2334V7.35455H9.41084V11.0562Z"
-                                                                                        fill="#ED2227" />
-                                                                                </svg>
-                                                                            </div>
-                                                                        </a>
-                                                                        <a href="{{ url('edit-quote/' . $quote->id) }}">
-                                                                            <div class="text-muted" type="button">
-                                                                                <svg width="20" height="20"
-                                                                                    viewBox="0 0 18 18" fill="none"
-                                                                                    xmlns="http://www.w3.org/2000/svg">
-                                                                                    <rect width="18" height="18"
-                                                                                        rx="2.90323" fill="#E7E9FD" />
-                                                                                    <path
-                                                                                        d="M6.1206 11.8786H6.70663L10.7266 7.85862L10.1406 7.27258L6.1206 11.2926V11.8786ZM5.70935 12.7011C5.59282 12.7011 5.49522 12.6616 5.41654 12.5826C5.33785 12.5037 5.29837 12.4061 5.2981 12.2898V11.2926C5.2981 11.1829 5.31866 11.0783 5.35978 10.9788C5.40091 10.8792 5.45917 10.7919 5.53456 10.7168L10.7266 5.53505C10.8088 5.45966 10.8997 5.4014 10.9993 5.36027C11.0988 5.31915 11.2032 5.29858 11.3126 5.29858C11.422 5.29858 11.5283 5.31915 11.6313 5.36027C11.7344 5.4014 11.8235 5.46308 11.8987 5.54533L12.4641 6.12108C12.5464 6.19648 12.6063 6.28558 12.6438 6.3884C12.6814 6.49121 12.7003 6.59402 12.7006 6.69683C12.7006 6.8065 12.6817 6.9111 12.6438 7.01062C12.606 7.11014 12.5461 7.20089 12.4641 7.28287L7.28238 12.4646C7.20698 12.54 7.11952 12.5983 7.02 12.6394C6.92048 12.6805 6.81602 12.7011 6.70663 12.7011H5.70935ZM10.4284 7.57074L10.1406 7.27258L10.7266 7.85862L10.4284 7.57074Z"
-                                                                                        fill="#4A58EC" />
-                                                                                </svg>
-                                                                            </div>
-                                                                        </a>
-                                                                        <a href="{{ asset('uploads/quotes/' . $quote->pdf . '') }}"
-                                                                            target="_blank">
-                                                                            <div class="text-muted" type="button">
-                                                                                <i class="fa-regular fa-file-pdf"></i>
-                                                                            </div>
-                                                                        </a>
-                                                                    </td>
-                                                                </tr>
-                                                                <?php } ?>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <button type="submit" class="btn btn-danger btn-sm mb-2"
-                                                        onclick="return confirm('Are you sure you want to delete selected records?')">Delete
-                                                        Selected</button>
-                                                </form>
+                                                                        <td class="action-icons d-flex gx-3">
+                                                                            <a href="{{ url('delete-quote/' . $quote->id) }}"
+                                                                                onclick="return confirm('Are you sure you want to delete this record?')">
+                                                                                <div class="text-muted" type="button">
+                                                                                    <svg width="20" height="20"
+                                                                                        viewBox="0 0 18 18" fill="none"
+                                                                                        xmlns="http://www.w3.org/2000/svg">
+                                                                                        <rect width="18"
+                                                                                            height="18" rx="2.90323"
+                                                                                            fill="#FFE9E5" />
+                                                                                        <path
+                                                                                            d="M6.9431 12.7013C6.71689 12.7013 6.52331 12.6208 6.36236 12.4599C6.20141 12.2989 6.12079 12.1052 6.12052 11.8787V6.53197H5.70923V5.70939H7.76568V5.2981H10.2334V5.70939H12.2899V6.53197H11.8786V11.8787C11.8786 12.105 11.7981 12.2987 11.6372 12.4599C11.4762 12.6211 11.2825 12.7016 11.056 12.7013H6.9431ZM11.056 6.53197H6.9431V11.8787H11.056V6.53197ZM7.76568 11.0562H8.58826V7.35455H7.76568V11.0562ZM9.41084 11.0562H10.2334V7.35455H9.41084V11.0562Z"
+                                                                                            fill="#ED2227" />
+                                                                                    </svg>
+                                                                                </div>
+                                                                            </a>
+                                                                            <a
+                                                                                href="{{ url('edit-quote/' . $quote->id) }}">
+                                                                                <div class="text-muted" type="button">
+                                                                                    <svg width="20" height="20"
+                                                                                        viewBox="0 0 18 18" fill="none"
+                                                                                        xmlns="http://www.w3.org/2000/svg">
+                                                                                        <rect width="18"
+                                                                                            height="18" rx="2.90323"
+                                                                                            fill="#E7E9FD" />
+                                                                                        <path
+                                                                                            d="M6.1206 11.8786H6.70663L10.7266 7.85862L10.1406 7.27258L6.1206 11.2926V11.8786ZM5.70935 12.7011C5.59282 12.7011 5.49522 12.6616 5.41654 12.5826C5.33785 12.5037 5.29837 12.4061 5.2981 12.2898V11.2926C5.2981 11.1829 5.31866 11.0783 5.35978 10.9788C5.40091 10.8792 5.45917 10.7919 5.53456 10.7168L10.7266 5.53505C10.8088 5.45966 10.8997 5.4014 10.9993 5.36027C11.0988 5.31915 11.2032 5.29858 11.3126 5.29858C11.422 5.29858 11.5283 5.31915 11.6313 5.36027C11.7344 5.4014 11.8235 5.46308 11.8987 5.54533L12.4641 6.12108C12.5464 6.19648 12.6063 6.28558 12.6438 6.3884C12.6814 6.49121 12.7003 6.59402 12.7006 6.69683C12.7006 6.8065 12.6817 6.9111 12.6438 7.01062C12.606 7.11014 12.5461 7.20089 12.4641 7.28287L7.28238 12.4646C7.20698 12.54 7.11952 12.5983 7.02 12.6394C6.92048 12.6805 6.81602 12.7011 6.70663 12.7011H5.70935ZM10.4284 7.57074L10.1406 7.27258L10.7266 7.85862L10.4284 7.57074Z"
+                                                                                            fill="#4A58EC" />
+                                                                                    </svg>
+                                                                                </div>
+                                                                            </a>
+                                                                            <a href="{{ asset('uploads/quotes/' . $quote->pdf . '') }}"
+                                                                                target="_blank">
+                                                                                <div class="text-muted" type="button">
+                                                                                    <i class="fa-regular fa-file-pdf"></i>
+                                                                                </div>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <?php } ?>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-danger btn-sm mb-2"
+                                                            onclick="return confirm('Are you sure you want to delete selected records?')">Delete
+                                                            Selected</button>
+                                                    </form>
 
 
-                                            </div>
+                                                </div>
+                                            @endif
                                         @endif
-                                    @endif
-                                </div>
+                                    </div>
                                 @endif
 
                                 <div class="tab-pane fade" id="events-notes" role="tabpanel"
@@ -1560,7 +1583,8 @@ $permissions = session('user_permissions');
 
                                         @if ($meetings->isEmpty())
                                             <p>No meetings found.</p>
-                                        @elseif (in_array(strtolower('show-all-activities'), array_map('strtolower', $permissions)) || (in_array(strtolower('show-own-activities'), array_map('strtolower', $permissions))))
+                                        @elseif (in_array(strtolower('show-all-activities'), array_map('strtolower', $permissions)) ||
+                                                in_array(strtolower('show-own-activities'), array_map('strtolower', $permissions)))
                                             <div>
                                                 <h5 class="mb-3 card-title">Meetings</h5>
                                             </div>
@@ -1634,7 +1658,8 @@ $permissions = session('user_permissions');
 
                                         @if ($lunches->isEmpty())
                                             <p>No lunches found.</p>
-                                        @elseif (in_array(strtolower('show-own-activities'), array_map('strtolower', $permissions)) || in_array(strtolower('show-all-activities'), array_map('strtolower', $permissions)))
+                                        @elseif (in_array(strtolower('show-own-activities'), array_map('strtolower', $permissions)) ||
+                                                in_array(strtolower('show-all-activities'), array_map('strtolower', $permissions)))
                                             <div>
                                                 <h5 class="mb-3 card-title">Lunches</h5>
                                             </div>
@@ -2321,7 +2346,7 @@ $permissions = session('user_permissions');
                         $user_name = UserDetails::where('user_id', $activity_log->user_id)->value('name');
                     ?>
 
-                    
+
 
                     <div class="d-flex">
                         <div class="col-5">
@@ -2339,6 +2364,9 @@ $permissions = session('user_permissions');
                         </div>
                     </div>
                     <?php } ?>
+
+
+                     {{-- @php var_dump($activity_logs); @endphp --}}
 
                 </div>
             </div>

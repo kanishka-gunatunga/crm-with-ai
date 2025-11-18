@@ -1,13 +1,11 @@
 <?php
 use App\Models\UserDetails;
-
+$permissions = session('user_permissions');
 ?>
 
 @extends('master')
 
 @section('content')
-
-
     <form action="" method="post" enctype="multipart/form-data" data-parsley-validate>
         @csrf
 
@@ -56,19 +54,27 @@ use App\Models\UserDetails;
                                                 <!-- Role 2: Can choose any sales owner -->
                                                 <div class="col-12 col-md-4">
                                                     <label for="assign_user" class="form-label">Sales Owner</label>
-                                                    <select class="myDropdown form-control" name="sales_owner"
-                                                        data-parsley-errors-container="#owner-errors" required>
-                                                        {{-- <option value="" selected disabled>Select Sales Owner
-                                                            </option> --}}
-                                                        @foreach ($owners as $owner)
-                                                            <option value="{{ $owner->user_id }}">{{ $owner->name }}
+                                                    @if (in_array(strtolower('quotes-view-all'), array_map('strtolower', $permissions)))
+                                                        <select class="myDropdown form-control" name="sales_owner"
+                                                            data-parsley-errors-container="#owner-errors" required>
+                                                            {{-- <option value="" selected disabled>Select Sales Owner
+                                                                </option> --}}
+                                                            @foreach ($owners as $owner)
+                                                                <option value="{{ $owner->user_id }}">{{ $owner->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    @else
+                                                        <select class="form-control" name="sales_owner" required selected>
+                                                            <option value="{{ $authenticatedUser->user_id }}" selected>
+                                                                {{ $authenticatedUser->name }}
                                                             </option>
-                                                        @endforeach
-                                                    </select>
 
+                                                        </select>
+                                                    @endif
                                                     <div id="owner-errors"></div>
 
-                                                    
+
 
                                                     {{-- <input type="hidden" name="sales_owner"
                                                             value=" {{$owner->id}}"> --}}
@@ -1189,15 +1195,14 @@ use App\Models\UserDetails;
             //     loadLeads(userId);
             // }
 
-            
+
+            loadLeads(userId);
 
 
-            // Corrected jQuery selector to target the dropdown with name="owner" for Role 2
             $('select[name="sales_owner"]').on('change', function() {
                 let selectedOwnerId = $(this).val();
                 loadLeads(selectedOwnerId);
             });
         });
     </script>
-
 @endsection

@@ -30,6 +30,7 @@ use App\Models\QuoteProduct;
 use App\Models\Service;
 use App\Models\Configuration;
 use App\Mail\LeadSendEmail;
+use App\Models\ActivityHistory;
 use App\Models\Attribute;
 use File;
 use PDF;
@@ -397,6 +398,17 @@ class QuoteController extends Controller
                 $quote->custom_attributes = $attributeData;
                 $quote->save();
 
+
+                $lead_id = $lead->id;
+
+                $activity_history = new ActivityHistory();
+                $activity_history->lead_id = $lead_id;
+                $activity_history->source = 'quote';
+                $activity_history->source_id = $quote->id;
+                $activity_history->user_id = Auth::id();
+                $activity_history->action = "Quote (#{$quote->id}) has been added.";
+                $activity_history->save();
+
                 if ($request->has('products')) {
                     foreach ($request->products as $index => $product_id) {
 
@@ -522,7 +534,7 @@ class QuoteController extends Controller
                     }
                 }
 
-                
+
                 return view('quotes.create_quote', [
                     'owners' => $owners,
                     'authenticatedUser' => $authenticatedUser,
@@ -1043,18 +1055,18 @@ class QuoteController extends Controller
 
 
         $permissions = session('user_permissions', []);
+        $leads = Lead::where('sales_owner', $salesOwnerId)->get(['id', 'title']);
 
 
-
-        if (in_array(strtolower('create-own-leads'), array_map('strtolower', $permissions))) {
-            //show only logged user's leads
-            $leads = Lead::where('sales_owner', $userId)->get(['id', 'title']);
-        } elseif (in_array(strtolower('create-any-leads'), array_map('strtolower', $permissions))) {
-            // show leads based on selected sales_owner
-            $leads = Lead::where('sales_owner', $salesOwnerId)->get(['id', 'title']);
-        } else {
-            $leads = collect(); // Empty collection if no permissions
-        }
+        // if (in_array(strtolower('quotes-view-own'), array_map('strtolower', $permissions))) {
+        //     //show only logged user's leads
+        //     $leads = Lead::where('sales_owner', $userId)->get(['id', 'title']);
+        // } elseif (in_array(strtolower('quotes-view-all'), array_map('strtolower', $permissions))) {
+        //     // show leads based on selected sales_owner
+        //     $leads = Lead::where('sales_owner', $salesOwnerId)->get(['id', 'title']);
+        // } else {
+        //     $leads = collect(); // Empty collection if no permissions
+        // }
 
         return response()->json($leads);
     }

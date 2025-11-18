@@ -903,6 +903,8 @@ class LeadController extends Controller
                 ];
             }
 
+            
+
             usort($allItems, function ($a, $b) {
                 return strtotime($b['created_at']) - strtotime($a['created_at']);
             });
@@ -1186,11 +1188,11 @@ class LeadController extends Controller
                 $participants = [];
                 if ($request->has('participants')) {
                     foreach ($request->participants as $participant) {
-                        list($type, $id) = explode('||', $participant);
+                        list($type, $id2) = explode('||', $participant);
 
                         $participants[] = [
                             'type' => $type,
-                            'id'   => (int) $id
+                            'id'   => (int) $id2
                         ];
                     }
                 }

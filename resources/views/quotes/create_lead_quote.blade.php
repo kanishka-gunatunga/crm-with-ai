@@ -180,152 +180,171 @@
                             <div class="card card-default mb-4">
                                 <div class="card-body">
                                     @foreach ($quoteAttributes as $attribute)
-                                        <div class="form-group mb-3">
-                                            <label for="{{ $attribute->code }}"
-                                                class="form-label">{{ $attribute->name }}</label>
+                                                <div class="form-group mb-3">
+                                                    <label class="form-label">{{ $attribute->name }}</label>
 
-                                            @switch($attribute->type)
-                                                @case('text')
-                                                    <input type="text" class="form-control" name="{{ $attribute->code }}"
-                                                        {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
-                                                @break
+                                                    @switch($attribute->type)
+                                                        @case('text')
+                                                            <input type="text" class="form-control"
+                                                                name="{{ $attribute->code }}"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @break
 
-                                                @case('textarea')
-                                                    <textarea class="form-control" name="{{ $attribute->code }}" rows="3"
-                                                        {{ $attribute->is_required == 'yes' ? 'required' : '' }}></textarea>
-                                                @break
+                                                        @case('textarea')
+                                                            <textarea class="form-control" name="{{ $attribute->code }}" rows="3"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}></textarea>
+                                                        @break
 
-                                                @case('email')
-                                                    <input type="email" class="form-control" name="{{ $attribute->code }}"
-                                                        {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
-                                                @break
+                                                        @case('email')
+                                                            <input type="email" class="form-control"
+                                                                name="{{ $attribute->code }}"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @break
 
-                                                @case('price')
-                                                    <input type="number" step="0.01" class="form-control"
-                                                        name="{{ $attribute->code }}"
-                                                        {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
-                                                @break
+                                                        @case('price')
+                                                            <input type="number" step="0.01" class="form-control"
+                                                                name="{{ $attribute->code }}"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @break
 
-                                                @case('boolean')
-                                                    <select name="{{ $attribute->code }}" class="form-select">
-                                                        <option value="1">Yes</option>
-                                                        <option value="0">No</option>
-                                                    </select>
-                                                @break
+                                                        @case('boolean')
+                                                            <select name="{{ $attribute->code }}" class="form-select">
+                                                                <option value="1">Yes</option>
+                                                                <option value="0">No</option>
+                                                            </select>
+                                                        @break
 
-                                                @case('select')
-                                                    @php
-                                                        $options = [];
-                                                        if ($attribute->options) {
-                                                            $options = json_decode($attribute->options, true);
-                                                        }
-                                                    @endphp
-                                                    <select name="{{ $attribute->code }}" class="form-select"
-                                                        {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
-                                                        <option value="">Select</option>
-                                                        @foreach ($options as $opt)
-                                                            <option value="{{ $opt }}">{{ $opt }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                @break
+                                                        @case('select')
+                                                            @php
+                                                                $options = [];
+                                                                if ($attribute->options) {
+                                                                    $options = json_decode($attribute->options, true);
+                                                                }
+                                                            @endphp
+                                                            <select name="{{ $attribute->code }}" class="form-select"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                                <option value="">Select</option>
+                                                                @foreach ($options as $opt)
+                                                                    <option value="{{ $opt }}">{{ $opt }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        @break
 
-                                                @case('multiselect')
-                                                    @php
-                                                        $options = [];
-                                                        if ($attribute->options) {
-                                                            $options = json_decode($attribute->options, true);
-                                                        }
-                                                    @endphp
-                                                    <select name="{{ $attribute->code }}[]" multiple class="form-select"
-                                                        {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
-                                                        @foreach ($options as $opt)
-                                                            <option value="{{ $opt }}">{{ $opt }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                @break
+                                                        @case('multiselect')
+                                                            @php
+                                                                $value = $customValues[$attribute->code] ?? [];
+                                                                $options = [];
 
-                                                @case('checkbox')
-                                                    @php
-                                                        $options = [];
-                                                        if ($attribute->options) {
-                                                            $options = is_array($attribute->options)
-                                                                ? $attribute->options
-                                                                : json_decode($attribute->options, true);
-                                                        }
-                                                    @endphp
-                                                    <div>
-                                                        @foreach ($options as $opt)
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox"
-                                                                    name="{{ $attribute->code }}[]" value="{{ $opt }}">
-                                                                <label class="form-check-label">{{ $opt }}</label>
+                                                                if ($attribute->option_type == 'lookups') {
+                                                                    $options = $lookupOptions[$attribute->code] ?? [];
+                                                                } else {
+                                                                    if ($attribute->options) {
+                                                                        $options = is_array($attribute->options)
+                                                                            ? $attribute->options
+                                                                            : json_decode($attribute->options, true);
+                                                                    }
+                                                                }
+                                                            @endphp
+
+                                                            <select name="{{ $attribute->code }}[]" multiple
+                                                                class="form-select tagselect"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                                @foreach ($options as $id => $label)
+                                                                    <option value="{{ $id }}"
+                                                                        @if (is_array($value) && in_array($label, $value)) selected @endif>
+                                                                        {{ $label }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        @break
+
+                                                        @case('checkbox')
+                                                            @php
+                                                                $options = [];
+                                                                if ($attribute->options) {
+                                                                    $options = is_array($attribute->options)
+                                                                        ? $attribute->options
+                                                                        : json_decode($attribute->options, true);
+                                                                }
+                                                            @endphp
+                                                            <div>
+                                                                @foreach ($options as $opt)
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            name="{{ $attribute->code }}[]"
+                                                                            value="{{ $opt }}">
+                                                                        <label
+                                                                            class="form-check-label">{{ $opt }}</label>
+                                                                    </div>
+                                                                @endforeach
                                                             </div>
-                                                        @endforeach
-                                                    </div>
-                                                @break
+                                                        @break
 
-                                                @case('date')
-                                                    <input type="date" class="form-control" name="{{ $attribute->code }}"
-                                                        {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
-                                                @break
+                                                        @case('lookup')
+                                                            @php
+                                                                // Get lookup options prepared in the controller
+                                                                $options = $lookupOptions[$attribute->code] ?? [];
 
-                                                @case('lookup')
-                                                    @php
-                                                        // Get lookup options prepared in the controller
-                                                        $options = $lookupOptions[$attribute->code] ?? [];
+                                                                // If editing, prefill the saved value
+                                                                $value = $customValues[$attribute->code] ?? '';
+                                                            @endphp
 
-                                                        // If editing, prefill the saved value
-                                                        $value = $customValues[$attribute->code] ?? '';
-                                                    @endphp
-
-                                                    <select name="{{ $attribute->code }}" class="form-select"
-                                                        {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
-                                                        <option value="">Select</option>
+                                                            <select name="{{ $attribute->code }}" class="form-select"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                                <option value="">Select</option>
 
 
 
-                                                        @foreach ($options as $name => $label)
-                                                            <option value="{{ $name }}"
-                                                                {{ (string) $value === (string) $name ? 'selected' : '' }}>
-                                                                {{ $label }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                @break
+                                                                @foreach ($options as $name => $label)
+                                                                    <option value="{{ $name }}"
+                                                                        {{ (string) $value === (string) $name ? 'selected' : '' }}>
+                                                                        {{ $label }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        @break
 
-                                                @case('datetime')
-                                                    <input type="datetime-local" class="form-control"
-                                                        name="{{ $attribute->code }}"
-                                                        {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
-                                                @break
+                                                        @case('date')
+                                                            <input type="date" class="form-control"
+                                                                name="{{ $attribute->code }}"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @break
 
-                                                @case('file')
-                                                    <input type="file" class="form-control" name="{{ $attribute->code }}"
-                                                        {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
-                                                @break
+                                                        @case('datetime')
+                                                            <input type="datetime-local" class="form-control"
+                                                                name="{{ $attribute->code }}"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @break
 
-                                                @case('image')
-                                                    <input type="file" accept="image/*" class="form-control"
-                                                        name="{{ $attribute->code }}"
-                                                        {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
-                                                @break
+                                                        @case('file')
+                                                            <input type="file" class="form-control"
+                                                                name="{{ $attribute->code }}"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @break
 
-                                                @case('phone')
-                                                    <input type="tel" class="form-control" name="{{ $attribute->code }}"
-                                                        {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
-                                                @break
+                                                        @case('image')
+                                                            <input type="file" accept="image/*" class="form-control"
+                                                                name="{{ $attribute->code }}"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @break
 
-                                                @default
-                                                    <input type="text" class="form-control" name="{{ $attribute->code }}">
-                                            @endswitch
+                                                        @case('phone')
+                                                            <input type="tel" class="form-control"
+                                                                name="{{ $attribute->code }}"
+                                                                {{ $attribute->is_required == 'yes' ? 'required' : '' }}>
+                                                        @break
 
-                                            @error($attribute->code)
-                                                <div class="alert alert-danger mt-2">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    @endforeach
+                                                        @default
+                                                            <input type="text" class="form-control"
+                                                                name="{{ $attribute->code }}">
+                                                    @endswitch
+
+                                                    @error($attribute->code)
+                                                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            @endforeach
 
                                 </div>
                             </div>
