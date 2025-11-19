@@ -1946,7 +1946,7 @@ class LeadController extends Controller
     {
         $request->validate([
             'lead_id' => 'required|exists:leads,id',
-            'priority' => 'required|in:High,Medium,Low',
+            'priority' => 'required|in:High,Medium,Low,Urgent',
         ]);
 
         $lead = Lead::find($request->lead_id);
