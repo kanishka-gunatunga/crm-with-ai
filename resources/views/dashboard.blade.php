@@ -1025,68 +1025,7 @@
                             </div>
                         @endif
 
-                        {{-- sources chart --}}
-                        @if (in_array(strtolower('show-sources'), array_map('strtolower', $permissions)))
-                            <div class="mt-4">
-                                <div class="card card-default leadsOverview">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <h2 class="dashboard-card-heder">Sources</h2>
-                                        </div>
-                                        <div class="d-flex gap-5">
-
-                                            <div class="time-duration-buttons dashboard-tabs">
-                                                <ul class="nav nav-pills " id="pills-tab" role="tablist">
-                                                    <li class="nav-item" role="presentation">
-                                                        <button class="nav-link active" id="pills-weekly-sources-tab"
-                                                            data-bs-toggle="pill" data-bs-target="#pills-weekly-sources"
-                                                            type="button" role="tab"
-                                                            aria-controls="pills-weekly-sources"
-                                                            aria-selected="true">Weekly</button>
-                                                    </li>
-                                                    <li class="nav-item" role="presentation">
-                                                        <button class="nav-link" id="pills-monthly-sources-tab"
-                                                            data-bs-toggle="pill" data-bs-target="#pills-monthly-sources"
-                                                            type="button" role="tab"
-                                                            aria-controls="pills-monthly-sources"
-                                                            aria-selected="false">Monthly</button>
-                                                    </li>
-                                                    <li class="nav-item" role="presentation">
-                                                        <button class="nav-link" id="pills-yearly-sources-tab"
-                                                            data-bs-toggle="pill" data-bs-target="#pills-yearly-sources"
-                                                            type="button" role="tab"
-                                                            aria-controls="pills-yearly-sources"
-                                                            aria-selected="false">Yearly</button>
-                                                    </li>
-                                                </ul>
-
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-
-                                    <div>
-                                        <div class="tab-content" id="pills-tabContent">
-                                            <div class="tab-pane fade show active" id="pills-weekly-sources"
-                                                role="tabpanel" aria-labelledby="pills-weekly-sources-tab">
-                                                <canvas id="sourcesWeeklyChart"></canvas>
-                                            </div>
-                                            <div class="tab-pane fade" id="pills-monthly-sources" role="tabpanel"
-                                                aria-labelledby="pills-monthly-sources-tab">
-                                                <canvas id="sourcesMonthlyChart"></canvas>
-                                            </div>
-                                            <div class="tab-pane fade" id="pills-yearly-sources" role="tabpanel"
-                                                aria-labelledby="pills-yearly-sources-tab">
-                                                <canvas id="sourcesYearlyChart"></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                            </div>
-                        @endif
+                        
                     </div>
 
                     <div class="col-md-4">
@@ -1338,7 +1277,93 @@
                                 </div>
                             </div>
                         @endif
+                        
+                        {{-- sources chart --}}
+                        @if (in_array(strtolower('show-sources'), array_map('strtolower', $permissions)))
+                            {{-- <div class="mt-4">
+                                <div class="card card-default leadsOverview">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h2 class="dashboard-card-heder">Sources</h2>
+                                        </div>
+                                        <div class="d-flex gap-5">
 
+                                            <div class="time-duration-buttons dashboard-tabs">
+                                                <ul class="nav nav-pills " id="pills-tab" role="tablist">
+                                                    <li class="nav-item" role="presentation">
+                                                        <button class="nav-link active" id="pills-weekly-sources-tab"
+                                                            data-bs-toggle="pill" data-bs-target="#pills-weekly-sources"
+                                                            type="button" role="tab"
+                                                            aria-controls="pills-weekly-sources"
+                                                            aria-selected="true">Weekly</button>
+                                                    </li>
+                                                    <li class="nav-item" role="presentation">
+                                                        <button class="nav-link" id="pills-monthly-sources-tab"
+                                                            data-bs-toggle="pill" data-bs-target="#pills-monthly-sources"
+                                                            type="button" role="tab"
+                                                            aria-controls="pills-monthly-sources"
+                                                            aria-selected="false">Monthly</button>
+                                                    </li>
+                                                    <li class="nav-item" role="presentation">
+                                                        <button class="nav-link" id="pills-yearly-sources-tab"
+                                                            data-bs-toggle="pill" data-bs-target="#pills-yearly-sources"
+                                                            type="button" role="tab"
+                                                            aria-controls="pills-yearly-sources"
+                                                            aria-selected="false">Yearly</button>
+                                                    </li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div>
+                                        <div class="tab-content" id="pills-tabContent">
+                                            <div class="tab-pane fade show active" id="pills-weekly-sources"
+                                                role="tabpanel" aria-labelledby="pills-weekly-sources-tab">
+                                                <canvas id="sourcesWeeklyChart"></canvas>
+                                            </div>
+                                            <div class="tab-pane fade" id="pills-monthly-sources" role="tabpanel"
+                                                aria-labelledby="pills-monthly-sources-tab">
+                                                <canvas id="sourcesMonthlyChart"></canvas>
+                                            </div>
+                                            <div class="tab-pane fade" id="pills-yearly-sources" role="tabpanel"
+                                                aria-labelledby="pills-yearly-sources-tab">
+                                                <canvas id="sourcesYearlyChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div> --}}
+
+                            <div class="mt-4 ">
+                                <div class="card card-default">
+
+                                    <div class="card-body">
+
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <h2 class="dashboard-card-heder">Sources</h2>
+                                            </div>
+
+                                        </div>
+                                        <div class="dashbaord-piechart-container">
+                                            <canvas id="sourcePieChart"></canvas>
+                                            <div
+                                                class="align-items-center justify-content-center text-center pie-chart-inner">
+
+                                                <span class="pepeline-text">Total Sources</span>
+                                                <span class="pepeline-count" id="totalSources">0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
 
                     </div>
                 </div>
@@ -1822,6 +1847,71 @@
 
             const pipelineChartData = @json($pieChartData);
             const ctx = document.getElementById('pipelinePieChart').getContext('2d');
+
+            const data = {
+                labels: pipelineChartData.labels,
+                datasets: [{
+                    data: pipelineChartData.data,
+                    backgroundColor: [
+                        '#EF4444',
+                        '#60A5FA',
+                        '#1D4ED8',
+                        '#10B981',
+                        '#F59E0B',
+                        '#6366F1',
+                        '#EC4899'
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 2,
+                    hoverOffset: 4
+                }]
+            };
+
+            const config = {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            const pipelineChart = new Chart(ctx, config);
+
+            const total = data.datasets[0].data.reduce((sum, value) => sum + value, 0);
+            document.getElementById('totalPipelines').textContent = total;
+        });
+    </script>
+
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const pipelineChartData = @json($sourcePieChartData);
+            const ctx = document.getElementById('sourcePieChart').getContext('2d');
 
             const data = {
                 labels: pipelineChartData.labels,

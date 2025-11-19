@@ -86,7 +86,7 @@ class MainController extends Controller
 
             // if ($userRole == '3') {
             $pipelines = Pipeline::orderBy('id', 'DESC')->get();
-            $sources = Source::orderBy('id', 'DESC')->get();
+
             $persons = Person::whereMonth('dob', Carbon::today()->month)
                 ->whereDay('dob', Carbon::today()->day)
                 ->orderBy('id', 'DESC')
@@ -97,6 +97,12 @@ class MainController extends Controller
                 ->select('pipeline', DB::raw('count(*) as total'))
                 ->groupBy('pipeline')
                 ->pluck('total', 'pipeline');
+
+            $sourceCounts = DB::table('sources')
+                ->select('name', DB::raw('COUNT(*) as total'))
+                ->groupBy('name')
+                ->pluck('total', 'name');
+            $sources = Source::orderBy('id', 'DESC')->get();
 
             $weeklyLeadsBySource = DB::table('leads')
                 ->where('sales_owner', $userId)
@@ -128,12 +134,23 @@ class MainController extends Controller
                 $pipeline->leads_count = $leadCounts->get($pipeline->id, 0);
             }
 
+            foreach ($sources as $source) {
+                $source->source_count = $sourceCounts->get($source->name, 0);
+            }
+
 
 
             $pieChartData = [
                 'labels' => $pipelines->pluck('name'),
                 'data' => $pipelines->pluck('leads_count'),
             ];
+
+            $sourcePieChartData = [
+                'labels' => $sources->pluck('name'),
+                'data' => $sources->pluck('source_count'),
+            ];
+
+
 
             $all_customers = Person::orderBY('id', 'DESC')->get();
             $this_month_customers = $all_customers->filter(function ($customer) {
@@ -158,7 +175,7 @@ class MainController extends Controller
                 return $quotation->created_at->month === Carbon::now()->month &&
                     $quotation->created_at->year === Carbon::now()->year;
             });
-            $recent_quotations = Quote::with(['leadData','personData']) 
+            $recent_quotations = Quote::with(['leadData', 'personData'])
                 ->where('owner', $userId)
                 ->orderBy('id', 'DESC')
                 ->take(5)
@@ -567,6 +584,7 @@ class MainController extends Controller
                 'yearlyData' => $yearlyData,
                 'persons' => $persons,
                 'my_activities' => $my_activities,
+                'sourcePieChartData' => $sourcePieChartData
             ]);
         }
     }

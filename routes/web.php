@@ -22,6 +22,7 @@ use App\Http\Controllers\WebFormController;
 use App\Http\Controllers\EmailTemplateController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\EmailsController;
+use App\Http\Controllers\ReportController;
 use Google\Service\BeyondCorp\Resource\V;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -197,6 +198,9 @@ Route::post( '/delete-selected-webforms', [WebFormController::class, 'delete_sel
 // Route::get('/favourite-emails', [EmailsController::class, 'fetch_favourite_emails'])->middleware(['auth']);
 // Route::post('/emails/reply/{parentId}', [EmailsController::class, 'reply'])->name('emails.reply');
 
+// Reports
+Route::get( '/reports', [ReportController::class, 'reports'])->middleware(['auth']);
+    
 Route::get('/lang/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'es', 'fa', 'tr', 'ar'])) {
         session(['locale' => $locale]);
