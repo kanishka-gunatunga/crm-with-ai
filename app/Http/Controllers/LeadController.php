@@ -79,9 +79,8 @@ class LeadController extends Controller
             if (in_array(strtolower('lead-view-own'), array_map('strtolower', $permissions))) {
                 $leadFilters->where('sales_owner', Auth::id());
             }
-            if (!(in_array (strtolower('lead-view-own'), array_map('strtolower', $permissions)) || in_array(strtolower('lead-view-all'), array_map('strtolower', $permissions)))) {
+            if (!(in_array(strtolower('lead-view-own'), array_map('strtolower', $permissions)) || in_array(strtolower('lead-view-all'), array_map('strtolower', $permissions)))) {
                 $leadFilters = $leadFilters->whereRaw('1 = 0');
-               
             }
 
             if ($request->filled('name')) {
@@ -870,7 +869,7 @@ class LeadController extends Controller
             $files = LeadFile::where('lead_id', $id)->get();
             $quotes = Quote::where('lead', $id)->get();
             $activity_logs = ActivityHistory::orderBy('id', 'DESC')->where('lead_id', $id)->get();
-            
+
 
             $allItems = [];
             $personNames = [];
@@ -903,14 +902,14 @@ class LeadController extends Controller
                 ];
             }
 
-            
+
 
             usort($allItems, function ($a, $b) {
                 return strtotime($b['created_at']) - strtotime($a['created_at']);
             });
 
-           
-                
+
+
             return view('leads.view_lead', [
                 'sources' => $sources,
                 'types' => $types,
@@ -1136,7 +1135,7 @@ class LeadController extends Controller
                 }
                 $lead_activity->participants = $participants;
                 $lead_activity->is_completed = 0;
-                
+
                 $lead_activity->save();
 
                 $this->addEventToGoogleCalendar($lead_activity);

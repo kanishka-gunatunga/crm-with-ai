@@ -200,6 +200,8 @@ Route::post( '/delete-selected-webforms', [WebFormController::class, 'delete_sel
 
 // Reports
 Route::get( '/reports', [ReportController::class, 'reports'])->middleware(['auth']);
+Route::get('/get-pipeline-stages/{pipelineId}', [ReportController::class, 'getPipelineStages'])->middleware(['auth']);
+Route::post('/generate-report', [ReportController::class, 'generateReport'])->middleware(['auth']);
     
 Route::get('/lang/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'es', 'fa', 'tr', 'ar'])) {
