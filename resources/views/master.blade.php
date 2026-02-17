@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Infinity CRM</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
@@ -54,7 +55,7 @@
     <script src="https://cdn.jsdelivr.net/npm/parsleyjs@2.9.2/dist/parsley.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
-    </script>
+        </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
@@ -84,6 +85,9 @@
         </div>
 
     </div>
+    <!-- Agentic Chatbot -->
+    <x-chatbot />
+    @stack('scripts')
 </body>
 <script>
     new FroalaEditor("div#froala-editor", {
@@ -96,7 +100,7 @@
             },
 
             'moreRich': {
-                'buttons': ['insertFile', 'insertLink', 'insertImage', ]
+                'buttons': ['insertFile', 'insertLink', 'insertImage',]
             },
 
 
@@ -105,8 +109,8 @@
     });
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.nav-link').forEach(function(link) {
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.nav-link').forEach(function (link) {
             if (link.classList.contains('active')) {
                 link.closest('..nav-item').style.backgroundColor = '#E7E9FD'; // or any color
             }
@@ -119,25 +123,25 @@
     const sidebar = document.getElementById('sidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-    hamburgerBtn.addEventListener('click', function() {
+    hamburgerBtn.addEventListener('click', function () {
         sidebar.classList.add('active');
         sidebarOverlay.classList.add('active');
     });
 
-    sidebarOverlay.addEventListener('click', function() {
+    sidebarOverlay.addEventListener('click', function () {
         sidebar.classList.remove('active');
         sidebarOverlay.classList.remove('active');
     });
 </script>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
 
         // Initialize Select2 for .myDropdown
         $('.myDropdown').select2({
             allowClear: true,
 
-        }).on('select2:open', function() {
+        }).on('select2:open', function () {
             console.log('Select2 dropdown opened');
             moveParsleyError
                 (); // Move the parsley error message after select2 container after initialization
@@ -153,7 +157,7 @@
         // Function to move the parsley error message to the last position of the parent container
         function moveParsleyError() {
             console.log('Moving parsley error message');
-            $('.parsley-errors-list').each(function() {
+            $('.parsley-errors-list').each(function () {
                 var parentDiv = $(this).closest(
                     '.col-12'); // Get the closest container of the error message
                 $(this).appendTo(
@@ -173,44 +177,44 @@
     //         allowClear: true
     //     });
     // });
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
 
         const tablesToExport = document.querySelectorAll('.data-table-export');
         const exportToggleButtons = document.querySelectorAll('.export-toggle');
 
-        tablesToExport.forEach(function(tableEl) {
+        tablesToExport.forEach(function (tableEl) {
             const exportTitle = tableEl.getAttribute('data-export-title') || 'Exported Table';
             const exportFilename = tableEl.getAttribute('data-export-filename') || 'exported_table';
 
             new DataTable(tableEl, {
                 dom: 'Bfrtip',
                 buttons: [{
-                        extend: 'csv',
-                        title: exportTitle,
-                        filename: exportFilename
-                    },
-                    {
-                        extend: 'excel',
-                        title: exportTitle,
-                        filename: exportFilename
-                    }
+                    extend: 'csv',
+                    title: exportTitle,
+                    filename: exportFilename
+                },
+                {
+                    extend: 'excel',
+                    title: exportTitle,
+                    filename: exportFilename
+                }
                 ]
             });
         });
 
         exportToggleButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 let dtButtonsContainer = null;
 
                 dtButtonsContainer = this.nextElementSibling;
                 if (dtButtonsContainer && !dtButtonsContainer.classList.contains(
-                        'dt-buttons')) {
+                    'dt-buttons')) {
 
                     dtButtonsContainer = this.parentNode.querySelector('.dt-buttons');
                 }
 
                 if (!dtButtonsContainer || !dtButtonsContainer.classList.contains(
-                        'dt-buttons')) {
+                    'dt-buttons')) {
                     const commonAncestor = this.closest(
                         '.page-container, .main-scrollable, .table-controls-area'
                     ); // Add your relevant parent classes/IDs here
@@ -236,16 +240,17 @@
         });
     });
 </script>
-{{-- <script>
+{{--
+<script>
     $('.tagselect').select2({
-                allowClear: true,
+        allowClear: true,
         tags: true,
     });
 </script> --}}
 
 
 <script>
-    
+
 
     // 1. Only Date Picker
     flatpickr(".datePicker", {
@@ -270,19 +275,19 @@
         disableMobile: true
     });
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#summernote').summernote();
     });
 
 
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.clear-all-btn').forEach(function(button) {
-            button.addEventListener('click', function() {
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.clear-all-btn').forEach(function (button) {
+            button.addEventListener('click', function () {
                 const form = button.closest('form');
                 if (!form) return;
 
                 // Clear all input fields
-                form.querySelectorAll('input').forEach(function(input) {
+                form.querySelectorAll('input').forEach(function (input) {
                     if (input.type === 'checkbox' || input.type === 'radio') {
                         input.checked = false;
                     } else if (input.type === 'file') {
@@ -293,12 +298,12 @@
                 });
 
                 // Clear textarea
-                form.querySelectorAll('textarea').forEach(function(textarea) {
+                form.querySelectorAll('textarea').forEach(function (textarea) {
                     textarea.value = '';
                 });
 
                 // Clear select elements
-                form.querySelectorAll('select').forEach(function(select) {
+                form.querySelectorAll('select').forEach(function (select) {
                     select.selectedIndex = 0;
                 });
 
@@ -336,10 +341,10 @@
     });
 </script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
 
         // Case 1: For delete links (e.g., <a href="...">)
-        $(document).on('click', '.delete-link-confirm', function(e) {
+        $(document).on('click', '.delete-link-confirm', function (e) {
             e.preventDefault();
             const url = $(this).attr('href');
 
@@ -359,7 +364,7 @@
         });
 
         // Case 2: For form submits (e.g., <button type="submit"> inside a <form>)
-        $(document).on('click', '.delete-form-confirm', function(e) {
+        $(document).on('click', '.delete-form-confirm', function (e) {
             e.preventDefault();
             const form = $(this).closest('form');
 
@@ -392,7 +397,7 @@
     }
 
     // Optional: Close on outside click
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (!e.target.closest('.user-profile') && !e.target.closest('.notification-wrapper')) {
             document.querySelectorAll('.dropdown-menu').forEach(el => el.style.display = 'none');
         }

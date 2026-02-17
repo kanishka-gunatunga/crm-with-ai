@@ -16,6 +16,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
         "maatwebsite/excel": "^3.1",
+        "openai-php/laravel": "^0.18.0",
         "webklex/laravel-imap": "^6.2"
     },
     "require-dev": {

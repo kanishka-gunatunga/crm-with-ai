@@ -23,172 +23,173 @@ use App\Http\Controllers\EmailTemplateController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\EmailsController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ChatAgentController;
 use Google\Service\BeyondCorp\Resource\V;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 Route::middleware(['locale'])->group(function () {
-Route::match(['get', 'post'],'/', [MainController::class, 'index']);
-Route::match(['get', 'post'],'forgot-password', [MainController::class, 'forgot_password']);
-Route::match(['get', 'post'],'/reset-password/{id}/{email}', [MainController::class, 'reset_password']);
-Route::get( '/logout', [MainController::class, 'logout']);
-Route::get('/dashboard', [MainController::class, 'dashboard'])->middleware(['auth']);
-Route::get('/get-events/{date}', [MainController::class, 'get_events'])->middleware(['auth']);
+    Route::match(['get', 'post'], '/', [MainController::class, 'index']);
+    Route::match(['get', 'post'], 'forgot-password', [MainController::class, 'forgot_password']);
+    Route::match(['get', 'post'], '/reset-password/{id}/{email}', [MainController::class, 'reset_password']);
+    Route::get('/logout', [MainController::class, 'logout']);
+    Route::get('/dashboard', [MainController::class, 'dashboard'])->middleware(['auth']);
+    Route::get('/get-events/{date}', [MainController::class, 'get_events'])->middleware(['auth']);
 
 
-//Leads
-Route::get( '/leads', [LeadController::class, 'leads'])->middleware(['auth']);
-Route::match(['get', 'post'],'create-lead', [LeadController::class, 'create_lead'])->middleware(['auth']);
-Route::match(['get', 'post'],'update-pipline-session', [LeadController::class, 'update_pipline_session'])->middleware(['auth']);
-Route::match(['get', 'post'],'delete-lead/{id}', [LeadController::class, 'delete_lead'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-lead/{id}', [LeadController::class, 'edit_lead'])->middleware(['auth']);
-Route::get( '/delete-type/{id}', [TypeController::class, 'delete_type'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-type/{id}', [TypeController::class, 'edit_type'])->middleware(['auth']);
-Route::match(['get', 'post'],'get-contact-person-details/{id}', [LeadController::class, 'get_contact_person_details'])->middleware(['auth']);
-Route::match(['get', 'post'],'update-lead-stage', [LeadController::class, 'update_lead_stage'])->middleware(['auth']);
-Route::match(['get', 'post'],'view-lead/{id}', [LeadController::class, 'view_lead'])->middleware(['auth']);
-Route::match(['get', 'post'],'add-lead-note/{id}', [LeadController::class, 'add_lead_note'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-note/{id}', [LeadController::class, 'edit_note'])->middleware(['auth']);
-Route::match(['get', 'post'],'delete-note/{id}', [LeadController::class, 'delete_note'])->middleware(['auth']);
-Route::match(['get', 'post'],'add-lead-activity/{id}', [LeadController::class, 'add_lead_activity'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-activity/{id}', [LeadController::class, 'edit_activity'])->middleware(['auth']);
-Route::match(['get', 'post'],'delete-activity/{id}', [LeadController::class, 'delete_activity'])->middleware(['auth']);
-Route::match(['get', 'post'],'complete-activity/{id}', [LeadController::class, 'complete_activity'])->middleware(['auth']);
-Route::match(['get', 'post'],'add-lead-email/{id}', [LeadController::class, 'add_lead_email'])->middleware(['auth']);
-Route::match(['get', 'post'],'delete-email/{id}', [LeadController::class, 'delete_email'])->middleware(['auth']);
-Route::match(['get', 'post'],'add-lead-file/{id}', [LeadController::class, 'add_lead_file'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-file/{id}', [LeadController::class, 'edit_file'])->middleware(['auth']);
-Route::match(['get', 'post'],'delete-file/{id}', [LeadController::class, 'delete_file'])->middleware(['auth']);
-Route::match(['get', 'post'],'export-leads/{format}', [LeadController::class, 'export_leads'])->middleware(['auth']);
-Route::match(['post'],'import-leads', [LeadController::class, 'import_leads'])->middleware(['auth']);
-Route::match(['post'],'update-lead-priority', [LeadController::class, 'update_lead_priority'])->middleware(['auth']);
-Route::match(['get'],'get-stages-by-pipeline/{pipeline}', [LeadController::class, 'get_stages_by_pipeline'])->middleware(['auth']);
-Route::post ('/assigned-to-me', [LeadController::class, 'assigned_to_me'])->middleware(['auth']);
+    //Leads
+    Route::get('/leads', [LeadController::class, 'leads'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'create-lead', [LeadController::class, 'create_lead'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'update-pipline-session', [LeadController::class, 'update_pipline_session'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'delete-lead/{id}', [LeadController::class, 'delete_lead'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-lead/{id}', [LeadController::class, 'edit_lead'])->middleware(['auth']);
+    Route::get('/delete-type/{id}', [TypeController::class, 'delete_type'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-type/{id}', [TypeController::class, 'edit_type'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'get-contact-person-details/{id}', [LeadController::class, 'get_contact_person_details'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'update-lead-stage', [LeadController::class, 'update_lead_stage'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'view-lead/{id}', [LeadController::class, 'view_lead'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'add-lead-note/{id}', [LeadController::class, 'add_lead_note'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-note/{id}', [LeadController::class, 'edit_note'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'delete-note/{id}', [LeadController::class, 'delete_note'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'add-lead-activity/{id}', [LeadController::class, 'add_lead_activity'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-activity/{id}', [LeadController::class, 'edit_activity'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'delete-activity/{id}', [LeadController::class, 'delete_activity'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'complete-activity/{id}', [LeadController::class, 'complete_activity'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'add-lead-email/{id}', [LeadController::class, 'add_lead_email'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'delete-email/{id}', [LeadController::class, 'delete_email'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'add-lead-file/{id}', [LeadController::class, 'add_lead_file'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-file/{id}', [LeadController::class, 'edit_file'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'delete-file/{id}', [LeadController::class, 'delete_file'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'export-leads/{format}', [LeadController::class, 'export_leads'])->middleware(['auth']);
+    Route::match(['post'], 'import-leads', [LeadController::class, 'import_leads'])->middleware(['auth']);
+    Route::match(['post'], 'update-lead-priority', [LeadController::class, 'update_lead_priority'])->middleware(['auth']);
+    Route::match(['get'], 'get-stages-by-pipeline/{pipeline}', [LeadController::class, 'get_stages_by_pipeline'])->middleware(['auth']);
+    Route::post('/assigned-to-me', [LeadController::class, 'assigned_to_me'])->middleware(['auth']);
 
-//Quotes
-Route::match(['get', 'post'],'quotes', [QuoteController::class, 'quotes'])->middleware(['auth']);
-Route::match(['get', 'post'],'create-lead-quote/{id}', [QuoteController::class, 'create_lead_quote'])->middleware(['auth']);
-Route::get( '/delete-quote/{id}', [QuoteController::class, 'delete_quote'])->middleware(['auth']);
-Route::match(['get', 'post'],'create-quote', [QuoteController::class, 'create_quote'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-quote/{id}', [QuoteController::class, 'edit_quote'])->middleware(['auth']);
-Route::post('/delete-selected-quotes', [QuoteController::class, 'delete_selected_quotes'])->middleware(['auth']);
-Route::get('/get-leads', [QuoteController::class, 'getLeads'])->name('get.leads');
-
-
-// Contact Persons
-Route::get( '/persons', [PersonsController::class, 'persons'])->middleware(['auth']);
-Route::match(['get', 'post'],'create-person', [PersonsController::class, 'create_person'])->middleware(['auth']);
-// Route::get( '/delete-person/{id}', [PersonsController::class, 'delete_person'])->middleware(['auth', 'permission:person-delete']);
-Route::get('/delete-person/{person_id}/{replacement_id}', [PersonsController::class, 'deletePerson'])->name('delete.person');
-Route::get('delete-person/{personToDeleteId}/assign-to/{personToAssignId}', [PersonsController::class, 'deleteAndAssign']);
-Route::post('/delete-selected-persons', [PersonsController::class, 'delete_selected_persons'])->middleware(['auth']);
-Route::match(['post'],'import-persons', [PersonsController::class, 'import_persons'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-person/{id}', [OrganizationsController::class, 'edit_organization'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-person/{id}', [PersonsController::class, 'edit_person'])->middleware(['auth']);
-
-// Contact Organizations
-Route::get( '/organizations', [OrganizationsController::class, 'organizations'])->middleware(['auth']);
-Route::match(['get', 'post'],'create-organization', [OrganizationsController::class, 'create_organization'])->middleware(['auth']);
-Route::get( '/delete-organization/{id}', [OrganizationsController::class, 'delete_organization'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-organization/{id}', [OrganizationsController::class, 'edit_organization'])->middleware(['auth']);
-Route::post('/delete-selected-organizations', [OrganizationsController::class, 'delete_selected_organizations'])->middleware(['auth']);
-Route::match(['post'],'import-organizations', [OrganizationsController::class, 'import_organizations'])->middleware(['auth']);
-
-//Products
-Route::get( '/products', [ProductsController::class, 'products'])->middleware(['auth']);
-Route::match(['get', 'post'],'create-product', [ProductsController::class, 'create_product'])->middleware(['auth']);
-Route::get( '/delete-product/{id}', [ProductsController::class, 'delete_product'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-product/{id}', [ProductsController::class, 'edit_product'])->middleware(['auth']);
-Route::post('/delete-selected-products', [ProductsController::class, 'delete_selected_products'])->middleware(['auth']);
-
-//Services
-Route::get( '/services', [ServicesController::class, 'services'])->middleware(['auth']);
-Route::match(['get', 'post'],'create-service', [ServicesController::class, 'create_service'])->middleware(['auth']);
-Route::get( '/delete-service/{id}', [ServicesController::class, 'delete_service'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-service/{id}', [ServicesController::class, 'edit_service'])->middleware(['auth']);
-Route::post('/delete-selected-services', [ServicesController::class, 'delete_selected_services'])->middleware(['auth']);
-
-//Activties
-Route::get( '/activities', [LeadController::class, 'activities'])->middleware(['auth']);
-Route::post('/update-activity-status', [LeadController::class, 'update_activity_status'])->middleware(['auth']);
-Route::post('/delete-selected-activities', [LeadController::class, 'delete_selected_activities'])->middleware(['auth']);
-
-//Configuration
-Route::get( '/configuration', [ConfigurationController::class, 'configuration'])->middleware(['auth']);
-Route::post('/update-company-logo', [ConfigurationController::class, 'update_company_logo'])->middleware(['auth']);
-
-//Settings
-Route::get( '/settings', [SettingsController::class, 'settings'])->middleware(['auth']);
+    //Quotes
+    Route::match(['get', 'post'], 'quotes', [QuoteController::class, 'quotes'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'create-lead-quote/{id}', [QuoteController::class, 'create_lead_quote'])->middleware(['auth']);
+    Route::get('/delete-quote/{id}', [QuoteController::class, 'delete_quote'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'create-quote', [QuoteController::class, 'create_quote'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-quote/{id}', [QuoteController::class, 'edit_quote'])->middleware(['auth']);
+    Route::post('/delete-selected-quotes', [QuoteController::class, 'delete_selected_quotes'])->middleware(['auth']);
+    Route::get('/get-leads', [QuoteController::class, 'getLeads'])->name('get.leads');
 
 
+    // Contact Persons
+    Route::get('/persons', [PersonsController::class, 'persons'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'create-person', [PersonsController::class, 'create_person'])->middleware(['auth']);
+    // Route::get( '/delete-person/{id}', [PersonsController::class, 'delete_person'])->middleware(['auth', 'permission:person-delete']);
+    Route::get('/delete-person/{person_id}/{replacement_id}', [PersonsController::class, 'deletePerson'])->name('delete.person');
+    Route::get('delete-person/{personToDeleteId}/assign-to/{personToAssignId}', [PersonsController::class, 'deleteAndAssign']);
+    Route::post('/delete-selected-persons', [PersonsController::class, 'delete_selected_persons'])->middleware(['auth']);
+    Route::match(['post'], 'import-persons', [PersonsController::class, 'import_persons'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-person/{id}', [OrganizationsController::class, 'edit_organization'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-person/{id}', [PersonsController::class, 'edit_person'])->middleware(['auth']);
 
-//Pipelines
-Route::get( '/pipelines', [PipelineController::class, 'pipelines'])->middleware(['auth']);
-Route::match(['get', 'post'],'create-pipeline', [PipelineController::class, 'create_pipeline'])->middleware(['auth']);
-Route::get( '/delete-pipeline/{id}', [PipelineController::class, 'delete_pipeline'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-pipeline/{id}', [PipelineController::class, 'edit_pipeline'])->middleware(['auth']);
-Route::get( '/delete-stage/{id}', [PipelineController::class, 'delete_stage'])->middleware(['auth']);
-Route::post( '/delete-selected-pipelines', [PipelineController::class, 'delete_selected_pipelines'])->middleware(['auth']);
+    // Contact Organizations
+    Route::get('/organizations', [OrganizationsController::class, 'organizations'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'create-organization', [OrganizationsController::class, 'create_organization'])->middleware(['auth']);
+    Route::get('/delete-organization/{id}', [OrganizationsController::class, 'delete_organization'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-organization/{id}', [OrganizationsController::class, 'edit_organization'])->middleware(['auth']);
+    Route::post('/delete-selected-organizations', [OrganizationsController::class, 'delete_selected_organizations'])->middleware(['auth']);
+    Route::match(['post'], 'import-organizations', [OrganizationsController::class, 'import_organizations'])->middleware(['auth']);
 
-//Sources
-Route::get( '/sources', [SourceController::class, 'sources'])->middleware(['auth']);
-Route::match(['get', 'post'],'create-source', [SourceController::class, 'create_source'])->middleware(['auth']);
-Route::get( '/delete-source/{id}', [SourceController::class, 'delete_source'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-source/{id}', [SourceController::class, 'edit_source'])->middleware(['auth']);
-Route::post( '/delete-selected-sources', [SourceController::class, 'delete_selected_sources'])->middleware(['auth']);
+    //Products
+    Route::get('/products', [ProductsController::class, 'products'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'create-product', [ProductsController::class, 'create_product'])->middleware(['auth']);
+    Route::get('/delete-product/{id}', [ProductsController::class, 'delete_product'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-product/{id}', [ProductsController::class, 'edit_product'])->middleware(['auth']);
+    Route::post('/delete-selected-products', [ProductsController::class, 'delete_selected_products'])->middleware(['auth']);
 
-//Types
-Route::get( '/types', [TypeController::class, 'types'])->middleware(['auth']);
-Route::match(['get', 'post'],'create-type', [TypeController::class, 'create_type'])->middleware(['auth']);
-Route::get( '/delete-type/{id}', [TypeController::class, 'delete_type'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-type/{id}', [TypeController::class, 'edit_type'])->middleware(['auth']);
-Route::post( '/delete-selected-types', [TypeController::class, 'delete_selected_types'])->middleware(['auth']);
+    //Services
+    Route::get('/services', [ServicesController::class, 'services'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'create-service', [ServicesController::class, 'create_service'])->middleware(['auth']);
+    Route::get('/delete-service/{id}', [ServicesController::class, 'delete_service'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-service/{id}', [ServicesController::class, 'edit_service'])->middleware(['auth']);
+    Route::post('/delete-selected-services', [ServicesController::class, 'delete_selected_services'])->middleware(['auth']);
 
-//Groups
-Route::get( '/groups', [GroupsController::class, 'groups'])->middleware(['auth']);
-Route::match(['get', 'post'],'create-group', [GroupsController::class, 'create_group'])->middleware(['auth']);
-Route::get( '/delete-group/{id}', [GroupsController::class, 'delete_group'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-group/{id}', [GroupsController::class, 'edit_group'])->middleware(['auth']);
-Route::post( '/delete-selected-groups', [GroupsController::class, 'delete_selected_groups'])->middleware(['auth']);
+    //Activties
+    Route::get('/activities', [LeadController::class, 'activities'])->middleware(['auth']);
+    Route::post('/update-activity-status', [LeadController::class, 'update_activity_status'])->middleware(['auth']);
+    Route::post('/delete-selected-activities', [LeadController::class, 'delete_selected_activities'])->middleware(['auth']);
 
-//Roles
-Route::get( '/roles', [RolesController::class, 'roles'])->middleware(['auth']);
-Route::match(['get', 'post'],'create-role', [RolesController::class, 'create_role'])->middleware(['auth']);
-Route::get( '/delete-role/{id}', [RolesController::class, 'delete_role'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-role/{id}', [RolesController::class, 'edit_role'])->middleware(['auth']);
-Route::get( '/delete-selected-roles', [RolesController::class, 'delete_selected_roles'])->middleware(['auth']);
+    //Configuration
+    Route::get('/configuration', [ConfigurationController::class, 'configuration'])->middleware(['auth']);
+    Route::post('/update-company-logo', [ConfigurationController::class, 'update_company_logo'])->middleware(['auth']);
 
-//Users
-Route::get( '/users', [UsersController::class, 'users'])->middleware(['auth']);
-Route::match(['get', 'post'],'create-user', [UsersController::class, 'create_user'])->middleware(['auth']);
-Route::get( '/delete-user/{id}', [UsersController::class, 'delete_user'])->middleware(['auth']);
-Route::get( '/delete-selected-users', [UsersController::class, 'delete_selected_users'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-user/{id}', [UsersController::class, 'edit_user'])->middleware(['auth']);
+    //Settings
+    Route::get('/settings', [SettingsController::class, 'settings'])->middleware(['auth']);
 
-//Attributes
-Route::get( '/attributes', [AttributeController::class, 'attributes'])->middleware(['auth']);
-Route::match(['get', 'post'],'create-attribute', [AttributeController::class, 'create_attribute'])->middleware(['auth']);
-Route::get( '/delete-attribute/{id}', [AttributeController::class, 'delete_attribute'])->middleware(['auth']);
-Route::post( '/delete-selected-attributes', [AttributeController::class, 'delete_selected_attributes'])->middleware(['auth']);
-Route::match(['get', 'post'],'edit-attribute/{id}', [AttributeController::class, 'edit_attribute'])->middleware(['auth']);
 
-//Email Templates
+
+    //Pipelines
+    Route::get('/pipelines', [PipelineController::class, 'pipelines'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'create-pipeline', [PipelineController::class, 'create_pipeline'])->middleware(['auth']);
+    Route::get('/delete-pipeline/{id}', [PipelineController::class, 'delete_pipeline'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-pipeline/{id}', [PipelineController::class, 'edit_pipeline'])->middleware(['auth']);
+    Route::get('/delete-stage/{id}', [PipelineController::class, 'delete_stage'])->middleware(['auth']);
+    Route::post('/delete-selected-pipelines', [PipelineController::class, 'delete_selected_pipelines'])->middleware(['auth']);
+
+    //Sources
+    Route::get('/sources', [SourceController::class, 'sources'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'create-source', [SourceController::class, 'create_source'])->middleware(['auth']);
+    Route::get('/delete-source/{id}', [SourceController::class, 'delete_source'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-source/{id}', [SourceController::class, 'edit_source'])->middleware(['auth']);
+    Route::post('/delete-selected-sources', [SourceController::class, 'delete_selected_sources'])->middleware(['auth']);
+
+    //Types
+    Route::get('/types', [TypeController::class, 'types'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'create-type', [TypeController::class, 'create_type'])->middleware(['auth']);
+    Route::get('/delete-type/{id}', [TypeController::class, 'delete_type'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-type/{id}', [TypeController::class, 'edit_type'])->middleware(['auth']);
+    Route::post('/delete-selected-types', [TypeController::class, 'delete_selected_types'])->middleware(['auth']);
+
+    //Groups
+    Route::get('/groups', [GroupsController::class, 'groups'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'create-group', [GroupsController::class, 'create_group'])->middleware(['auth']);
+    Route::get('/delete-group/{id}', [GroupsController::class, 'delete_group'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-group/{id}', [GroupsController::class, 'edit_group'])->middleware(['auth']);
+    Route::post('/delete-selected-groups', [GroupsController::class, 'delete_selected_groups'])->middleware(['auth']);
+
+    //Roles
+    Route::get('/roles', [RolesController::class, 'roles'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'create-role', [RolesController::class, 'create_role'])->middleware(['auth']);
+    Route::get('/delete-role/{id}', [RolesController::class, 'delete_role'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-role/{id}', [RolesController::class, 'edit_role'])->middleware(['auth']);
+    Route::get('/delete-selected-roles', [RolesController::class, 'delete_selected_roles'])->middleware(['auth']);
+
+    //Users
+    Route::get('/users', [UsersController::class, 'users'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'create-user', [UsersController::class, 'create_user'])->middleware(['auth']);
+    Route::get('/delete-user/{id}', [UsersController::class, 'delete_user'])->middleware(['auth']);
+    Route::get('/delete-selected-users', [UsersController::class, 'delete_selected_users'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-user/{id}', [UsersController::class, 'edit_user'])->middleware(['auth']);
+
+    //Attributes
+    Route::get('/attributes', [AttributeController::class, 'attributes'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'create-attribute', [AttributeController::class, 'create_attribute'])->middleware(['auth']);
+    Route::get('/delete-attribute/{id}', [AttributeController::class, 'delete_attribute'])->middleware(['auth']);
+    Route::post('/delete-selected-attributes', [AttributeController::class, 'delete_selected_attributes'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'edit-attribute/{id}', [AttributeController::class, 'edit_attribute'])->middleware(['auth']);
+
+    //Email Templates
 // Route::get( '/email-templates', [EmailTemplateController::class, 'email_templates'])->middleware(['auth']);
 // Route::match(['get', 'post'],'create-email-template', [EmailTemplateController::class, 'create_email_template'])->middleware(['auth']);
 // Route::get( '/delete-email-template/{id}', [EmailTemplateController::class, 'delete_email_template'])->middleware(['auth']);
 // Route::match(['get', 'post'],'edit-email-template/{id}', [EmailTemplateController::class, 'edit_email_template'])->middleware(['auth']);
 // Route::post( '/delete-selected-templates', [EmailTemplateController::class, 'delete_selected_templates'])->middleware(['auth']);
 
-//Web Flows
-Route::get( '/web-forms', [WebFormController::class, 'web_forms'])->middleware(['auth']);
-Route::match(['get', 'post'],'create-web-form', [WebFormController::class, 'create_web_form'])->middleware(['auth']);
-Route::get( '/delete-web-form/{id}', [WebFormController::class, 'delete_web_form'])->middleware(['auth']);
-Route::get( '/view-web-form/{uuid}', [WebFormController::class, 'view_web_form']);
-Route::get('/embed/web-form/{uuid}', [WebFormController::class, 'serveEmbedScript']);
-Route::post('web-form-submit/{uuid}', [WebFormController::class, 'web_form_submit']);
-Route::match(['get', 'post'],'edit-web-form/{id}', [WebFormController::class, 'edit_web_form'])->middleware(['auth']);
-Route::post( '/delete-selected-webforms', [WebFormController::class, 'delete_selected_webforms'])->middleware(['auth']);
+    //Web Flows
+    Route::get('/web-forms', [WebFormController::class, 'web_forms'])->middleware(['auth']);
+    Route::match(['get', 'post'], 'create-web-form', [WebFormController::class, 'create_web_form'])->middleware(['auth']);
+    Route::get('/delete-web-form/{id}', [WebFormController::class, 'delete_web_form'])->middleware(['auth']);
+    Route::get('/view-web-form/{uuid}', [WebFormController::class, 'view_web_form']);
+    Route::get('/embed/web-form/{uuid}', [WebFormController::class, 'serveEmbedScript']);
+    Route::post('web-form-submit/{uuid}', [WebFormController::class, 'web_form_submit']);
+    Route::match(['get', 'post'], 'edit-web-form/{id}', [WebFormController::class, 'edit_web_form'])->middleware(['auth']);
+    Route::post('/delete-selected-webforms', [WebFormController::class, 'delete_selected_webforms'])->middleware(['auth']);
 
-//Emails
+    //Emails
 // Route::get( '/emails', [EmailsController::class, 'emails'])->middleware(['auth']);
 // Route::match(['get', 'post'],'compose-email', [EmailsController::class, 'compose_email'])->middleware(['auth']);
 // Route::match(['get', 'post'], 'view-email/{id}', [EmailsController::class, 'view_email'])->middleware(['auth']);
@@ -198,23 +199,25 @@ Route::post( '/delete-selected-webforms', [WebFormController::class, 'delete_sel
 // Route::get('/favourite-emails', [EmailsController::class, 'fetch_favourite_emails'])->middleware(['auth']);
 // Route::post('/emails/reply/{parentId}', [EmailsController::class, 'reply'])->name('emails.reply');
 
-// Reports
-Route::get( '/reports', [ReportController::class, 'reports'])->middleware(['auth']);
-Route::get('/get-pipeline-stages/{pipelineId}', [ReportController::class, 'getPipelineStages'])->middleware(['auth']);
-Route::post('/generate-report', [ReportController::class, 'generateReport'])->middleware(['auth']);
-    
-Route::get('/lang/{locale}', function ($locale) {
-    if (in_array($locale, ['en', 'es', 'fa', 'tr', 'ar'])) {
-        session(['locale' => $locale]);
-    }
-    return redirect()->back();
-})->name('lang.switch');
+    // Reports
+    Route::get('/reports', [ReportController::class, 'reports'])->middleware(['auth']);
+    Route::get('/get-pipeline-stages/{pipelineId}', [ReportController::class, 'getPipelineStages'])->middleware(['auth']);
+    Route::post('/generate-report', [ReportController::class, 'generateReport'])->middleware(['auth']);
 
-// Route::get('/leadf', function () {
+    Route::post('/chat/agent', [ChatAgentController::class, 'chat'])->middleware(['auth']);
+
+    Route::get('/lang/{locale}', function ($locale) {
+        if (in_array($locale, ['en', 'es', 'fa', 'tr', 'ar'])) {
+            session(['locale' => $locale]);
+        }
+        return redirect()->back();
+    })->name('lang.switch');
+
+    // Route::get('/leadf', function () {
 //     return View('leads.leads');
 // });
 
-// Route::get('/settings', function () {
+    // Route::get('/settings', function () {
 //     return View('settings.settings');
 // })->name('settings');
 });
