@@ -48,7 +48,7 @@
 
 } */
 .sidebar-title {
-    font-family:  var(--font-family);
+    font-family: var(--font-family);
     font-weight: 600;
     font-size: 12px;
     color: var(--primary-text-color);
@@ -73,6 +73,8 @@
     line-height: 100%;
     /* margin-bottom: 12px; */
     padding: 20px;
+    display: flex;
+    align-items: center;
 }
 
 .sidenav .nav-link svg {
@@ -83,9 +85,10 @@
     fill: var(--primary-color);
 }
 
-.stroke-nav-item path:hover, .person-class svg path:hover {
-  fill: inherit !important;
-  stroke: var(--primary-color) !important;
+.stroke-nav-item path:hover,
+.person-class svg path:hover {
+    fill: inherit !important;
+    stroke: var(--primary-color) !important;
 }
 
 .navbar-nav .nav-link:hover {
@@ -97,7 +100,8 @@
     background-color: #F4F7FF;
     border-right: 5px solid var(--primary-color);
 }
-.accordion-header{
+
+.accordion-header {
     padding: 20px;
 }
 
@@ -139,6 +143,15 @@
 }
 
 @media (max-width: 767.98px) {
+    .sidebar {
+        width: 0;
+        display: none;
+    }
+
+    .sidebar-container {
+        width: 0;
+    }
+
     .sidenav {
         position: fixed;
         top: 0;
@@ -148,6 +161,8 @@
         z-index: 1051;
         box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
         margin-top: 0;
+        width: 250px;
+        /* Ensure width is explicitly set for active state */
     }
 
     .sidenav.active {

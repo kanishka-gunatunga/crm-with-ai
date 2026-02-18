@@ -113,6 +113,13 @@ select,
   padding: 20px !important;
 }
 
+@media (max-width: 767.98px) {
+  .main-content {
+    padding-left: 0 !important;
+    width: 100vw;
+  }
+}
+
 .action-bar {
   padding: 30px;
   border: 1px solid #E8E9EB;
@@ -2165,10 +2172,10 @@ div.dataTables_wrapper div.dataTables_filter {
 } */
 
 
-.participant-select-container .select2-selection{
+.participant-select-container .select2-selection {
   overflow-y: scroll !important;
 }
 
-label{
+label {
   font-family: var(--font-family) !important;
 }

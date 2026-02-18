@@ -1,3 +1,5 @@
+import { marked } from 'marked';
+
 document.addEventListener('DOMContentLoaded', function () {
     const chatToggle = document.getElementById('chat-toggle');
     const chatWidget = document.getElementById('chat-widget');
@@ -46,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 border border-blue-200 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
                     <img alt="Bot" src="https://img.icons8.com/color/48/robot-3.png" class="object-cover w-5 h-5">
                 </div>
-                <div class="max-w-[75%] p-3.5 rounded-2xl text-sm shadow-sm leading-relaxed bg-white border border-gray-100 text-gray-700 rounded-bl-sm">
+                <div class="max-w-[75%] p-3.5 rounded-2xl text-sm shadow-sm leading-relaxed bg-white border border-gray-100 text-gray-700 rounded-bl-sm markdown-content">
                     ${formatMessage(content)}
                 </div>
             `;
@@ -91,15 +93,17 @@ document.addEventListener('DOMContentLoaded', function () {
         if (el) el.remove();
     }
 
-    // Format Message (Simple Markdown Links)
+    // Format Message using marked.js
     function formatMessage(text) {
-        // Convert [Layout](link) to <a href="link" ...>
-        let formatted = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" class="text-blue-600 underline font-medium hover:text-blue-800">$1</a>');
+        // Configure marked options
+        marked.setOptions({
+            gfm: true,
+            breaks: true,
+            headerIds: false,
+            mangle: false
+        });
 
-        // Convert newlines to <br>
-        formatted = formatted.replace(/\n/g, '<br>');
-
-        return formatted;
+        return marked.parse(text);
     }
 
     function escapeHtml(text) {

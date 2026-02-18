@@ -30,7 +30,7 @@
                         class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-blue-600"></span>
                 </div>
                 <div class="flex flex-col">
-                    <h3 class="font-bold text-base leading-tight">CRM Assistant</h3>
+                    <h3 class="font-bold leading-tight" style="font-size: 18px;">CRM Assistant</h3>
                     <div
                         class="flex items-center gap-1.5 text-[10px] text-blue-100 bg-white/10 px-2 py-0.5 rounded-full w-fit mt-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none"
@@ -73,12 +73,12 @@
 
         <!-- Input Area -->
         <form id="chat-form" class="p-4 bg-white border-t border-gray-100 flex gap-2 items-center shrink-0">
-            <input type="text" id="chat-input" placeholder="Type a message..."
-                class="flex-1 bg-gray-100 hover:bg-gray-50 focus:bg-white rounded-[5px] px-2 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all duration-200 border border-transparent"
+            <input type="text" id="chat-input" placeholder="Type a message..." style="border-radius: 45px !important;"
+                class="flex-1 bg-gray-100 hover:bg-gray-50 focus:bg-white rounded-[5px] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all duration-200 border border-transparent"
                 autocomplete="off">
             <button type="submit" id="chat-submit"
                 class="p-3 text-white rounded-full hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg transform active:scale-95 flex items-center justify-center"
-                style="background-color: var(--primary-color);">
+                style="background-color: var(--primary-color); border-radius: 50%;">
                 <svg id="send-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="m22 2-7 20-4-9-9-4Z"></path>
@@ -93,6 +93,7 @@
         </form>
     </div>
 </div>
+
 
 <style>
     .scrollbar-thin::-webkit-scrollbar {
@@ -110,6 +111,46 @@
 
     .scrollbar-thin::-webkit-scrollbar-thumb:hover {
         background: #D1D5DB;
+    }
+
+    /* Markdown Styles */
+    .markdown-content ul {
+        list-style-type: disc;
+        margin-left: 1.5rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .markdown-content ol {
+        list-style-type: decimal;
+        margin-left: 1.5rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .markdown-content li {
+        margin-bottom: 0.25rem;
+    }
+
+    .markdown-content p {
+        margin-bottom: 0.5rem;
+    }
+
+    .markdown-content p:last-child {
+        margin-bottom: 0;
+    }
+
+    .markdown-content strong {
+        font-weight: 600;
+    }
+
+    .markdown-content a {
+        color: #2563eb;
+        text-decoration: underline;
+    }
+
+    .markdown-content a:hover {
+        color: #1d4ed8;
     }
 </style>
 
